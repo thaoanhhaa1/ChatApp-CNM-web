@@ -1,8 +1,9 @@
+import config from '~/config';
 import { Home } from '~/pages';
 
 const routes = [
     {
-        path: '/',
+        path: config.routes.chats,
         component: Home,
     },
 ];
