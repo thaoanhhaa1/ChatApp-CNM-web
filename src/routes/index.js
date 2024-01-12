@@ -1,9 +1,14 @@
-import { Home } from '~/pages';
+import { Home, Register } from '~/pages';
 
 const routes = [
     {
         path: '/',
         component: Home,
+    },
+
+    {
+        path: '/register',
+        component: Register,
     },
 ];
 
