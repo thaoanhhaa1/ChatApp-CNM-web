@@ -1,7 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
     text-rendering: optimizespeed;
+    font-family: 'Public Sans', sans-serif;
+}
+
+// Tippy custom
+.tippy-content {
+    @apply py-1 px-2;
+}
+
+.tooltip-inner {
+    font-size: 0.8203125rem;
 }

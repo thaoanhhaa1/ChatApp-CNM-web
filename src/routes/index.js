@@ -1,14 +1,16 @@
+import config from '~/config';
 import { Home, Register } from '~/pages';
 
 const routes = [
     {
-        path: '/',
+        path: config.routes.chats,
         component: Home,
     },
 
     {
-        path: '/register',
+        path: config.routes.register,
         component: Register,
+        layout: null,
     },
 ];
 
