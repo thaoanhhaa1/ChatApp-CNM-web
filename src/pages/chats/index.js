@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SearchIcon } from '~/assets';
 import ChatItem from '~/components/chatItem';
+import HeaderPage from '~/components/headerPage';
 import Input from '~/components/input';
 import OnlineUser from '~/components/onlineUser';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
@@ -47,17 +48,18 @@ const Chats = () => {
 
     return (
         <div className="h-full flex flex-col">
-            <div className="p-2 ex:p-3 sm:p-4 md:p-5 dl:p-6">
-                <h1 className="pb-2 ex:pb-3 sm:pb-4 md:pb-5 dl:pb-6">{t('chats.title')}</h1>
-                <Input Icon={SearchIcon} placeholder={t('chats.searchPlaceholder')} />
-                <Swiper spaceBetween={width < screens.SM ? 8 : 16} slidesPerView="auto" className="mt-2 sm:mt-4">
-                    {onlineUsers.map((item) => (
-                        <SwiperSlide className="!w-fit" key={item.id}>
-                            <OnlineUser data={item} />
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-            </div>
+            <HeaderPage title={t('chats.title')}>
+                <div>
+                    <Input Icon={SearchIcon} placeholder={t('chats.searchPlaceholder')} />
+                    <Swiper spaceBetween={width < screens.SM ? 8 : 16} slidesPerView="auto" className="mt-2 sm:mt-4">
+                        {onlineUsers.map((item) => (
+                            <SwiperSlide className="!w-fit" key={item.id}>
+                                <OnlineUser data={item} />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
+            </HeaderPage>
             <div className="flex-1 flex flex-col pb-1 ex:pb-2 sm:pb-3 md:pb-4 dl:pb-5">
                 <h3 className="px-1 ex:px-2 dl:px-4 sm:-mt-2 pb-1 ex:pb-2 dl:pb-4 text-base font-semibold">
                     {t('chats.recent')}

@@ -28,6 +28,7 @@ module.exports = {
                 'dark-tooltip-bg': '#f8f9fa',
                 'dark-tooltip-color': '#303841',
                 'tooltip-color': '#f7f7ff',
+                input: '#495057',
             },
             screens: {
                 ex: '480px',

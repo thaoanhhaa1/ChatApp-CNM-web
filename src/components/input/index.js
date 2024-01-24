@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
 import { classNames } from '~/utils';
 
-const Input = ({ Icon, placeholder = '', className = '', containerClassName = '', ...props }) => {
+const Input = ({ Icon, outline, placeholder = '', className = '', containerClassName = '', ...props }) => {
     return (
         <div
             className={classNames(
-                'flex items-center bg-input-bg dark:bg-dark-input-bg rounded-1.6 overflow-hidden',
+                'border flex items-center rounded overflow-hidden transition-all',
+                outline
+                    ? 'border-separate dark:border-dark-separate dark:focus-within:border-dark-sidebar-item-color bg-white dark:bg-dark-sidebar-sub-bg focus-within:border-input'
+                    : 'border-transparent bg-input-bg dark:bg-dark-input-bg',
                 containerClassName,
             )}
         >
@@ -17,7 +20,8 @@ const Input = ({ Icon, placeholder = '', className = '', containerClassName = ''
             <input
                 placeholder={placeholder}
                 className={classNames(
-                    'bg-input-bg dark:bg-dark-input-bg flex-1 px-2 sm:px-4 py-1 sm:py-2 outline-none text-sm leading-normal placeholder:text-secondary dark:placeholder:text-dark-secondary text-primary dark:text-dark-primary',
+                    'flex-1 px-2 sm:px-4 py-1 sm:py-2 outline-none text-sm leading-normal placeholder:text-secondary dark:placeholder:text-dark-secondary text-input dark:text-dark-primary',
+                    outline ? 'bg-white dark:bg-dark-sidebar-sub-bg' : 'bg-input-bg dark:bg-dark-input-bg',
                     className,
                 )}
                 {...props}
@@ -31,6 +35,7 @@ Input.propTypes = {
     placeholder: PropTypes.string,
     className: PropTypes.string,
     containerClassName: PropTypes.string,
+    outline: PropTypes.bool,
 };
 
 export default Input;

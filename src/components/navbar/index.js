@@ -85,7 +85,7 @@ const html = document.querySelector('html');
 
 const Navbar = ({ className }) => {
     const { t } = useTranslation();
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(true);
 
     const toggleDarkMode = () => setDarkMode(!darkMode);
 

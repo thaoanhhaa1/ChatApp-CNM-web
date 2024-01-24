@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useOnClickOutside } from '~/hooks';
 import { classNames } from '~/utils';
 import Portal from '../portal';
+import Button from './Button';
+import Footer from './Footer';
+import Header from './Header';
 
 const Modal = ({ children, show, className, containerClassName, onClickOutside = () => {} }) => {
     const [showDebounce, setShowDebounce] = useState(show);
@@ -55,5 +58,9 @@ Modal.propTypes = {
     containerClassName: PropTypes.string,
     onClickOutside: PropTypes.func,
 };
+
+Modal.Header = Header;
+Modal.Footer = Footer;
+Modal.Button = Button;
 
 export default Modal;

@@ -36,5 +36,19 @@
             "forward": "Chuyển tiếp",
             "delete": "Xoá"
         }
+    },
+    "contacts": {
+        "title": "Liên hệ",
+        "search": "Tìm kiếm liên hệ...",
+        "share": "Chia sẻ",
+        "block": "Chặn",
+        "remove": "Xoá",
+        "add-contact": "Thêm liên hệ",
+        "phone": "Số điện thoại",
+        "enter-phone": "Nhập số điện thoại",
+        "message": "Lời chào",
+        "enter-message": "Nhập lời chào",
+        "close": "Đóng",
+        "invite-contact": "Kết bạn"
     }
 }

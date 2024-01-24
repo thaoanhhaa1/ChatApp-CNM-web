@@ -36,5 +36,19 @@
             "forward": "Forward",
             "delete": "Delete"
         }
+    },
+    "contacts": {
+        "title": "Contacts",
+        "search": "Search users...",
+        "share": "Share",
+        "block": "Block",
+        "remove": "Remove",
+        "add-contact": "Add Contact",
+        "phone": "Phone",
+        "enter-phone": "Enter Phone",
+        "message": "Invitation Message",
+        "enter-message": "Enter Message",
+        "close": "Close",
+        "invite-contact": "Invite Contact"
     }
 }
