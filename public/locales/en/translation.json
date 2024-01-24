@@ -1,0 +1,40 @@
+{
+    "navbar": {
+        "chats": "Chats",
+        "profile": "Profile",
+        "groups": "Groups",
+        "contacts": "Contacts",
+        "settings": "Settings",
+        "logout": "Log out"
+    },
+    "chats": {
+        "searchPlaceholder": "Search messages or users",
+        "title": "Chats",
+        "recent": "Recent",
+        "search": "Search"
+    },
+    "chat": {
+        "search": "Search",
+        "archive": "Archive",
+        "muted": "Muted",
+        "delete": "Delete",
+        "video-call": "Start Video Call",
+        "audio-call": "Start Audio Call",
+        "name": "Name",
+        "email": "Email",
+        "time": "Time",
+        "location": "Location",
+        "about": "About",
+        "attached-files": "Attached Files",
+        "members": "Members",
+        "active": "Active",
+        "chat": "Enter Message...",
+        "profile": "View profile",
+        "more": {
+            "copy": "Copy",
+            "save": "Save",
+            "forward": "Forward",
+            "delete": "Delete"
+        }
+    }
+}

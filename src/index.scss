@@ -3,9 +3,20 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    @apply select-none;
+}
+
 body {
     text-rendering: optimizespeed;
     font-family: 'Public Sans', sans-serif;
+    @apply text-primary dark:text-dark-primary;
+}
+
+h1 {
+    font-size: 1.3125rem;
+    line-height: 1.575em;
+    font-weight: 600;
 }
 
 // Tippy custom
@@ -15,4 +26,22 @@ body {
 
 .tooltip-inner {
     font-size: 0.8203125rem;
+}
+
+// Scrollbar customize
+.scrollbar::-webkit-scrollbar {
+    @apply hidden;
+}
+
+.scrollbar > div {
+    transition: background-color ease 0.3s, top 0s;
+}
+
+// Tippy
+.tippy-box[role='tooltip'] {
+    @apply bg-black dark:bg-dark-tooltip-bg text-tooltip-color dark:text-dark-tooltip-color;
+}
+
+.tippy-arrow[role='tooltip'] {
+    @apply text-black dark:text-dark-tooltip-bg;
 }

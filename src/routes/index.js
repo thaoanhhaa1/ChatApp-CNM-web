@@ -1,10 +1,10 @@
 import config from '~/config';
-import { Home } from '~/pages';
+import { Chats } from '~/pages';
 
 const routes = [
     {
         path: config.routes.chats,
-        component: Home,
+        component: Chats,
     },
 ];
 

@@ -1,0 +1,40 @@
+{
+    "navbar": {
+        "chats": "Trò chuyện",
+        "profile": "Hồ sơ",
+        "groups": "Danh sách nhóm",
+        "contacts": "Liên hệ",
+        "settings": "Cài đặt",
+        "logout": "Đăng xuất"
+    },
+    "chats": {
+        "searchPlaceholder": "Tìm kiếm tin nhắn hoặc người dùng",
+        "title": "Trò chuyện",
+        "recent": "Gần đây",
+        "search": "Tìm kiếm tin nhắn"
+    },
+    "chat": {
+        "search": "Tìm tin nhắn",
+        "archive": "Lưu trữ",
+        "muted": "Tắt tiếng",
+        "delete": "Xoá hội thoại",
+        "video-call": "Bắt đầu cuộc gọi",
+        "audio-call": "Bắt đầu cuộc gọi",
+        "name": "Tên",
+        "email": "Email",
+        "time": "Thời gian",
+        "location": "Vị trí",
+        "about": "Thông tin về đoạn chat",
+        "attached-files": "File đính kèm",
+        "members": "Thành viên",
+        "active": "Hoạt động",
+        "chat": "Nhập tin nhắn...",
+        "profile": "Thông tin hội thoại",
+        "more": {
+            "copy": "Sao chép",
+            "save": "Lưu",
+            "forward": "Chuyển tiếp",
+            "delete": "Xoá"
+        }
+    }
+}
