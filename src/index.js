@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -9,6 +10,7 @@ import 'tippy.js/animations/shift-toward-subtle.css';
 import 'tippy.js/animations/shift-toward.css';
 import 'tippy.js/dist/tippy.css';
 import App from './App';
+import { store } from './app/store';
 import './i18n';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
@@ -16,7 +18,9 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <App />
+        <Provider store={store}>
+            <App />
+        </Provider>
     </React.StrictMode>,
 );
 

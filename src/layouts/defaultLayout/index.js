@@ -1,8 +1,11 @@
 import { useWindowSize } from '@uidotdev/usehooks';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Chat from '~/components/chat';
 import Navbar from '~/components/navbar';
+import routes from '~/config/routes';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
 import { classNames } from '~/utils';
@@ -10,10 +13,18 @@ import { classNames } from '~/utils';
 const DefaultLayout = ({ children }) => {
     const [showChat, setShowChat] = useState(false);
     const { width } = useWindowSize();
+    const { user, loading } = useSelector((state) => state.user);
+    const navigation = useNavigate();
 
     useEffect(() => {
         width > screens.DL && setShowChat(false);
     }, [width]);
+
+    // useEffect(() => {
+    //     if (!user._id && !loading) navigation(routes.register);
+    // }, [loading, navigation, user._id]);
+
+    // if (loading) return <div>loading...</div>;
 
     return (
         <LayoutProvider value={{ setShowChat }}>

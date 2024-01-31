@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SearchIcon, UserAddLineIcon } from '~/assets';
 import Contact from '~/components/contact';
-import FormGroup from '~/components/formGroup';
+import FormWrap from '~/components/formWrap';
 import HeaderPage from '~/components/headerPage';
 import Input from '~/components/input';
 import Modal from '~/components/modal';
@@ -88,12 +88,12 @@ const Contacts = () => {
                 <Modal.Header onClose={setFalse}>{t('contacts.add-contact')}</Modal.Header>
 
                 <div className="p-6 flex flex-col gap-6">
-                    <FormGroup>
-                        <FormGroup.Label htmlFor="phone">{t('contacts.phone')}</FormGroup.Label>
+                    <FormWrap>
+                        <FormWrap.Label htmlFor="phone">{t('contacts.phone')}</FormWrap.Label>
                         <Input type="tel" id="phone" name="phone" outline placeholder={t('contacts.enter-phone')} />
-                    </FormGroup>
-                    <FormGroup>
-                        <FormGroup.Label htmlFor="message">{t('contacts.message')}</FormGroup.Label>
+                    </FormWrap>
+                    <FormWrap>
+                        <FormWrap.Label htmlFor="message">{t('contacts.message')}</FormWrap.Label>
                         <Textarea
                             outline
                             type="tel"
@@ -102,7 +102,7 @@ const Contacts = () => {
                             placeholder={t('contacts.enter-message')}
                             rows={3}
                         />
-                    </FormGroup>
+                    </FormWrap>
                 </div>
 
                 <Modal.Footer className="flex justify-end items-center gap-2">

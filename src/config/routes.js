@@ -5,6 +5,7 @@ const routes = {
     contacts: '/contacts',
     settings: '/settings',
     logOut: '/log-out',
+    register: '/register',
 };
 
 export default routes;

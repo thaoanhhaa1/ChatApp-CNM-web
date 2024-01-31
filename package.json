@@ -4,10 +4,12 @@
     "private": true,
     "dependencies": {
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+        "@reduxjs/toolkit": "^2.0.1",
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
         "@tippyjs/react": "^4.2.6",
+        "axios": "^1.6.5",
         "@uidotdev/usehooks": "^2.4.1",
         "customize-cra": "^1.0.0",
         "i18next": "^23.7.16",
@@ -17,10 +19,13 @@
         "react": "^18.2.0",
         "react-app-rewired": "^2.2.1",
         "react-dom": "^18.2.0",
+        "react-multistep": "^5.5.9",
+        "react-redux": "^9.1.0",
         "react-i18next": "^14.0.0",
         "react-router-dom": "^6.21.1",
         "react-scripts": "5.0.1",
         "sass": "^1.69.7",
+        "validator": "^13.11.0",
         "swiper": "^11.0.5",
         "tailwindcss-animation-delay": "^1.2.0",
         "web-vitals": "^2.1.4"
@@ -53,6 +58,7 @@
         "@tailwindcss/line-clamp": "^0.4.4",
         "autoprefixer": "^10.4.16",
         "babel-plugin-module-resolver": "^5.0.0",
+        "customize-cra": "^1.0.0",
         "postcss": "^8.4.33",
         "tailwindcss": "^3.4.1"
     }
