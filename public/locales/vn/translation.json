@@ -49,6 +49,9 @@
         "message": "Lời chào",
         "enter-message": "Nhập lời chào",
         "close": "Đóng",
-        "invite-contact": "Kết bạn"
+        "invite-contact": "Kết bạn",
+        "phone-empty": "Số điện thoại không được để trống.",
+        "phone-invalid": "Số điện thoại không hợp lệ.",
+        "message-empty": "Lời chào không được để trống."
     }
 }

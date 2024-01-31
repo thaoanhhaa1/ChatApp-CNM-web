@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import validator from 'validator';
 import { SearchIcon, UserAddLineIcon } from '~/assets';
 import Contact from '~/components/contact';
 import FormWrap from '~/components/formWrap';
@@ -60,8 +61,35 @@ const Contacts = () => {
         ],
     });
     const [labels, setLabels] = useState([]);
+    const [phone, setPhone] = useState('');
+    const [message, setMessage] = useState('');
+    const [errors, setErrors] = useState({});
 
-    const handleInviteContact = () => {};
+    const handleValidator = () => {
+        const errors = {};
+
+        if (validator.isEmpty(phone)) errors.phone = 'contacts.phone-empty';
+        else if (!validator.isMobilePhone(phone, 'vi-VN')) errors.phone = 'contacts.phone-invalid';
+
+        if (validator.isEmpty(message)) errors.message = 'contacts.message-empty';
+
+        return errors;
+    };
+
+    const handleInviteContact = () => {
+        const errors = handleValidator();
+        setErrors(errors);
+
+        if (Object.keys(errors).length !== 0) return;
+
+        console.group('Invite Contact');
+        console.log('🚀 ~ Contacts ~ phone:', phone);
+        console.log('🚀 ~ Contacts ~ message:', message);
+        console.groupEnd();
+
+        setPhone('');
+        setMessage('');
+    };
 
     useEffect(() => {
         setLabels(Object.keys(contacts));
@@ -88,11 +116,19 @@ const Contacts = () => {
                 <Modal.Header onClose={setFalse}>{t('contacts.add-contact')}</Modal.Header>
 
                 <div className="p-6 flex flex-col gap-6">
-                    <FormWrap>
+                    <FormWrap error={t(errors.phone)}>
                         <FormWrap.Label htmlFor="phone">{t('contacts.phone')}</FormWrap.Label>
-                        <Input type="tel" id="phone" name="phone" outline placeholder={t('contacts.enter-phone')} />
+                        <Input
+                            onChangeText={setPhone}
+                            value={phone}
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            outline
+                            placeholder={t('contacts.enter-phone')}
+                        />
                     </FormWrap>
-                    <FormWrap>
+                    <FormWrap error={t(errors.message)}>
                         <FormWrap.Label htmlFor="message">{t('contacts.message')}</FormWrap.Label>
                         <Textarea
                             outline
@@ -101,6 +137,8 @@ const Contacts = () => {
                             name="message"
                             placeholder={t('contacts.enter-message')}
                             rows={3}
+                            value={message}
+                            onChangeText={setMessage}
                         />
                     </FormWrap>
                 </div>

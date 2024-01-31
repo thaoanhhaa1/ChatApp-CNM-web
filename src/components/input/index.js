@@ -1,7 +1,21 @@
 import PropTypes from 'prop-types';
 import { classNames } from '~/utils';
 
-const Input = ({ Icon, outline, placeholder = '', className = '', containerClassName = '', ...props }) => {
+const Input = ({
+    Icon,
+    outline,
+    placeholder = '',
+    className = '',
+    containerClassName = '',
+    onChangeText = () => {},
+    onChange = () => {},
+    ...props
+}) => {
+    const handleChange = (e) => {
+        onChange(e);
+        onChangeText(e.target.value);
+    };
+
     return (
         <div
             className={classNames(
@@ -25,6 +39,7 @@ const Input = ({ Icon, outline, placeholder = '', className = '', containerClass
                     className,
                 )}
                 {...props}
+                onChange={handleChange}
             />
         </div>
     );
@@ -36,6 +51,8 @@ Input.propTypes = {
     className: PropTypes.string,
     containerClassName: PropTypes.string,
     outline: PropTypes.bool,
+    onChangeText: PropTypes.func,
+    onChange: PropTypes.func,
 };
 
 export default Input;
