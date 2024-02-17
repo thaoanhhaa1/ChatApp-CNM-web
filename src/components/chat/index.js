@@ -14,7 +14,7 @@ const Chat = () => {
     return (
         <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile }}>
             <div className="flex h-full shadow-navbar z-1 dark:bg-dark">
-                <div className="flex flex-col flex-1">
+                <div className="w-full flex flex-col flex-1">
                     <Header />
                     <Body />
                     <Footer />

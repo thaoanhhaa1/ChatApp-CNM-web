@@ -50,5 +50,16 @@
         "enter-message": "Nhập lời chào",
         "close": "Đóng",
         "invite-contact": "Kết bạn"
+    },
+    "emoji": {
+        "suggested": "Gần đây",
+        "smileys_people": "Con người",
+        "animals_nature": "Tự nhiên",
+        "food_drink": "Đồ ăn",
+        "travel_places": "Du lịch",
+        "activities": "Hoạt động",
+        "objects": "Đồ vật",
+        "symbols": "Biểu tượng",
+        "flags": "Quốc gia"
     }
 }

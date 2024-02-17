@@ -7,55 +7,82 @@ const chats = [
     {
         avatar: 'https://images.unsplash.com/photo-1705733282884-701c98680343?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHx8',
         name: 'John Doe',
-        message: 'Hello, how are you?',
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2021-01-01 09:00:00',
     },
     {
         avatar: 'https://images.unsplash.com/photo-1705437576510-cd12ae0ebb68?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8',
         name: 'Jane Smith',
-        message: "I'm good, thanks! How about you?",
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2021-01-01 09:05:00',
     },
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'John Doe',
-        message: "I'm doing well too.",
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2021-01-01 09:10:00',
     },
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'Jane Smith',
-        message: "That's great to hear!",
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2021-01-01 09:15:00',
     },
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'John Doe',
-        message: 'By the way, did you finish the report?',
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2021-01-01 09:20:00',
     },
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'Jane Smith',
-        message: "Not yet, I'm still working on it.",
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2021-01-01 09:25:00',
     },
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'John Doe',
-        message: 'O',
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2021-01-01 09:30:00',
     },
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'Jane Smith',
-        message: 'Will do, thanks!',
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2021-01-01 09:35:00',
     },
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'Jane Smith',
-        message: 'T',
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2024-01-18 09:35:00',
         files: [
             {
@@ -66,7 +93,10 @@ const chats = [
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'John Doe',
-        message: 'T',
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2024-01-18 09:35:00',
         files: [
             {
@@ -77,7 +107,10 @@ const chats = [
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'John Doe',
-        message: 'T',
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2024-01-18 09:35:00',
         images: [
             'https://plus.unsplash.com/premium_photo-1705003210596-dcff04d0fa5a?q=80&w=1744&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -87,7 +120,10 @@ const chats = [
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'John Doe',
-        message: 'T',
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2024-01-18 09:35:00',
         files: [
             {
@@ -98,14 +134,19 @@ const chats = [
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'John Doe',
-        message:
-            'No problem, have a great day! No problem, have a great day! No problem, have a great day! No problem, have a great day! No problem, have a great day!',
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         date: '2024-01-19 09:40:00',
     },
     {
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         name: 'Jane Smith',
-        message: 'You!',
+        messages: [
+            { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+            { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+        ],
         images: [
             'https://plus.unsplash.com/premium_photo-1705003210596-dcff04d0fa5a?q=80&w=1744&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             'https://plus.unsplash.com/premium_photo-1705003210596-dcff04d0fa5a?q=80&w=1744&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',

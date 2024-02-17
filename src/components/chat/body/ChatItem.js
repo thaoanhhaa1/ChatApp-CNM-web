@@ -34,6 +34,12 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
         },
     ];
 
+    const handleClickMessage = (message) => {
+        if (message.type === 'text') return;
+
+        console.log(message);
+    };
+
     return (
         <div>
             <div
@@ -55,7 +61,7 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
                             'w-fit flex flex-col gap-1 px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
                             isMe
                                 ? 'rounded-l-lg bg-sidebar-sub-bg dark:bg-dark-sidebar-bg'
-                                : 'rounded-r-lg bg-primary-color',
+                                : 'rounded-r-lg bg-primary-color bg-opacity-60',
                         )}
                     >
                         <p
@@ -64,7 +70,16 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
                                 isMe ? 'text-primary dark:text-dark-primary' : 'text-white',
                             )}
                         >
-                            {chat.message}
+                            {chat.messages.map((message, index) => (
+                                <span
+                                    key={index}
+                                    onClick={() => handleClickMessage(message)}
+                                    className={classNames(message.type === 'tag' && 'text-[#0068ff] cursor-pointer')}
+                                >
+                                    {message.type === 'tag' && '@'}
+                                    {message.content}
+                                </span>
+                            ))}
                         </p>
 
                         {chat.images && (
@@ -94,7 +109,7 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
                             'border-5 w-0',
                             isMe
                                 ? 'border-sidebar-sub-bg dark:border-dark-sidebar-bg ml-auto border-b-transparent border-l-transparent dark:border-b-transparent dark:border-l-transparent'
-                                : 'border-primary-color border-r-transparent border-b-transparent',
+                                : 'border-primary-color border-opacity-60 border-r-transparent border-b-transparent',
                         )}
                     />
                     {isYourNext || (

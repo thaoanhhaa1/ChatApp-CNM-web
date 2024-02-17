@@ -50,5 +50,16 @@
         "enter-message": "Enter Message",
         "close": "Close",
         "invite-contact": "Invite Contact"
+    },
+    "emoji": {
+        "suggested": "Recent",
+        "smileys_people": "People",
+        "animals_nature": "Nature",
+        "food_drink": "Food & Drink",
+        "travel_places": "Travel & places",
+        "activities": "Activity",
+        "objects": "Objects",
+        "symbols": "Symbols",
+        "flags": "Flags"
     }
 }
