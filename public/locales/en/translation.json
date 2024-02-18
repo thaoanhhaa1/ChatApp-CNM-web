@@ -61,5 +61,8 @@
         "objects": "Objects",
         "symbols": "Symbols",
         "flags": "Flags"
+    },
+    "sticker": {
+        "search": "Search sticker"
     }
 }

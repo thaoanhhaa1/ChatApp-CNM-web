@@ -334,4 +334,22 @@ export const BlockLineIcon = ({ className }) => (
     </svg>
 );
 
+export const RightIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width={12} height={18} viewBox="0 0 7 16">
+        <path
+            fill="currentColor"
+            d="M1.5 13a.47.47 0 0 1-.35-.15c-.2-.2-.2-.51 0-.71L5.3 7.99L1.15 3.85c-.2-.2-.2-.51 0-.71c.2-.2.51-.2.71 0l4.49 4.51c.2.2.2.51 0 .71l-4.5 4.49c-.1.1-.23.15-.35.15"
+        ></path>
+    </svg>
+);
+
+export const LeftIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width={12} height={18} viewBox="0 0 7 16">
+        <path
+            fill="currentColor"
+            d="M5.5 13a.47.47 0 0 1-.35-.15l-4.5-4.5c-.2-.2-.2-.51 0-.71l4.5-4.49c.2-.2.51-.2.71 0c.2.2.2.51 0 .71L1.71 8l4.15 4.15c.2.2.2.51 0 .71c-.1.1-.23.15-.35.15Z"
+        ></path>
+    </svg>
+);
+
 // export const Icon = ({className}) => ()

@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mention, MentionsInput } from 'react-mentions';
 import { AttachmentLineIcon, ImageFillIcon, SendPlaneFillIcon } from '~/assets';
+import { insertEmojiToChat, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
 import MentionItem from './Mention';
@@ -9,6 +10,7 @@ import MentionItem from './Mention';
 const Footer = () => {
     const { t } = useTranslation();
     const [chat, setChat] = useState('');
+    const [selectionStart, setSelectionStart] = useState(-1);
     const [mentions] = useState([
         {
             id: 'walter',
@@ -84,25 +86,26 @@ const Footer = () => {
     const ref = useRef();
 
     const handleChange = (e) => setChat(e.target.value);
+    const handleEmojiClick = (e) => {
+        const inputElement = ref.current.inputElement;
+        const selectionStart = inputElement.selectionStart;
+
+        setChat((chat) => insertEmojiToChat(e.emoji, chat, ref.current.inputElement));
+        setSelectionStart(selectionStart + 2);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.code === 'Enter' && !e.shiftKey) {
+            handleSend();
+            e.preventDefault();
+        }
+    };
 
     const handleSend = () => {
-        console.log(chat);
-
-        const messages = chat.split(/@~~|~~@/).map((message) => {
-            if (chat.includes(`@~~${message}~~@`))
-                return {
-                    content: message.split('~~')[1],
-                    id: message.split('~~')[0],
-                    type: 'tag',
-                };
-
-            return {
-                content: message,
-                type: 'text',
-            };
-        });
+        const messages = splitMessage(chat);
 
         console.log('🚀 ~ messages ~ messages:', messages);
+        setChat('');
     };
 
     const renderUserSuggestion = (e) => <MentionItem mention={e} />;
@@ -122,10 +125,20 @@ const Footer = () => {
         return () => inputElement.removeEventListener('scroll', handleScroll);
     }, []);
 
+    useLayoutEffect(() => {
+        const inputElement = ref.current.inputElement;
+
+        if (selectionStart === -1) return;
+
+        inputElement.focus();
+        inputElement.setSelectionRange(selectionStart, selectionStart);
+    }, [selectionStart]);
+
     return (
         <div className="items-end border-t border-separate dark:border-dark-separate p-2 sm:p-3 md:p-4 dl:p-5 flex gap-2 w-full">
             <label className="flex-1">
                 <MentionsInput
+                    onKeyDown={handleKeyDown}
                     allowSpaceInQuery
                     forceSuggestionsAboveCursor
                     spellCheck={false}
@@ -151,7 +164,7 @@ const Footer = () => {
                 </MentionsInput>
             </label>
             <div className="flex">
-                <Emoticon />
+                <Emoticon handleEmojiClick={handleEmojiClick} />
                 <Button icon={AttachmentLineIcon} />
                 <Button icon={ImageFillIcon} />
                 <Button onClick={handleSend} icon={SendPlaneFillIcon} type="primary" />

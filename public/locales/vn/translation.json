@@ -61,5 +61,8 @@
         "objects": "Đồ vật",
         "symbols": "Biểu tượng",
         "flags": "Quốc gia"
+    },
+    "sticker": {
+        "search": "Tìm kiếm sticker"
     }
 }

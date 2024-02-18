@@ -5,37 +5,19 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tippy from '@tippyjs/react';
 import EmojiPicker from 'emoji-picker-react';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { EmotionHappyLineIcon } from '~/assets';
-import { emoji } from '~/constants';
+import Sticker from '~/components/sticker';
 import Button from './Button';
+import PropTypes from 'prop-types';
 
-const Emoticon = () => {
-    const { t } = useTranslation();
+const Emoticon = ({ handleEmojiClick }) => {
     const [value, setValue] = useState('2');
-
-    const [categories, setCategories] = useState([]);
 
     const handleChange = (_, a) => setValue(a);
 
-    const handleShow = () => {
-        console.log('Show..........');
-
-        setCategories(
-            emoji.categories.map((category) => ({
-                category,
-                name: t(`emoji.${category}`),
-            })),
-        );
-    };
-
-    useEffect(() => {
-        console.log('Render');
-    }, []);
-
     return (
-        <div>
+        <div className="relative">
             <Tippy
                 offset={[0, 0]}
                 arrow={false}
@@ -48,9 +30,11 @@ const Emoticon = () => {
                                 <Tab label="EMOJI" value="2" />
                             </TabList>
                         </Box>
-                        <TabPanel value="1">Item One</TabPanel>
+                        <TabPanel value="1">
+                            <Sticker />
+                        </TabPanel>
                         <TabPanel value="2">
-                            <EmojiPicker categories={categories} />
+                            <EmojiPicker searchDisabled onEmojiClick={handleEmojiClick} />
                         </TabPanel>
                     </TabContext>
                 }
@@ -65,6 +49,8 @@ const Emoticon = () => {
     );
 };
 
-Emoticon.propTypes = {};
+Emoticon.propTypes = {
+    handleEmojiClick: PropTypes.func.isRequired,
+};
 
 export default Emoticon;

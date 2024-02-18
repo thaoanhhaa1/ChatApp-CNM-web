@@ -1,20 +1,30 @@
 import PropTypes from 'prop-types';
 import { classNames } from '~/utils';
 
-const Input = ({ Icon, outline, placeholder = '', className = '', containerClassName = '', ...props }) => {
+const Input = ({
+    Icon,
+    outline,
+    rounded,
+    placeholder = '',
+    className = '',
+    iconClassName = '',
+    containerClassName = '',
+    ...props
+}) => {
     return (
         <div
             className={classNames(
-                'border flex items-center rounded overflow-hidden transition-all',
+                'border flex items-center overflow-hidden transition-all',
                 outline
                     ? 'border-separate dark:border-dark-separate dark:focus-within:border-dark-sidebar-item-color bg-white dark:bg-dark-sidebar-sub-bg focus-within:border-input'
                     : 'border-transparent bg-input-bg dark:bg-dark-input-bg',
+                rounded ? 'rounded-full' : 'rounded',
                 containerClassName,
             )}
         >
             {Icon && (
-                <span className="pl-2 sm:pl-4 text-secondary dark:text-dark-secondary">
-                    <Icon className="w-[18px] h-[18px]" />
+                <span className={classNames('pl-2 sm:pl-4 text-secondary dark:text-dark-secondary', iconClassName)}>
+                    <Icon className="w-full h-full" />
                 </span>
             )}
             <input
@@ -35,7 +45,9 @@ Input.propTypes = {
     placeholder: PropTypes.string,
     className: PropTypes.string,
     containerClassName: PropTypes.string,
+    iconClassName: PropTypes.string,
     outline: PropTypes.bool,
+    rounded: PropTypes.bool,
 };
 
 export default Input;

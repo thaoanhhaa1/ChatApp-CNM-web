@@ -56,7 +56,7 @@ h1 {
     }
 
     &[role='emoji'] {
-        @apply bg-white shadow-[0_0_10px_rgba(0,0,0,0.2)];
+        @apply bg-white shadow-[0_0_10px_rgba(0,0,0,0.2)] border border-[#d6dbe1];
 
         .css-13xfq8m-MuiTabPanel-root {
             @apply w-[350px] h-[450px];
