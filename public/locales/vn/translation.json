@@ -64,5 +64,11 @@
     },
     "sticker": {
         "search": "Tìm kiếm sticker"
+    },
+    "attachFiles": {
+        "photo": "ảnh",
+        "file": "file",
+        "and": "và",
+        "selected": "được chọn"
     }
 }

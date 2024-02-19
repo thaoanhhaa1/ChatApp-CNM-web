@@ -81,23 +81,6 @@ h1 {
     }
 }
 
-// Input custom
-.input {
-    outline: none;
-
-    span {
-        @apply break-all;
-
-        br {
-            @apply hidden;
-        }
-
-        &.emoji {
-            @apply w-[22px] h-[22px] inline-block bg-cover text-transparent;
-        }
-    }
-}
-
 // Tab custom
 div.css-13xfq8m-MuiTabPanel-root {
     @apply p-0;
@@ -167,4 +150,8 @@ div.css-13xfq8m-MuiTabPanel-root {
 
 .dark .mentions-input__suggestions {
     background: #313a43 !important;
+}
+
+#draggable {
+    @apply absolute pointer-events-none h-full w-full top-0 left-0 select-none;
 }

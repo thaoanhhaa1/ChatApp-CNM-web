@@ -24,6 +24,7 @@
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-app-rewired": "^2.2.1",
+        "react-beautiful-dnd": "^13.1.1",
         "react-dom": "^18.2.0",
         "react-i18next": "^14.0.0",
         "react-image-size": "^2.3.2",

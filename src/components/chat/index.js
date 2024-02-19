@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import { ChatProvider } from '~/context';
 import Body from './body';
 import Footer from './footer';
 import Header from './header';
 import Profile from './profile';
-import { ChatProvider } from '~/context';
 
 const Chat = () => {
     const [showProfile, setShowProfile] = useState(false);

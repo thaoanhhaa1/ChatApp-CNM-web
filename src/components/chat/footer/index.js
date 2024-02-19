@@ -1,7 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mention, MentionsInput } from 'react-mentions';
+import { useSelector } from 'react-redux';
 import { AttachmentLineIcon, ImageFillIcon, SendPlaneFillIcon } from '~/assets';
+import AttachFiles from '~/components/attachFiles';
 import { insertEmojiToChat, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
@@ -83,6 +85,7 @@ const Footer = () => {
             display: 'Lydìã Rôdarté-Qüayle',
         },
     ]);
+    const { files } = useSelector((state) => state.attachFiles);
     const ref = useRef();
 
     const handleChange = (e) => setChat(e.target.value);
@@ -135,40 +138,43 @@ const Footer = () => {
     }, [selectionStart]);
 
     return (
-        <div className="items-end border-t border-separate dark:border-dark-separate p-2 sm:p-3 md:p-4 dl:p-5 flex gap-2 w-full">
-            <label className="flex-1">
-                <MentionsInput
-                    onKeyDown={handleKeyDown}
-                    allowSpaceInQuery
-                    forceSuggestionsAboveCursor
-                    spellCheck={false}
-                    maxLength={135813}
-                    autoComplete="off"
-                    autoCorrect="off"
-                    ref={ref}
-                    rows={1}
-                    value={chat}
-                    onChange={handleChange}
-                    placeholder={t('chat.chat')}
-                    className="mentions-input rounded text-sm leading-normal placeholder:text-secondary dark:placeholder:text-dark-secondary text-input dark:text-dark-primary bg-input-bg dark:bg-dark-input-bg flex-1 my-0.5"
-                >
-                    <Mention
-                        displayTransform={displayTransform}
-                        markup="@~~__id__~~__display__~~@"
-                        appendSpaceOnAdd
-                        className="text-[#0068ff]"
-                        trigger="@"
-                        data={mentions}
-                        renderSuggestion={renderUserSuggestion}
-                    />
-                </MentionsInput>
-            </label>
-            <div className="flex">
-                <Emoticon handleEmojiClick={handleEmojiClick} />
-                <Button icon={AttachmentLineIcon} />
-                <Button icon={ImageFillIcon} />
-                <Button onClick={handleSend} icon={SendPlaneFillIcon} type="primary" />
+        <div className="border-t border-separate dark:border-dark-separate p-2 sm:p-3 md:p-4 dl:p-5">
+            <div className="items-end flex gap-2">
+                <label className="flex-1">
+                    <MentionsInput
+                        onKeyDown={handleKeyDown}
+                        allowSpaceInQuery
+                        forceSuggestionsAboveCursor
+                        spellCheck={false}
+                        maxLength={135813}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        ref={ref}
+                        rows={1}
+                        value={chat}
+                        onChange={handleChange}
+                        placeholder={t('chat.chat')}
+                        className="mentions-input rounded text-sm leading-normal placeholder:text-secondary dark:placeholder:text-dark-secondary text-input dark:text-dark-primary bg-input-bg dark:bg-dark-input-bg flex-1 my-0.5"
+                    >
+                        <Mention
+                            displayTransform={displayTransform}
+                            markup="@~~__id__~~__display__~~@"
+                            appendSpaceOnAdd
+                            className="text-[#0068ff]"
+                            trigger="@"
+                            data={mentions}
+                            renderSuggestion={renderUserSuggestion}
+                        />
+                    </MentionsInput>
+                </label>
+                <div className="flex">
+                    <Emoticon handleEmojiClick={handleEmojiClick} />
+                    <Button icon={AttachmentLineIcon} />
+                    <Button icon={ImageFillIcon} />
+                    <Button onClick={handleSend} icon={SendPlaneFillIcon} type="primary" />
+                </div>
             </div>
+            {files.length > 0 && <AttachFiles />}
         </div>
     );
 };

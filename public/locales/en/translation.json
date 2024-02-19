@@ -64,5 +64,11 @@
     },
     "sticker": {
         "search": "Search sticker"
+    },
+    "attachFiles": {
+        "photo": "photo",
+        "file": "file",
+        "and": "and",
+        "selected": "selected"
     }
 }

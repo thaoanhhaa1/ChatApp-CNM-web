@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { DownloadLineIcon, FileTextFillIcon, ImageFillIcon, MoreFillIcon } from '~/assets';
-import { convertFileSize } from '~/utils';
+import { convertFileSize, isPhotoFile } from '~/utils';
 import Button from './Button';
 
 const getIcon = (fileName) => {
-    if (/\.(jpg|jpeg|png|gif|bmp)$/i.test(fileName)) return ImageFillIcon;
+    if (isPhotoFile(fileName)) return ImageFillIcon;
 
     // Regex video: /\.(mp4|mkv|avi|mov|wmv|flv)$/i
 
