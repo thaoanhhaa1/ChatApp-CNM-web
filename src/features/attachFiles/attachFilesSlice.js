@@ -140,8 +140,11 @@ const attachFilesSlice = createSlice({
         setFiles: (state, { payload }) => {
             state.files = payload;
         },
+        removeFile: (state, { payload }) => {
+            state.files = state.files.filter((file) => file.id !== payload);
+        },
     },
 });
 
 export default attachFilesSlice.reducer;
-export const { setFiles } = attachFilesSlice.actions;
+export const { setFiles, removeFile } = attachFilesSlice.actions;
