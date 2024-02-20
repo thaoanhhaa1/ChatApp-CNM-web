@@ -69,6 +69,14 @@
         "photo": "ảnh",
         "file": "file",
         "and": "và",
-        "selected": "được chọn"
+        "selected": "được chọn",
+        "quickSend": {
+            "title": "Gửi nhanh",
+            "description": "Thả Files vào đây để gửi ngay"
+        },
+        "preview": {
+            "title": "Xem trước khi gửi",
+            "description": "Thả Files vào đây để xem lại trước khi gửi"
+        }
     }
 }

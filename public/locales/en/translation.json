@@ -69,6 +69,14 @@
         "photo": "photo",
         "file": "file",
         "and": "and",
-        "selected": "selected"
+        "selected": "selected",
+        "quickSend": {
+            "title": "Quick send",
+            "description": "Drop Files here to send immediately"
+        },
+        "preview": {
+            "title": "Preview before sending",
+            "description": "Drop Files here to preview before sending"
+        }
     }
 }

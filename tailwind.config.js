@@ -29,6 +29,10 @@ module.exports = {
                 'dark-tooltip-color': '#303841',
                 'tooltip-color': '#f7f7ff',
                 input: '#495057',
+                primary: '#343a40',
+                'dark-primary': '#eff2f7',
+                secondary: '#7a7f9a',
+                'dark-secondary': '#abb4d2',
             },
             screens: {
                 ex: '480px',
@@ -50,12 +54,6 @@ module.exports = {
                 ss: ['0.8125rem', '0.9375rem'],
                 mm: ['0.9375rem', '1.125rem'],
                 base: ['1rem', '1.2rem'],
-            },
-            textColor: {
-                primary: '#343a40',
-                'dark-primary': '#eff2f7',
-                secondary: '#7a7f9a',
-                'dark-secondary': '#abb4d2',
             },
             transitionDuration: {
                 400: '400ms',

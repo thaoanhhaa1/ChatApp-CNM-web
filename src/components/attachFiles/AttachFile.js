@@ -15,7 +15,7 @@ const AttachFile = ({ file }) => {
             }}
             className="cursor-pointer bg-center bg-no-repeat bg-contain w-[100px] h-[100px] rounded-md border border-[#d6dbe1] relative overflow-hidden"
         >
-            <div className="text-ellipsis overflow-hidden absolute bottom-0 left-0 right-0 px-1 py-0.5 text-ss leading-normal text-center bg-black bg-opacity-50 text-white">
+            <div className="h-6 text-nowrap text-ellipsis overflow-hidden absolute bottom-0 left-0 right-0 px-1 py-0.5 text-ss leading-normal text-center bg-black bg-opacity-50 text-white">
                 {file.name}
             </div>
             <span

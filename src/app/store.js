@@ -7,4 +7,8 @@ export const store = configureStore({
         user: userReducer,
         attachFiles: attachFilesReducer,
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 });
