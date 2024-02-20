@@ -38,6 +38,7 @@
         "react-scripts": "5.0.1",
         "react-textarea-autosize": "^8.5.3",
         "sass": "^1.69.7",
+        "smile2emoji": "^3.10.0",
         "swiper": "^11.0.5",
         "tailwindcss-animation-delay": "^1.2.0",
         "uuid": "^9.0.1",

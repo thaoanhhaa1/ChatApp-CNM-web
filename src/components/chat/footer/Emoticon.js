@@ -5,13 +5,15 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tippy from '@tippyjs/react';
 import EmojiPicker from 'emoji-picker-react';
+import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { EmotionHappyLineIcon } from '~/assets';
 import Sticker from '~/components/sticker';
 import Button from './Button';
-import PropTypes from 'prop-types';
 
 const Emoticon = ({ handleEmojiClick }) => {
+    const { t } = useTranslation();
     const [value, setValue] = useState('2');
 
     const handleChange = (_, a) => setValue(a);
@@ -43,7 +45,9 @@ const Emoticon = ({ handleEmojiClick }) => {
                 className="p-0"
                 trigger="click"
             >
-                <Button icon={EmotionHappyLineIcon} />
+                <Tippy content={t('chat.emoji')}>
+                    <Button icon={EmotionHappyLineIcon} />
+                </Tippy>
             </Tippy>
         </div>
     );

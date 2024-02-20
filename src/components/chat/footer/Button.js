@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 import { classNames } from '~/utils';
 
-const Button = forwardRef(({ type = 'text-primary', icon, onClick = () => {} }, ref) => {
+const Button = forwardRef(({ type = 'text-primary', icon, className, onClick = () => {} }, ref) => {
     const Icon = icon;
 
     return (
@@ -14,6 +14,7 @@ const Button = forwardRef(({ type = 'text-primary', icon, onClick = () => {} }, 
                 type === 'text-primary'
                     ? 'text-primary-color bg-white dark:bg-dark'
                     : 'text-white bg-primary-color hover:brightness-90',
+                className,
             )}
         >
             <Icon className="w-4 h-4" />
@@ -24,6 +25,7 @@ const Button = forwardRef(({ type = 'text-primary', icon, onClick = () => {} }, 
 Button.propTypes = {
     type: PropTypes.string,
     icon: PropTypes.func.isRequired,
+    className: PropTypes.string,
     onClick: PropTypes.func,
 };
 

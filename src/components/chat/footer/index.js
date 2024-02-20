@@ -2,12 +2,14 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mention, MentionsInput } from 'react-mentions';
 import { useSelector } from 'react-redux';
+import { checkText } from 'smile2emoji';
 import { AttachmentLineIcon, ImageFillIcon, SendPlaneFillIcon } from '~/assets';
 import AttachFiles from '~/components/attachFiles';
 import { insertEmojiToChat, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
 import MentionItem from './Mention';
+import SendFiles from './SendFiles';
 
 const Footer = () => {
     const { t } = useTranslation();
@@ -88,7 +90,7 @@ const Footer = () => {
     const { files } = useSelector((state) => state.attachFiles);
     const ref = useRef();
 
-    const handleChange = (e) => setChat(e.target.value);
+    const handleChange = (e) => setChat(checkText(e.target.value));
     const handleEmojiClick = (e) => {
         const inputElement = ref.current.inputElement;
         const selectionStart = inputElement.selectionStart;
@@ -103,6 +105,8 @@ const Footer = () => {
             e.preventDefault();
         }
     };
+
+    const handleSendFiles = (files) => console.log('Send files...', files);
 
     const handleSend = () => {
         const messages = splitMessage(chat);
@@ -169,8 +173,13 @@ const Footer = () => {
                 </label>
                 <div className="flex">
                     <Emoticon handleEmojiClick={handleEmojiClick} />
-                    <Button icon={AttachmentLineIcon} />
-                    <Button icon={ImageFillIcon} />
+                    <SendFiles onSend={handleSendFiles} Icon={AttachmentLineIcon} tooltip={t('chat.attached-file')} />
+                    <SendFiles
+                        onSend={handleSendFiles}
+                        Icon={ImageFillIcon}
+                        tooltip={t('chat.images')}
+                        accept="image/*"
+                    />
                     <Button onClick={handleSend} icon={SendPlaneFillIcon} type="primary" />
                 </div>
             </div>

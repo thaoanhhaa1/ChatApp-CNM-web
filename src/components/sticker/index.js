@@ -46,7 +46,7 @@ const Sticker = () => {
             <div className="flex-1 flex flex-col pb-0.5">
                 <div className="p-2">
                     <Input
-                        iconClassName="sm:pl-2 h-[14px] w-[22px]"
+                        iconClassName="sm:!pl-2 h-[14px] w-[22px]"
                         className="py-0 h-6 pr-3 sm:pl-2"
                         Icon={SearchIcon}
                         rounded

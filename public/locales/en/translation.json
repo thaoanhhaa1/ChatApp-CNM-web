@@ -35,7 +35,10 @@
             "save": "Save",
             "forward": "Forward",
             "delete": "Delete"
-        }
+        },
+        "emoji": "Emoji",
+        "attached-file": "Attached File",
+        "images": "Images"
     },
     "contacts": {
         "title": "Contacts",

@@ -35,7 +35,10 @@
             "save": "Lưu",
             "forward": "Chuyển tiếp",
             "delete": "Xoá"
-        }
+        },
+        "emoji": "Biểu cảm",
+        "attached-file": "Đính kèm file",
+        "images": "Gửi hình ảnh"
     },
     "contacts": {
         "title": "Liên hệ",
