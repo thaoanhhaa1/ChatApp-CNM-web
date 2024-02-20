@@ -115,7 +115,7 @@ const Contacts = () => {
             <Modal show={value} onClickOutside={setFalse}>
                 <Modal.Header onClose={setFalse}>{t('contacts.add-contact')}</Modal.Header>
 
-                <div className="p-6 flex flex-col gap-6">
+                <div className="p-2 ex:p-4 sm:p-6 flex flex-col gap-2 ex:gap-4 sn:gap-6">
                     <FormWrap error={t(errors.phone)}>
                         <FormWrap.Label htmlFor="phone">{t('contacts.phone')}</FormWrap.Label>
                         <Input
