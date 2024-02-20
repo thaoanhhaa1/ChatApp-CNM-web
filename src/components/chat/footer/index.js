@@ -1,3 +1,4 @@
+import { useWindowSize } from '@uidotdev/usehooks';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mention, MentionsInput } from 'react-mentions';
@@ -89,6 +90,7 @@ const Footer = () => {
     ]);
     const { files } = useSelector((state) => state.attachFiles);
     const ref = useRef();
+    const { width } = useWindowSize();
 
     const handleChange = (e) => setChat(checkText(e.target.value));
     const handleEmojiClick = (e) => {
@@ -109,13 +111,15 @@ const Footer = () => {
     const handleSendFiles = (files) => console.log('Send files...', files);
 
     const handleSend = () => {
+        if (!chat) return;
+
         const messages = splitMessage(chat);
 
         console.log('🚀 ~ messages ~ messages:', messages);
         setChat('');
     };
 
-    const renderUserSuggestion = (e) => <MentionItem mention={e} />;
+    const renderUserSuggestion = (mention) => <MentionItem mention={mention} />;
 
     const displayTransform = (_, display) => `@${display}`;
 
@@ -140,6 +144,16 @@ const Footer = () => {
         inputElement.focus();
         inputElement.setSelectionRange(selectionStart, selectionStart);
     }, [selectionStart]);
+
+    useLayoutEffect(() => {
+        const inputElement = ref.current.inputElement;
+        const containerElement = ref.current.containerElement;
+
+        const inputWidth = inputElement.clientWidth;
+
+        if (inputWidth < 300) containerElement.classList.add('move');
+        else containerElement.classList.remove('move');
+    }, [width]);
 
     return (
         <div className="border-t border-separate dark:border-dark-separate p-2 sm:p-3 md:p-4 dl:p-5">

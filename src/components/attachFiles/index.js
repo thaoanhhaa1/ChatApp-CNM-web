@@ -26,7 +26,7 @@ const AttachFiles = () => {
     };
 
     return (
-        <div className="flex flex-col mt-2 -mr-4 pt-3 border-t border-separate dark:border-dark-separate max-h-[180px] -mb-2">
+        <div className="flex flex-col mt-2 sm:-mr-4 pt-2 ex:pt-3 border-t border-separate dark:border-dark-separate max-h-[180px] -mb-2">
             <Header />
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="droppable" direction="horizontal">

@@ -59,13 +59,16 @@ h1 {
         @apply bg-white shadow-[0_0_10px_rgba(0,0,0,0.2)] border border-[#d6dbe1];
 
         .css-13xfq8m-MuiTabPanel-root {
-            @apply w-[350px] h-[450px];
+            @apply max-w-[350px] w-full aspect-[350/450];
         }
     }
 }
 
 // Emoji Custom
 .epr-main {
+    @apply max-w-full aspect-[350/450];
+    height: unset !important;
+
     .epr-body::-webkit-scrollbar-button,
     .epr-header > div:first-child,
     > div:last-child {
@@ -87,14 +90,19 @@ div.css-13xfq8m-MuiTabPanel-root {
 }
 
 .MuiTabs-flexContainer {
-    @apply justify-center px-4;
+    @apply justify-center px-0 ex:px-4;
 }
 
 .MuiTab-root[role='tab'] {
-    @apply w-[154px];
+    @apply max-w-[154px] w-full flex-1;
 }
 
 // Mentions Input Custom
+.mentions-input.move .mentions-input__suggestions {
+    right: unset !important;
+    left: 0;
+}
+
 .mentions-input__control {
     @apply relative;
     max-height: 182px;
@@ -122,13 +130,7 @@ div.css-13xfq8m-MuiTabPanel-root {
     @apply px-2 sm:px-4 py-1 sm:py-2;
 }
 
-.dark :is(.mentions-input__highlighter, .mentions-input__input, .mentions-input__suggestions) {
-    &::-webkit-scrollbar-thumb {
-        @apply bg-[#696b6b] rounded-md;
-    }
-}
-
-:is(.mentions-input__highlighter, .mentions-input__input, .mentions-input__suggestions) {
+:is(.mentions-input__highlighter, .mentions-input__input, .mentions-input__suggestions__list) {
     &::-webkit-scrollbar {
         @apply absolute right-0 w-1 bg-transparent;
     }
@@ -138,14 +140,17 @@ div.css-13xfq8m-MuiTabPanel-root {
     }
 
     &::-webkit-scrollbar-thumb {
-        @apply bg-[#7f7f7f] rounded-md;
+        @apply bg-[#BCC0C9] dark:bg-[#a2adb7] rounded-md;
     }
 }
 
 .mentions-input__suggestions {
-    @apply py-3 shadow-[0_0_10px_0_rgba(0,0,0,0.2)] translate-y-1 rounded-lg max-h-[410px] overflow-auto;
+    @apply py-2 ex:py-3 shadow-[0_0_10px_0_rgba(0,0,0,0.2)] translate-y-1 rounded-lg w-[300px];
     margin: 0 !important;
-    min-width: 300px !important;
+
+    &__list {
+        @apply max-h-[410px] overflow-auto;
+    }
 }
 
 .dark .mentions-input__suggestions {
@@ -157,7 +162,7 @@ div.css-13xfq8m-MuiTabPanel-root {
 }
 
 // Attach files
-.attach-files {
+:is(.attach-files, .epr-body) {
     &::-webkit-scrollbar {
         @apply w-2;
     }

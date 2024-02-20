@@ -25,7 +25,11 @@ const DropZone = ({ height, title, description, onDrop = () => {} }) => {
                 >
                     {title}
                 </div>
-                <p className="text-sm leading-normal dark:text-[#9e9f9f]">{description}</p>
+                {description && (
+                    <p className={classNames('text-sm leading-normal dark:text-[#9e9f9f]', height < 66 && 'hidden')}>
+                        {description}
+                    </p>
+                )}
             </div>
             <input {...getInputProps()} />
         </div>

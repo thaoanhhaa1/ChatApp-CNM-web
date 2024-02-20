@@ -1,3 +1,4 @@
+import { useWindowSize } from '@uidotdev/usehooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +19,7 @@ const Chat = () => {
     const dropZoneRef = useRef();
     const [dropZoneHeights, setDropZoneHeights] = useState([0, 0]);
     const { files } = useSelector((state) => state.attachFiles);
+    const { width } = useWindowSize();
     const dispatch = useDispatch();
 
     const handleDropPreview = useCallback(
@@ -43,17 +45,18 @@ const Chat = () => {
         if (!element) return;
 
         let enterTarget = null;
-        const { x, y, width, height } = element.getBoundingClientRect();
 
         const handleDragEnter = (e) => {
-            if (e.x >= x && e.x <= x + width && e.y >= y && e.y <= y + height) {
+            const { top, bottom, left, right } = element.getBoundingClientRect();
+            if (e.x >= left && e.x <= right && e.y >= top && e.y <= bottom) {
                 setShowDropZone();
                 enterTarget = e.target;
             }
         };
 
         const handleDragLeave = (e) => {
-            if (enterTarget === e.target && !(e.x >= x && e.x <= x + width && e.y >= y && e.y <= y + height))
+            const { top, bottom, left, right } = element.getBoundingClientRect();
+            if (enterTarget === e.target && !(e.x >= left && e.x <= right && e.y >= top && e.y <= bottom))
                 setHiddenDropZone();
         };
 
@@ -75,7 +78,7 @@ const Chat = () => {
         const firstHeight = element.firstChild.clientHeight;
 
         setDropZoneHeights([firstHeight, parentHeight - firstHeight]);
-    }, [files]);
+    }, [files, width]);
 
     return (
         <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile }}>

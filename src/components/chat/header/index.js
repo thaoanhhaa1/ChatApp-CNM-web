@@ -76,7 +76,7 @@ const Header = () => {
                 <Link to="/" className="text-base font-semibold line-clamp-1">
                     Doris Brown
                 </Link>
-                <RecordCircleFillIcon className="flex-shrink-0 -ml-2 w-2.5 h-2.5 text-success" />
+                <RecordCircleFillIcon className="flex-shrink-0 -ml-1 sm:-ml-2 w-2.5 h-2.5 text-success" />
             </div>
             <div className="flex gap-2">
                 <div>
