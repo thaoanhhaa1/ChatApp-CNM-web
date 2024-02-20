@@ -5,7 +5,7 @@ import { isPhotoFile } from '~/utils';
 import HeaderLabel from './HeaderLabel';
 
 const Header = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { files } = useSelector((state) => state.attachFiles);
     const [numberPhotos, numberFiles] = useMemo(
         () =>
@@ -27,14 +27,14 @@ const Header = () => {
             {numberPhotos > 0 && (
                 <HeaderLabel number={numberPhotos}>
                     {t('attachFiles.photo')}
-                    {numberPhotos > 1 && 's'}
+                    {numberPhotos > 1 && i18n.language === 'en' && 's'}
                 </HeaderLabel>
             )}
             {numberPhotos > 0 && numberFiles > 0 && <span>{t('attachFiles.and')}</span>}
             {numberFiles > 0 && (
                 <HeaderLabel number={numberFiles}>
                     {t('attachFiles.file')}
-                    {numberFiles > 1 && 's'}
+                    {numberFiles > 1 && i18n.language === 'en' && 's'}
                 </HeaderLabel>
             )}
             <span>{t('attachFiles.selected')}</span>

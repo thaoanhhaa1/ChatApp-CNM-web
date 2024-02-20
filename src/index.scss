@@ -155,3 +155,18 @@ div.css-13xfq8m-MuiTabPanel-root {
 #draggable {
     @apply absolute pointer-events-none h-full w-full top-0 left-0 select-none;
 }
+
+// Attach files
+.attach-files {
+    &::-webkit-scrollbar {
+        @apply w-2;
+    }
+
+    &::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        @apply bg-[#BCC0C9] dark:bg-[#a2adb7] rounded-[3px];
+    }
+}

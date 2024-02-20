@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 const HeaderLabel = ({ number, children }) => {
     return (
         <>
-            <span className="px-1 py-[1px] font-medium rounded bg-[#f0f7ff] text-[#005ae0]">{number}</span>
+            <span className="px-1 py-[1px] font-medium rounded bg-[#f0f7ff] dark:bg-[#0f2345] text-[#005ae0] dark:text-[#3989ff]">
+                {number}
+            </span>
             <span>{children}</span>
         </>
     );

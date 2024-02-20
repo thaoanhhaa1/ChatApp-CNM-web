@@ -26,14 +26,14 @@ const AttachFiles = () => {
     };
 
     return (
-        <div className="flex flex-col mt-2 pt-3 border-t border-[#d6dbe1] max-h-[180px] -mb-2">
+        <div className="flex flex-col mt-2 -mr-4 pt-3 border-t border-separate dark:border-dark-separate max-h-[180px] -mb-2">
             <Header />
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="droppable" direction="horizontal">
                     {(provided) => (
                         <div
                             ref={provided.innerRef}
-                            className="flex overflow-x-hidden overflow-y-auto flex-wrap w-full"
+                            className="attach-files flex overflow-x-hidden overflow-y-auto flex-wrap w-full"
                             {...provided.droppableProps}
                         >
                             {files.map((item, index) => (

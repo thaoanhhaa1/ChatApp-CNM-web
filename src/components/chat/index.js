@@ -87,7 +87,7 @@ const Chat = () => {
                         <Footer />
 
                         {showDropZone && (
-                            <div className="z-1 absolute inset-0 bg-white bg-opacity-90">
+                            <div className="z-1 absolute inset-0">
                                 <DropZone
                                     onDrop={handleDropQuickSend}
                                     height={dropZoneHeights[0]}
