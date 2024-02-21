@@ -1,18 +1,29 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AttachmentLineIcon, CloseLineIcon, GroupIcon, RecordCircleFillIcon, UserIcon } from '~/assets';
+import { AttachmentLineIcon, More2FillIcon, RecordCircleFillIcon, UserIcon } from '~/assets';
 import Accordion from '~/components/accordion';
 import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
-import Member from '~/components/member';
+import About from '~/components/chat/profile/About';
+import HeaderPage from '~/components/headerPage';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
-import { useChat } from '~/context';
-import About from './About';
 
 const Profile = () => {
     const [active, setActive] = useState(-1);
     const { t } = useTranslation();
-    const { handleHideProfile } = useChat();
+
+    const more = [
+        {
+            title: 'Edit',
+        },
+        {
+            title: 'Action',
+            separate: true,
+        },
+        {
+            title: 'Another action',
+        },
+    ];
 
     const accordions = [
         {
@@ -40,39 +51,12 @@ const Profile = () => {
                 </div>
             ),
         },
-        {
-            icon: GroupIcon,
-            title: 'chat.members',
-            children: (
-                <div className="flex flex-col gap-2">
-                    <Member
-                        user={{
-                            avatar: 'https://plus.unsplash.com/premium_photo-1703689541382-8945aee7fcf8?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                            name: 'Sera Mullar',
-                            role: 'Admin',
-                        }}
-                    />
-                    <Member
-                        user={{
-                            avatar: 'https://plus.unsplash.com/premium_photo-1703689541382-8945aee7fcf8?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                            name: 'Sera Mullar',
-                        }}
-                    />
-                </div>
-            ),
-        },
     ];
 
     return (
-        <div className="z-1 fixed top-0 bottom-0 right-0 gx:relative flex flex-col w-full max-w-[380px] border-l-4 border-separate dark:border-dark-separate h-screen pb-2 ex:pb-3 sm:pb-4 md:pb-5 dl:pb-6 bg-white dark:bg-dark">
+        <div className="h-full flex flex-col">
+            <HeaderPage title={t('profile.title')} rightIcon={More2FillIcon} data={more} />
             <div className="p-2 ex:p-3 sm:p-4 md:p-5 dl:p-6 border-b border-separate dark:border-dark-separate">
-                <button
-                    onClick={handleHideProfile}
-                    className="ml-auto w-10 h-10 flex justify-center items-center text-secondary dark:text-dark-secondary"
-                >
-                    <CloseLineIcon />
-                </button>
-
                 <div className="flex flex-col items-center mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6">
                     <Avatar
                         size="96px"
@@ -110,5 +94,7 @@ const Profile = () => {
         </div>
     );
 };
+
+Profile.propTypes = {};
 
 export default Profile;

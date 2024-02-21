@@ -53,5 +53,8 @@
         "phone-empty": "Phone number can not be left blank.",
         "phone-invalid": "Invalid phone number.",
         "message-empty": "Message cannot be blank."
+    },
+    "profile": {
+        "title": "My Profile"
     }
 }

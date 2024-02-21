@@ -53,5 +53,8 @@
         "phone-empty": "Số điện thoại không được để trống.",
         "phone-invalid": "Số điện thoại không hợp lệ.",
         "message-empty": "Lời chào không được để trống."
+    },
+    "profile": {
+        "title": "Hồ sơ của tôi"
     }
 }
