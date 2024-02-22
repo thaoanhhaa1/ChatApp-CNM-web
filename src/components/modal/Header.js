@@ -1,11 +1,23 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { CloseLineIcon } from '~/assets';
+import { useDispatch } from 'react-redux';
+import { CloseLineIcon, LeftLineIcon } from '~/assets';
+import { popSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 
-const Header = ({ children, onClose }) => {
+const Header = ({ children, showBack, onClose }) => {
+    const dispatch = useDispatch();
+
+    const handleBack = () => dispatch(popSub());
+
     return (
         <div className="flex justify-between items-center p-2 ex:p-3 sm:p-4 border-b border-separate dark:border-dark-separate">
-            <h5 className="text-lg leading-normal font-semibold">{children}</h5>
+            <div className="flex items-center gap-1">
+                {showBack && (
+                    <span onClick={handleBack} className="cursor-pointer p-1 text-secondary dark:text-dark-secondary">
+                        <LeftLineIcon className="w-5 h-5" />
+                    </span>
+                )}
+                <h5 className="text-lg leading-normal font-semibold">{children}</h5>
+            </div>
             <span onClick={onClose} className="cursor-pointer p-1 text-secondary dark:text-dark-secondary">
                 <CloseLineIcon className="w-4 h-4" />
             </span>
@@ -16,6 +28,7 @@ const Header = ({ children, onClose }) => {
 Header.propTypes = {
     children: PropTypes.node.isRequired,
     onClose: PropTypes.func.isRequired,
+    showBack: PropTypes.bool,
 };
 
 export default Header;

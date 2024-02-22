@@ -52,6 +52,25 @@
         "invite-contact": "Invite Contact",
         "phone-empty": "Phone number can not be left blank.",
         "phone-invalid": "Invalid phone number.",
-        "message-empty": "Message cannot be blank."
+        "message-empty": "Message cannot be blank.",
+        "modal": {
+            "close": "Close",
+            "search": "Search",
+            "placeholder": "Search by country name",
+            "recentSearches": "Recent searches",
+            "youMayKnow": "You may know",
+            "fromPhoneNumber": "From phone number",
+            "addFriend": "Add friend",
+            "viewMore": "View more",
+            "profile": "Profile",
+            "chat": "Chat",
+            "personalInformation": "Personal information",
+            "gender": "Gender",
+            "birthday": "Birthday",
+            "mutualGroup": "Mutual group",
+            "shareContact": "Share contact",
+            "blockMessagesAndCalls": "Block messages and calls",
+            "report": "Report"
+        }
     }
 }

@@ -38,20 +38,38 @@
         }
     },
     "contacts": {
-        "title": "Liên hệ",
+        "title": "Danh bạ",
         "search": "Tìm kiếm liên hệ...",
         "share": "Chia sẻ",
         "block": "Chặn",
-        "remove": "Xoá",
+        "remove": "Huỷ kết bạn",
         "add-contact": "Thêm liên hệ",
         "phone": "Số điện thoại",
         "enter-phone": "Nhập số điện thoại",
         "message": "Lời chào",
         "enter-message": "Nhập lời chào",
-        "close": "Đóng",
         "invite-contact": "Kết bạn",
         "phone-empty": "Số điện thoại không được để trống.",
         "phone-invalid": "Số điện thoại không hợp lệ.",
-        "message-empty": "Lời chào không được để trống."
+        "message-empty": "Lời chào không được để trống.",
+        "modal": {
+            "close": "Huỷ",
+            "search": "Tìm kiếm",
+            "placeholder": "Nhập tên quốc gia để tìm kiếm",
+            "recentSearches": "Kết quả gần nhất",
+            "youMayKnow": "Có thể bạn biết",
+            "fromPhoneNumber": "Từ số điện thoại",
+            "addFriend": "Kết bạn",
+            "viewMore": "Xem thêm",
+            "profile": "Thông tin tài khoản",
+            "chat": "Nhắn tin",
+            "personalInformation": "Thông tin cá nhân",
+            "gender": "Giới tính",
+            "birthday": "Ngày sinh",
+            "mutualGroup": "Nhóm chung",
+            "shareContact": "Chia sẻ danh thiếp",
+            "blockMessagesAndCalls": "Chặn tin nhắn và cuộc gọi",
+            "report": "Báo xấu"
+        }
     }
 }

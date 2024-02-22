@@ -99,7 +99,7 @@ export const LogOutIcon = ({ className = '' }) => (
 );
 
 export const SearchIcon = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} width={18} height={18} viewBox="0 0 24 24">
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24">
         <path
             fill="currentColor"
             d="m18.031 16.617l4.283 4.282l-1.415 1.415l-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9s9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617m-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.867-3.133-7-7-7s-7 3.133-7 7s3.133 7 7 7a6.977 6.977 0 0 0 4.875-1.975z"
@@ -331,6 +331,88 @@ export const BlockLineIcon = ({ className }) => (
             fill="currentColor"
             d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16M8.523 7.109l8.368 8.368a6.037 6.037 0 0 1-1.414 1.414L7.109 8.523A6.04 6.04 0 0 1 8.523 7.11"
         />
+    </svg>
+);
+
+export const LeftLineIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <g fill="none" fillRule="evenodd">
+            <path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
+            <path
+                fill="currentColor"
+                d="M8.293 12.707a1 1 0 0 1 0-1.414l5.657-5.657a1 1 0 1 1 1.414 1.414L10.414 12l4.95 4.95a1 1 0 0 1-1.414 1.414z"
+            ></path>
+        </g>
+    </svg>
+);
+
+export const DownArrowFillIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48">
+        <path
+            fill="currentColor"
+            stroke="currentColor"
+            strokeLinejoin="round"
+            strokeWidth={4}
+            d="M36 19L24 31L12 19z"
+        ></path>
+    </svg>
+);
+
+export const UserCircleBrokenIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <circle cx={12} cy={9} r={3}></circle>
+            <path strokeLinecap="round" d="M17.97 20c-.16-2.892-1.045-5-5.97-5s-5.81 2.108-5.97 5"></path>
+            <path
+                strokeLinecap="round"
+                d="M7 3.338A9.954 9.954 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"
+            ></path>
+        </g>
+    </svg>
+);
+
+export const PencilLineIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256">
+        <path
+            fill="currentColor"
+            d="M225.91 74.79L181.22 30.1a14 14 0 0 0-19.8 0L38.1 153.41a13.94 13.94 0 0 0-4.1 9.9V208a14 14 0 0 0 14 14h168a6 6 0 0 0 0-12H110.49L225.91 94.59a14 14 0 0 0 0-19.8M93.52 210H48a2 2 0 0 1-2-2v-44.69a2 2 0 0 1 .59-1.41L136 72.49L183.52 120Zm123.9-123.9L192 111.52L144.49 64l25.41-25.41a2 2 0 0 1 2.83 0l44.69 44.68a2 2 0 0 1 0 2.83"
+        ></path>
+    </svg>
+);
+
+export const UserGroupIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
+        <path
+            fill="currentColor"
+            d="M5.1 7.93A2.87 2.87 0 0 0 7.87 5A2.88 2.88 0 0 0 5.1 2a2.88 2.88 0 0 0-2.78 3A2.88 2.88 0 0 0 5.1 7.93m0-4.67A1.62 1.62 0 0 1 6.62 5A1.63 1.63 0 0 1 5.1 6.68A1.63 1.63 0 0 1 3.58 5A1.62 1.62 0 0 1 5.1 3.26m7.19 5.05a2.39 2.39 0 0 0 2.3-2.46a2.39 2.39 0 0 0-2.3-2.47A2.39 2.39 0 0 0 10 5.85a2.39 2.39 0 0 0 2.29 2.46m0-3.68a1.15 1.15 0 0 1 1.05 1.22a1.15 1.15 0 0 1-1.05 1.21a1.15 1.15 0 0 1-1.06-1.21a1.15 1.15 0 0 1 1.06-1.22m-.07 4.93a3.85 3.85 0 0 0-3.07 1.51A5.21 5.21 0 0 0 5.1 9.18A5 5 0 0 0 0 14h1.25a3.72 3.72 0 0 1 3.85-3.57A3.71 3.71 0 0 1 8.94 14h1.25a4.5 4.5 0 0 0-.32-1.69a2.54 2.54 0 0 1 2.35-1.5a2.44 2.44 0 0 1 2.53 2.33V14H16v-.86a3.69 3.69 0 0 0-3.78-3.58"
+        ></path>
+    </svg>
+);
+
+export const ContactCardIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
+        <path
+            fill="currentColor"
+            d="M8 8.5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0m-4 3.199a.95.95 0 0 1 .949-.949H8.05a.95.95 0 0 1 .949.949c0 .847-.577 1.585-1.399 1.791l-.059.015c-.684.17-1.4.17-2.084 0l-.06-.015A1.846 1.846 0 0 1 4 11.699M11.5 8a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM2 5.75C2 4.784 2.784 4 3.75 4h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 16.25 16H3.75A1.75 1.75 0 0 1 2 14.25zM3.75 5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h12.5a.75.75 0 0 0 .75-.75v-8.5a.75.75 0 0 0-.75-.75z"
+        ></path>
+    </svg>
+);
+
+export const BlockIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" strokeWidth={2}>
+            <circle cx={12} cy={12} r={10}></circle>
+            <path d="M5 19L19 5"></path>
+        </g>
+    </svg>
+);
+
+export const WarningIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256">
+        <path
+            fill="currentColor"
+            d="M236.8 188.09L149.35 36.22a24.76 24.76 0 0 0-42.7 0L19.2 188.09a23.51 23.51 0 0 0 0 23.72A24.35 24.35 0 0 0 40.55 224h174.9a24.35 24.35 0 0 0 21.33-12.19a23.51 23.51 0 0 0 .02-23.72m-13.87 15.71a8.5 8.5 0 0 1-7.48 4.2H40.55a8.5 8.5 0 0 1-7.48-4.2a7.59 7.59 0 0 1 0-7.72l87.45-151.87a8.75 8.75 0 0 1 15 0l87.45 151.87a7.59 7.59 0 0 1-.04 7.72M120 144v-40a8 8 0 0 1 16 0v40a8 8 0 0 1-16 0m20 36a12 12 0 1 1-12-12a12 12 0 0 1 12 12"
+        ></path>
     </svg>
 );
 

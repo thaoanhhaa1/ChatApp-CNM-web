@@ -41,13 +41,16 @@ function Button({
     return (
         <Comp
             className={classNames(
-                'relative inline-flex items-center min-w-[100px] gap-2 border border-transparent cursor-pointer select-none disabled:opacity-50',
+                'relative inline-flex items-center min-w-[100px] gap-2 border cursor-pointer select-none disabled:opacity-50 transition-all duration-300',
                 (small && 'px-2 py-1 rounded text-sm leading-normal') || 'px-4 py-2 rounded-md text-mm leading-normal',
-                primary && 'bg-primary-color text-white',
+                !outline && primary && 'bg-primary-color text-white',
                 align === 'center' && 'justify-center',
                 align === 'left' && 'justify-start',
                 align === 'right' && 'justify-end',
                 disabled && 'opacity-50',
+                (outline && 'border-primary-color text-primary-color hover:bg-primary-color hover:bg-opacity-10') ||
+                    'border-transparent',
+                className,
             )}
             {...props}
             {...passProp}
