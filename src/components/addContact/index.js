@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { UserCircleBrokenIcon } from '~/assets';
+import { reset, setPhone } from '~/features/addContact/addContactSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import Button from '../button';
 import Modal from '../modal';
@@ -36,8 +37,10 @@ const contacts = [
 
 const AddContact = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
-    const [phone, setPhone] = useState();
     const dispatch = useDispatch();
+    const { phone } = useSelector((state) => state.addContact);
+    const { subs } = useSelector((state) => state.popupMultiLevel);
+    const [showMore, setShowMore] = useState(false);
 
     const handleClickContact = (contact) => {
         console.log('handleClickContact');
@@ -59,14 +62,25 @@ const AddContact = ({ show, onClickOutside }) => {
         dispatch(addSub(Profile));
     };
 
-    return (
-        <Modal show={show} onClickOutside={onClickOutside}>
-            <PopupMultiLevel onClose={onClickOutside}>
-                <Modal.Header onClose={onClickOutside}>{t('contacts.add-contact')}</Modal.Header>
+    const handleChangePhone = (phone) => dispatch(setPhone(phone));
 
-                <div className="p-2 ex:p-4 flex flex-col gap-2 ex:gap-4 sn:gap-6">
-                    <PhoneInput value={phone} setValue={setPhone} />
-                </div>
+    const handleClose = () => {
+        onClickOutside();
+        dispatch(reset());
+    };
+
+    const handleClickViewMore = () => setShowMore(true);
+
+    useEffect(() => {
+        subs.length || dispatch(reset());
+    }, [dispatch, subs.length]);
+
+    return (
+        <Modal show={show} onClickOutside={handleClose}>
+            <PopupMultiLevel onClose={handleClose}>
+                <Modal.Header onClose={handleClose}>{t('contacts.add-contact')}</Modal.Header>
+
+                <PhoneInput className="p-2 ex:p-4" value={phone} setValue={handleChangePhone} />
 
                 <div className="h-[min(350px,60vh)] overflow-auto">
                     <ScrollbarCustomize>
@@ -99,11 +113,21 @@ const AddContact = ({ show, onClickOutside }) => {
                                 />
                             ))}
                         </ContactList>
+                        {showMore || (
+                            <div className="h-[30px] flex items-center">
+                                <div
+                                    onClick={handleClickViewMore}
+                                    className="cursor-pointer pl-4 text-ss leading-normal text-primary-color"
+                                >
+                                    View more
+                                </div>
+                            </div>
+                        )}
                     </ScrollbarCustomize>
                 </div>
 
                 <Modal.Footer className="flex justify-end items-center gap-2">
-                    <Modal.Button onClick={onClickOutside} type="text-primary">
+                    <Modal.Button onClick={handleClose} type="text-primary">
                         {t('contacts.modal.close')}
                     </Modal.Button>
                     <Modal.Button onClick={handleClickSearch}>{t('contacts.modal.search')}</Modal.Button>

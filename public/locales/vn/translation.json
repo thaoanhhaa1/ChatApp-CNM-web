@@ -69,7 +69,32 @@
             "mutualGroup": "Nhóm chung",
             "shareContact": "Chia sẻ danh thiếp",
             "blockMessagesAndCalls": "Chặn tin nhắn và cuộc gọi",
-            "report": "Báo xấu"
+            "report": "Báo xấu",
+            "setAlias": "Đặt tên gợi nhớ",
+            "setAliasTitle": "Hãy đặt một cái tên dễ nhớ cho",
+            "setAliasNotice": "Lưu ý: Tên gợi nhớ sẽ chỉ hiển thị riêng với bạn.",
+            "confirm": "Xác nhận",
+            "cancel": "Huỷ",
+            "character": "ký tự",
+            "notAllowViewFeed": "Chặn người này xem nhật ký của tôi",
+            "information": "Thông tin",
+            "placeholderGreetingMessage": "Nhập lời chào...",
+            "greetingMessage1": "Xin chào, mình là",
+            "greetingMessage2": "Mình tìm thấy bạn bằng số điện thoại. Kết bạn với mình nhé!",
+            "reportDescription": "Bạn lo ngại về hội thoại này, chọn một trong những lý do dưới đây rồi gửi cho chúng tôi.",
+            "sensitiveContent": "Nội dung nhạy cảm",
+            "annoying": "Làm phiền",
+            "scam": "Lừa đảo",
+            "other": "Lý do khác",
+            "reportPlaceholder": "Nhập lý do báo xấu",
+            "blockAndDeleteConversations": "Chặn và xoá tin nhắn người này sau khi báo xấu",
+            "unblock": "Bỏ chặn",
+            "unblockTitle": "Bỏ chặn để gửi tin nhắn và cuộc gọi tới người này.",
+            "blockWarning": "Cẩn trọng khi kết bạn với người lạ",
+            "zaloName": "Tên Zalo",
+            "phoneNumber": "Điện thoại",
+            "joinedZalo": "Tham gia Zalo",
+            "undoRequest": "Huỷ kết bạn"
         }
     }
 }

@@ -70,7 +70,32 @@
             "mutualGroup": "Mutual group",
             "shareContact": "Share contact",
             "blockMessagesAndCalls": "Block messages and calls",
-            "report": "Report"
+            "report": "Report",
+            "setAlias": "Set alias",
+            "setAliasTitle": "Choose a memorable name for",
+            "setAliasNotice": "Notice: This alias will only be shown to you.",
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "character": "character",
+            "notAllowViewFeed": "Do not allow this user to view my feed",
+            "information": "Profile",
+            "placeholderGreetingMessage": "Enter your greeting message...",
+            "greetingMessage1": "Hi, my name is",
+            "greetingMessage2": "I found you by searching your number. Please accept my request!",
+            "reportDescription": "If you are concerned about this conversation. You can report the conversation after selecting a problem below.",
+            "sensitiveContent": "Sensitive Content",
+            "annoying": "Annoying",
+            "scam": "Scam",
+            "other": "Other",
+            "reportPlaceholder": "Enter report reason",
+            "blockAndDeleteConversations": "Block and delete conversations",
+            "unblock": "Unblock",
+            "unblockTitle": "Unblock to send message and call to this person.",
+            "blockWarning": "Be careful when adding strangers",
+            "zaloName": "Zalo name",
+            "phoneNumber": "Phone number",
+            "joinedZalo": "Joined Zalo",
+            "undoRequest": "Undo request"
         }
     }
 }

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DownArrowFillIcon } from '~/assets';
 import { countries } from '~/constants';
@@ -7,8 +7,9 @@ import { useBoolean, useOnClickOutside } from '~/hooks';
 import Input from '../input';
 import ScrollbarCustomize from '../scrollbarCustomize';
 import CountryItem from './CountryItem';
+import { classNames } from '~/utils';
 
-const PhoneInput = ({ value, setValue }) => {
+const PhoneInput = ({ className, value, setValue }) => {
     const ref = useRef();
     const { value: show, toggle, setFalse } = useBoolean();
     const [searchCountry, setSearchCountry] = useState('');
@@ -24,12 +25,8 @@ const PhoneInput = ({ value, setValue }) => {
 
     const handlePhoneChange = (phone) => setValue((prev) => ({ ...prev, phone }));
 
-    useEffect(() => {
-        value || setValue(() => ({ country: { name: 'Vietnam', dialling_code: '+84', code: 'VN' }, phone: '' }));
-    }, [setValue, value]);
-
     return (
-        <div className="flex gap-2">
+        <div className={classNames('flex gap-2', className)}>
             <div
                 ref={ref}
                 className="flex items-center relative cursor-pointer text-input px-1 border rounded transition-all border-separate dark:border-dark-separate bg-white dark:bg-dark-sidebar-sub-bg"
@@ -81,7 +78,7 @@ const PhoneInput = ({ value, setValue }) => {
                 name="phone"
                 outline
                 placeholder={t('contacts.enter-phone')}
-                value={value?.phone}
+                value={value?.phone || ''}
                 onChangeText={handlePhoneChange}
             />
         </div>
@@ -91,6 +88,7 @@ const PhoneInput = ({ value, setValue }) => {
 PhoneInput.propTypes = {
     value: PropTypes.object,
     setValue: PropTypes.func,
+    className: PropTypes.string,
 };
 
 export default PhoneInput;
