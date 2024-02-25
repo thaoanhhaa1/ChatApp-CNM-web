@@ -14,13 +14,13 @@ const ProfileHeader = () => {
         <div>
             <img className="w-full aspect-[400/171] object-cover" src={contact.background} alt="" />
 
-            <div className="px-4 -mt-4">
-                <div className="flex gap-4 items-center">
+            <div className="px-2 ex:px-3 sm:px-4 -mt-4">
+                <div className="flex gap-2 ex:gap-3 sm:gap-4 items-center">
                     <div className="relative">
                         <Avatar src={contact.avatar} size="80px" />
 
                         {contact.blocked && (
-                            <span className="absolute right-0 bottom-0 rounded-full bg-white border border-white text-[#d91b1b]">
+                            <span className="absolute right-0 bottom-0 rounded-full bg-white dark:bg-[#242526] border border-white dark:border-[#242526] text-[#d91b1b]">
                                 <BlockIcon className="w-6 h-6" />
                             </span>
                         )}
@@ -31,7 +31,7 @@ const ProfileHeader = () => {
                         </h3>
                         <span
                             onClick={handleChangeAlias}
-                            className="p-1 ml-2 cursor-pointer text-primary rounded-lg hover:bg-[#dfe2e7] transition-all"
+                            className="p-1 ml-2 cursor-pointer rounded-lg hover:bg-[#dfe2e7] dark:hover:bg-white dark:hover:bg-opacity-5 transition-all"
                         >
                             <PencilLineIcon className="w-4 h-4" />
                         </span>

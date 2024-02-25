@@ -20,7 +20,7 @@ const Input = ({
     return (
         <div
             className={classNames(
-                'border flex items-center overflow-hidden transition-all',
+                'border flex items-center transition-all',
                 outline
                     ? 'border-separate dark:border-dark-separate dark:focus-within:border-dark-sidebar-item-color bg-white dark:bg-dark-sidebar-sub-bg focus-within:border-input'
                     : 'border-transparent bg-input-bg dark:bg-dark-input-bg',

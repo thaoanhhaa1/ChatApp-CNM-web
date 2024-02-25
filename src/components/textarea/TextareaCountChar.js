@@ -13,14 +13,14 @@ const TextareaCountChar = ({ maxLength, value, className, onChangeText = () => {
     return (
         <div
             className={classNames(
-                'flex flex-col gap-2 p-3 border rounded border-[#d6dbe1] focus-within:border-primary-color',
+                'flex flex-col gap-2 p-2 ex:p-2.5 sm:p-3 border rounded border-[#d6dbe1] focus-within:border-primary-color',
                 className,
             )}
         >
             <textarea
                 maxLength={maxLength}
                 placeholder={t('contacts.modal.placeholderGreetingMessage')}
-                className="textarea flex-1 outline-none resize-none text-sm leading-normal placeholder:text-secondary dark:placeholder:text-dark-secondary text-input dark:text-dark-primary"
+                className="bg-transparent textarea flex-1 outline-none resize-none text-sm leading-normal placeholder:text-secondary dark:placeholder:text-dark-secondary text-input dark:text-dark-primary"
                 value={value}
                 onChange={handleChange}
                 {...props}

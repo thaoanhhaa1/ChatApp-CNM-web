@@ -33,18 +33,18 @@ const Alias = ({ onClose }) => {
                 {t('contacts.modal.setAlias')}
             </Modal.Header>
 
-            <div className="px-4 py-3">
+            <div className="px-2 ex:px-3 sm:px-4 py-2 ex:py-2.5 sm:py-3">
                 <div>
                     <Avatar containerClassName="mx-auto" src={contact.avatar} size="72px" />
                 </div>
-                <div className="mt-4 px-2 text-center text-sm leading-normal">
+                <div className="mt-2 ex:mt-3 sm:mt-4 px-2 text-center text-sm leading-normal">
                     <p>
                         {t('contacts.modal.setAliasTitle')}&nbsp;
                         <span className="font-medium">{contact.name}</span>.
                     </p>
                     <p>{t('contacts.modal.setAliasNotice')}</p>
                 </div>
-                <div className="max-w-[320px] mx-auto mt-3">
+                <div className="max-w-[320px] mx-auto mt-2 ex:mt-2.5 sm:mt-3">
                     <Input value={name} placeholder={contact.alias || contact.name} onChangeText={setName} />
                 </div>
             </div>

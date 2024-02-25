@@ -14,7 +14,7 @@ const Checkbox = ({ checked, onChange = () => {} }) => {
         >
             <input checked={checked} onChange={handleChange} type="checkbox" hidden />
 
-            <CheckIcon className="w-4 h-4 text-white" />
+            <CheckIcon className="w-4 h-4 text-white dark:text-[#242526]" />
         </label>
     );
 };

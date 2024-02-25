@@ -29,7 +29,7 @@ const PhoneInput = ({ className, value, setValue }) => {
         <div className={classNames('flex gap-2', className)}>
             <div
                 ref={ref}
-                className="flex items-center relative cursor-pointer text-input px-1 border rounded transition-all border-separate dark:border-dark-separate bg-white dark:bg-dark-sidebar-sub-bg"
+                className="flex-shrink-0 flex items-center relative cursor-pointer text-input px-1 border rounded transition-all border-separate dark:border-dark-separate bg-white dark:bg-dark-sidebar-sub-bg"
             >
                 <div onClick={toggle} className="flex items-center gap-2">
                     <img
@@ -37,14 +37,14 @@ const PhoneInput = ({ className, value, setValue }) => {
                         alt=""
                         src={`${process.env.REACT_APP_FLAG_ENDPOINT}/${value?.country.code.toLowerCase()}.png`}
                     />
-                    <span className="text-sm font-medium leading-normal tracking-[0.2px]">
+                    <span className="text-sm font-medium leading-normal tracking-[0.2px] dark:text-dark-primary">
                         ({value?.country.dialling_code})
                     </span>
-                    <DownArrowFillIcon className="w-5 h-5" />
+                    <DownArrowFillIcon className="w-5 h-5 dark:text-white" />
                 </div>
 
                 {show && (
-                    <div className="z-1 shadow-popup bg-white dark:bg-dark absolute top-full left-0 w-[300px] p-1 rounded border border-separate dark:border-dark-separate">
+                    <div className="z-1 shadow-popup bg-white dark:bg-dark absolute top-full left-0 max-w-[300px] p-1 rounded border border-separate dark:border-dark-separate">
                         <Input
                             containerClassName="h-[26px]"
                             className="!px-3 !py-0"
@@ -71,16 +71,17 @@ const PhoneInput = ({ className, value, setValue }) => {
                     </div>
                 )}
             </div>
-            <Input
-                containerClassName="flex-1"
-                type="tel"
-                id="phone"
-                name="phone"
-                outline
-                placeholder={t('contacts.enter-phone')}
-                value={value?.phone || ''}
-                onChangeText={handlePhoneChange}
-            />
+            <div className="flex-1">
+                <Input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    outline
+                    placeholder={t('contacts.enter-phone')}
+                    value={value?.phone || ''}
+                    onChangeText={handlePhoneChange}
+                />
+            </div>
         </div>
     );
 };

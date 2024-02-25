@@ -42,7 +42,8 @@ function Button({
         <Comp
             className={classNames(
                 'relative inline-flex items-center min-w-[100px] gap-2 border cursor-pointer select-none disabled:opacity-50 transition-all duration-300',
-                (small && 'px-2 py-1 rounded text-sm leading-normal') || 'px-4 py-2 rounded-md text-mm leading-normal',
+                (small && 'px-2 py-1 rounded text-sm leading-normal') ||
+                    'px-2 ex:px-3 sm:px-4 py-1 ex:py-1.5 sm:py-2 rounded-md text-mm leading-normal',
                 !outline && primary && 'bg-primary-color text-white',
                 align === 'center' && 'justify-center',
                 align === 'left' && 'justify-start',

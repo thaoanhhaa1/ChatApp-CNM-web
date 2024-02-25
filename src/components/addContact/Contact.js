@@ -7,7 +7,7 @@ const Contact = ({ avatar, name, description, right, onClick = () => {}, onClose
     return (
         <div
             onClick={onClick}
-            className="group/contact relative flex items-center gap-3 px-4 py-2 hover:bg-[#eaedf0] ease-linear duration-300 cursor-pointer"
+            className="group/contact relative flex items-center gap-2 ex:gap-3 px-2 ex:px-3 sm:px-4 py-1 ex:py-1.5 sm:py-2 hover:bg-[#eaedf0] dark:hover:bg-white dark:hover:bg-opacity-5 ease-linear duration-300 cursor-pointer"
         >
             <Avatar alt={name} src={avatar} size="40px" />
             <div className="flex-1">

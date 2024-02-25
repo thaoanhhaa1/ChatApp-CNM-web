@@ -20,7 +20,7 @@ const PopupMultiLevel = ({ children, onClose = () => {} }) => {
 
             const element = subRef.current;
 
-            dispatch(setHeight(element.offsetHeight));
+            dispatch(setHeight(element.clientHeight));
         }
 
         updateHeight();
@@ -36,7 +36,7 @@ const PopupMultiLevel = ({ children, onClose = () => {} }) => {
             >
                 <div
                     className={classNames(
-                        'max-h-[min(600px,_80vh)] overflow-y-auto transition-transform duration-200',
+                        'overflow-y-auto transition-transform duration-200',
                         subs.length ? '-translate-x-full' : 'translate-x-0',
                     )}
                 >
@@ -44,7 +44,7 @@ const PopupMultiLevel = ({ children, onClose = () => {} }) => {
                 </div>
                 <div
                     className={classNames(
-                        'absolute max-h-[85vh] overflow-y-auto top-0 left-full w-full transition-transform duration-200',
+                        'absolute overflow-y-auto top-0 left-full w-full transition-transform duration-200',
                         subs.length ? '-translate-x-full' : 'translate-x-0',
                     )}
                 >

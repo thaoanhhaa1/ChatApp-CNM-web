@@ -80,7 +80,7 @@ const AddContact = ({ show, onClickOutside }) => {
             <PopupMultiLevel onClose={handleClose}>
                 <Modal.Header onClose={handleClose}>{t('contacts.add-contact')}</Modal.Header>
 
-                <PhoneInput className="p-2 ex:p-4" value={phone} setValue={handleChangePhone} />
+                <PhoneInput className="p-2 ex:p-3 sm:p-4" value={phone} setValue={handleChangePhone} />
 
                 <div className="h-[min(350px,60vh)] overflow-auto">
                     <ScrollbarCustomize>
@@ -117,7 +117,7 @@ const AddContact = ({ show, onClickOutside }) => {
                             <div className="h-[30px] flex items-center">
                                 <div
                                     onClick={handleClickViewMore}
-                                    className="cursor-pointer pl-4 text-ss leading-normal text-primary-color"
+                                    className="cursor-pointer pl-2 ex:pl-3 sm:pl-4 text-ss leading-normal text-primary-color"
                                 >
                                     View more
                                 </div>

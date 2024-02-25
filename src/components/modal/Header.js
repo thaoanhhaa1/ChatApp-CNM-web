@@ -14,7 +14,7 @@ const Header = ({ children, showBack, onClose }) => {
                 {showBack && (
                     <span
                         onClick={handleBack}
-                        className="cursor-pointer p-1 text-secondary dark:text-dark-secondary rounded-lg hover:bg-[#dfe2e7] transition-all duration-200"
+                        className="cursor-pointer p-1 text-secondary dark:text-dark-secondary rounded-lg hover:bg-[#dfe2e7] dark:hover:bg-white dark:hover:bg-opacity-5 transition-all duration-200"
                     >
                         <LeftLineIcon className="w-5 h-5" />
                     </span>
@@ -23,7 +23,7 @@ const Header = ({ children, showBack, onClose }) => {
             </div>
             <span
                 onClick={onClose}
-                className="cursor-pointer p-1 text-secondary dark:text-dark-secondary rounded-lg hover:bg-[#dfe2e7] transition-all duration-200"
+                className="cursor-pointer p-1 text-secondary dark:text-dark-secondary rounded-lg hover:bg-[#dfe2e7] dark:hover:bg-white dark:hover:bg-opacity-5 transition-all duration-200"
             >
                 <CloseLineIcon className="w-4 h-4" />
             </span>

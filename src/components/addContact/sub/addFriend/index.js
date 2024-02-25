@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from '~/components/modal';
+import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import Switch from '~/components/switch';
 import { TextareaCountChar } from '~/components/textarea';
 import { constants } from '~/constants';
@@ -41,19 +42,23 @@ const AddFriend = ({ onClose }) => {
                 {t('contacts.modal.profile')}
             </Modal.Header>
 
-            <ProfileHeader />
-            <div className="p-4">
-                <TextareaCountChar
-                    className="h-[120px]"
-                    maxLength={constants.MAX_LENGTH_OF_GREETING_MESSAGE}
-                    onChangeText={setMessage}
-                    value={message}
-                />
+            <div className="h-[calc(min(600px,80vh)-144px)]">
+                <ScrollbarCustomize>
+                    <ProfileHeader />
+                    <div className="p-2 ex:p-3 sm:p-4">
+                        <TextareaCountChar
+                            className="h-[120px]"
+                            maxLength={constants.MAX_LENGTH_OF_GREETING_MESSAGE}
+                            onChangeText={setMessage}
+                            value={message}
+                        />
 
-                <label className="cursor-pointer mt-4 h-11 px-4 rounded bg-[#f3f5f6] flex items-center justify-between">
-                    <span className="text-sm leading-normal">{t('contacts.modal.notAllowViewFeed')}</span>
-                    <Switch checked={blockViewFeed} onChange={setBlockViewFeed} />
-                </label>
+                        <label className="cursor-pointer mt-2 ex:mt-3 sm:mt-4 h-11 px-2 ex:-px-3 sm:px-4 rounded bg-[#f3f5f6] dark:bg-[#2c2e2f] flex items-center justify-between">
+                            <span className="text-sm leading-normal">{t('contacts.modal.notAllowViewFeed')}</span>
+                            <Switch checked={blockViewFeed} onChange={setBlockViewFeed} />
+                        </label>
+                    </div>
+                </ScrollbarCustomize>
             </div>
 
             <Modal.Footer className="flex justify-end items-center gap-2">

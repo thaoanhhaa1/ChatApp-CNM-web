@@ -13,7 +13,9 @@ const RadioLabel = ({ icon, name, value, label, onChange }) => {
         <label
             className={classNames(
                 'px-3 h-8 rounded-full flex items-center transition-all duration-150 cursor-pointer',
-                checked ? 'bg-primary-color text-white' : 'bg-[#eaedf0] hover:bg-[#dfe2e7]',
+                checked
+                    ? 'bg-primary-color text-white'
+                    : 'dark:text-[#e5e5e5] bg-[#eaedf0] dark:bg-[#353637] hover:bg-[#dfe2e7] dark:hover:bg-white dark:hover:bg-opacity-5',
             )}
         >
             <input ref={ref} name={name} value={value} type="radio" hidden onChange={handleChange} />

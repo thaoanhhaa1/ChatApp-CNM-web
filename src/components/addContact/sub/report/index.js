@@ -60,8 +60,8 @@ const Report = ({ onClose }) => {
                 {t('contacts.modal.report')}
             </Modal.Header>
 
-            <div className="p-4">
-                <p className="text-sm leading-normal mb-3">{t('contacts.modal.reportDescription')}</p>
+            <div className="p-2 ex:p-3 sm:p-4">
+                <p className="text-sm leading-normal mb-2 ex:mb-2.5 sm:mb-3">{t('contacts.modal.reportDescription')}</p>
 
                 <RadioLabelList
                     list={reasons.map((item) => ({ ...item, label: t(item.label) }))}
@@ -71,7 +71,7 @@ const Report = ({ onClose }) => {
 
                 <div
                     className={classNames(
-                        'mt-3 transition-all duration-200',
+                        'mt-2 ex:mt-2.5 sm:mt-3 transition-all duration-200',
                         reason === 'other' ? 'opacity-100' : 'opacity-0',
                     )}
                 >
@@ -85,7 +85,7 @@ const Report = ({ onClose }) => {
                 </div>
 
                 <FormControlLabel
-                    className="mt-4"
+                    className="mt-2 ex:mt-3 sm:mt-4"
                     control={<Checkbox checked={checked} onChange={setChecked} />}
                     label={t('contacts.modal.blockAndDeleteConversations')}
                 />
