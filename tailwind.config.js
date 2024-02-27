@@ -42,6 +42,8 @@ module.exports = {
             boxShadow: {
                 navbar: '0 2px 4px rgba(15,34,58,.12)',
                 popup: '0 2px 4px rgba(15,34,58,.12)',
+                reaction:
+                    '0 12px 28px 0 rgba(0,0,0,0.2),0 2px 4px 0 rgba(0,0,0,0.1),inset 0 0 0 1px rgba(255,255,255,0.5)',
             },
             spacing: {
                 2.5: '0.625rem',

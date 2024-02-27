@@ -1,19 +1,26 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChatForwardIcon, ClockIcon, DeleteBinLineIcon, FileCopyIcon, MoreFillIcon, SaveLineIcon } from '~/assets';
 import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
 import Popup from '~/components/popup';
 import { classNames, getTimeChatSeparate, isShowTimeChatSeparate } from '~/utils';
 import ChatImage from './ChatImage';
+import ChatItemButton from './ChatItemButton';
+import ChatItemReaction from './ChatItemReaction';
 import ChatItemSeparate from './ChatItemSeparate';
-import { useTranslation } from 'react-i18next';
+import Reaction from './ReactionChat';
 
 const ChatItem = ({ isMe, chat, nextChat }) => {
     const { t } = useTranslation();
+    const [react, setReact] = useState('haha');
+
     const isYourNext = nextChat?.name === chat.name;
     const date = new Date(chat.date);
     const nextDate = nextChat && new Date(nextChat.date);
     const showSeparate = nextDate && isShowTimeChatSeparate(date, nextDate);
+    const reacts = ['love'];
 
     const mores = [
         {
@@ -41,7 +48,7 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
     };
 
     return (
-        <div>
+        <div className="">
             <div
                 className={classNames(
                     'max-w-[90%] ex:max-w-[85%] xs:max-w-[80%] sm:max-w-[75%] flex',
@@ -58,7 +65,7 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
                 <div className={isMe ? 'ml-1 mr-2 sm:mr-4' : 'ml-2 sm:ml-4 mr-1'}>
                     <div
                         className={classNames(
-                            'w-fit flex flex-col gap-1 px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
+                            'relative w-fit flex flex-col gap-1 px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
                             isMe
                                 ? 'rounded-l-lg bg-sidebar-sub-bg dark:bg-dark-sidebar-bg'
                                 : 'rounded-r-lg bg-primary-color bg-opacity-60',
@@ -103,6 +110,12 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
                             <ClockIcon className="mr-1" />
                             <span>10:31</span>
                         </div>
+
+                        <ChatItemReaction
+                            reacts={reacts}
+                            react={react}
+                            className="absolute right-0 bottom-0 translate-y-[calc(100%-7px)]"
+                        />
                     </div>
                     <div
                         className={classNames(
@@ -123,11 +136,14 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
                         </div>
                     )}
                 </div>
-                <Popup data={mores} animation="shift-toward" placement={isMe ? 'bottom-end' : 'bottom-start'}>
-                    <span className="cursor-pointer h-fit mt-1 dark:text-dark-secondary">
-                        <MoreFillIcon className="w-[15px] h-[15px] rotate-90" />
-                    </span>
-                </Popup>
+                <div className={classNames('flex', isMe && 'flex-row-reverse')}>
+                    <Reaction setReact={setReact} react={react} />
+                    <Popup data={mores} animation="shift-toward" placement={isMe ? 'bottom-end' : 'bottom-start'}>
+                        <ChatItemButton>
+                            <MoreFillIcon className="w-[15px] h-[15px] rotate-90" />
+                        </ChatItemButton>
+                    </Popup>
+                </div>
             </div>
             {nextDate && showSeparate && <ChatItemSeparate>{getTimeChatSeparate(nextDate)}</ChatItemSeparate>}
         </div>
