@@ -70,6 +70,7 @@ module.exports = {
                 sidebar: '380px',
             },
             borderRadius: {
+                0.75: '0.1875rem',
                 1.6: '0.4rem',
             },
             zIndex: {

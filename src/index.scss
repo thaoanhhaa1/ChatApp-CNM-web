@@ -1,7 +1,61 @@
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+// Fonts
+@font-face {
+    font-family: 'Public Sans';
+    src: url(./assets/fonts/PublicSans/PublicSans-Thin.ttf);
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: 'Public Sans';
+    src: url(./assets/fonts/PublicSans/PublicSans-ExtraLight.ttf);
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: 'Public Sans';
+    src: url(./assets/fonts/PublicSans/PublicSans-Light.ttf);
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'Public Sans';
+    src: url(./assets/fonts/PublicSans/PublicSans-Regular.ttf);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Public Sans';
+    src: url(./assets/fonts/PublicSans/PublicSans-Medium.ttf);
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Public Sans';
+    src: url(./assets/fonts/PublicSans/PublicSans-SemiBold.ttf);
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Public Sans';
+    src: url(./assets/fonts/PublicSans/PublicSans-Bold.ttf);
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Public Sans';
+    src: url(./assets/fonts/PublicSans/PublicSans-ExtraBold.ttf);
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: 'Public Sans';
+    src: url(./assets/fonts/PublicSans/PublicSans-Black.ttf);
+    font-weight: 900;
+}
 
 * {
     @apply select-none;
@@ -56,10 +110,10 @@ h1 {
     }
 
     &[role='emoji'] {
-        @apply bg-white shadow-[0_0_10px_rgba(0,0,0,0.2)] border border-[#d6dbe1];
+        @apply shadow-[0_0_10px_rgba(0,0,0,0.2)] border-[#d6dbe1] bg-white border;
 
         .css-13xfq8m-MuiTabPanel-root {
-            @apply max-w-[350px] w-full aspect-[350/450];
+            @apply aspect-[350/450] max-w-[350px] w-full;
         }
     }
 
@@ -74,7 +128,7 @@ h1 {
 
 // Emoji Custom
 .epr-main {
-    @apply max-w-full aspect-[350/450];
+    @apply aspect-[350/450] max-w-full;
     height: unset !important;
 
     .epr-body::-webkit-scrollbar-button,
@@ -153,7 +207,7 @@ div.css-13xfq8m-MuiTabPanel-root {
 }
 
 .mentions-input__suggestions {
-    @apply py-2 ex:py-3 shadow-[0_0_10px_0_rgba(0,0,0,0.2)] translate-y-1 rounded-lg w-[300px];
+    @apply shadow-[0_0_10px_0_rgba(0,0,0,0.2)] w-[300px] py-2 ex:py-3 translate-y-1 rounded-lg;
     margin: 0 !important;
 
     &__list {
@@ -180,6 +234,6 @@ div.css-13xfq8m-MuiTabPanel-root {
     }
 
     &::-webkit-scrollbar-thumb {
-        @apply bg-[#BCC0C9] dark:bg-[#a2adb7] rounded-[3px];
+        @apply bg-[#BCC0C9] dark:bg-[#a2adb7] rounded-0.75;
     }
 }
