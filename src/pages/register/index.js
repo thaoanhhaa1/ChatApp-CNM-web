@@ -105,6 +105,7 @@ const Register = () => {
                 saveToken(res.data.accessToken);
                 dispatch(setUser(res.data.user));
                 navigation(routes.chats);
+            
             } catch (error) {
                 setErrors({
                     ...errors,
@@ -116,6 +117,7 @@ const Register = () => {
         }
 
         setLoading(false);
+        
     };
 
     return (

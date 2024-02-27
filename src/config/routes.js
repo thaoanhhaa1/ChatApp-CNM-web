@@ -6,6 +6,7 @@ const routes = {
     settings: '/settings',
     logOut: '/log-out',
     register: '/register',
+    signIn: '/sign-in',
 };
 
 export default routes;

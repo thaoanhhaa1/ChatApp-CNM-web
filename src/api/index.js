@@ -1,5 +1,7 @@
 const api = {
     register: () => `/auth/register`,
+    // login: () => `/auth/login`
+    
 };
 
 export default api;
