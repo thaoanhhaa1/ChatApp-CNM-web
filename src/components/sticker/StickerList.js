@@ -15,7 +15,7 @@ const StickerList = ({ sticker, setOffsetTop }) => {
     useEffect(() => {
         setOffsetTop(stickerRef.current?.offsetTop || 0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [stickerRef.current?.offsetTop]);
 
     useLayoutEffect(() => {
         const containerWidth = stickerRef.current.clientWidth;

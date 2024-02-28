@@ -1,5 +1,5 @@
 import { useWindowSize } from '@uidotdev/usehooks';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mention, MentionsInput } from 'react-mentions';
 import { useSelector } from 'react-redux';
@@ -204,4 +204,4 @@ const Footer = () => {
 
 Footer.propTypes = {};
 
-export default Footer;
+export default memo(Footer);

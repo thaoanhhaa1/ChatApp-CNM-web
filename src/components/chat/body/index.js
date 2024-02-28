@@ -1,7 +1,7 @@
+import { memo, useEffect, useRef } from 'react';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import ChatItem from './ChatItem';
 import ChatItemTyping from './ChatItemTyping';
-import { useEffect, useRef } from 'react';
 
 const chats = [
     {
@@ -185,4 +185,4 @@ const Body = () => {
 
 Body.propTypes = {};
 
-export default Body;
+export default memo(Body);
