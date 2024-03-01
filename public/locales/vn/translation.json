@@ -1,9 +1,9 @@
 {
     "navbar": {
-        "chats": "Trò chuyện",
-        "profile": "Hồ sơ",
-        "groups": "Danh sách nhóm",
-        "contacts": "Liên hệ",
+        "chats": "Tin nhắn",
+        "profile": "Cá nhân",
+        "groups": "Bảng tin",
+        "contacts": "Danh bạ",
         "settings": "Cài đặt",
         "logout": "Đăng xuất"
     },

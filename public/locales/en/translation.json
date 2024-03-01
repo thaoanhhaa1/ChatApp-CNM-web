@@ -1,9 +1,9 @@
 {
     "navbar": {
-        "chats": "Chats",
+        "chats": "Chat",
         "profile": "Profile",
-        "groups": "Groups",
-        "contacts": "Contacts",
+        "groups": "Feeds",
+        "contacts": "Contact",
         "settings": "Settings",
         "logout": "Log out"
     },
