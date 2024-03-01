@@ -2,6 +2,7 @@ export { default as classNames } from './classNames';
 export { default as convertFileSize } from './convertFileSize';
 export { default as getBgByTypeFile } from './getBgByTypeFile';
 export { default as getTimeChatSeparate } from './getTimeChatSeparate';
+export { default as getUnseenMessageNumber } from './getUnseenMessageNumber';
 export { default as insertEmojiToChat } from './insertEmojiToChat';
 export { default as isPhotoFile } from './isPhotoFile';
 export { default as isShowTimeChatSeparate } from './isShowTimeChatSeparate';

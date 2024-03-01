@@ -1,6 +1,7 @@
 import Tippy from '@tippyjs/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
     ArchiveIcon,
@@ -38,6 +39,9 @@ const Header = () => {
     const [showVideo, setShowVideo] = useState(false);
     const { setShowChat } = useLayout();
     const { handleShowProfile } = useChat();
+    const {
+        active: { user },
+    } = useSelector((state) => state.chats);
 
     const more = [
         {
@@ -68,13 +72,9 @@ const Header = () => {
                 >
                     <ChevronDownIcon className="w-4 h-4" />
                 </button>
-                <Avatar
-                    containerClassName="flex-shrink-0"
-                    src="https://images.unsplash.com/photo-1705077111154-94a4a210461e?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    status="OFFLINE"
-                />
+                <Avatar containerClassName="flex-shrink-0" src={user.avatar} status={user.status} />
                 <Link to="/" className="text-base font-semibold line-clamp-1">
-                    Doris Brown
+                    {user.name}
                 </Link>
                 <RecordCircleFillIcon className="flex-shrink-0 -ml-1 sm:-ml-2 w-2.5 h-2.5 text-success" />
             </div>

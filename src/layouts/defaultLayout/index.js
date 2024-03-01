@@ -35,7 +35,7 @@ const DefaultLayout = ({ children }) => {
                         showChat ? 'z-20' : 'z-1 delay-400 dl:delay-0',
                     )}
                 >
-                    <div className="relative w-full dl:w-sidebar bg-sidebar-sub-bg dark:bg-dark-sidebar-sub-bg transition-width ease-linear duration-400">
+                    <div className="flex-shrink-0 relative w-full dl:w-sidebar bg-sidebar-sub-bg dark:bg-dark-sidebar-sub-bg transition-width ease-linear duration-400">
                         <div className="absolute inset-0 overflow-y-hidden">{children}</div>
                     </div>
                     <div

@@ -236,3 +236,20 @@ div.MuiTabPanel-root {
         @apply bg-[#BCC0C9] dark:bg-[#a2adb7] rounded-0.75;
     }
 }
+
+// Slider
+.slider-btn {
+    @apply absolute z-1 p-2 top-2/4 -translate-y-2/4 text-primary-color;
+
+    &--prev {
+        @apply left-0;
+    }
+
+    &--next {
+        @apply right-0;
+    }
+
+    > svg {
+        @apply w-6 h-6;
+    }
+}

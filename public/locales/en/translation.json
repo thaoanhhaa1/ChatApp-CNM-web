@@ -11,7 +11,9 @@
         "searchPlaceholder": "Search messages or users",
         "title": "Chats",
         "recent": "Recent",
-        "search": "Search"
+        "search": "Search",
+        "emptyTitle": "Welcome to Zalo PC!",
+        "emptyDescription": "Explore the best features to support your work and allow you to chat with your friends and family. All are optimized for your computer!"
     },
     "chat": {
         "search": "Search",
@@ -80,6 +82,41 @@
         "preview": {
             "title": "Preview before sending",
             "description": "Drop Files here to preview before sending"
+        }
+    },
+    "slider": {
+        "1": {
+            "title": "Messages more, work less",
+            "description": "Use Quick Messages to save common messages & respond faster in any conversations."
+        },
+        "2": {
+            "title": "Disappearing messages",
+            "description": "From now messages can auto-disappear after a set time."
+        },
+        "3": {
+            "title": "End-to-end Encryption",
+            "description": "Messages are encrypted during sending and receiving",
+            "buttonTitle": "More"
+        },
+        "4": {
+            "title": "Effective teamwork with Zalo Group Call",
+            "description": "Connect and converse with your team anytime, anywhere"
+        },
+        "5": {
+            "title": "Stay connected and work on any device",
+            "description": "With advanced synchronization"
+        },
+        "6": {
+            "title": "Heavy files to send?",
+            "description": "Let Zalo PC deal with it!"
+        },
+        "7": {
+            "title": "Chat with your teammates",
+            "description": "Fast and easily with tools optimized for your computer"
+        },
+        "8": {
+            "title": "Enhance productivity up to 40%",
+            "description": "With Zalo PC"
         }
     }
 }

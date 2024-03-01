@@ -8,6 +8,7 @@ import { addFiles } from '~/features/attachFiles/attachFilesSlice';
 import { useBoolean } from '~/hooks';
 import DropZone from '../dropZone';
 import Body from './body';
+import ChatEmpty from './chatEmpty';
 import Footer from './footer';
 import Header from './header';
 import Profile from './profile';
@@ -19,6 +20,7 @@ const Chat = () => {
     const dropZoneRef = useRef();
     const [dropZoneHeights, setDropZoneHeights] = useState([0, 0]);
     const { files } = useSelector((state) => state.attachFiles);
+    const { active } = useSelector((state) => state.chats);
     const { width } = useWindowSize();
     const dispatch = useDispatch();
 
@@ -47,7 +49,10 @@ const Chat = () => {
         let enterTarget = null;
 
         const handleDragEnter = (e) => {
+            if (!active) return;
+
             const { top, bottom, left, right } = element.getBoundingClientRect();
+
             if (e.x >= left && e.x <= right && e.y >= top && e.y <= bottom) {
                 setShowDropZone();
                 enterTarget = e.target;
@@ -67,7 +72,7 @@ const Chat = () => {
             window.removeEventListener('dragenter', handleDragEnter);
             window.removeEventListener('dragleave', handleDragLeave);
         };
-    }, [setHiddenDropZone, setShowDropZone]);
+    }, [active, setHiddenDropZone, setShowDropZone]);
 
     useEffect(() => {
         const element = dropZoneRef.current;
@@ -78,34 +83,38 @@ const Chat = () => {
         const firstHeight = element.firstChild.clientHeight;
 
         setDropZoneHeights([firstHeight, parentHeight - firstHeight]);
-    }, [files, width]);
+    }, [files, width, active]);
 
     return (
         <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile }}>
             <div className="flex h-full shadow-navbar z-1 dark:bg-dark">
                 <div className="w-full flex flex-col flex-1">
-                    <Header />
-                    <div ref={dropZoneRef} className="relative flex-1 flex flex-col">
-                        <Body />
-                        <Footer />
+                    {(active && (
+                        <>
+                            <Header />
+                            <div ref={dropZoneRef} className="relative flex-1 flex flex-col">
+                                <Body />
+                                <Footer />
 
-                        {showDropZone && (
-                            <div className="z-1 absolute inset-0">
-                                <DropZone
-                                    onDrop={handleDropQuickSend}
-                                    height={dropZoneHeights[0]}
-                                    title={t('attachFiles.quickSend.title')}
-                                    description={t('attachFiles.quickSend.description')}
-                                />
-                                <DropZone
-                                    onDrop={handleDropPreview}
-                                    height={dropZoneHeights[1]}
-                                    title={t('attachFiles.preview.title')}
-                                    description={t('attachFiles.preview.description')}
-                                />
+                                {showDropZone && (
+                                    <div className="z-1 absolute inset-0">
+                                        <DropZone
+                                            onDrop={handleDropQuickSend}
+                                            height={dropZoneHeights[0]}
+                                            title={t('attachFiles.quickSend.title')}
+                                            description={t('attachFiles.quickSend.description')}
+                                        />
+                                        <DropZone
+                                            onDrop={handleDropPreview}
+                                            height={dropZoneHeights[1]}
+                                            title={t('attachFiles.preview.title')}
+                                            description={t('attachFiles.preview.description')}
+                                        />
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
+                        </>
+                    )) || <ChatEmpty />}
                 </div>
                 {showProfile && <Profile />}
             </div>

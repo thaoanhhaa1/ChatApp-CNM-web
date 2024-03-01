@@ -1,5 +1,6 @@
 import { useWindowSize } from '@uidotdev/usehooks';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SearchIcon } from '~/assets';
 import ChatItem from '~/components/chatItem';
@@ -12,39 +13,8 @@ import { screens } from '~/constants';
 const Chats = () => {
     const { t } = useTranslation();
     const { width } = useWindowSize();
-
-    const onlineUsers = [
-        {
-            id: '1',
-            avatar: 'https://images.unsplash.com/photo-1705009448405-8151a45339d4?q=80&w=1665&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            name: 'Patrick',
-        },
-        {
-            id: '2',
-            avatar: 'https://images.unsplash.com/photo-1705009448405-8151a45339d4?q=80&w=1665&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            name: 'Patrick',
-        },
-        {
-            id: '3',
-            avatar: 'https://images.unsplash.com/photo-1705009448405-8151a45339d4?q=80&w=1665&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            name: 'Patrick',
-        },
-        {
-            id: '4',
-            avatar: 'https://images.unsplash.com/photo-1705009448405-8151a45339d4?q=80&w=1665&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            name: 'Patrick',
-        },
-        {
-            id: '5',
-            avatar: 'https://images.unsplash.com/photo-1705009448405-8151a45339d4?q=80&w=1665&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            name: 'Patrick',
-        },
-        {
-            id: '6',
-            avatar: 'https://images.unsplash.com/photo-1705009448405-8151a45339d4?q=80&w=1665&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            name: 'Patrick',
-        },
-    ];
+    const { users: onlineUsers } = useSelector((state) => state.onlineUsers);
+    const { chats, active } = useSelector((state) => state.chats);
 
     return (
         <div className="h-full flex flex-col">
@@ -66,26 +36,9 @@ const Chats = () => {
                 </h3>
                 <ScrollbarCustomize>
                     <div className="flex flex-col gap-[1px] px-1 ex:px-2">
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem active />
-                        <ChatItem typing />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
+                        {chats.map((chat) => (
+                            <ChatItem key={chat.id} chat={chat} active={chat.id === active?.id} />
+                        ))}
                     </div>
                 </ScrollbarCustomize>
             </div>

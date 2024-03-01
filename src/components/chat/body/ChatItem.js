@@ -1,10 +1,14 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { ChatForwardIcon, ClockIcon, DeleteBinLineIcon, FileCopyIcon, MoreFillIcon, SaveLineIcon } from '~/assets';
 import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
+import Message from '~/components/message';
 import Popup from '~/components/popup';
+import ReplyMessage from '~/components/replyMessage';
+import { setOffsetTop } from '~/features/messages/messagesSlice';
 import { classNames, getTimeChatSeparate, isShowTimeChatSeparate } from '~/utils';
 import ChatImage from './ChatImage';
 import ChatItemButton from './ChatItemButton';
@@ -12,9 +16,12 @@ import ChatItemReaction from './ChatItemReaction';
 import ChatItemSeparate from './ChatItemSeparate';
 import Reaction from './ReactionChat';
 
-const ChatItem = ({ isMe, chat, nextChat }) => {
+const ChatItem = ({ isMe, chat, nextChat, scrollY = () => {} }) => {
     const { t } = useTranslation();
     const [react, setReact] = useState('haha');
+    const ref = useRef();
+    const dispatch = useDispatch();
+    const { messages } = useSelector((state) => state.messages);
 
     const isYourNext = nextChat?.name === chat.name;
     const date = new Date(chat.date);
@@ -41,14 +48,19 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
         },
     ];
 
-    const handleClickMessage = (message) => {
-        if (message.type === 'text') return;
+    const handleClickReply = (message) => messages.forEach((mess) => mess.id === message.id && scrollY(mess.offsetTop));
 
-        console.log(message);
-    };
+    useEffect(() => {
+        dispatch(
+            setOffsetTop({
+                id: chat.id,
+                offsetTop: ref.current.offsetTop,
+            }),
+        );
+    }, [chat.id, dispatch]);
 
     return (
-        <div className="">
+        <div ref={ref}>
             <div
                 className={classNames(
                     'max-w-[90%] ex:max-w-[85%] xs:max-w-[80%] sm:max-w-[75%] flex',
@@ -68,26 +80,25 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
                             'relative w-fit flex flex-col gap-1 px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
                             isMe
                                 ? 'rounded-l-lg bg-sidebar-sub-bg dark:bg-dark-sidebar-bg'
-                                : 'rounded-r-lg bg-primary-color bg-opacity-60',
+                                : 'rounded-r-lg bg-primary-color bg-opacity-40',
                         )}
                     >
-                        <p
-                            className={classNames(
-                                'text-mm',
-                                isMe ? 'text-primary dark:text-dark-primary' : 'text-white',
-                            )}
-                        >
-                            {chat.messages.map((message, index) => (
-                                <span
-                                    key={index}
-                                    onClick={() => handleClickMessage(message)}
-                                    className={classNames(message.type === 'tag' && 'text-[#0068ff] cursor-pointer')}
-                                >
-                                    {message.type === 'tag' && '@'}
-                                    {message.content}
-                                </span>
-                            ))}
-                        </p>
+                        <ReplyMessage
+                            isMe={isMe}
+                            onClick={handleClickReply}
+                            message={{
+                                avatar: 'https://images.unsplash.com/photo-1705733282884-701c98680343?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHx8',
+                                name: 'John Doe',
+                                messages: [
+                                    { content: 'Jesse Pinkman', id: 'jesse', type: 'tag' },
+                                    { content: ' fdgfdgdfgdfgdfgdf', type: 'text' },
+                                ],
+                                date: '2021-01-01 09:00:00',
+                                id: 0,
+                            }}
+                        />
+
+                        <Message messages={chat.messages} isMe={isMe} />
 
                         {chat.images && (
                             <div className="flex gap-1 px-1 flex-col ex:flex-row flex-wrap">
@@ -122,7 +133,7 @@ const ChatItem = ({ isMe, chat, nextChat }) => {
                             'border-5 w-0',
                             isMe
                                 ? 'border-sidebar-sub-bg dark:border-dark-sidebar-bg ml-auto border-b-transparent border-l-transparent dark:border-b-transparent dark:border-l-transparent'
-                                : 'border-primary-color border-opacity-60 border-r-transparent border-b-transparent',
+                                : 'border-primary-color border-opacity-40 border-r-transparent border-b-transparent',
                         )}
                     />
                     {isYourNext || (
@@ -154,6 +165,7 @@ ChatItem.propTypes = {
     isMe: PropTypes.bool.isRequired,
     chat: PropTypes.object.isRequired,
     nextChat: PropTypes.object,
+    scrollY: PropTypes.func,
 };
 
 export default ChatItem;
