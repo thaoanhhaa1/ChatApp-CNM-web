@@ -50,5 +50,11 @@
         "enter-message": "Nhập lời chào",
         "close": "Đóng",
         "invite-contact": "Kết bạn"
+    },
+    "not-found": {
+        "title": "Có vẻ như bạn đang bị lạc",
+        "description": "Trang bạn đan tìm kiếm không có sẵn!",
+        "home": "Trang chủ",
+        "back": "Quay lại"
     }
 }

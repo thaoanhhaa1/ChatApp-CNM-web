@@ -50,5 +50,11 @@
         "enter-message": "Enter Message",
         "close": "Close",
         "invite-contact": "Invite Contact"
+    },
+    "not-found": {
+        "title": "Look like you're lost",
+        "description": "The page you are looking for not avaible!",
+        "home": "Go to Home",
+        "back": "Back"
     }
 }
