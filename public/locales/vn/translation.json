@@ -95,6 +95,16 @@
             "phoneNumber": "Điện thoại",
             "joinedZalo": "Tham gia Zalo",
             "undoRequest": "Huỷ kết bạn"
-        }
+        },
+        "friend": "Bạn bè",
+        "group": "Nhóm",
+        "friendRequest": "Lời mời kết bạn",
+        "directory": "Danh bạ máy",
+        "user-may-use": "Người dùng có sử dụng ứng dụng",
+        "birthday-calender": "Lịch sinh nhật",
+        "follow-friend-birthday": "Theo dõi sinh nhật của bạn bè",
+        "create-group": "Tạo nhóm mới",
+        "group-joined": "Nhóm đang tham gia",
+        "last-activity": "Hoạt động cuối"
     }
 }

@@ -46,7 +46,7 @@ const PhoneInput = ({ className, value, setValue }) => {
                 {show && (
                     <div className="z-1 shadow-popup bg-white dark:bg-dark absolute top-full left-0 max-w-[300px] p-1 rounded border border-separate dark:border-dark-separate">
                         <Input
-                            containerClassName="h-[26px]"
+                            containerClassName="h-[26px] overflow-hidden"
                             className="!px-3 !py-0"
                             rounded
                             placeholder={t('contacts.modal.placeholder')}

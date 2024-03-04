@@ -45,3 +45,29 @@ h1 {
 [role='tooltip'] .tippy-arrow {
     @apply text-black dark:text-dark-tooltip-bg;
 }
+
+// Contacts
+.contacts {
+    .MuiTabPanel-root {
+        @apply p-0;
+    }
+
+    .MuiBox-root {
+        @apply px-6;
+    }
+}
+
+// MUI custom
+.MuiBox-root {
+    .MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary {
+        @apply dark:text-white;
+
+        &.Mui-selected {
+            @apply text-primary-color;
+        }
+    }
+
+    .MuiTabs-indicator {
+        @apply bg-primary-color;
+    }
+}

@@ -1,9 +1,14 @@
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { SearchIcon, UserAddLineIcon } from '~/assets';
 import AddContact from '~/components/addContact';
-import Contact from '~/components/contact';
+import ContactTab from '~/components/contactTab';
 import HeaderPage from '~/components/headerPage';
 import Input from '~/components/input';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
@@ -13,65 +18,17 @@ import { useBoolean } from '~/hooks';
 const Contacts = () => {
     const { t } = useTranslation();
     const { value, setTrue, setFalse } = useBoolean(false);
-    const [contacts] = useState({
-        A: [
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-        ],
-        B: [
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-        ],
-        C: [
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-        ],
-        D: [
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-        ],
-    });
-    const [labels, setLabels] = useState([]);
     const dispatch = useDispatch();
+    const [tab, setTab] = useState('1');
 
-    useEffect(() => {
-        setLabels(Object.keys(contacts));
-    }, [contacts]);
+    const handleChange = (_, a) => setTab(a);
 
     useEffect(() => {
         dispatch(resetSubs());
     }, [dispatch, value]);
 
     return (
-        <div className="flex flex-col h-full pb-2 sm:pb-5">
+        <div className="contacts flex flex-col h-full pb-2 sm:pb-5">
             <HeaderPage
                 tooltip={t('contacts.add-contact')}
                 title={t('contacts.title')}
@@ -80,13 +37,23 @@ const Contacts = () => {
             >
                 <Input placeholder={t('contacts.search')} Icon={SearchIcon} />
             </HeaderPage>
-            <ScrollbarCustomize>
-                <div className="px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6 flex flex-col gap-2 sm:gap-4">
-                    {labels.map((title, index) => (
-                        <Contact title={title} key={index} contactList={contacts[title]} />
-                    ))}
-                </div>
-            </ScrollbarCustomize>
+
+            <TabContext value={tab}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '-24px' }}>
+                    <TabList onChange={handleChange}>
+                        <Tab label={t('contacts.friend')} value="1" />
+                        <Tab label={t('contacts.group')} value="2" />
+                    </TabList>
+                </Box>
+                <ScrollbarCustomize>
+                    <TabPanel value="1">
+                        <ContactTab.Friend />
+                    </TabPanel>
+                    <TabPanel value="2">
+                        <ContactTab.Group />
+                    </TabPanel>
+                </ScrollbarCustomize>
+            </TabContext>
 
             <AddContact show={value} onClickOutside={setFalse} />
         </div>

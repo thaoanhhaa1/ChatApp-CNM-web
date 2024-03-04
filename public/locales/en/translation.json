@@ -96,6 +96,16 @@
             "phoneNumber": "Phone number",
             "joinedZalo": "Joined Zalo",
             "undoRequest": "Undo request"
-        }
+        },
+        "friend": "Friend",
+        "group": "Group",
+        "friendRequest": "Add friend invitation",
+        "directory": "Machine contact",
+        "user-may-use": "Contacts who use Zalo",
+        "birthday-calender": "Birthday schedule",
+        "follow-friend-birthday": "Follow your friends' birthdays",
+        "create-group": "Create New Group",
+        "group-joined": "Joined Groups",
+        "last-activity": "Recent activity"
     }
 }
