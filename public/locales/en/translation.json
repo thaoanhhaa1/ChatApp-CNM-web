@@ -106,6 +106,17 @@
         "follow-friend-birthday": "Follow your friends' birthdays",
         "create-group": "Create New Group",
         "group-joined": "Joined Groups",
-        "last-activity": "Recent activity"
+        "last-activity": "Recent activity",
+        "friend-request": {
+            "title": "Add friend invitation",
+            "received": "Received",
+            "sent": "Sent",
+            "see-more": "See more",
+            "see-less": "See less",
+            "decline": "Decline",
+            "accept": "Accept",
+            "add-friend": "Add",
+            "recall": "Recall"
+        }
     }
 }

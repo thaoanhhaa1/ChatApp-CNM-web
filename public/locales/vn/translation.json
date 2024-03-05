@@ -105,6 +105,17 @@
         "follow-friend-birthday": "Theo dõi sinh nhật của bạn bè",
         "create-group": "Tạo nhóm mới",
         "group-joined": "Nhóm đang tham gia",
-        "last-activity": "Hoạt động cuối"
+        "last-activity": "Hoạt động cuối",
+        "friend-request": {
+            "title": "Lời mời kết bạn",
+            "received": "Đã nhận",
+            "sent": "Đã gửi",
+            "see-more": "Xem thêm",
+            "see-less": "Thu gọn",
+            "decline": "Từ chối",
+            "accept": "Chấp nhận",
+            "add-friend": "Kết bạn",
+            "recall": "Thu hồi"
+        }
     }
 }

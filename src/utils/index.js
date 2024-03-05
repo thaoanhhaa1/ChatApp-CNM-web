@@ -1,5 +1,6 @@
 export { default as classNames } from './classNames';
 export { default as convertFileSize } from './convertFileSize';
+export { default as getDateFriendRequest } from './getDateFriendRequest';
 export { default as getDateTimeContactGroup } from './getDateTimeContactGroup';
 export { default as getNumberFormat } from './getNumberFormat';
 export { default as getTimeChatSeparate } from './getTimeChatSeparate';

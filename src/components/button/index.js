@@ -6,6 +6,7 @@ function Button({
     to,
     href,
     primary = false,
+    secondary = false,
     outline = false,
     rounded = false,
     text = false,
@@ -42,15 +43,18 @@ function Button({
         <Comp
             className={classNames(
                 'relative inline-flex items-center min-w-[100px] gap-2 border cursor-pointer select-none disabled:opacity-50 transition-all duration-300',
-                (small && 'px-2 py-1 rounded text-sm leading-normal') ||
-                    'px-2 ex:px-3 sm:px-4 py-1 ex:py-1.5 sm:py-2 rounded-md text-mm leading-normal',
+                (small && 'px-2 py-1 text-sm leading-normal') ||
+                    'px-2 ex:px-3 sm:px-4 py-1 ex:py-1.5 sm:py-2 text-mm leading-normal',
                 !outline && primary && 'bg-primary-color text-white',
+                !outline && secondary && 'bg-[#f0eff5] dark:bg-[#36404a] text-[#7a7f9a] dark:text-[#abb4d2]',
                 align === 'center' && 'justify-center',
                 align === 'left' && 'justify-start',
                 align === 'right' && 'justify-end',
                 disabled && 'opacity-50',
                 (outline && 'border-primary-color text-primary-color hover:bg-primary-color hover:bg-opacity-10') ||
                     'border-transparent',
+                rounded && 'rounded-full',
+                !rounded && ((small && 'rounded') || 'rounded-md'),
                 className,
             )}
             {...props}
@@ -73,6 +77,7 @@ Button.propTypes = {
     to: PropTypes.string,
     href: PropTypes.string,
     primary: PropTypes.bool,
+    secondary: PropTypes.bool,
     outline: PropTypes.bool,
     rounded: PropTypes.bool,
     text: PropTypes.bool,

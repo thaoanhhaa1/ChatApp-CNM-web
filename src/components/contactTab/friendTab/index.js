@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Cake2LineIcon, ContactBook3LineIcon, GroupIcon } from '~/assets';
 import Contact from '~/components/contact';
+import { friendContactTab, friendContactTabConst } from '~/constants';
 import Button from '../Button';
 import Seperate from '../Seperate';
 import Wrapper from '../Wrapper';
+import FriendRequest from './friendRequest';
 
 const Friend = () => {
     const { t } = useTranslation();
     const [labels, setLabels] = useState([]);
     const { contacts } = useSelector((state) => state.contacts);
+    const [modalActive, setModalActive] = useState(1);
+
+    const handleClickAction = (action) => setModalActive(action.id);
+    const handleCloseModal = () => setModalActive();
 
     useEffect(() => {
         setLabels(Object.keys(contacts));
@@ -19,19 +24,16 @@ const Friend = () => {
     return (
         <Wrapper>
             <div className="py-2">
-                <Button Icon={GroupIcon} title={t('contacts.friendRequest')} primary />
-                <Button
-                    Icon={ContactBook3LineIcon}
-                    title={t('contacts.directory')}
-                    description={t('contacts.user-may-use')}
-                    primary
-                />
-                <Button
-                    Icon={Cake2LineIcon}
-                    title={t('contacts.birthday-calender')}
-                    description={t('contacts.follow-friend-birthday')}
-                    primary
-                />
+                {friendContactTab.map((item) => (
+                    <Button
+                        onClick={() => handleClickAction(item)}
+                        Icon={item.Icon}
+                        title={t(item.title)}
+                        description={t(item.description)}
+                        key={item.id}
+                        primary
+                    />
+                ))}
             </div>
             <Seperate />
             <div className="mt-4 flex flex-col gap-2 sm:gap-4">
@@ -39,6 +41,11 @@ const Friend = () => {
                     <Contact title={title} key={index} contactList={contacts[title]} />
                 ))}
             </div>
+
+            <FriendRequest
+                show={modalActive === friendContactTabConst.FRIEND_REQUEST}
+                onClickOutside={handleCloseModal}
+            />
         </Wrapper>
     );
 };
