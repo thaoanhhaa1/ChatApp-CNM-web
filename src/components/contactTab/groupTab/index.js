@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { PeopleAddIcon, SortArrowIcon } from '~/assets';
-import ContactGroupItem from '../contactGroupItem';
-import Button from './Button';
-import Seperate from './Seperate';
-import Wrapper from './Wrapper';
+import Button from '../Button';
+import Wrapper from '../Wrapper';
+import Seperate from '../Seperate';
+import ContactGroupItem from '~/components/contactGroupItem';
 
 const Group = () => {
     const { t } = useTranslation();

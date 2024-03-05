@@ -1,5 +1,5 @@
-import Friend from './Friend';
-import Group from './Group';
+import Friend from './friendTab';
+import Group from './groupTab';
 
 const ContactTab = {
     Friend,

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Cake2LineIcon, ContactBook3LineIcon, GroupIcon } from '~/assets';
-import Contact from '../contact';
-import Button from './Button';
-import Seperate from './Seperate';
-import Wrapper from './Wrapper';
+import Contact from '~/components/contact';
+import Button from '../Button';
+import Seperate from '../Seperate';
+import Wrapper from '../Wrapper';
 
 const Friend = () => {
     const { t } = useTranslation();

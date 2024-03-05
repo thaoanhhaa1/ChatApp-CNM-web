@@ -39,8 +39,8 @@ const Contacts = () => {
             </HeaderPage>
 
             <TabContext value={tab}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '-24px' }}>
-                    <TabList onChange={handleChange}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <TabList className="-mt-2 ex:-mt-3 sm:-mt-4 md:-mt-5 dl:-mt-6" onChange={handleChange}>
                         <Tab label={t('contacts.friend')} value="1" />
                         <Tab label={t('contacts.group')} value="2" />
                     </TabList>
