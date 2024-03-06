@@ -7,12 +7,13 @@ import Button from '../Button';
 import Seperate from '../Seperate';
 import Wrapper from '../Wrapper';
 import FriendRequest from './friendRequest';
+import PhoneBook from './phoneBook';
 
 const Friend = () => {
     const { t } = useTranslation();
     const [labels, setLabels] = useState([]);
     const { contacts } = useSelector((state) => state.contacts);
-    const [modalActive, setModalActive] = useState(1);
+    const [modalActive, setModalActive] = useState(2);
 
     const handleClickAction = (action) => setModalActive(action.id);
     const handleCloseModal = () => setModalActive();
@@ -46,6 +47,7 @@ const Friend = () => {
                 show={modalActive === friendContactTabConst.FRIEND_REQUEST}
                 onClickOutside={handleCloseModal}
             />
+            <PhoneBook show={modalActive === friendContactTabConst.PHONE_BOOK} onClickOutside={handleCloseModal} />
         </Wrapper>
     );
 };

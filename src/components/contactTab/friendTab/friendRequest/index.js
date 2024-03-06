@@ -1,5 +1,6 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -64,6 +65,9 @@ const FriendRequest = ({ show, onClickOutside }) => {
     );
 };
 
-FriendRequest.propTypes = {};
+FriendRequest.propTypes = {
+    show: PropTypes.bool.isRequired,
+    onClickOutside: PropTypes.func.isRequired,
+};
 
 export default FriendRequest;

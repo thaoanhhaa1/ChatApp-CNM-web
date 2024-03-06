@@ -31,6 +31,7 @@ function Button({
         to,
         href,
         onClick,
+        ...passProp,
     };
 
     if (disabled) {
@@ -58,7 +59,6 @@ function Button({
                 className,
             )}
             {...props}
-            {...passProp}
         >
             {LeftIcon && <LeftIcon className={classNames(loading && 'opacity-0')} />}
             <span className={classNames(loading && 'opacity-0')}>{children}</span>

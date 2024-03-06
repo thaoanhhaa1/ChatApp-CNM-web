@@ -1,40 +1,40 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import AddFriendBody from '~/components/addFriend';
 import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { constants } from '~/constants';
-import { popSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
+import { updateContact } from '~/features/phoneBook/phoneBookSlice';
 
 const AddFriend = ({ onClose }) => {
     const { t } = useTranslation();
-    const { contact } = useSelector((state) => state.addContact);
     const { user } = useSelector((state) => state.user);
-    const dispatch = useDispatch();
+    const { contact } = useSelector((state) => state.addContact);
     const [data, setData] = useState({
-        message: `${t('contacts.modal.greetingMessage1')} ${user.name}. ${t('contacts.modal.greetingMessage2')}`,
+        message: `${t('contacts.phone-book.greetingMessage1')} ${user.name}. ${t(
+            'contacts.phone-book.greetingMessage2',
+        )}.`,
         blockView: false,
     });
+    const dispatch = useDispatch();
 
-    const handleClickProfile = () => dispatch(popSub());
     const handleAddFriend = () => {
-        const { message, blockView } = data;
-
-        console.group('Add friend');
+        console.group('handleAddFriend');
         console.log('From: ', user);
         console.log('To: ', contact);
-        console.log('Message: ', message);
-        console.log('Block view: ', blockView);
+        console.log(data);
         console.groupEnd();
-
-        onClose();
-
-        // Show message
     };
 
-    if (!contact.name) return;
+    useEffect(() => {
+        return () => {
+            dispatch(updateContact(contact));
+
+            // TODO Update on server...
+        };
+    }, [contact, dispatch]);
 
     return (
         <>
@@ -45,7 +45,7 @@ const AddFriend = ({ onClose }) => {
             <div className="h-[calc(min(600px,80vh)-144px)]">
                 <ScrollbarCustomize>
                     <AddFriendBody
-                        blockViewTitle={t('contacts.modal.notAllowViewFeed')}
+                        blockViewTitle={t('contacts.phone-book.notAllowViewFeed')}
                         setData={setData}
                         data={data}
                         maxLength={constants.MAX_LENGTH_OF_GREETING_MESSAGE}
@@ -54,9 +54,6 @@ const AddFriend = ({ onClose }) => {
             </div>
 
             <Modal.Footer className="flex justify-end items-center gap-2">
-                <Modal.Button onClick={handleClickProfile} type="text-primary">
-                    {t('contacts.modal.information')}
-                </Modal.Button>
                 <Modal.Button onClick={handleAddFriend}>{t('contacts.modal.addFriend')}</Modal.Button>
             </Modal.Footer>
         </>

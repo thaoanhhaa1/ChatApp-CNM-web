@@ -124,6 +124,15 @@
             "my-qr": "My QR code",
             "common-group": "Common group",
             "suggest": "Suggest \"May be you known\""
+        },
+        "phone-book": {
+            "last-update": "Latest update",
+            "search": "Search",
+            "all": "All",
+            "not-friends": "Not friends",
+            "notAllowViewFeed": "Block this person to view my timeline",
+            "greetingMessage1": "Hi, I'm",
+            "greetingMessage2": "I've got your phone number"
         }
     }
 }

@@ -123,6 +123,15 @@
             "my-qr": "Mã QR của tôi",
             "common-group": "Nhóm chung",
             "suggest": "Gợi ý \"Có thể bạn quen\""
+        },
+        "phone-book": {
+            "last-update": "Lần cập nhật danh bạ gần nhất",
+            "search": "Tìm kiếm",
+            "all": "Tất cả",
+            "not-friends": "Chưa là bạn",
+            "notAllowViewFeed": "Chặn xem nhật ký của tôi",
+            "greetingMessage1": "Xin chào, mình là",
+            "greetingMessage2": "Mình có số điện thoại của bạn"
         }
     }
 }

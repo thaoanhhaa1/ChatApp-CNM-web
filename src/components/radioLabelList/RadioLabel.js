@@ -1,13 +1,17 @@
 import PropTypes from 'prop-types';
-import { useRef } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { classNames } from '~/utils';
 
-const RadioLabel = ({ icon, name, value, label, onChange }) => {
+const RadioLabel = ({ icon, name, value, label, onChange, ...props }) => {
     const Icon = icon;
     const ref = useRef();
-    const checked = ref.current?.checked;
+    const [checked, setChecked] = useState();
 
     const handleChange = (e) => onChange(e.target.value);
+
+    useLayoutEffect(() => {
+        setChecked(ref.current?.checked);
+    }, [ref.current?.checked]);
 
     return (
         <label
@@ -18,7 +22,7 @@ const RadioLabel = ({ icon, name, value, label, onChange }) => {
                     : 'dark:text-[#e5e5e5] bg-[#eaedf0] dark:bg-[#353637] hover:bg-[#dfe2e7] dark:hover:bg-white dark:hover:bg-opacity-5',
             )}
         >
-            <input ref={ref} name={name} value={value} type="radio" hidden onChange={handleChange} />
+            <input ref={ref} name={name} value={value} type="radio" hidden onChange={handleChange} {...props} />
             <span className="text-sm font-medium">{label}</span>
             {icon && (
                 <span className="ml-2">
@@ -31,7 +35,11 @@ const RadioLabel = ({ icon, name, value, label, onChange }) => {
 
 RadioLabel.propTypes = {
     checked: PropTypes.bool,
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
+    icon: PropTypes.func,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
 };
 
 export default RadioLabel;
