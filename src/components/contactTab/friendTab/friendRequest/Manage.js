@@ -31,38 +31,40 @@ const Manage = ({ onClose }) => {
                 {t('contacts.friend-request.manage-title')}
             </Modal.Header>
 
-            <div className="px-4 py-2 flex items-center justify-between gap-2">
-                <div>
-                    <div className="text-sm">{t('contacts.friend-request.add-by-phone-number')}</div>
-                    <span className="text-ss text-secondary dark:text-dark-secondary">
-                        {user.dialling_code}
-                        {user.phone.length === 10 ? user.phone.substring(1) : user.phone}
-                    </span>
+            <div className="px-2 ex:px-3 sm:px-4 py-2">
+                <div className=" flex items-center justify-between gap-2">
+                    <div>
+                        <div className="text-sm">{t('contacts.friend-request.add-by-phone-number')}</div>
+                        <span className="text-ss text-secondary dark:text-dark-secondary">
+                            {user.dialling_code}
+                            {user.phone.length === 10 ? user.phone.substring(1) : user.phone}
+                        </span>
+                    </div>
+                    <Switch className="flex-shrink-0" checked={allowAddByPhone} onChange={setAllowAddByPhone} />
                 </div>
-                <Switch className="flex-shrink-0" checked={allowAddByPhone} onChange={setAllowAddByPhone} />
-            </div>
 
-            <Seperate />
+                <Seperate />
 
-            <div className="px-4 py-2 flex flex-col gap-2">
-                <h6 className="text-sm font-medium text-primary-color">
-                    {t('contacts.friend-request.allow-stranger')}
-                </h6>
-                <p className="text-ss text-secondary dark:text-dark-secondary">
-                    {t('contacts.friend-request.allow-stranger-desc')}
-                </p>
-                <FormControlLabel
-                    control={<Checkbox checked={qrCode} onChange={setQrCode} />}
-                    label={t('contacts.friend-request.my-qr')}
-                />
-                <FormControlLabel
-                    control={<Checkbox checked={commonGroup} onChange={setCommonGroup} />}
-                    label={t('contacts.friend-request.common-group')}
-                />
-                <FormControlLabel
-                    control={<Checkbox checked={suggest} onChange={setSuggest} />}
-                    label={t('contacts.friend-request.suggest')}
-                />
+                <div className=" flex flex-col gap-2">
+                    <h6 className="text-sm font-medium text-primary-color">
+                        {t('contacts.friend-request.allow-stranger')}
+                    </h6>
+                    <p className="text-ss text-secondary dark:text-dark-secondary">
+                        {t('contacts.friend-request.allow-stranger-desc')}
+                    </p>
+                    <FormControlLabel
+                        control={<Checkbox checked={qrCode} onChange={setQrCode} />}
+                        label={t('contacts.friend-request.my-qr')}
+                    />
+                    <FormControlLabel
+                        control={<Checkbox checked={commonGroup} onChange={setCommonGroup} />}
+                        label={t('contacts.friend-request.common-group')}
+                    />
+                    <FormControlLabel
+                        control={<Checkbox checked={suggest} onChange={setSuggest} />}
+                        label={t('contacts.friend-request.suggest')}
+                    />
+                </div>
             </div>
         </>
     );

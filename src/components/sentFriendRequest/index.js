@@ -14,10 +14,10 @@ const SentFriendRequest = ({ contact }) => {
     };
 
     return (
-        <div className="px-4 py-2 flex gap-2 items-center">
+        <div className="px-2 ex:px-3 sm:px-4 py-2 flex gap-2 items-center">
             <Avatar src={contact.avatar} />
             <div className="flex-1">
-                <div className="text-sm font-medium">{contact.name}</div>
+                <div className="text-sm font-medium line-clamp-1">{contact.name}</div>
                 <span className="text-ss text-secondary dark:text-dark-secondary">
                     {getDateFriendRequest(new Date(contact.date))}
                 </span>

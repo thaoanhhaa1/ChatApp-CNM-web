@@ -19,7 +19,7 @@ const Header = ({ children, showBack, onClose }) => {
                         <LeftLineIcon className="w-5 h-5" />
                     </span>
                 )}
-                <h5 className="text-lg leading-normal font-semibold">{children}</h5>
+                <h5 className="text-lg leading-normal font-semibold line-clamp-1">{children}</h5>
             </div>
             <span
                 onClick={onClose}

@@ -21,11 +21,11 @@ const ReceivedFriendRequest = ({ contact }) => {
     };
 
     return (
-        <div className="flex gap-2 px-4 py-2">
+        <div className="flex gap-2 px-2 ex:px-3 sm:px-4 py-2">
             <Avatar src={contact.avatar} containerClassName="flex-shrink-0" />
             <div className="flex flex-col gap-2 flex-1">
                 <div>
-                    <div className="text-sm font-medium">{contact.name}</div>
+                    <div className="text-sm font-medium line-clamp-1">{contact.name}</div>
                     <span className="text-ss text-secondary dark:text-dark-secondary">
                         {getDateFriendRequest(new Date(contact.date))}
                     </span>
