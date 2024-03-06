@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { CheckIcon } from '~/assets';
 import { classNames } from '~/utils';
 
-const Checkbox = ({ checked, onChange = () => {} }) => {
+const Checkbox = ({ rounded, checked, onChange = () => {} }) => {
     const handleChange = (e) => onChange(e.target.checked);
 
     return (
@@ -10,6 +10,7 @@ const Checkbox = ({ checked, onChange = () => {} }) => {
             className={classNames(
                 'flex justify-center items-center w-5 h-5 rounded-full border border-primary-color',
                 checked && 'bg-primary-color',
+                (rounded && 'rounded-full') || 'rounded-md',
             )}
         >
             <input checked={checked} onChange={handleChange} type="checkbox" hidden />
@@ -20,6 +21,7 @@ const Checkbox = ({ checked, onChange = () => {} }) => {
 };
 
 Checkbox.propTypes = {
+    rounded: PropTypes.bool,
     checked: PropTypes.bool,
     onChange: PropTypes.func,
 };

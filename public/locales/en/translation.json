@@ -116,7 +116,14 @@
             "decline": "Decline",
             "accept": "Accept",
             "add-friend": "Add",
-            "recall": "Recall"
+            "recall": "Recall",
+            "manage-title": "Manage friend invitation",
+            "add-by-phone-number": "Allow unknown people to find you by phone number",
+            "allow-stranger": "Allow unknown people to add friend",
+            "allow-stranger-desc": "Allow unknown people to add friend by follow sources",
+            "my-qr": "My QR code",
+            "common-group": "Common group",
+            "suggest": "Suggest \"May be you known\""
         }
     }
 }

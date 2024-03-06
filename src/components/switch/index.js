@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { classNames } from '~/utils';
 
-const Switch = ({ checked, onChange }) => {
+const Switch = ({ checked, className, onChange }) => {
     const handleChange = (e) => onChange(e.target.checked);
 
     return (
@@ -9,6 +9,7 @@ const Switch = ({ checked, onChange }) => {
             className={classNames(
                 'w-8 h-4 p-0.5 rounded-full ease-linear duration-200 cursor-pointer',
                 checked ? 'bg-primary-color' : 'bg-[#b1b5b9] dark:bg-[#696b6b]',
+                className,
             )}
         >
             <input checked={checked} onChange={handleChange} type="checkbox" hidden />
@@ -25,6 +26,7 @@ const Switch = ({ checked, onChange }) => {
 Switch.propTypes = {
     checked: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
+    className: PropTypes.string,
 };
 
 export default Switch;

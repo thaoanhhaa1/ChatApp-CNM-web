@@ -2,10 +2,13 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { SettingIcon } from '~/assets';
 import Modal from '~/components/modal';
 import PopupMultiLevel from '~/components/popupMultiLevel';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
+import { addSub, resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
+import Manage from './Manage';
 import ReceivedTab from './ReceivedTab';
 import SentTab from './SentTab';
 
@@ -15,17 +18,21 @@ const SENT_TAB = '2';
 const FriendRequest = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
     const [tab, setTab] = useState(RECEIVED_TAB);
+    const dispatch = useDispatch();
 
     const handleChange = (_, a) => setTab(a);
 
     const handleClose = () => {
         onClickOutside();
+        dispatch(resetSubs());
     };
 
+    const handleClickSetting = () => dispatch(addSub(Manage));
+
     return (
-        <Modal show={show} onClickOutside={onClickOutside}>
+        <Modal show={show} onClickOutside={handleClose}>
             <PopupMultiLevel onClose={handleClose}>
-                <Modal.Header onClose={onClickOutside}>{t('contacts.friend-request.title')}</Modal.Header>
+                <Modal.Header onClose={handleClose}>{t('contacts.friend-request.title')}</Modal.Header>
 
                 <div className="relative flex flex-col h-[min(350px,60vh)]">
                     <TabContext value={tab}>
@@ -45,7 +52,10 @@ const FriendRequest = ({ show, onClickOutside }) => {
                         </ScrollbarCustomize>
                     </TabContext>
 
-                    <span className="cursor-pointer absolute top-0 right-0 w-12 h-12 flex justify-center items-center">
+                    <span
+                        onClick={handleClickSetting}
+                        className="text-secondary dark:text-dark-secondary cursor-pointer absolute top-0 right-0 w-12 h-12 flex justify-center items-center"
+                    >
                         <SettingIcon />
                     </span>
                 </div>

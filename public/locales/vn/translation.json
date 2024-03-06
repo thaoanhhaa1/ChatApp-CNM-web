@@ -115,7 +115,14 @@
             "decline": "Từ chối",
             "accept": "Chấp nhận",
             "add-friend": "Kết bạn",
-            "recall": "Thu hồi"
+            "recall": "Thu hồi",
+            "manage-title": "Quản lý nguồn tìm kiếm và kết bạn",
+            "add-by-phone-number": "Cho phép người khác tìm kiếm và kết bạn qua số điện thoại",
+            "allow-stranger": "Cho phép người lạ kết bạn",
+            "allow-stranger-desc": "Người lạ có thể gửi lời mời kết bạn qua những nguồn này",
+            "my-qr": "Mã QR của tôi",
+            "common-group": "Nhóm chung",
+            "suggest": "Gợi ý \"Có thể bạn quen\""
         }
     }
 }

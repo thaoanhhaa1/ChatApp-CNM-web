@@ -86,7 +86,7 @@ const Report = ({ onClose }) => {
 
                 <FormControlLabel
                     className="mt-2 ex:mt-3 sm:mt-4"
-                    control={<Checkbox checked={checked} onChange={setChecked} />}
+                    control={<Checkbox rounded checked={checked} onChange={setChecked} />}
                     label={t('contacts.modal.blockAndDeleteConversations')}
                 />
             </div>
