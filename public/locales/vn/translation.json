@@ -135,6 +135,15 @@
         },
         "recent-activity": "Hoạt động cuối",
         "group-name": "Tên nhóm",
-        "admin-group": "Nhóm quản lý"
+        "admin-group": "Nhóm quản lý",
+        "create-group-modal": {
+            "title": "Tạo nhóm",
+            "cancel": "Huỷ",
+            "create-group": "Tạo nhóm",
+            "enter-group-name": "Nhập tên nhóm...",
+            "search-placeholder": "Nhập tên, só điện thoại, hoặc danh sách số điện thoại",
+            "recent-chat": "Trò chuyện gần đây",
+            "selected": "Đã chọn"
+        }
     }
 }

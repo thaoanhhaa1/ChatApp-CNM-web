@@ -28,7 +28,7 @@ const Button = ({ children, type = 'primary', disabled = false, ...props }) => {
 
 Button.propTypes = {
     children: PropTypes.node.isRequired,
-    type: PropTypes.string,
+    type: PropTypes.oneOf(['primary', 'text-primary']),
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
 };

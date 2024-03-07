@@ -1,26 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import Contact from '~/components/contact';
+import PhoneBook from '~/components/phoneBook';
 import { friendContactTab, friendContactTabConst } from '~/constants';
 import Button from '../Button';
 import Seperate from '../Seperate';
 import Wrapper from '../Wrapper';
+import ContactItem from './ContactItem';
 import FriendRequest from './friendRequest';
-import PhoneBook from './phoneBook';
+import PhoneBookSub from './phoneBook';
 
 const Friend = () => {
     const { t } = useTranslation();
-    const [labels, setLabels] = useState([]);
     const { contacts } = useSelector((state) => state.contacts);
     const [modalActive, setModalActive] = useState();
 
     const handleClickAction = (action) => setModalActive(action.id);
     const handleCloseModal = () => setModalActive();
-
-    useEffect(() => {
-        setLabels(Object.keys(contacts));
-    }, [contacts]);
 
     return (
         <Wrapper>
@@ -37,17 +33,14 @@ const Friend = () => {
                 ))}
             </div>
             <Seperate />
-            <div className="mt-4 flex flex-col gap-2 sm:gap-4">
-                {labels.map((title, index) => (
-                    <Contact title={title} key={index} contactList={contacts[title]} />
-                ))}
-            </div>
+
+            <PhoneBook phoneBook={contacts} render={(contact) => <ContactItem contact={contact} key={contact.id} />} />
 
             <FriendRequest
                 show={modalActive === friendContactTabConst.FRIEND_REQUEST}
                 onClickOutside={handleCloseModal}
             />
-            <PhoneBook show={modalActive === friendContactTabConst.PHONE_BOOK} onClickOutside={handleCloseModal} />
+            <PhoneBookSub show={modalActive === friendContactTabConst.PHONE_BOOK} onClickOutside={handleCloseModal} />
         </Wrapper>
     );
 };

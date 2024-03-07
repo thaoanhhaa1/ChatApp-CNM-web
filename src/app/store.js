@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import addContactReducer from '~/features/addContact/addContactSlice';
 import contactGroupsReducer from '~/features/contactGroups/contactGroupsSlice';
 import contactsReducer from '~/features/contacts/contactsSlice';
+import contactsGroupReducer from '~/features/contactsGroup/contactsGroupSlice';
 import phoneBookReducer from '~/features/phoneBook/phoneBookSlice';
 import popupMultiLevelReducer from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import receivedFriendRequestsReducer from '~/features/receivedFriendRequests/receivedFriendRequestsSlice';
@@ -18,6 +19,7 @@ export const store = configureStore({
         receivedFriendRequests: receivedFriendRequestsReducer,
         sentFriendRequests: sentFriendRequestsReducer,
         phoneBook: phoneBookReducer,
+        contactsGroup: contactsGroupReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

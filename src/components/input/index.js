@@ -22,7 +22,7 @@ const Input = ({
             className={classNames(
                 'border flex items-center transition-all',
                 outline
-                    ? 'border-separate dark:border-dark-separate dark:focus-within:border-dark-sidebar-item-color bg-white dark:bg-dark-sidebar-sub-bg focus-within:border-input'
+                    ? 'border-separate dark:border-dark-separate dark:focus-within:border-dark-sidebar-item-color bg-white dark:bg-dark-sidebar-sub-bg focus-within:border-input overflow-hidden'
                     : 'border-transparent bg-input-bg dark:bg-dark-input-bg',
                 rounded ? 'rounded-full' : 'rounded',
                 containerClassName,

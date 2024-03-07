@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { InfoIcon, SearchIcon } from '~/assets';
 import Input from '~/components/input';
 import Modal from '~/components/modal';
+import PhoneBook from '~/components/phoneBook';
 import PhoneBookItem from '~/components/phoneBookItem';
 import PopupMultiLevel from '~/components/popupMultiLevel';
 import RadioLabelList from '~/components/radioLabelList';
@@ -16,7 +17,7 @@ import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import Seperate from '../../Seperate';
 import AddFriend from './AddFriend';
 
-const PhoneBook = ({ show, onClickOutside }) => {
+const PhoneBookSub = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
     const [filter, setFilter] = useState(phoneBookFilterConst.ALL);
     const { user } = useSelector((state) => state.user);
@@ -78,23 +79,17 @@ const PhoneBook = ({ show, onClickOutside }) => {
                     <div className="h-[1px] bg-separate dark:bg-dark-separate sm:-mx-3 ex:-mx-4 -mx-2"></div>
                     <div className="flex-1 sm:-mx-3 ex:-mx-4 -mx-2">
                         <ScrollbarCustomize>
-                            {labels.map((label) => (
-                                <Fragment key={label}>
-                                    {contactFilter[label].length > 0 && (
-                                        <h6 className="px-2 sm:px-4 text-mm text-primary-color font-bold leading-normal">
-                                            {label}
-                                        </h6>
-                                    )}
-                                    {contactFilter[label].map((contact) => (
-                                        <PhoneBookItem
-                                            onAdd={() => handleAddFriend(contact)}
-                                            onRecall={() => handleRecall(contact)}
-                                            contact={contact}
-                                            key={contact.id}
-                                        />
-                                    ))}
-                                </Fragment>
-                            ))}
+                            <PhoneBook
+                                phoneBook={contactFilter}
+                                render={(contact) => (
+                                    <PhoneBookItem
+                                        onAdd={() => handleAddFriend(contact)}
+                                        onRecall={() => handleRecall(contact)}
+                                        contact={contact}
+                                        key={contact.id}
+                                    />
+                                )}
+                            />
                         </ScrollbarCustomize>
                     </div>
                 </div>
@@ -103,9 +98,9 @@ const PhoneBook = ({ show, onClickOutside }) => {
     );
 };
 
-PhoneBook.propTypes = {
+PhoneBookSub.propTypes = {
     show: PropTypes.bool.isRequired,
     onClickOutside: PropTypes.func.isRequired,
 };
 
-export default PhoneBook;
+export default PhoneBookSub;

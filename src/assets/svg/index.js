@@ -180,10 +180,10 @@ export const PhoneFillIcon = ({ className }) => (
 );
 
 export const CloseFillIcon = ({ className }) => (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32">
         <path
             fill="currentColor"
-            d="m12 10.587l4.95-4.95l1.414 1.414l-4.95 4.95l4.95 4.95l-1.415 1.414l-4.95-4.95l-4.949 4.95l-1.414-1.415l4.95-4.95l-4.95-4.95L7.05 5.638z"
+            d="M16 2C8.2 2 2 8.2 2 16s6.2 14 14 14s14-6.2 14-14S23.8 2 16 2m5.4 21L16 17.6L10.6 23L9 21.4l5.4-5.4L9 10.6L10.6 9l5.4 5.4L21.4 9l1.6 1.6l-5.4 5.4l5.4 5.4z"
         />
     </svg>
 );
@@ -477,6 +477,15 @@ export const InfoIcon = ({ className }) => (
                 clipRule="evenodd"
             ></path>
         </g>
+    </svg>
+);
+
+export const CameraFilledIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path
+            fill="currentColor"
+            d="M13.925 2.504a2.25 2.25 0 0 1 1.94 1.11l.814 1.387h2.071A3.25 3.25 0 0 1 22 8.25v9.5A3.25 3.25 0 0 1 18.75 21H5.25A3.25 3.25 0 0 1 2 17.75v-9.5A3.25 3.25 0 0 1 5.25 5h2.08l.875-1.424a2.25 2.25 0 0 1 1.917-1.073zM12 8a4.5 4.5 0 1 0 0 9a4.5 4.5 0 0 0 0-9m0 1.5a3 3 0 1 1 0 6a3 3 0 0 1 0-6"
+        />
     </svg>
 );
 

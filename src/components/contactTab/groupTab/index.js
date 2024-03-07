@@ -5,9 +5,11 @@ import { PeopleAddIcon, SortArrowIcon } from '~/assets';
 import ContactGroupItem from '~/components/contactGroupItem';
 import Popup from '~/components/popup';
 import { sortGroup } from '~/constants';
+import { useBoolean } from '~/hooks';
 import Button from '../Button';
 import Seperate from '../Seperate';
 import Wrapper from '../Wrapper';
+import CreateGroup from './createGroup';
 
 const Group = () => {
     const { t } = useTranslation();
@@ -18,11 +20,13 @@ const Group = () => {
         [t],
     );
     const sortedGroups = useMemo(() => sorts && groups, [groups, sorts]);
+    // FIXME init value: true
+    const { value: show, setFalse: handleHidden, setTrue: handleShow } = useBoolean(true);
 
     return (
         <Wrapper>
             <div className="py-2">
-                <Button Icon={PeopleAddIcon} title={t('contacts.create-group')} rounded />
+                <Button onClick={handleShow} Icon={PeopleAddIcon} title={t('contacts.create-group')} rounded />
             </div>
             <Seperate />
             <div className="mt-4 flex flex-col">
@@ -41,6 +45,8 @@ const Group = () => {
                     <ContactGroupItem group={group} key={group.id} />
                 ))}
             </div>
+
+            <CreateGroup show={show} onClickOutside={handleHidden} />
         </Wrapper>
     );
 };

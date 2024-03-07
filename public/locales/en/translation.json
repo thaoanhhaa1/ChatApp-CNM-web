@@ -136,6 +136,15 @@
         },
         "recent-activity": "Recent activity",
         "group-name": "Group name",
-        "admin-group": "Admin group"
+        "admin-group": "Admin group",
+        "create-group-modal": {
+            "title": "Create group",
+            "cancel": "Cancel",
+            "create-group": "Create group",
+            "enter-group-name": "Enter group name...",
+            "search-placeholder": "Enter name, phone number, or list of phone number here",
+            "recent-chat": "Recent",
+            "selected": "Selected"
+        }
     }
 }
