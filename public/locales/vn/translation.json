@@ -132,6 +132,9 @@
             "notAllowViewFeed": "Chặn xem nhật ký của tôi",
             "greetingMessage1": "Xin chào, mình là",
             "greetingMessage2": "Mình có số điện thoại của bạn"
-        }
+        },
+        "recent-activity": "Hoạt động cuối",
+        "group-name": "Tên nhóm",
+        "admin-group": "Nhóm quản lý"
     }
 }

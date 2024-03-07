@@ -133,6 +133,9 @@
             "notAllowViewFeed": "Block this person to view my timeline",
             "greetingMessage1": "Hi, I'm",
             "greetingMessage2": "I've got your phone number"
-        }
+        },
+        "recent-activity": "Recent activity",
+        "group-name": "Group name",
+        "admin-group": "Admin group"
     }
 }

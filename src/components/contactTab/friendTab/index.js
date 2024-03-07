@@ -13,7 +13,7 @@ const Friend = () => {
     const { t } = useTranslation();
     const [labels, setLabels] = useState([]);
     const { contacts } = useSelector((state) => state.contacts);
-    const [modalActive, setModalActive] = useState(2);
+    const [modalActive, setModalActive] = useState();
 
     const handleClickAction = (action) => setModalActive(action.id);
     const handleCloseModal = () => setModalActive();
