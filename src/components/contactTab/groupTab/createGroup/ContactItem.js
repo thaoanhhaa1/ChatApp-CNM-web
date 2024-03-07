@@ -9,7 +9,7 @@ const ContactItem = ({ checked, contact, onClick = () => {} }) => {
             className="cursor-pointer px-2 h-[52px] flex items-center gap-2 hover:bg-black hover:bg-opacity-5 rounded-md transition-colors duration-300"
         >
             <Checkbox rounded checked={checked} />
-            <Avatar src={contact.avatar} />
+            <Avatar className="flex-shrink-0" src={contact.avatar} />
             <div className="flex-1 text-sm line-clamp-1">{contact.alias || contact.name}</div>
         </div>
     );

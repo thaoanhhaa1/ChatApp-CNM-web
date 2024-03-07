@@ -55,35 +55,35 @@ const CreateGroup = ({ show, onClickOutside }) => {
                 <Modal.Header onClose={onClickOutside}>{t('contacts.create-group-modal.title')}</Modal.Header>
 
                 <div className="h-[75vh] flex flex-col">
-                    <div className="px-4 pt-4">
-                        <div className="flex gap-2.5 items-center">
-                            <div className="flex justify-center items-center w-12 h-12 rounded-full text-[#7589a3] border border-[#d6dbe1]">
+                    <div className="px-2 ex:px-3 smn:px-4 pt-2 ex:pt-3 smn:pt-4">
+                        <div className="flex gap-2 ex:gap-2.5 items-center">
+                            <div className="flex justify-center items-center w-12 h-12 rounded-full text-[#7589a3] border border-[#d6dbe1] dark:border-[#3d3f40]">
                                 <CameraFilledIcon className="w-6 h-6" />
                             </div>
-                            <div className="flex-1 border-b border-[#d6dbe1] focus-within:border-primary-color">
+                            <div className="flex-1 border-b border-[#d6dbe1] dark:border-[#3d3f40] focus-within:border-primary-color dark:focus-within:border-primary-color">
                                 <input
                                     value={groupName}
                                     onChange={handleChange}
                                     placeholder={t('contacts.create-group-modal.enter-group-name')}
                                     type="text"
-                                    className="w-full text-sm h-[37px] outline-none placeholder:text-secondary dark:text-dark-secondary"
+                                    className="bg-transparent w-full text-sm h-[37px] outline-none placeholder:text-secondary dark:text-dark-secondary"
                                 />
                             </div>
                         </div>
 
                         <Input
                             placeholder={t('contacts.create-group-modal.search-placeholder')}
-                            containerClassName="mt-4 focus-within:border-primary-color"
+                            containerClassName="mt-2 ex:mt-3 sm:mt-4 focus-within:border-primary-color"
                             Icon={SearchIcon}
                             outline
                             rounded
                         />
 
-                        <div className="mt-5 h-[1px] bg-separate dark:bg-dark-separate" />
+                        <div className="mt-2.5 ex:mt-3.5 sm:mt-5 h-[1px] bg-separate dark:bg-dark-separate" />
                     </div>
 
-                    <div className="flex-1 px-4">
-                        <div className="flex h-full gap-3 overflow-hidden">
+                    <div className="flex-1 px-2 ex:px-3 sm:px-4">
+                        <div className="flex h-full gap-2 ex:gap-3 overflow-hidden">
                             <div className="flex-1">
                                 <ScrollbarCustomize>
                                     <PhoneBook
@@ -105,7 +105,7 @@ const CreateGroup = ({ show, onClickOutside }) => {
                                     selectedContacts.length ? 'w-[184px]' : 'w-0',
                                 )}
                             >
-                                <div className="absolute top-0 left-0 bottom-0 w-[184px] pt-3 pb-4">
+                                <div className="absolute top-0 left-0 bottom-0 w-[184px] pt-2 sm:pt-3 pb-3 sm:pb-4">
                                     <SelectedContacts
                                         handleRemoveContact={handleRemoveContact}
                                         selectedContacts={selectedContacts}
