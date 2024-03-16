@@ -143,7 +143,13 @@
             "enter-group-name": "Nhập tên nhóm...",
             "search-placeholder": "Nhập tên, só điện thoại, hoặc danh sách số điện thoại",
             "recent-chat": "Trò chuyện gần đây",
-            "selected": "Đã chọn"
+            "selected": "Đã chọn",
+            "update-avatar": "Cập nhật ảnh đại diện",
+            "upload-from-pc": "Tải lên từ máy tính",
+            "gallery": "Bộ sưu tập",
+            "update": "Cập nhật",
+            "change-avatar": "Đổi ảnh đại diện",
+            "delete-avatar": "Xoá ảnh đại diện"
         }
     }
 }

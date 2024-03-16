@@ -1,9 +1,15 @@
+export { default as calcDimensionCropImage } from './calcDimensionCropImage';
+export { default as calcMinMaxPositionCropImage } from './calcMinMaxPositionCropImage';
+export { default as centerAspectCrop } from './centerAspectCrop';
 export { default as classNames } from './classNames';
 export { default as convertContactsToPhoneBook } from './convertContactsToPhoneBook';
 export { default as convertFileSize } from './convertFileSize';
+export { default as countContactsInPhoneBook } from './countContactsInPhoneBook';
 export { default as getDateFriendRequest } from './getDateFriendRequest';
 export { default as getDateTimeContactGroup } from './getDateTimeContactGroup';
 export { default as getFirstCharOfName } from './getFirstCharOfName';
 export { default as getNumberFormat } from './getNumberFormat';
 export { default as getTimeChatSeparate } from './getTimeChatSeparate';
+export { default as handleScaleImage } from './handleScaleImage';
 export { default as isShowTimeChatSeparate } from './isShowTimeChatSeparate';
+export { default as phoneBookFilter } from './phoneBookFilter';

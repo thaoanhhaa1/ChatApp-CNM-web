@@ -3,6 +3,7 @@ import addContactReducer from '~/features/addContact/addContactSlice';
 import contactGroupsReducer from '~/features/contactGroups/contactGroupsSlice';
 import contactsReducer from '~/features/contacts/contactsSlice';
 import contactsGroupReducer from '~/features/contactsGroup/contactsGroupSlice';
+import createGroupReducer from '~/features/createGroup/createGroupSlice';
 import phoneBookReducer from '~/features/phoneBook/phoneBookSlice';
 import popupMultiLevelReducer from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import receivedFriendRequestsReducer from '~/features/receivedFriendRequests/receivedFriendRequestsSlice';
@@ -20,6 +21,7 @@ export const store = configureStore({
         sentFriendRequests: sentFriendRequestsReducer,
         phoneBook: phoneBookReducer,
         contactsGroup: contactsGroupReducer,
+        createGroup: createGroupReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

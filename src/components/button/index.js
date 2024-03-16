@@ -15,6 +15,7 @@ function Button({
     disabled = false,
     children,
     className,
+    iconClassName,
     align = 'center',
     loading = false,
     LeftIcon,
@@ -60,9 +61,9 @@ function Button({
             )}
             {...props}
         >
-            {LeftIcon && <LeftIcon className={classNames(loading && 'opacity-0')} />}
+            {LeftIcon && <LeftIcon className={classNames('flex-shrink-0', loading && 'opacity-0', iconClassName)} />}
             <span className={classNames(loading && 'opacity-0')}>{children}</span>
-            {RightIcon && <RightIcon className={classNames(loading && 'opacity-0')} />}
+            {RightIcon && <RightIcon className={classNames('flex-shrink-0', loading && 'opacity-0', iconClassName)} />}
             <span
                 className={classNames(
                     'absolute block -my-2 w-6 h-6 border-4 rounded-full border-white border-t-transparent animate-spin',
@@ -86,9 +87,10 @@ Button.propTypes = {
     disabled: PropTypes.bool,
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
+    iconClassName: PropTypes.string,
     loading: PropTypes.bool,
-    LeftIcon: PropTypes.node,
-    RightIcon: PropTypes.node,
+    LeftIcon: PropTypes.func,
+    RightIcon: PropTypes.func,
     align: PropTypes.string,
     onClick: PropTypes.func,
 };

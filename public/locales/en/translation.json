@@ -144,7 +144,13 @@
             "enter-group-name": "Enter group name...",
             "search-placeholder": "Enter name, phone number, or list of phone number here",
             "recent-chat": "Recent",
-            "selected": "Selected"
+            "selected": "Selected",
+            "update-avatar": "Update avatar",
+            "upload-from-pc": "Upload from PC",
+            "gallery": "Gallery",
+            "update": "Update",
+            "change-avatar": "Update avatar",
+            "delete-avatar": "Remove avatar"
         }
     }
 }
