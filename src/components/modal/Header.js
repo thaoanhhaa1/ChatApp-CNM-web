@@ -4,7 +4,7 @@ import { CloseLineIcon } from '~/assets';
 
 const Header = ({ children, onClose }) => {
     return (
-        <div className="flex justify-between items-center p-4 border-b border-separate dark:border-dark-separate">
+        <div className="flex justify-between items-center p-2 ex:p-3 sm:p-4 border-b border-separate dark:border-dark-separate">
             <h5 className="text-lg leading-normal font-semibold">{children}</h5>
             <span onClick={onClose} className="cursor-pointer p-1 text-secondary dark:text-dark-secondary">
                 <CloseLineIcon className="w-4 h-4" />

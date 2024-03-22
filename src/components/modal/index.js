@@ -37,7 +37,7 @@ const Modal = ({ children, show, className, containerClassName, onClickOutside =
                     <div
                         ref={ref}
                         className={classNames(
-                            'rounded-md border border-[rgba(0,0,0,.175)] w-[500px] bg-white dark:bg-dark-sidebar-sub-bg transition-all duration-300',
+                            'rounded-md border border-[rgba(0,0,0,.175)] w-[500px] bg-white dark:bg-dark-sidebar-sub-bg transition-all duration-300 mx-2',
                             (showAnimationDebounce && 'translate-y-0') || '-translate-y-10',
                             className,
                         )}

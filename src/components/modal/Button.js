@@ -11,7 +11,7 @@ const Button = ({ children, type = 'primary', onClick = () => {} }) => {
         <button
             onClick={onClick}
             className={classNames(
-                'border border-transparent px-4 py-2 text-mm leading-normal rounded transition-all',
+                'border border-transparent px-2 ex:px-4 py-1 ex:py-2 text-mm leading-normal rounded transition-all',
                 ...styles,
             )}
         >
