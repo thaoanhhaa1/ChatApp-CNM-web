@@ -5,9 +5,9 @@ import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {
+    ClockIcon,
     ContactIcon,
     GlobalIcon,
-    GroupIcon,
     LogOutIcon,
     LogoIcon,
     MessageIcon,
@@ -26,19 +26,19 @@ import Button from './Button';
 
 const navBars = [
     {
-        title: 'navbar.chats',
-        icon: MessageIcon,
-        to: routes.chats,
-    },
-    {
         title: 'navbar.profile',
         icon: UserIcon,
         to: routes.profile,
     },
     {
+        title: 'navbar.chats',
+        icon: MessageIcon,
+        to: routes.chats,
+    },
+    {
         title: 'navbar.groups',
-        icon: GroupIcon,
-        to: routes.groups,
+        icon: ClockIcon,
+        to: routes.feed,
     },
     {
         title: 'navbar.contacts',
@@ -106,7 +106,7 @@ const Navbar = ({ className }) => {
             <div className="flex-5 dl:flex-none flex dl:flex-col justify-evenly dl:justify-start items-center ex:gap-2">
                 {navBars.map(({ title, ...navbar }, index) => (
                     <Tippy delay={[200, 0]} offset={[0, 0]} content={t(title)} key={index}>
-                        <Button {...navbar} />
+                        <Button {...navbar}>{t(title)}</Button>
                     </Tippy>
                 ))}
             </div>
@@ -120,9 +120,9 @@ const Navbar = ({ className }) => {
                 </Tippy>
 
                 <Popup data={actions.map((action) => ({ ...action, title: t(action.title) }))}>
-                    <Button>
+                    <button className="w-12 h-12 flex justify-center items-center">
                         <Avatar src="https://plus.unsplash.com/premium_photo-1682339458660-bc746ad86023?q=80&w=1635&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
-                    </Button>
+                    </button>
                 </Popup>
             </div>
         </nav>

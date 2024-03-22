@@ -253,3 +253,65 @@ div.MuiTabPanel-root {
         @apply w-6 h-6;
     }
 }
+
+// Contacts
+.contacts {
+    .MuiTabPanel-root {
+        @apply p-0;
+    }
+
+    .MuiBox-root {
+        @apply px-6;
+    }
+}
+
+// MUI custom
+.MuiBox-root {
+    .MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary {
+        @apply dark:text-white;
+
+        &.Mui-selected {
+            @apply text-primary-color;
+        }
+    }
+
+    .MuiTabs-indicator {
+        @apply bg-primary-color;
+    }
+}
+
+// ReactCrop customize
+.ReactCrop {
+    rect {
+        @apply fill-white;
+    }
+}
+
+.ReactCrop__child-wrapper {
+    @apply w-full h-full relative flex justify-center items-center;
+}
+
+.ReactCrop__crop-selection {
+    @apply overflow-hidden rounded-full pointer-events-none;
+}
+
+.ReactCrop__rule-of-thirds-hz,
+.ReactCrop__rule-of-thirds-vt {
+    @apply transition-all duration-500;
+}
+
+// Slider customize
+span.MuiSlider-root {
+    @apply text-primary-color;
+
+    .MuiSlider-thumb {
+        &.Mui-active,
+        &:hover {
+            @apply shadow-none;
+        }
+
+        &::after {
+            @apply hidden;
+        }
+    }
+}

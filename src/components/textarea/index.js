@@ -2,7 +2,19 @@ import PropTypes from 'prop-types';
 import { classNames } from '~/utils';
 import TextareaAutosize from 'react-textarea-autosize';
 
-const Textarea = ({ outline, placeholder = '', className = '', ...props }) => {
+const Textarea = ({
+    outline,
+    placeholder = '',
+    className = '',
+    onChangeText = () => {},
+    onChange = () => {},
+    ...props
+}) => {
+    const handleChange = (e) => {
+        onChange(e);
+        onChangeText(e.target.value);
+    };
+
     return (
         <TextareaAutosize
             placeholder={placeholder}
@@ -14,6 +26,7 @@ const Textarea = ({ outline, placeholder = '', className = '', ...props }) => {
                 className,
             )}
             {...props}
+            onChange={handleChange}
         />
     );
 };
@@ -22,6 +35,9 @@ Textarea.propTypes = {
     placeholder: PropTypes.string,
     className: PropTypes.string,
     outline: PropTypes.bool,
+    onChangeText: PropTypes.func,
+    onChange: PropTypes.func,
 };
 
 export default Textarea;
+export { default as TextareaCountChar } from './TextareaCountChar';

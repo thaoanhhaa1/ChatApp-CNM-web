@@ -1,16 +1,17 @@
 import Tippy from '@tippyjs/react';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { classNames } from '~/utils';
 import Item from './Item';
 
 const Popup = ({ data, children, ...props }) => {
+    const tipRef = useRef();
     const [instance, setInstance] = useState();
 
-    const handleHidden = () => {
+    const handleHidden = useCallback(() => {
         instance && instance.hide();
         setInstance();
-    };
+    }, [instance]);
 
     const content = (
         <div className={classNames('-mx-2 -my-1')}>
@@ -22,9 +23,28 @@ const Popup = ({ data, children, ...props }) => {
         </div>
     );
 
+    useEffect(() => {
+        const options = {
+            root: null,
+            rootMargin: '0px',
+        };
+        const ref = tipRef.current;
+        const observer = new IntersectionObserver((entries) => {
+            const [entry] = entries;
+            entry.isIntersecting || handleHidden();
+        }, options);
+
+        if (ref) observer.observe(ref);
+
+        return () => {
+            if (ref) observer.unobserve(ref);
+        };
+    }, [handleHidden, tipRef]);
+
     return (
-        <div>
+        <div className="flex">
             <Tippy
+                ref={tipRef}
                 className="min-w-[160px] py-2 bg-white dark:bg-dark-popup-bg shadow-popup rounded"
                 content={content}
                 arrow={false}

@@ -9,14 +9,21 @@ const Input = ({
     className = '',
     iconClassName = '',
     containerClassName = '',
+    onChangeText = () => {},
+    onChange = () => {},
     ...props
 }) => {
+    const handleChange = (e) => {
+        onChange(e);
+        onChangeText(e.target.value);
+    };
+
     return (
         <div
             className={classNames(
                 'border flex items-center overflow-hidden transition-all',
                 outline
-                    ? 'border-separate dark:border-dark-separate dark:focus-within:border-dark-sidebar-item-color bg-white dark:bg-dark-sidebar-sub-bg focus-within:border-input'
+                    ? 'border-separate dark:border-dark-separate dark:focus-within:border-dark-sidebar-item-color bg-white dark:bg-dark-sidebar-sub-bg focus-within:border-input overflow-hidden'
                     : 'border-transparent bg-input-bg dark:bg-dark-input-bg',
                 rounded ? 'rounded-full' : 'rounded',
                 containerClassName,
@@ -35,6 +42,7 @@ const Input = ({
                     className,
                 )}
                 {...props}
+                onChange={handleChange}
             />
         </div>
     );
@@ -47,6 +55,8 @@ Input.propTypes = {
     containerClassName: PropTypes.string,
     iconClassName: PropTypes.string,
     outline: PropTypes.bool,
+    onChangeText: PropTypes.func,
+    onChange: PropTypes.func,
     rounded: PropTypes.bool,
 };
 

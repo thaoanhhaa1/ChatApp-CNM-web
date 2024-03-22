@@ -5,6 +5,8 @@ const initialState = {
         name: 'John Doe',
         avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
         id: 1,
+        phone: '0987967077',
+        dialling_code: '+84',
     },
     loading: true,
 };

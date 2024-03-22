@@ -3,6 +3,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import ReactDOM from 'react-dom/client';
+import 'react-image-crop/dist/ReactCrop.css';
 import { Provider } from 'react-redux';
 import 'swiper/css';
 import 'swiper/css/navigation';

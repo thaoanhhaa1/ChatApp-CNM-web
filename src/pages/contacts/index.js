@@ -1,74 +1,34 @@
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { SearchIcon, UserAddLineIcon } from '~/assets';
-import Contact from '~/components/contact';
-import FormWrap from '~/components/formWrap';
+import AddContact from '~/components/addContact';
+import ContactTab from '~/components/contactTab';
 import HeaderPage from '~/components/headerPage';
 import Input from '~/components/input';
-import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
-import Textarea from '~/components/textarea';
+import { resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { useBoolean } from '~/hooks';
 
 const Contacts = () => {
     const { t } = useTranslation();
     const { value, setTrue, setFalse } = useBoolean(false);
-    const [contacts] = useState({
-        A: [
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-        ],
-        B: [
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-        ],
-        C: [
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-        ],
-        D: [
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-            {
-                name: 'Albert Rodarte',
-            },
-        ],
-    });
-    const [labels, setLabels] = useState([]);
+    const dispatch = useDispatch();
+    const [tab, setTab] = useState('1');
 
-    const handleInviteContact = () => {};
+    const handleChange = (_, a) => setTab(a);
 
     useEffect(() => {
-        setLabels(Object.keys(contacts));
-    }, [contacts]);
+        dispatch(resetSubs());
+    }, [dispatch, value]);
 
     return (
-        <div className="flex flex-col h-full pb-2 sm:pb-5">
+        <div className="contacts flex flex-col h-full pb-2 sm:pb-5">
             <HeaderPage
                 tooltip={t('contacts.add-contact')}
                 title={t('contacts.title')}
@@ -77,41 +37,25 @@ const Contacts = () => {
             >
                 <Input placeholder={t('contacts.search')} Icon={SearchIcon} />
             </HeaderPage>
-            <ScrollbarCustomize>
-                <div className="px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6 flex flex-col gap-2 sm:gap-4">
-                    {labels.map((title, index) => (
-                        <Contact title={title} key={index} contactList={contacts[title]} />
-                    ))}
-                </div>
-            </ScrollbarCustomize>
-            <Modal show={value} onClickOutside={setFalse}>
-                <Modal.Header onClose={setFalse}>{t('contacts.add-contact')}</Modal.Header>
 
-                <div className="p-6 flex flex-col gap-6">
-                    <FormWrap>
-                        <FormWrap.Label htmlFor="phone">{t('contacts.phone')}</FormWrap.Label>
-                        <Input type="tel" id="phone" name="phone" outline placeholder={t('contacts.enter-phone')} />
-                    </FormWrap>
-                    <FormWrap>
-                        <FormWrap.Label htmlFor="message">{t('contacts.message')}</FormWrap.Label>
-                        <Textarea
-                            outline
-                            type="tel"
-                            id="message"
-                            name="message"
-                            placeholder={t('contacts.enter-message')}
-                            rows={3}
-                        />
-                    </FormWrap>
-                </div>
+            <TabContext value={tab}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <TabList className="-mt-2 ex:-mt-3 sm:-mt-4 md:-mt-5 dl:-mt-6" onChange={handleChange}>
+                        <Tab label={t('contacts.friend')} value="1" />
+                        <Tab label={t('contacts.group')} value="2" />
+                    </TabList>
+                </Box>
+                <ScrollbarCustomize>
+                    <TabPanel value="1">
+                        <ContactTab.Friend />
+                    </TabPanel>
+                    <TabPanel value="2">
+                        <ContactTab.Group />
+                    </TabPanel>
+                </ScrollbarCustomize>
+            </TabContext>
 
-                <Modal.Footer className="flex justify-end items-center gap-2">
-                    <Modal.Button onClick={setFalse} type="text-primary">
-                        {t('contacts.close')}
-                    </Modal.Button>
-                    <Modal.Button onClick={handleInviteContact}>{t('contacts.invite-contact')}</Modal.Button>
-                </Modal.Footer>
-            </Modal>
+            <AddContact show={value} onClickOutside={setFalse} />
         </div>
     );
 };

@@ -15,6 +15,7 @@ const images = {
     heavyFiles: require('./heavy-files.png'),
     teammates: require('./teammates.jpg'),
     enhance: require('./enhance.jpg'),
+    notFoundBg: require('./not-found-bg.gif'),
 };
 
 export default images;
