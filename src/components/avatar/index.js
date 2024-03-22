@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 import { classNames } from '~/utils';
 
 const Avatar = ({ size = '36px', src, alt = '', status = 'OFFLINE', className, containerClassName }) => {
@@ -27,4 +28,4 @@ Avatar.propTypes = {
     containerClassName: PropTypes.string,
 };
 
-export default Avatar;
+export default memo(Avatar);

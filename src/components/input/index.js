@@ -7,6 +7,7 @@ const Input = ({
     rounded,
     placeholder = '',
     className = '',
+    iconClassName = '',
     containerClassName = '',
     onChangeText = () => {},
     onChange = () => {},
@@ -20,7 +21,7 @@ const Input = ({
     return (
         <div
             className={classNames(
-                'border flex items-center transition-all',
+                'border flex items-center overflow-hidden transition-all',
                 outline
                     ? 'border-separate dark:border-dark-separate dark:focus-within:border-dark-sidebar-item-color bg-white dark:bg-dark-sidebar-sub-bg focus-within:border-input overflow-hidden'
                     : 'border-transparent bg-input-bg dark:bg-dark-input-bg',
@@ -29,8 +30,8 @@ const Input = ({
             )}
         >
             {Icon && (
-                <span className="pl-2 sm:pl-4 text-secondary dark:text-dark-secondary">
-                    <Icon className="w-[18px] h-[18px]" />
+                <span className={classNames('pl-2 sm:pl-4 text-secondary dark:text-dark-secondary', iconClassName)}>
+                    <Icon className="w-full h-full" />
                 </span>
             )}
             <input
@@ -52,6 +53,7 @@ Input.propTypes = {
     placeholder: PropTypes.string,
     className: PropTypes.string,
     containerClassName: PropTypes.string,
+    iconClassName: PropTypes.string,
     outline: PropTypes.bool,
     onChangeText: PropTypes.func,
     onChange: PropTypes.func,

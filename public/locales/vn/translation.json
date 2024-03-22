@@ -11,7 +11,9 @@
         "searchPlaceholder": "Tìm kiếm tin nhắn hoặc người dùng",
         "title": "Trò chuyện",
         "recent": "Gần đây",
-        "search": "Tìm kiếm tin nhắn"
+        "search": "Tìm kiếm tin nhắn",
+        "emptyTitle": "Chào mừng đến với Zalo PC!",
+        "emptyDescription": "Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn."
     },
     "chat": {
         "search": "Tìm tin nhắn",
@@ -35,7 +37,10 @@
             "save": "Lưu",
             "forward": "Chuyển tiếp",
             "delete": "Xoá"
-        }
+        },
+        "emoji": "Biểu cảm",
+        "attached-file": "Đính kèm file",
+        "images": "Gửi hình ảnh"
     },
     "contacts": {
         "title": "Danh bạ",
@@ -161,5 +166,68 @@
         "description": "Trang bạn đan tìm kiếm không có sẵn!",
         "home": "Trang chủ",
         "back": "Quay lại"
+    },
+    "emoji": {
+        "suggested": "Gần đây",
+        "smileys_people": "Con người",
+        "animals_nature": "Tự nhiên",
+        "food_drink": "Đồ ăn",
+        "travel_places": "Du lịch",
+        "activities": "Hoạt động",
+        "objects": "Đồ vật",
+        "symbols": "Biểu tượng",
+        "flags": "Quốc gia"
+    },
+    "sticker": {
+        "search": "Tìm kiếm sticker"
+    },
+    "attachFiles": {
+        "photo": "ảnh",
+        "file": "file",
+        "and": "và",
+        "selected": "được chọn",
+        "quickSend": {
+            "title": "Gửi nhanh",
+            "description": "Thả Files vào đây để gửi ngay"
+        },
+        "preview": {
+            "title": "Xem trước khi gửi",
+            "description": "Thả Files vào đây để xem lại trước khi gửi"
+        }
+    },
+    "slider": {
+        "1": {
+            "title": "Nhắn tin nhiều hơn, soạn thảo ít hơn",
+            "description": "Sử dụng Tin Nhắn Nhanh để lưu sẵn các tin nhắn thường dùng và gửi nhanh trong hội thoại bất kỳ."
+        },
+        "2": {
+            "title": "Tin nhắn tự xóa",
+            "description": "Từ giờ tin nhắn đã có thể tự động tự xóa sau khoảng thời gian nhất định."
+        },
+        "3": {
+            "title": "Mã hóa đầu cuối",
+            "description": "Nội dung tin nhắn được mã hóa trong suốt quá trình gửi và nhận",
+            "buttonTitle": "Tìm hiểu thêm"
+        },
+        "4": {
+            "title": "Gọi nhóm và làm việc hiệu quả với Zalo Group Call",
+            "description": "Trao đổi công việc mọi lúc mọi nơi"
+        },
+        "5": {
+            "title": "Trải nghiệm xuyên suốt",
+            "description": "Kết nối và giải quyết công việc trên mọi thiết bị với dữ liệu luôn được đồng bộ"
+        },
+        "6": {
+            "title": "Gửi File nặng?",
+            "description": "Đã có Zalo PC \"xử\" hết"
+        },
+        "7": {
+            "title": "Chat nhóm với đồng nghiệp",
+            "description": "Tiện lợi hơn, nhờ các công cụ hỗ trợ chat trên máy tính"
+        },
+        "8": {
+            "title": "Giải quyết công việc hiệu quả hơn, lên đến 40%",
+            "description": "Với Zalo PC"
+        }
     }
 }

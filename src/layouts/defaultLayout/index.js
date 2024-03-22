@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Chat from '~/components/chat';
 import Navbar from '~/components/navbar';
-import routes from '~/config/routes';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
 import { classNames } from '~/utils';
@@ -36,13 +35,13 @@ const DefaultLayout = ({ children }) => {
                         showChat ? 'z-20' : 'z-1 delay-400 dl:delay-0',
                     )}
                 >
-                    <div className="relative w-full dl:w-sidebar bg-sidebar-sub-bg dark:bg-dark-sidebar-sub-bg transition-width ease-linear duration-400">
+                    <div className="flex-shrink-0 relative w-full dl:w-sidebar bg-sidebar-sub-bg dark:bg-dark-sidebar-sub-bg transition-width ease-linear duration-400">
                         <div className="absolute inset-0 overflow-y-hidden">{children}</div>
                     </div>
                     <div
                         className={classNames(
-                            'z-1 fixed dl:relative inset-0 dl:translate-x-0 flex-1 transition-all ease-linear duration-400 bg-white',
-                            showChat ? 'translate-x-0' : 'translate-x-full',
+                            'z-1 fixed dl:relative inset-0 flex-1 transition-transform ease-linear duration-400 bg-white',
+                            showChat ? 'translate-x-0' : 'translate-x-full dl:translate-x-0',
                         )}
                     >
                         <Chat />

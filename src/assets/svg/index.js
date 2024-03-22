@@ -334,6 +334,33 @@ export const BlockLineIcon = ({ className }) => (
     </svg>
 );
 
+export const RightIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width={12} height={18} viewBox="0 0 7 16">
+        <path
+            fill="currentColor"
+            d="M1.5 13a.47.47 0 0 1-.35-.15c-.2-.2-.2-.51 0-.71L5.3 7.99L1.15 3.85c-.2-.2-.2-.51 0-.71c.2-.2.51-.2.71 0l4.49 4.51c.2.2.2.51 0 .71l-4.5 4.49c-.1.1-.23.15-.35.15"
+        ></path>
+    </svg>
+);
+
+export const LeftIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width={12} height={18} viewBox="0 0 7 16">
+        <path
+            fill="currentColor"
+            d="M5.5 13a.47.47 0 0 1-.35-.15l-4.5-4.5c-.2-.2-.2-.51 0-.71l4.5-4.49c.2-.2.51-.2.71 0c.2.2.2.51 0 .71L1.71 8l4.15 4.15c.2.2.2.51 0 .71c-.1.1-.23.15-.35.15Z"
+        ></path>
+    </svg>
+);
+
+export const CloseFilledIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32">
+        <path
+            fill="currentColor"
+            d="M16 2C8.2 2 2 8.2 2 16s6.2 14 14 14s14-6.2 14-14S23.8 2 16 2m5.4 21L16 17.6L10.6 23L9 21.4l5.4-5.4L9 10.6L10.6 9l5.4 5.4L21.4 9l1.6 1.6l-5.4 5.4l5.4 5.4z"
+        ></path>
+    </svg>
+);
+
 export const LeftLineIcon = ({ className }) => (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
         <g fill="none" fillRule="evenodd">
@@ -464,6 +491,27 @@ export const SortArrowIcon = ({ className }) => (
             fill="currentColor"
             d="m8 2l-.707-.707L8 .586l.707.707zm1 15a1 1 0 1 1-2 0zM2.293 6.293l5-5l1.414 1.414l-5 5zm6.414-5l5 5l-1.414 1.414l-5-5zM9 2v15H7V2zm7 20l-.707.707l.707.707l.707-.707zm1-15a1 1 0 1 0-2 0zm-6.707 10.707l5 5l1.414-1.414l-5-5zm6.414 5l5-5l-1.414-1.414l-5 5zM17 22V7h-2v15z"
         ></path>
+    </svg>
+);
+
+export const PrevIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" strokeWidth={2} d="M17 2L7 12l10 10"></path>
+    </svg>
+);
+
+export const NextIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" strokeWidth={2} d="m7 2l10 10L7 22"></path>
+    </svg>
+);
+
+export const QuoteRightIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="1.19em" height="1em" viewBox="0 0 1664 1408">
+        <path
+            fill="currentColor"
+            d="M768 192v704q0 104-40.5 198.5T618 1258t-163.5 109.5T256 1408h-64q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h64q106 0 181-75t75-181v-32q0-40-28-68t-68-28H192q-80 0-136-56T0 576V192q0-80 56-136T192 0h384q80 0 136 56t56 136m896 0v704q0 104-40.5 198.5T1514 1258t-163.5 109.5T1152 1408h-64q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h64q106 0 181-75t75-181v-32q0-40-28-68t-68-28h-224q-80 0-136-56t-56-136V192q0-80 56-136t136-56h384q80 0 136 56t56 136"
+        />
     </svg>
 );
 

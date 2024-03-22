@@ -120,6 +120,10 @@ const ScrollbarCustomize = (
             const elem = scrollRef.current;
             elem.scrollTop = elem.scrollHeight;
         },
+        scrollY: (y) => {
+            const elem = scrollRef.current;
+            elem.scrollTop = y;
+        },
     }));
 
     return (
