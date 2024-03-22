@@ -4,6 +4,7 @@ import { classNames } from '~/utils';
 const Input = ({
     Icon,
     outline,
+    rounded,
     placeholder = '',
     className = '',
     containerClassName = '',
@@ -19,10 +20,11 @@ const Input = ({
     return (
         <div
             className={classNames(
-                'border flex items-center rounded overflow-hidden transition-all',
+                'border flex items-center transition-all',
                 outline
-                    ? 'border-separate dark:border-dark-separate dark:focus-within:border-dark-sidebar-item-color bg-white dark:bg-dark-sidebar-sub-bg focus-within:border-input'
+                    ? 'border-separate dark:border-dark-separate dark:focus-within:border-dark-sidebar-item-color bg-white dark:bg-dark-sidebar-sub-bg focus-within:border-input overflow-hidden'
                     : 'border-transparent bg-input-bg dark:bg-dark-input-bg',
+                rounded ? 'rounded-full' : 'rounded',
                 containerClassName,
             )}
         >
@@ -53,6 +55,7 @@ Input.propTypes = {
     outline: PropTypes.bool,
     onChangeText: PropTypes.func,
     onChange: PropTypes.func,
+    rounded: PropTypes.bool,
 };
 
 export default Input;

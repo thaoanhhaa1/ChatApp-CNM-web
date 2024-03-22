@@ -1,7 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    user: {},
+    user: {
+        phone: '0987967077',
+        dialling_code: '+84',
+        name: 'John',
+    },
     loading: true,
 };
 

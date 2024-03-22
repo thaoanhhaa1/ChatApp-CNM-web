@@ -39,3 +39,4 @@ Textarea.propTypes = {
 };
 
 export default Textarea;
+export { default as TextareaCountChar } from './TextareaCountChar';

@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { BlockLineIcon, DeleteBinLineIcon, MoreFillIcon, ShareLineIcon } from '~/assets';
+import { BlockLineIcon, DeleteBinLineIcon, More2FillIcon, PhoneLineIcon, ShareLineIcon, VideoLineIcon } from '~/assets';
+import Avatar from '../avatar';
 import Popup from '../popup';
+import Button from './Button';
 
 const ContactItem = ({ contact }) => {
     const { t } = useTranslation();
@@ -9,6 +11,7 @@ const ContactItem = ({ contact }) => {
         {
             title: t('contacts.share'),
             icon: ShareLineIcon,
+            onClick: () => console.log('handleShare'),
         },
         {
             title: t('contacts.block'),
@@ -20,14 +23,20 @@ const ContactItem = ({ contact }) => {
         },
     ];
 
+    const handleCallAudio = () => console.log('handleCallAudio');
+    const handleCallVideo = () => console.log('handleCallVideo');
+
     return (
-        <div className="px-3 sm:px-5 py-1.5 sm:py-2.5 flex justify-between items-center gap-2 cursor-pointer">
-            <div className="text-sm font-semibold">{contact.name}</div>
-            <Popup data={more} placement="bottom-end" animation="shift-toward" offset={[0, 0]}>
-                <div className="pl-4 pr-1 py-1 text-secondary dark:text-dark-secondary">
-                    <MoreFillIcon className="w-4 h-4 rotate-90" />
-                </div>
-            </Popup>
+        <div className="p-1.5 sm:p-2.5 flex items-center gap-2 cursor-pointer hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-colors duration-300 rounded-md">
+            <Avatar src={contact.avatar} />
+            <div className="text-sm font-semibold flex-1 line-clamp-1">{contact.name}</div>
+            <div className="flex items-center">
+                <Button Icon={PhoneLineIcon} onClick={handleCallAudio} />
+                <Button Icon={VideoLineIcon} onClick={handleCallVideo} />
+                <Popup data={more} placement="bottom-end" animation="shift-toward" offset={[0, 0]}>
+                    <Button Icon={More2FillIcon} />
+                </Popup>
+            </div>
         </div>
     );
 };
