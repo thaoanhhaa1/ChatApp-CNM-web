@@ -1,12 +1,16 @@
 import PropTypes from 'prop-types';
 
-const FormGroup = ({ label, name, value, onChange, error, ...props }) => {
+const FormGroup = ({ label, icon, name, value, onChange, error, ...props }) => {
+    const Icon = icon;
     return (
         <div>
             {label && (
                 <label htmlFor={name} className="block text-primary text-mm leading-5 font-medium mb-2">
                     {label}
                 </label>
+            )}
+            {icon && (
+                <Icon className="w-[14px] h-[14px]" />
             )}
             <input
                 id={name}
@@ -23,6 +27,7 @@ const FormGroup = ({ label, name, value, onChange, error, ...props }) => {
 
 FormGroup.propTypes = {
     label: PropTypes.string,
+    icon: PropTypes.func,
     name: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,

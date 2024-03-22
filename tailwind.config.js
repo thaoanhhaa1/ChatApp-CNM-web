@@ -29,6 +29,8 @@ module.exports = {
                 'dark-tooltip-color': '#303841',
                 'tooltip-color': '#f7f7ff',
                 input: '#495057',
+                hoverPurple: '#554BDA',
+                'pink-Purple': '#D8D9E1'
             },
             screens: {
                 ex: '480px',

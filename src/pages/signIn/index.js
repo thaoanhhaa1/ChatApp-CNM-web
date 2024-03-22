@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import QrTab from './qrTab/qrTab';
 import SdtTab from './sdtTab/sdtTab';
+import Button from '~/components/button';
+
+
+// import SdtTab from './sdtTab/sdtTab';
 
 
 const SignIn = () => {
