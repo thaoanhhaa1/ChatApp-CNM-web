@@ -5,9 +5,9 @@ import { useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {
+    ClockIcon,
     ContactIcon,
     GlobalIcon,
-    GroupIcon,
     LogOutIcon,
     LogoIcon,
     MessageIcon,
@@ -26,19 +26,19 @@ import Button from './Button';
 
 const navBars = [
     {
-        title: 'navbar.chats',
-        icon: MessageIcon,
-        to: routes.chats,
-    },
-    {
         title: 'navbar.profile',
         icon: UserIcon,
         to: routes.profile,
     },
     {
+        title: 'navbar.chats',
+        icon: MessageIcon,
+        to: routes.chats,
+    },
+    {
         title: 'navbar.groups',
-        icon: GroupIcon,
-        to: routes.groups,
+        icon: ClockIcon,
+        to: routes.feed,
     },
     {
         title: 'navbar.contacts',
@@ -106,7 +106,7 @@ const Navbar = ({ className }) => {
             <div className="flex-5 dl:flex-none flex dl:flex-col justify-evenly dl:justify-start items-center ex:gap-2">
                 {navBars.map(({ title, ...navbar }, index) => (
                     <Tippy delay={[200, 0]} offset={[0, 0]} content={t(title)} key={index}>
-                        <Button {...navbar} />
+                        <Button {...navbar}>{t(title)}</Button>
                     </Tippy>
                 ))}
             </div>
