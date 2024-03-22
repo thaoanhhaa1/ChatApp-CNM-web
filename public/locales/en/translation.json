@@ -1,9 +1,9 @@
 {
     "navbar": {
-        "chats": "Chats",
+        "chats": "Chat",
         "profile": "Profile",
-        "groups": "Groups",
-        "contacts": "Contacts",
+        "groups": "Feeds",
+        "contacts": "Contact",
         "settings": "Settings",
         "logout": "Log out"
     },
@@ -151,6 +151,16 @@
             "update": "Update",
             "change-avatar": "Update avatar",
             "delete-avatar": "Remove avatar"
-        }
+        },
+        "message-empty": "Message cannot be blank."
+    },
+    "profile": {
+        "title": "My Profile"
+    },
+    "not-found": {
+        "title": "Look like you're lost",
+        "description": "The page you are looking for not avaible!",
+        "home": "Go to Home",
+        "back": "Back"
     }
 }

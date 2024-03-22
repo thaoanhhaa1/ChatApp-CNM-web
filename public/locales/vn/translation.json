@@ -1,9 +1,9 @@
 {
     "navbar": {
-        "chats": "Trò chuyện",
-        "profile": "Hồ sơ",
-        "groups": "Danh sách nhóm",
-        "contacts": "Liên hệ",
+        "chats": "Tin nhắn",
+        "profile": "Cá nhân",
+        "groups": "Bảng tin",
+        "contacts": "Danh bạ",
         "settings": "Cài đặt",
         "logout": "Đăng xuất"
     },
@@ -150,6 +150,16 @@
             "update": "Cập nhật",
             "change-avatar": "Đổi ảnh đại diện",
             "delete-avatar": "Xoá ảnh đại diện"
-        }
+        },
+        "message-empty": "Lời chào không được để trống."
+    },
+    "profile": {
+        "title": "Hồ sơ của tôi"
+    },
+    "not-found": {
+        "title": "Có vẻ như bạn đang bị lạc",
+        "description": "Trang bạn đan tìm kiếm không có sẵn!",
+        "home": "Trang chủ",
+        "back": "Quay lại"
     }
 }
