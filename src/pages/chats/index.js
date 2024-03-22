@@ -10,6 +10,8 @@ import OnlineUser from '~/components/onlineUser';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { screens } from '~/constants';
 
+// TODO Search
+// TODO Click online user
 const Chats = () => {
     const { t } = useTranslation();
     const { width } = useWindowSize();

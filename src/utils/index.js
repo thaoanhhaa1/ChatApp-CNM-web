@@ -6,5 +6,6 @@ export { default as getUnseenMessageNumber } from './getUnseenMessageNumber';
 export { default as insertEmojiToChat } from './insertEmojiToChat';
 export { default as isPhotoFile } from './isPhotoFile';
 export { default as isShowTimeChatSeparate } from './isShowTimeChatSeparate';
+export { default as loadImage } from './loadImage';
 export { default as reorder } from './reorder';
 export { default as splitMessage } from './splitMessage';

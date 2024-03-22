@@ -1,5 +1,4 @@
 import Tippy from '@tippyjs/react';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -20,6 +19,7 @@ import Call from '~/components/call';
 import Input from '~/components/input';
 import Popup from '~/components/popup';
 import { useChat, useLayout } from '~/context';
+import { useBoolean } from '~/hooks';
 import Button from './Button';
 
 const tippyProps = {
@@ -33,10 +33,11 @@ const tippyProps = {
     className: 'border border-[#f0eff5] dark:border-dark-separate shadow-popup py-1 bg-white dark:bg-dark-popup-bg',
 };
 
+// TODO Search
 const Header = () => {
     const { t } = useTranslation();
-    const [showCall, setShowCall] = useState(false);
-    const [showVideo, setShowVideo] = useState(false);
+    const { value: showCall, setTrue: setShowCall, setFalse: setHideCall } = useBoolean(false);
+    const { value: showVideo, setTrue: setShowVideo, setFalse: setHideVideo } = useBoolean(false);
     const { setShowChat } = useLayout();
     const { handleShowProfile } = useChat();
     const {
@@ -90,13 +91,13 @@ const Header = () => {
 
                 <div className="dl:flex gap-2 hidden">
                     <div>
-                        <Button icon={PhoneLineIcon} onClick={() => setShowCall(true)} />
-                        <Call onAccept={() => {}} onCancel={() => setShowCall(false)} show={showCall} />
+                        <Button icon={PhoneLineIcon} onClick={setShowCall} />
+                        <Call onAccept={() => {}} onCancel={setHideCall} show={showCall} />
                     </div>
 
                     <div>
-                        <Button icon={VideoLineIcon} onClick={() => setShowVideo(true)} />
-                        <Call onAccept={() => {}} onCancel={() => setShowVideo(false)} show={showVideo} isVideoCall />
+                        <Button icon={VideoLineIcon} onClick={setShowVideo} />
+                        <Call onAccept={() => {}} onCancel={setHideVideo} show={showVideo} isVideoCall />
                     </div>
 
                     <Button onClick={handleShowProfile} icon={UserIcon} />

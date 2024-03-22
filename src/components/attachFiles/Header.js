@@ -6,7 +6,7 @@ import HeaderLabel from './HeaderLabel';
 
 const Header = () => {
     const { t, i18n } = useTranslation();
-    const { files } = useSelector((state) => state.attachFiles);
+    const { files } = useSelector((state) => state.chat);
     const [numberPhotos, numberFiles] = useMemo(
         () =>
             files.reduce(

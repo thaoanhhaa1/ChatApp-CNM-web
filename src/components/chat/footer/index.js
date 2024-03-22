@@ -2,10 +2,12 @@ import { useWindowSize } from '@uidotdev/usehooks';
 import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mention, MentionsInput } from 'react-mentions';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { checkText } from 'smile2emoji';
 import { AttachmentLineIcon, ImageFillIcon, SendPlaneFillIcon } from '~/assets';
 import AttachFiles from '~/components/attachFiles';
+import ReplyMessage from '~/components/replyMessage';
+import { setChat, setReply } from '~/features/chat/chatSlice';
 import { insertEmojiToChat, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
@@ -14,7 +16,6 @@ import SendFiles from './SendFiles';
 
 const Footer = () => {
     const { t } = useTranslation();
-    const [chat, setChat] = useState('');
     const [selectionStart, setSelectionStart] = useState(-1);
     const [mentions] = useState([
         {
@@ -88,16 +89,17 @@ const Footer = () => {
             display: 'Lydìã Rôdarté-Qüayle',
         },
     ]);
-    const { files } = useSelector((state) => state.attachFiles);
+    const { files, reply, chat } = useSelector((state) => state.chat);
     const ref = useRef();
     const { width } = useWindowSize();
+    const dispatch = useDispatch();
 
-    const handleChange = (e) => setChat(checkText(e.target.value));
+    const handleChange = (e) => dispatch(setChat(checkText(e.target.value)));
     const handleEmojiClick = (e) => {
         const inputElement = ref.current.inputElement;
         const selectionStart = inputElement.selectionStart;
 
-        setChat((chat) => insertEmojiToChat(e.emoji, chat, ref.current.inputElement));
+        dispatch(setChat(insertEmojiToChat(e.emoji, chat, ref.current.inputElement)));
         setSelectionStart(selectionStart + 2);
     };
 
@@ -108,6 +110,9 @@ const Footer = () => {
         }
     };
 
+    const renderUserSuggestion = (mention) => <MentionItem mention={mention} />;
+    const displayTransform = (_, display) => `@${display}`;
+    const handleCloseReply = () => dispatch(setReply());
     const handleSendFiles = (files) => console.log('Send files...', files);
 
     const handleSend = () => {
@@ -116,12 +121,8 @@ const Footer = () => {
         const messages = splitMessage(chat);
 
         console.log('🚀 ~ messages ~ messages:', messages);
-        setChat('');
+        dispatch(setChat(''));
     };
-
-    const renderUserSuggestion = (mention) => <MentionItem mention={mention} />;
-
-    const displayTransform = (_, display) => `@${display}`;
 
     useEffect(() => {
         if (!ref.current) return () => {};
@@ -157,6 +158,8 @@ const Footer = () => {
 
     return (
         <div className="border-t border-separate dark:border-dark-separate p-2 sm:p-3 md:p-4 dl:p-5">
+            {reply ? <ReplyMessage showClose isMe onClose={handleCloseReply} message={reply} /> : null}
+
             <div className="items-end flex gap-2">
                 <label className="flex-1">
                     <MentionsInput

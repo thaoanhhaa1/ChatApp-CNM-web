@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { ImageFillIcon } from '~/assets';
 import { useLayout } from '~/context';
 import { setActive } from '~/features/chats/chatsSlice';
 import { classNames, getUnseenMessageNumber } from '~/utils';
@@ -31,7 +32,14 @@ const ChatItem = ({ chat, active }) => {
                 <div className="">
                     <h5 className="text-mm font-semibold mb-1 line-clamp-1">{chat.user.name}</h5>
                     {(chat.typing && <Typing />) || (
-                        <Message isMe className="line-clamp-1" isReply messages={message.messages} />
+                        <div className="flex items-center">
+                            {message?.images?.length && (
+                                <span className="mr-1 text-secondary dark:text-dark-secondary">
+                                    <ImageFillIcon className="w-[14px] h-[14px]" />
+                                </span>
+                            )}
+                            <Message isMe className="line-clamp-1" isReply messages={message.messages} />
+                        </div>
                     )}
                 </div>
                 <div className="flex flex-col justify-center">

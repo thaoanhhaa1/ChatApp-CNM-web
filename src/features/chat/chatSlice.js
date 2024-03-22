@@ -1,13 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+    chat: '',
     files: [],
 };
 
-const attachFilesSlice = createSlice({
-    name: 'attachFiles',
+const chatSlice = createSlice({
+    name: 'chat',
     initialState,
     reducers: {
+        setChat: (state, { payload }) => {
+            state.chat = payload;
+        },
+        setReply: (state, { payload }) => {
+            state.reply = payload;
+        },
         setFiles: (state, { payload }) => {
             state.files = payload;
         },
@@ -20,5 +27,5 @@ const attachFilesSlice = createSlice({
     },
 });
 
-export default attachFilesSlice.reducer;
-export const { setFiles, removeFile, addFiles } = attachFilesSlice.actions;
+export default chatSlice.reducer;
+export const { setChat, setReply, setFiles, removeFile, addFiles } = chatSlice.actions;

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 } from 'uuid';
 import { ChatProvider } from '~/context';
-import { addFiles } from '~/features/attachFiles/attachFilesSlice';
+import { addFiles } from '~/features/chat/chatSlice';
 import { useBoolean } from '~/hooks';
 import DropZone from '../dropZone';
 import Body from './body';
@@ -19,7 +19,7 @@ const Chat = () => {
     const { value: showDropZone, setFalse: setHiddenDropZone, setTrue: setShowDropZone } = useBoolean(false);
     const dropZoneRef = useRef();
     const [dropZoneHeights, setDropZoneHeights] = useState([0, 0]);
-    const { files } = useSelector((state) => state.attachFiles);
+    const { files } = useSelector((state) => state.chat);
     const { active } = useSelector((state) => state.chats);
     const { width } = useWindowSize();
     const dispatch = useDispatch();

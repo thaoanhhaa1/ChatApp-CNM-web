@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { CloseFilledIcon } from '~/assets';
-import { removeFile } from '~/features/attachFiles/attachFilesSlice';
+import { removeFile } from '~/features/chat/chatSlice';
 import { classNames, getBgByTypeFile } from '~/utils';
 
 const AttachFile = ({ file }) => {

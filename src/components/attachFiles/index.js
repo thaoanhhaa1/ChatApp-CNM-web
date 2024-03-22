@@ -2,13 +2,13 @@ import { useRef } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { createPortal } from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFiles } from '~/features/attachFiles/attachFilesSlice';
+import { setFiles } from '~/features/chat/chatSlice';
 import { reorder } from '~/utils';
 import AttachFile from './AttachFile';
 import Header from './Header';
 
 const AttachFiles = () => {
-    const { files } = useSelector((state) => state.attachFiles);
+    const { files } = useSelector((state) => state.chat);
     const dispatch = useDispatch();
     const dragEl = useRef(document.getElementById('draggable'));
 
