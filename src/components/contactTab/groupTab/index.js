@@ -21,7 +21,7 @@ const Group = () => {
     );
     const sortedGroups = useMemo(() => sorts && groups, [groups, sorts]);
     // FIXME init value: true
-    const { value: show, setFalse: handleHidden, setTrue: handleShow } = useBoolean(true);
+    const { value: show, setFalse: handleHidden, setTrue: handleShow } = useBoolean(false);
 
     return (
         <Wrapper>

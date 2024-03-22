@@ -19,7 +19,7 @@ const Emoticon = ({ handleEmojiClick }) => {
     const handleChange = (_, a) => setValue(a);
 
     return (
-        <div className="relative">
+        <div className="relative emoticon">
             <Tippy
                 offset={[0, 0]}
                 arrow={false}

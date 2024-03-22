@@ -45,10 +45,10 @@ const FriendRequest = ({ show, onClickOutside }) => {
                         </Box>
                         <ScrollbarCustomize>
                             <TabPanel value={RECEIVED_TAB}>
-                                <ReceivedTab className="-m-6" />
+                                <ReceivedTab />
                             </TabPanel>
                             <TabPanel value={SENT_TAB}>
-                                <SentTab className="-m-6" />
+                                <SentTab />
                             </TabPanel>
                         </ScrollbarCustomize>
                     </TabContext>

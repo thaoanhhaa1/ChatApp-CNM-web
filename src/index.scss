@@ -150,12 +150,14 @@ div.MuiTabPanel-root {
     @apply p-0;
 }
 
-.MuiTabs-flexContainer {
-    @apply justify-center px-0 ex:px-4;
-}
+.emoticon {
+    .MuiTabs-flexContainer {
+        @apply justify-center px-0 ex:px-4;
+    }
 
-.MuiTab-root[role='tab'] {
-    @apply max-w-[154px] w-full flex-1;
+    .MuiTab-root[role='tab'] {
+        @apply max-w-[154px] w-full flex-1;
+    }
 }
 
 // Mentions Input Custom
