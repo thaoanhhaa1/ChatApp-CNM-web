@@ -151,8 +151,7 @@
             "update": "Update",
             "change-avatar": "Update avatar",
             "delete-avatar": "Remove avatar"
-        },
-        "message-empty": "Message cannot be blank."
+        }
     },
     "profile": {
         "title": "My Profile"
