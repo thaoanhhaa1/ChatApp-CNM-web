@@ -120,9 +120,9 @@ const Navbar = ({ className }) => {
                 </Tippy>
 
                 <Popup data={actions.map((action) => ({ ...action, title: t(action.title) }))}>
-                    <Button>
+                    <button className="w-12 h-12 flex justify-center items-center">
                         <Avatar src="https://plus.unsplash.com/premium_photo-1682339458660-bc746ad86023?q=80&w=1635&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
-                    </Button>
+                    </button>
                 </Popup>
             </div>
         </nav>
