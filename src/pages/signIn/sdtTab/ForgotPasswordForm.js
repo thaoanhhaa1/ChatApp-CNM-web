@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Button from '~/components/button';
-import { MobileIcon } from '~/assets';
-import FormLogin from '~/components/Sigin/formLogin';
-import UpdatePasswordForm from './UpdatePasswordForm';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import validator from 'validator';
+import { MobileIcon } from '~/assets';
+import Button from '~/components/button';
+import PhoneSelect from '~/components/phoneSelect';
+import UnderlineInput from '~/components/underlineInput';
+import { useBoolean } from '~/hooks';
+import UpdatePasswordForm from './UpdatePasswordForm';
 
-const ForgotPasswordForm = ({ value, onChange, onClick }) => {
-    const [showUpdatePass, setshowUpdatePass] = useState(false);
-    // const [phone, setPhone] = useState({ value });
-    const [error, setError] = useState('');
+const ForgotPasswordForm = ({ onBack = () => {} }) => {
+    const { t } = useTranslation();
+    const [showUpdatePass, setShowUpdatePass] = useState(false);
+    const [phone, setPhone] = useState('');
+    const [country, setCountry] = useState();
+    const { value, setFalse, setTrue } = useBoolean();
 
     const handleContinue = () => {
-        if (!validator.isMobilePhone(value, 'vi-VN')) {
-            setError('Số điện thoại không hợp lệ');
+        setFalse();
+        console.group(`handleSubmit`);
+
+        console.log(`country`, country);
+        console.log(`phone`, phone);
+
+        console.groupEnd();
+
+        if (!validator.isMobilePhone(phone, 'vi-VN')) {
+            setTrue();
         } else {
-            setshowUpdatePass(true);
+            setShowUpdatePass(true);
         }
     };
 
@@ -23,37 +36,54 @@ const ForgotPasswordForm = ({ value, onChange, onClick }) => {
         <div>
             {!showUpdatePass ? (
                 <>
-                    <div className='flex items-center justify-center mb-5'>
-                        <p>Nhập số điện thoại của bạn</p>
+                    <div className="flex items-center justify-center mb-[30px]">
+                        <p>{t('login.enter-phone-number')}</p>
                     </div>
-                    <FormLogin
-                        name="phone"
-                        icon={MobileIcon}
-                        value={value}
-                        onChange={onChange}
-                        error={error}
+                    <UnderlineInput
+                        containerClassName="mb-[18px]"
+                        value={phone}
+                        onChangeText={setPhone}
+                        more={<PhoneSelect onChange={setCountry} />}
+                        type="tel"
+                        Icon={MobileIcon}
+                        placeholder={t('login.phone-number')}
                     />
 
-                    <Button className='w-full hover:bg-hoverPurple mt-5' primary onClick={handleContinue}>Tiếp tục</Button>
-                    <Button onClick={onClick}>&#171; Quay lại</Button>
+                    {value && (
+                        <div className="rounded-sm text-xs font-medium text-[#b64848] bg-[#ffe7e7] p-[15px] mb-6">
+                            {t('login.error-forget-password')}
+                        </div>
+                    )}
+
+                    <Button
+                        disabled={phone.length < 6}
+                        className="w-full hover:bg-hoverPurple"
+                        primary
+                        onClick={handleContinue}
+                    >
+                        {t('login.continue')}
+                    </Button>
+                    <div className="mt-3">
+                        <span
+                            onClick={onBack}
+                            className="text-ss cursor-pointer transition-colors hover:underline hover:text-primary-color"
+                        >
+                            &#171; &nbsp;
+                            {t('login.back')}
+                        </span>
+                    </div>
                 </>
             ) : (
                 <div>
-                    <UpdatePasswordForm sdt={value} />
+                    <UpdatePasswordForm sdt={phone} country={country} />
                 </div>
-            )
-
-            }
+            )}
         </div>
-
     );
 };
 
 ForgotPasswordForm.propTypes = {
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    error: PropTypes.string,
-    onClick: PropTypes.func.isRequired,
+    onBack: PropTypes.func.isRequired,
 };
 
 export default ForgotPasswordForm;

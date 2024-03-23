@@ -48,7 +48,7 @@ function Button({
                 align === 'left' && 'justify-start',
                 align === 'right' && 'justify-end',
                 disabled && 'opacity-50',
-                className
+                className,
             )}
             {...props}
             {...passProp}

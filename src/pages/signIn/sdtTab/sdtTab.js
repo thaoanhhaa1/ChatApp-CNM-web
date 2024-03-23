@@ -1,16 +1,21 @@
-import { useState } from "react";
-import validator from "validator";
-import { LockIcon, MobileIcon } from "~/assets";
-import FormLogin from "~/components/Sigin/formLogin";
-import Button from "~/components/button";
-import MobileLoginForm from "./MobileLoginForm";
-import ForgotPasswordForm from "./ForgotPasswordForm";
-
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { LockIcon, MobileIcon } from '~/assets';
+import Button from '~/components/button';
+import PhoneSelect from '~/components/phoneSelect';
+import UnderlineInput from '~/components/underlineInput';
+import { useBoolean } from '~/hooks';
+import ForgotPasswordForm from './ForgotPasswordForm';
+import MobileLoginForm from './MobileLoginForm';
 
 const SdtTab = () => {
+    const { t } = useTranslation();
     const [showMobileLoginForm, setShowMobileLoginForm] = useState(false);
     const [showForgotPasswordForm, setShowForgotPasswordForm] = useState(false);
-    const [showLoginPasswordForm, setShowLoginPasswordForm] = useState(false);
+    const { value: showError, setFalse: setHideError } = useBoolean(false);
+    const [country, setCountry] = useState();
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleShowMobileLoginForm = () => {
         setShowMobileLoginForm(true);
@@ -23,7 +28,6 @@ const SdtTab = () => {
     };
 
     const handleBackToLoginPasswordForm = () => {
-        setShowLoginPasswordForm(true);
         setShowMobileLoginForm(false);
         setShowForgotPasswordForm(false);
     };
@@ -33,32 +37,6 @@ const SdtTab = () => {
     });
 
     const [errors, setErrors] = useState({});
-
-    const handleChangePassword = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-        setErrors({
-            ...errors,
-            password: undefined, // Xóa thông báo lỗi khi người dùng thay đổi giá trị
-        });
-    };
-
-    const validateFormData = () => {
-        const { phone, password } = formData;
-        const errors = {};
-
-        if (!validator.isMobilePhone(phone, 'vi-VN')) {
-            errors.phone = 'Số điện thoại không hợp lệ';
-        }
-
-        if (!validator.isLength(password, { min: 6, max: undefined }))
-            errors.password = 'Mật khẩu có ít nhất 6 kí tự';
-
-        return errors;
-    };
 
     const handleChangePhone = (phone) => {
         setFormData({
@@ -72,47 +50,80 @@ const SdtTab = () => {
     };
 
     const handleSubmit = () => {
-        // e.preventDefault();
-        // Validate form data
-        const validationErrors = validateFormData();
-        setErrors(validationErrors);
+        setHideError();
 
-        // Check if there are no validation errors
-        if (Object.keys(validationErrors).length === 0) {
-            // Perform login action
-            // Example: send data to server, authenticate user, etc.
-            console.log('Form submitted successfully');
-        } else {
-            // If there are validation errors, do something (e.g., display error messages)
-            console.log('Form contains errors');
-        }
+        console.group(`handleSubmit`);
+
+        console.log(`country`, country);
+        console.log(`phone`, phone);
+        console.log(`password`, password);
+
+        console.groupEnd();
+
+        // Check phone and pass
+        // Đúng ==> Login
+        // Sai ==> show error
+    };
+
+    const handleClickForgetPassword = () => {
+        handleSubmit();
+        handleShowForgotPasswordForm();
+    };
+
+    const handleClickSignInWithMobile = () => {
+        handleSubmit();
+        handleShowMobileLoginForm();
     };
 
     return (
-        <div className="mt-10">
+        <div>
             {!showMobileLoginForm && !showForgotPasswordForm && (
                 <>
-                    <FormLogin
-                        name="phone"
-                        icon={MobileIcon}
-                        value={formData.phone}
-                        onChange={handleChangePhone}
-                        error={errors.phone}
-
-                    />
-                    <FormLogin
-                        input
-                        type='password'
-                        name="password"
-                        icon={LockIcon}
-                        value={formData.password}
-                        onChange={handleChangePassword}
-                        error={errors.password}
-                        placeholder="Mật khẩu"
-                    />
-                    <Button onClick={handleSubmit} className='w-full hover:bg-hoverPurple mt-5' primary>Đăng nhập với mật khẩu</Button>
-                    <Button onClick={() => { handleSubmit(); handleShowMobileLoginForm(); }} className='w-full border border-1 border-gray-500 mt-3 hover:border-hoverPurple'>Đăng nhập bằng thiết bị di động</Button>
-                    <Button onClick={() => { handleSubmit(); handleShowForgotPasswordForm(); }} className="w-full hover:underline hover:text-hoverPurple">Quên mật khẩu?</Button>
+                    <div className="flex flex-col gap-[18px]">
+                        <UnderlineInput
+                            value={phone}
+                            onChangeText={setPhone}
+                            more={<PhoneSelect onChange={setCountry} />}
+                            type="tel"
+                            Icon={MobileIcon}
+                            placeholder={t('login.phone-number')}
+                        />
+                        <UnderlineInput
+                            containerClassName="mb-[18px]"
+                            value={password}
+                            onChangeText={setPassword}
+                            type="password"
+                            Icon={LockIcon}
+                            placeholder={t('login.password')}
+                        />
+                        {showError ? (
+                            <span className="text-ss leading-normal text-[#DD4B39]">{t('login.error')}</span>
+                        ) : null}
+                    </div>
+                    <div className="flex flex-col gap-3 mt-2.5">
+                        <Button
+                            disabled={phone.length < 6 || password.length < 6}
+                            onClick={handleSubmit}
+                            className="w-full hover:bg-hoverPurple"
+                            primary
+                        >
+                            {t('login.login-with-password')}
+                        </Button>
+                        <Button
+                            disabled={phone.length < 6}
+                            onClick={handleClickSignInWithMobile}
+                            className="w-full border border-1 border-gray-500 hover:border-hoverPurple !text-primary-color"
+                        >
+                            {t('login.sign-in-with-mobile')}
+                        </Button>
+                        <Button
+                            small
+                            onClick={handleClickForgetPassword}
+                            className="w-full hover:underline hover:text-hoverPurple"
+                        >
+                            {t('login.forgot-password')}
+                        </Button>
+                    </div>
                 </>
             )}
             {showMobileLoginForm && (
@@ -120,20 +131,15 @@ const SdtTab = () => {
                     value={formData.phone}
                     onChange={handleChangePhone}
                     error={errors.phone}
-                    onClick={handleBackToLoginPasswordForm}
+                    onBack={handleBackToLoginPasswordForm}
                 />
             )}
 
-            {showForgotPasswordForm && (
-                <ForgotPasswordForm
-                    value={formData.phone}
-                    onChange={handleChangePhone}
-                    error={errors.phone}
-                    onClick={handleBackToLoginPasswordForm}
-                />
-            )}
+            {showForgotPasswordForm && <ForgotPasswordForm onBack={handleBackToLoginPasswordForm} />}
         </div>
     );
-}
-SdtTab.propTypes = {}
+};
+
+SdtTab.propTypes = {};
+
 export default SdtTab;

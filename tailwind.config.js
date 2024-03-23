@@ -30,7 +30,7 @@ module.exports = {
                 'tooltip-color': '#f7f7ff',
                 input: '#495057',
                 hoverPurple: '#554BDA',
-                'pink-Purple': '#D8D9E1'
+                'pink-Purple': '#D8D9E1',
             },
             screens: {
                 ex: '480px',
@@ -40,6 +40,7 @@ module.exports = {
             boxShadow: {
                 navbar: '0 2px 4px rgba(15,34,58,.12)',
                 popup: '0 2px 4px rgba(15,34,58,.12)',
+                'phone-select': '0 2px 5px rgba(0,0,0,0.25)',
             },
             spacing: {
                 2.5: '0.625rem',

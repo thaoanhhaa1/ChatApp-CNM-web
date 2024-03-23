@@ -5,7 +5,7 @@ const routes = {
     contacts: '/contacts',
     settings: '/settings',
     logOut: '/log-out',
-    register: '/register',
+    register: '/sign-up',
     signIn: '/sign-in',
 };
 
