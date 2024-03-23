@@ -1,9 +1,8 @@
-import { Fragment, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import validator from 'validator';
-import api, { axiosClient } from '~/api';
 import { saveToken } from '~/api/axiosClient';
 import Button from '~/components/button';
 import FormControl from '~/components/formControl';
@@ -14,6 +13,7 @@ import UnderlineInput from '~/components/underlineInput';
 import routes from '~/config/routes';
 import { genders } from '~/constants';
 import { setUser } from '~/features/user/userSlice';
+import { register } from '~/services';
 import { classNames } from '~/utils';
 
 const NUMBER_OF_STEP = 4;
@@ -86,7 +86,7 @@ const Register = () => {
 
     const prevStep = () => currentStep > 1 && setCurrentStep(currentStep - 1);
 
-    const handleChangeCountry = (country) => setFormData((prev) => ({ ...prev, country }));
+    const handleChangeCountry = useCallback((country) => setFormData((prev) => ({ ...prev, country })), []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -108,21 +108,26 @@ const Register = () => {
 
         setLoading(true);
         const validationErrors = validateFormFields(currentStep);
-        if (Object.keys(validationErrors).length === 0) {
-            try {
-                const res = await axiosClient.post(api.register(), formData);
 
-                saveToken(res.data.accessToken);
-                dispatch(setUser(res.data.user));
-                navigation(routes.chats);
-            } catch (error) {
-                setErrors({
-                    ...errors,
-                    dateOfBirth: error.response.data.error.message,
-                });
-            }
-        } else {
+        if (Object.keys(validationErrors).length) {
+            // TODO Handle validate
             setErrors(validationErrors);
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const res = await register(formData);
+            const { accessToken, user } = res.data;
+
+            saveToken(accessToken);
+            dispatch(setUser(user));
+            navigation(routes.chats);
+        } catch (error) {
+            setErrors({
+                ...errors,
+                dateOfBirth: error.response.data.error.message,
+            });
         }
 
         setLoading(false);

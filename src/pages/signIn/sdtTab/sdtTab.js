@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { LockIcon, MobileIcon } from '~/assets';
 import Button from '~/components/button';
 import PhoneSelect from '~/components/phoneSelect';
 import UnderlineInput from '~/components/underlineInput';
+import config from '~/config';
+import { setUser } from '~/features/user/userSlice';
 import { useBoolean } from '~/hooks';
+import { login } from '~/services';
+import { token } from '~/utils';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import MobileLoginForm from './MobileLoginForm';
 
@@ -12,10 +18,13 @@ const SdtTab = () => {
     const { t } = useTranslation();
     const [showMobileLoginForm, setShowMobileLoginForm] = useState(false);
     const [showForgotPasswordForm, setShowForgotPasswordForm] = useState(false);
-    const { value: showError, setFalse: setHideError } = useBoolean(false);
+    const { value: showError, setFalse: setHideError, setTrue: setShowError } = useBoolean(false);
     const [country, setCountry] = useState();
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
+    const navigation = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const handleShowMobileLoginForm = () => {
         setShowMobileLoginForm(true);
@@ -49,8 +58,9 @@ const SdtTab = () => {
         });
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setHideError();
+        setLoading(true);
 
         console.group(`handleSubmit`);
 
@@ -60,9 +70,20 @@ const SdtTab = () => {
 
         console.groupEnd();
 
-        // Check phone and pass
-        // Đúng ==> Login
-        // Sai ==> show error
+        // TODO Validate
+
+        try {
+            const res = await login({ country, phone, password });
+            const { accessToken, user } = res.data;
+
+            token.set(accessToken);
+            dispatch(setUser(user));
+            navigation(config.routes.chats);
+        } catch (error) {
+            setShowError();
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleClickForgetPassword = () => {
@@ -102,7 +123,8 @@ const SdtTab = () => {
                     </div>
                     <div className="flex flex-col gap-3 mt-2.5">
                         <Button
-                            disabled={phone.length < 6 || password.length < 6}
+                            loading={loading}
+                            disabled={phone.length < 6 || password.length < 6 || loading}
                             onClick={handleSubmit}
                             className="w-full hover:bg-hoverPurple"
                             primary
