@@ -1,42 +1,50 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import validator from 'validator';
 import api, { axiosClient } from '~/api';
 import { saveToken } from '~/api/axiosClient';
 import Button from '~/components/button';
-import FormGroup from '~/components/formGroup';
+import FormControl from '~/components/formControl';
+import Languages from '~/components/languages';
+import PhoneSelect from '~/components/phoneSelect';
 import RadioGroup from '~/components/radioGroup';
+import UnderlineInput from '~/components/underlineInput';
 import routes from '~/config/routes';
+import { genders } from '~/constants';
 import { setUser } from '~/features/user/userSlice';
 import { classNames } from '~/utils';
-
-const genders = [
-    {
-        label: 'Nam',
-        value: 'male',
-    },
-    {
-        label: 'Nữ',
-        value: 'female',
-    },
-];
 
 const NUMBER_OF_STEP = 4;
 
 const Register = () => {
+    const { t } = useTranslation();
     const [currentStep, setCurrentStep] = useState(1);
-    const [loading, setLoading] = useState(false);
-    const dispatch = useDispatch();
-    const navigation = useNavigate();
-
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
         password: '',
         gender: 'male',
         dateOfBirth: '',
+        country: {},
     });
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    const navigation = useNavigate();
+    const termRef = useRef();
+    const socialTermRef = useRef();
+    const gendersTranslation = useMemo(() => genders.map((gender) => ({ ...gender, label: t(gender.label) })), [t]);
+    const disabled = useMemo(() => {
+        const { name, phone, password } = formData;
+
+        if (currentStep === 1) return name.length < 2;
+        if (currentStep === 2)
+            return phone.length < 6 || !termRef?.current?.checked || !socialTermRef?.current?.checked;
+        if (currentStep === 3) return password.length < 6;
+
+        return false;
+    }, [currentStep, formData]);
 
     const [errors, setErrors] = useState({});
 
@@ -77,6 +85,8 @@ const Register = () => {
     };
 
     const prevStep = () => currentStep > 1 && setCurrentStep(currentStep - 1);
+
+    const handleChangeCountry = (country) => setFormData((prev) => ({ ...prev, country }));
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -146,27 +156,29 @@ const Register = () => {
                 </div>
                 {currentStep === 1 && (
                     <div>
-                        <FormGroup
-                            required
-                            placeholder="Gồm 2-40 kí tự"
-                            label="Tên zalo"
+                        <FormControl
+                            label={t('register.zalo-name')}
+                            control={
+                                <UnderlineInput
+                                    placeholder={t('register.zalo-name-placeholder')}
+                                    onChange={handleChange}
+                                    value={formData.name}
+                                    name="name"
+                                />
+                            }
                             error={errors.name}
-                            name="name"
-                            onChange={handleChange}
-                            value={formData.name}
                         />
                         <div className="text-mm text-secondary">
-                            <p className="mt-2">Lưu ý khi đặt tên</p>
+                            <p className="mt-2">{t('register.zalo-name-attention-1')}:</p>
                             <p className="">
-                                - Không vi phạm{' '}
+                                - {t('register.zalo-name-attention-2')}{' '}
                                 <a
                                     href="https://help.zalo.me/huong-dan/chuyen-muc/bao-mat-va-rieng-tu/quy-dinh-dat-ten-nguoi-dung-tren-zalo"
                                     className="text-primary-color"
                                 >
-                                    quy định đặt tên trên Zalo
+                                    {t('register.zalo-name-attention-2-1')}
                                 </a>{' '}
-                                <br />
-                                - Nên sử dụng tên thật để giúp bạn bè nhận ra bạn <br />
+                                <br />- {t('register.zalo-name-attention-3')} <br />
                             </p>
                         </div>
                     </div>
@@ -174,21 +186,47 @@ const Register = () => {
 
                 {currentStep === 2 && (
                     <div>
-                        <FormGroup
-                            label="Số điện thoại"
-                            name="phone"
-                            placeholder="Nhập số điện thoại"
-                            required
-                            value={formData.phone}
-                            onChange={handleChange}
+                        <FormControl
+                            label={t('register.phone')}
+                            control={
+                                <UnderlineInput
+                                    placeholder={t('register.phone-placeholder')}
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    name="phone"
+                                    type="tel"
+                                    more={<PhoneSelect onChange={handleChangeCountry} />}
+                                />
+                            }
                             error={errors.phone}
                         />
                         <div className="flex items-center mb-4 mt-4 text-mm text-secondary dark:text-gray-300">
-                            <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 rounded" />
+                            <input
+                                ref={termRef}
+                                id="default-checkbox-1"
+                                type="checkbox"
+                                value=""
+                                className="w-4 h-4 rounded"
+                            />
                             <label htmlFor="default-checkbox" className="ms-2 font-medium">
-                                Tôi đồng ý với các{' '}
+                                {t('register.phone-checkbox-1')}{' '}
                                 <a href="https://zalo.vn/dieukhoan/" className="text-primary-color">
-                                    điều khoản sử dụng Zalo
+                                    {t('register.phone-checkbox-1-1')}
+                                </a>
+                            </label>
+                        </div>
+                        <div className="flex items-center mb-4 mt-4 text-mm text-secondary dark:text-gray-300">
+                            <input
+                                ref={socialTermRef}
+                                id="default-checkbox-2"
+                                type="checkbox"
+                                value=""
+                                className="w-4 h-4 rounded"
+                            />
+                            <label htmlFor="default-checkbox" className="ms-2 font-medium">
+                                {t('register.phone-checkbox-1')}{' '}
+                                <a href="https://zalo.vn/dieukhoan/" className="text-primary-color">
+                                    {t('register.phone-checkbox-1-2')}
                                 </a>
                             </label>
                         </div>
@@ -196,15 +234,18 @@ const Register = () => {
                 )}
 
                 {currentStep === 3 && (
-                    <FormGroup
+                    <FormControl
+                        label={t('register.password')}
+                        control={
+                            <UnderlineInput
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                type="password"
+                                placeholder={t('register.password-placeholder')}
+                            />
+                        }
                         error={errors.password}
-                        label="Mật khẩu"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        type="password"
-                        placeholder="Enter your password"
-                        required
                     />
                 )}
 
@@ -212,40 +253,49 @@ const Register = () => {
                     <div>
                         <RadioGroup
                             name="gender"
-                            data={genders}
-                            label="Giới tính"
+                            data={gendersTranslation}
+                            label={t('register.gender')}
                             onChange={handleChange}
                             value={formData.gender}
                         />
-                        <FormGroup
+                        <FormControl
+                            label={t('register.birthday')}
                             error={errors.dateOfBirth}
-                            label="Ngày sinh"
-                            name={'dateOfBirth'}
-                            value={formData.dateOfBirth}
-                            onChange={handleChange}
-                            type="date"
-                            required
+                            control={
+                                <UnderlineInput
+                                    name={'dateOfBirth'}
+                                    value={formData.dateOfBirth}
+                                    onChange={handleChange}
+                                    type="date"
+                                />
+                            }
                         />
                     </div>
                 )}
 
                 <div className="flex justify-between mt-4">
                     <Button primary disabled={currentStep <= 1 || loading} onClick={prevStep}>
-                        Quay lại
+                        {t('register.back')}
                     </Button>
                     {currentStep < 4 ? (
-                        <Button primary onClick={nextStep}>
-                            Kế tiếp
+                        <Button disabled={disabled} primary onClick={nextStep}>
+                            {t('register.next')}
                         </Button>
                     ) : (
-                        <Button primary onClick={handleSubmit} disabled={loading} loading={loading}>
-                            Đăng ký
+                        <Button
+                            disabled={!formData.dateOfBirth || loading}
+                            primary
+                            onClick={handleSubmit}
+                            loading={loading}
+                        >
+                            {t('register.register')}
                         </Button>
                     )}
                 </div>
             </div>
 
             <div className="absolute inset-0 -z-10 bg-sidebar-item-active-bg" />
+            <Languages />
         </div>
     );
 };

@@ -4,8 +4,9 @@ const routes = {
     feed: '/feed',
     contacts: '/contacts',
     settings: '/settings',
-    logOut: '/log-out',
-    register: '/register',
+    logOut: '/sign-out',
+    register: '/sign-up',
+    signIn: '/sign-in',
     404: '*',
 };
 

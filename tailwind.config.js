@@ -29,6 +29,8 @@ module.exports = {
                 'dark-tooltip-color': '#303841',
                 'tooltip-color': '#f7f7ff',
                 input: '#495057',
+                hoverPurple: '#554BDA',
+                'pink-Purple': '#D8D9E1',
                 primary: '#343a40',
                 'dark-primary': '#eff2f7',
                 secondary: '#7a7f9a',
@@ -42,6 +44,7 @@ module.exports = {
             boxShadow: {
                 navbar: '0 2px 4px rgba(15,34,58,.12)',
                 popup: '0 2px 4px rgba(15,34,58,.12)',
+                'phone-select': '0 2px 5px rgba(0,0,0,0.25)',
                 reaction:
                     '0 12px 28px 0 rgba(0,0,0,0.2),0 2px 4px 0 rgba(0,0,0,0.1),inset 0 0 0 1px rgba(255,255,255,0.5)',
             },

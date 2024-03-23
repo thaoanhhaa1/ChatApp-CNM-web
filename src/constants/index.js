@@ -1,3 +1,5 @@
+export { default as countries } from './countries';
+export { default as genders } from './genders';
 export * as emoji from './emoji';
 export { default as reaction } from './reaction';
 export { default as screens } from './screens';
