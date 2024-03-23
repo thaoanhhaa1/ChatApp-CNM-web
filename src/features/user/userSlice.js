@@ -8,7 +8,7 @@ const initialState = {
         phone: '0987967077',
         dialling_code: '+84',
     },
-    loading: true,
+    loading: false,
 };
 
 const userSlice = createSlice({

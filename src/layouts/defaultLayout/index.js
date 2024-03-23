@@ -4,11 +4,23 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Chat from '~/components/chat';
+import Loading from '~/components/loading';
 import Navbar from '~/components/navbar';
+import config from '~/config';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
 import { classNames } from '~/utils';
 
+// TODO Check user
+/**
+ * - User not exist
+ *      + accessToken exist
+ *          ++ accessToken valid ===> Get User
+ *          ++ accessToken invalid
+ *              +++ refreshToken valid ==> Get accessToken
+ *              +++ refreshToken invalid ==> redirect to Home
+ *      + accessToken not exist ==> redirect to Home
+ */
 const DefaultLayout = ({ children }) => {
     const [showChat, setShowChat] = useState(false);
     const { width } = useWindowSize();
@@ -19,11 +31,13 @@ const DefaultLayout = ({ children }) => {
         width > screens.DL && setShowChat(false);
     }, [width]);
 
-    // useEffect(() => {
-    //     if (!user._id && !loading) navigation(routes.register);
-    // }, [loading, navigation, user._id]);
+    useEffect(() => {
+        if (user._id) return;
 
-    // if (loading) return <div>loading...</div>;
+        if (!user._id && !loading) navigation(config.routes.signIn);
+    }, [loading, navigation, user._id]);
+
+    if (loading || !user._id) return <Loading />;
 
     return (
         <LayoutProvider value={{ setShowChat }}>

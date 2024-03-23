@@ -1,9 +1,10 @@
 import Tippy from '@tippyjs/react';
 import i18next from 'i18next';
 import PropTypes from 'prop-types';
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     ClockIcon,
     ContactIcon,
@@ -18,8 +19,10 @@ import {
     UserIcon,
 } from '~/assets';
 import images from '~/assets/images';
+import config from '~/config';
 import routes from '~/config/routes';
-import { classNames } from '~/utils';
+import logout from '~/services/logout';
+import { classNames, token } from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
@@ -65,27 +68,37 @@ const languages = [
     },
 ];
 
-const actions = [
-    {
-        title: 'navbar.profile',
-        icon: ProfileIcon,
-    },
-    {
-        title: 'navbar.settings',
-        icon: SettingIcon,
-        separate: true,
-    },
-    {
-        title: 'navbar.logout',
-        icon: LogOutIcon,
-    },
-];
-
 const html = document.querySelector('html');
 
 const Navbar = ({ className }) => {
     const { t } = useTranslation();
+    const { user } = useSelector((state) => state.user);
     const [darkMode, setDarkMode] = useState(true);
+    const navigate = useNavigate();
+
+    const actions = useMemo(
+        () => [
+            {
+                title: 'navbar.profile',
+                icon: ProfileIcon,
+            },
+            {
+                title: 'navbar.settings',
+                icon: SettingIcon,
+                separate: true,
+            },
+            {
+                title: 'navbar.logout',
+                icon: LogOutIcon,
+                onClick: () => {
+                    logout().then();
+                    token.set('');
+                    navigate(config.routes.signIn);
+                },
+            },
+        ],
+        [navigate],
+    );
 
     const toggleDarkMode = () => setDarkMode(!darkMode);
 
@@ -121,7 +134,7 @@ const Navbar = ({ className }) => {
 
                 <Popup data={actions.map((action) => ({ ...action, title: t(action.title) }))}>
                     <button className="w-12 h-12 flex justify-center items-center">
-                        <Avatar src="https://plus.unsplash.com/premium_photo-1682339458660-bc746ad86023?q=80&w=1635&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+                        <Avatar src={user.avatar} />
                     </button>
                 </Popup>
             </div>
