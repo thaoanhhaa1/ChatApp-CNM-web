@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { classNames } from '~/utils';
 
 const Item = ({
@@ -29,7 +30,7 @@ const Item = ({
                 onClick={handleClick}
             >
                 <div className="flex gap-2 items-center">
-                    {url && <img className="h-3 object-cover" src={url} alt={children} />}
+                    {url && <LazyLoadImage className="h-3 object-cover" src={url} alt={children} />}
                     <span className="text-mm leading-5">{children}</span>
                 </div>
                 {icon && <Icon className="w-[15px] h-[15px]" />}

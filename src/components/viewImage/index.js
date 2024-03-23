@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { CloseLineIcon } from '~/assets';
 import Portal from '../portal';
 
@@ -20,7 +21,7 @@ const ViewImage = ({ title, url, onClose = () => {} }) => {
                 {/* Body */}
                 <div className="relative flex-1 bg-[#141414] w-full">
                     <div className="absolute inset-0 p-5">
-                        <img className="object-contain w-full h-full" src={url} alt="" />
+                        <LazyLoadImage className="object-contain w-full h-full" src={url} alt="" />
                     </div>
                 </div>
 

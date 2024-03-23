@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const UpdateAvatarItem = ({ url, onClick = () => {} }) => {
     return (
@@ -6,7 +7,7 @@ const UpdateAvatarItem = ({ url, onClick = () => {} }) => {
             onClick={onClick}
             className="cursor-pointer hover:grayscale-[30%] aspect-square rounded-full overflow-hidden border border-[#b6bec9] transition-all"
         >
-            <img className="w-full h-full object-cover" alt="" src={url} />
+            <LazyLoadImage className="w-full h-full object-cover" alt="" src={url} />
         </div>
     );
 };

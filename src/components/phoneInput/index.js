@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { DownArrowFillIcon } from '~/assets';
 import { countries } from '~/constants';
 import { useBoolean, useOnClickOutside } from '~/hooks';
+import { classNames } from '~/utils';
 import Input from '../input';
 import ScrollbarCustomize from '../scrollbarCustomize';
 import CountryItem from './CountryItem';
-import { classNames } from '~/utils';
 
 const PhoneInput = ({ className, value, setValue }) => {
     const ref = useRef();
@@ -32,7 +33,7 @@ const PhoneInput = ({ className, value, setValue }) => {
                 className="flex-shrink-0 flex items-center relative cursor-pointer text-input px-1 border rounded transition-all border-separate dark:border-dark-separate bg-white dark:bg-dark-sidebar-sub-bg"
             >
                 <div onClick={toggle} className="flex items-center gap-2">
-                    <img
+                    <LazyLoadImage
                         className="w-6 h-6 object-contain"
                         alt=""
                         src={`${process.env.REACT_APP_FLAG_ENDPOINT}/${value?.country.code.toLowerCase()}.png`}

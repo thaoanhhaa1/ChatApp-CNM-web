@@ -2,6 +2,7 @@ import { useWindowSize } from '@uidotdev/usehooks';
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { LeftLineIcon, RightLineIcon } from '~/assets';
 import Avatar from '~/components/avatar';
@@ -91,7 +92,7 @@ const EditAvatar = ({ onClose }) => {
                     >
                         <div className="absolute inset-0 bg-white bg-opacity-40"></div>
 
-                        <img src={avatar.url} className="absolute inset-0 rounded-full" alt="" />
+                        <LazyLoadImage src={avatar.url} className="absolute inset-0 rounded-full" alt="" />
                     </div>
                 </div>
 

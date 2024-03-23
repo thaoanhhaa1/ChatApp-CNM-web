@@ -1,3 +1,4 @@
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { BlockIcon, PencilLineIcon } from '~/assets';
 import Avatar from '~/components/avatar';
@@ -12,7 +13,7 @@ const ProfileHeader = () => {
 
     return (
         <div>
-            <img className="w-full aspect-[400/171] object-cover" src={contact.background} alt="" />
+            <LazyLoadImage className="w-full aspect-[400/171] object-cover" src={contact.background} alt="" />
 
             <div className="px-2 ex:px-3 sm:px-4 -mt-4">
                 <div className="flex gap-2 ex:gap-3 sm:gap-4 items-center">

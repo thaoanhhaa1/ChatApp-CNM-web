@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { classNames } from '~/utils';
 
 const Button = ({ item, active, onClick = () => {} }) => {
@@ -9,7 +10,7 @@ const Button = ({ item, active, onClick = () => {} }) => {
             onClick={handleClick}
             className={classNames('w-9 h-9 p-0.5 rounded-[25%]', active && 'bg-[#E4E6EB] dark:bg-dark-sidebar-bg')}
         >
-            <img className="w-full h-full object-contain object-center" src={item.url} alt="" />
+            <LazyLoadImage className="w-full h-full object-contain object-center" src={item.url} alt="" />
         </button>
     );
 };

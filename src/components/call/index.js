@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { CloseLineIcon, PhoneFillIcon, VideoFillIcon } from '~/assets';
 import Modal from '../modal';
 import Button from './Button';
@@ -11,7 +12,7 @@ const Call = ({ isVideoCall, show, onCancel = () => {}, onAccept = () => {} }) =
         <Modal show={show} onClickOutside={onCancel}>
             <div className="p-10 flex flex-col items-center gap-6">
                 <div className="w-[96px] h-[96px] p-1 border border-[#f0eff5] dark:border-dark-separate rounded-full">
-                    <img
+                    <LazyLoadImage
                         className="w-full h-full rounded-full object-cover"
                         src="https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                         alt=""

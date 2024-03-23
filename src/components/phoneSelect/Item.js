@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const Item = ({ country, onClick = () => {} }) => {
     const handleClick = () => onClick(country);
@@ -8,7 +9,7 @@ const Item = ({ country, onClick = () => {} }) => {
             onClick={handleClick}
             className="cursor-pointer px-2.5 py-2 flex gap-2.5 transition-colors hover:bg-black hover:bg-opacity-5"
         >
-            <img
+            <LazyLoadImage
                 className="w-4 object-contain"
                 src={`${process.env.REACT_APP_FLAG_ENDPOINT}/${country.code.toLowerCase()}.png`}
                 alt={country.name}

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { memo } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import images from '~/assets/images';
 import { classNames } from '~/utils';
 
@@ -17,7 +18,7 @@ const ChatItemReaction = ({ reacts, react, className }) => {
         >
             {reaction.map((react) => (
                 <div key={react} className="px-[1px]">
-                    <img alt={react} src={images[react]} className="w-4 h-4" />
+                    <LazyLoadImage alt={react} src={images[react]} className="w-4 h-4" />
                 </div>
             ))}
             {count > 1 && (

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { CloseLineIcon } from '~/assets';
 import { classNames } from '~/utils';
 import Message from '../message';
@@ -24,7 +25,7 @@ const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {},
             )}
         >
             <div className="w-0.5 h-10 bg-primary-color" />
-            {image && <img alt="" src={image} className="w-9 h-9 object-cover" />}
+            {image && <LazyLoadImage alt="" src={image} className="w-9 h-9 object-cover" />}
             {message.sticker ? <StickerItem url={message.sticker} className="w-9 h-9" /> : null}
             <div className="flex-1">
                 <div className="text-ss font-medium line-clamp-1">{message.name}</div>

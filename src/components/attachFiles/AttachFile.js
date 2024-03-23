@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useDispatch } from 'react-redux';
 import { CloseFilledIcon } from '~/assets';
 import { removeFile } from '~/features/chat/chatSlice';
@@ -31,7 +32,7 @@ const AttachFile = ({ file }) => {
                 <CloseFilledIcon className="w-4 h-4" />
             </span>
 
-            <img
+            <LazyLoadImage
                 className={classNames('w-full h-full', isRenderImage ? 'object-cover' : 'object-contain')}
                 alt={file.name}
                 src={bgImage}
