@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { CloseFillIcon, PhoneFillIcon, VideoFillIcon } from '~/assets';
+import { CloseLineIcon, PhoneFillIcon, VideoFillIcon } from '~/assets';
 import Modal from '../modal';
 import Button from './Button';
 
@@ -24,7 +24,7 @@ const Call = ({ isVideoCall, show, onCancel = () => {}, onAccept = () => {} }) =
                 <div />
                 <div className="flex gap-6">
                     <Button onClick={onCancel} className="bg-danger">
-                        <CloseFillIcon />
+                        <CloseLineIcon />
                     </Button>
                     <Button onClick={onAccept} className="bg-success">
                         {(isVideoCall && <VideoFillIcon />) || <PhoneFillIcon />}
