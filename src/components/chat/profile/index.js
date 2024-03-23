@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AttachmentLineIcon, CloseLineIcon, GroupIcon, UserIcon } from '~/assets';
+import { AttachmentLineIcon, CloseLineIcon, GroupIcon, RecordCircleFillIcon, UserIcon } from '~/assets';
 import Accordion from '~/components/accordion';
 import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
@@ -79,7 +79,10 @@ const Profile = () => {
                         src="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                     />
                     <h5 className="mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6 mb-1 font-semibold">General</h5>
-                    <p className="text-mm text-secondary dark:text-dark-secondary">{t('chat.active')}</p>
+                    <div className="flex items-center gap-1">
+                        <RecordCircleFillIcon className="flex-shrink-0 w-2.5 h-2.5 text-success" />
+                        <p className="text-mm text-secondary dark:text-dark-secondary">{t('chat.active')}</p>
+                    </div>
                 </div>
             </div>
             <ScrollbarCustomize>

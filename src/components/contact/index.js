@@ -4,10 +4,10 @@ import ContactItem from './ContactItem';
 const Contact = ({ title, contactList }) => {
     return (
         <div>
-            <h6 className="p-2 sm:p-4 text-mm text-primary-color font-bold leading-normal">{title}</h6>
+            <h6 className="px-2 sm:px-4 text-mm text-primary-color font-bold leading-normal">{title}</h6>
             <div>
-                {contactList.map((contact, index) => (
-                    <ContactItem contact={contact} key={index} />
+                {contactList.map((contact) => (
+                    <ContactItem contact={contact} key={contact.id} />
                 ))}
             </div>
         </div>

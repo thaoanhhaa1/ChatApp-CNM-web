@@ -1,6 +1,6 @@
 import Tippy from '@tippyjs/react';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
     ArchiveIcon,
@@ -19,6 +19,7 @@ import Call from '~/components/call';
 import Input from '~/components/input';
 import Popup from '~/components/popup';
 import { useChat, useLayout } from '~/context';
+import { useBoolean } from '~/hooks';
 import Button from './Button';
 
 const tippyProps = {
@@ -32,12 +33,16 @@ const tippyProps = {
     className: 'border border-[#f0eff5] dark:border-dark-separate shadow-popup py-1 bg-white dark:bg-dark-popup-bg',
 };
 
+// TODO Search
 const Header = () => {
     const { t } = useTranslation();
-    const [showCall, setShowCall] = useState(false);
-    const [showVideo, setShowVideo] = useState(false);
+    const { value: showCall, setTrue: setShowCall, setFalse: setHideCall } = useBoolean(false);
+    const { value: showVideo, setTrue: setShowVideo, setFalse: setHideVideo } = useBoolean(false);
     const { setShowChat } = useLayout();
     const { handleShowProfile } = useChat();
+    const {
+        active: { user },
+    } = useSelector((state) => state.chats);
 
     const more = [
         {
@@ -68,15 +73,11 @@ const Header = () => {
                 >
                     <ChevronDownIcon className="w-4 h-4" />
                 </button>
-                <Avatar
-                    containerClassName="flex-shrink-0"
-                    src="https://images.unsplash.com/photo-1705077111154-94a4a210461e?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    status="OFFLINE"
-                />
+                <Avatar containerClassName="flex-shrink-0" src={user.avatar} status={user.status} />
                 <Link to="/" className="text-base font-semibold line-clamp-1">
-                    Doris Brown
+                    {user.name}
                 </Link>
-                <RecordCircleFillIcon className="flex-shrink-0 -ml-2 w-2.5 h-2.5 text-success" />
+                <RecordCircleFillIcon className="flex-shrink-0 -ml-1 sm:-ml-2 w-2.5 h-2.5 text-success" />
             </div>
             <div className="flex gap-2">
                 <div>
@@ -90,13 +91,13 @@ const Header = () => {
 
                 <div className="dl:flex gap-2 hidden">
                     <div>
-                        <Button icon={PhoneLineIcon} onClick={() => setShowCall(true)} />
-                        <Call onAccept={() => {}} onCancel={() => setShowCall(false)} show={showCall} />
+                        <Button icon={PhoneLineIcon} onClick={setShowCall} />
+                        <Call onAccept={() => {}} onCancel={setHideCall} show={showCall} />
                     </div>
 
                     <div>
-                        <Button icon={VideoLineIcon} onClick={() => setShowVideo(true)} />
-                        <Call onAccept={() => {}} onCancel={() => setShowVideo(false)} show={showVideo} isVideoCall />
+                        <Button icon={VideoLineIcon} onClick={setShowVideo} />
+                        <Call onAccept={() => {}} onCancel={setHideVideo} show={showVideo} isVideoCall />
                     </div>
 
                     <Button onClick={handleShowProfile} icon={UserIcon} />

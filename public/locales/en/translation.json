@@ -1,9 +1,9 @@
 {
     "navbar": {
-        "chats": "Chats",
+        "chats": "Chat",
         "profile": "Profile",
-        "groups": "Groups",
-        "contacts": "Contacts",
+        "groups": "Feeds",
+        "contacts": "Contact",
         "settings": "Settings",
         "logout": "Log out"
     },
@@ -11,7 +11,9 @@
         "searchPlaceholder": "Search messages or users",
         "title": "Chats",
         "recent": "Recent",
-        "search": "Search"
+        "search": "Search",
+        "emptyTitle": "Welcome to Zalo PC!",
+        "emptyDescription": "Explore the best features to support your work and allow you to chat with your friends and family. All are optimized for your computer!"
     },
     "chat": {
         "search": "Search",
@@ -35,7 +37,10 @@
             "save": "Save",
             "forward": "Forward",
             "delete": "Delete"
-        }
+        },
+        "emoji": "Emoji",
+        "attached-file": "Attached File",
+        "images": "Images"
     },
     "contacts": {
         "title": "Contacts",
@@ -49,7 +54,181 @@
         "message": "Invitation Message",
         "enter-message": "Enter Message",
         "close": "Close",
-        "invite-contact": "Invite Contact"
+        "invite-contact": "Invite Contact",
+        "phone-empty": "Phone number can not be left blank.",
+        "phone-invalid": "Invalid phone number.",
+        "message-empty": "Message cannot be blank.",
+        "modal": {
+            "close": "Close",
+            "search": "Search",
+            "placeholder": "Search by country name",
+            "recentSearches": "Recent searches",
+            "youMayKnow": "You may know",
+            "fromPhoneNumber": "From phone number",
+            "addFriend": "Add friend",
+            "viewMore": "View more",
+            "profile": "Profile",
+            "chat": "Chat",
+            "personalInformation": "Personal information",
+            "gender": "Gender",
+            "birthday": "Birthday",
+            "mutualGroup": "Mutual group",
+            "shareContact": "Share contact",
+            "blockMessagesAndCalls": "Block messages and calls",
+            "report": "Report",
+            "setAlias": "Set alias",
+            "setAliasTitle": "Choose a memorable name for",
+            "setAliasNotice": "Notice: This alias will only be shown to you.",
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "character": "character",
+            "notAllowViewFeed": "Do not allow this user to view my feed",
+            "information": "Profile",
+            "placeholderGreetingMessage": "Enter your greeting message...",
+            "greetingMessage1": "Hi, my name is",
+            "greetingMessage2": "I found you by searching your number. Please accept my request!",
+            "reportDescription": "If you are concerned about this conversation. You can report the conversation after selecting a problem below.",
+            "sensitiveContent": "Sensitive Content",
+            "annoying": "Annoying",
+            "scam": "Scam",
+            "other": "Other",
+            "reportPlaceholder": "Enter report reason",
+            "blockAndDeleteConversations": "Block and delete conversations",
+            "unblock": "Unblock",
+            "unblockTitle": "Unblock to send message and call to this person.",
+            "blockWarning": "Be careful when adding strangers",
+            "zaloName": "Zalo name",
+            "phoneNumber": "Phone number",
+            "joinedZalo": "Joined Zalo",
+            "undoRequest": "Undo request"
+        },
+        "friend": "Friend",
+        "group": "Group",
+        "friendRequest": "Add friend invitation",
+        "directory": "Machine contact",
+        "user-may-use": "Contacts who use Zalo",
+        "birthday-calender": "Birthday schedule",
+        "follow-friend-birthday": "Follow your friends' birthdays",
+        "create-group": "Create New Group",
+        "group-joined": "Joined Groups",
+        "last-activity": "Recent activity",
+        "friend-request": {
+            "title": "Add friend invitation",
+            "received": "Received",
+            "sent": "Sent",
+            "see-more": "See more",
+            "see-less": "See less",
+            "decline": "Decline",
+            "accept": "Accept",
+            "add-friend": "Add",
+            "recall": "Recall",
+            "manage-title": "Manage friend invitation",
+            "add-by-phone-number": "Allow unknown people to find you by phone number",
+            "allow-stranger": "Allow unknown people to add friend",
+            "allow-stranger-desc": "Allow unknown people to add friend by follow sources",
+            "my-qr": "My QR code",
+            "common-group": "Common group",
+            "suggest": "Suggest \"May be you known\""
+        },
+        "phone-book": {
+            "last-update": "Latest update",
+            "search": "Search",
+            "all": "All",
+            "not-friends": "Not friends",
+            "notAllowViewFeed": "Block this person to view my timeline",
+            "greetingMessage1": "Hi, I'm",
+            "greetingMessage2": "I've got your phone number"
+        },
+        "recent-activity": "Recent activity",
+        "group-name": "Group name",
+        "admin-group": "Admin group",
+        "create-group-modal": {
+            "title": "Create group",
+            "cancel": "Cancel",
+            "create-group": "Create group",
+            "enter-group-name": "Enter group name...",
+            "search-placeholder": "Enter name, phone number, or list of phone number here",
+            "recent-chat": "Recent",
+            "selected": "Selected",
+            "update-avatar": "Update avatar",
+            "upload-from-pc": "Upload from PC",
+            "gallery": "Gallery",
+            "update": "Update",
+            "change-avatar": "Update avatar",
+            "delete-avatar": "Remove avatar"
+        }
+    },
+    "profile": {
+        "title": "My Profile"
+    },
+    "not-found": {
+        "title": "Look like you're lost",
+        "description": "The page you are looking for not avaible!",
+        "home": "Go to Home",
+        "back": "Back"
+    },
+    "emoji": {
+        "suggested": "Recent",
+        "smileys_people": "People",
+        "animals_nature": "Nature",
+        "food_drink": "Food & Drink",
+        "travel_places": "Travel & places",
+        "activities": "Activity",
+        "objects": "Objects",
+        "symbols": "Symbols",
+        "flags": "Flags"
+    },
+    "sticker": {
+        "search": "Search sticker"
+    },
+    "attachFiles": {
+        "photo": "photo",
+        "file": "file",
+        "and": "and",
+        "selected": "selected",
+        "quickSend": {
+            "title": "Quick send",
+            "description": "Drop Files here to send immediately"
+        },
+        "preview": {
+            "title": "Preview before sending",
+            "description": "Drop Files here to preview before sending"
+        }
+    },
+    "slider": {
+        "1": {
+            "title": "Messages more, work less",
+            "description": "Use Quick Messages to save common messages & respond faster in any conversations."
+        },
+        "2": {
+            "title": "Disappearing messages",
+            "description": "From now messages can auto-disappear after a set time."
+        },
+        "3": {
+            "title": "End-to-end Encryption",
+            "description": "Messages are encrypted during sending and receiving",
+            "buttonTitle": "More"
+        },
+        "4": {
+            "title": "Effective teamwork with Zalo Group Call",
+            "description": "Connect and converse with your team anytime, anywhere"
+        },
+        "5": {
+            "title": "Stay connected and work on any device",
+            "description": "With advanced synchronization"
+        },
+        "6": {
+            "title": "Heavy files to send?",
+            "description": "Let Zalo PC deal with it!"
+        },
+        "7": {
+            "title": "Chat with your teammates",
+            "description": "Fast and easily with tools optimized for your computer"
+        },
+        "8": {
+            "title": "Enhance productivity up to 40%",
+            "description": "With Zalo PC"
+        }
     },
     "login": {
         "with-qr-code": "With QR code",
