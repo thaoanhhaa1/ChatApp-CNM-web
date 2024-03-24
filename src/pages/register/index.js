@@ -13,6 +13,7 @@ import UnderlineInput from '~/components/underlineInput';
 import routes from '~/config/routes';
 import { genders } from '~/constants';
 import { setUser } from '~/features/user/userSlice';
+import { useBoolean } from '~/hooks';
 import { register } from '~/services';
 import { classNames } from '~/utils';
 
@@ -35,6 +36,7 @@ const Register = () => {
     const termRef = useRef();
     const socialTermRef = useRef();
     const gendersTranslation = useMemo(() => genders.map((gender) => ({ ...gender, label: t(gender.label) })), [t]);
+    const { value: terms, toggle: toggleTerms } = useBoolean();
     const disabled = useMemo(() => {
         const { name, phone, password } = formData;
 
@@ -44,7 +46,8 @@ const Register = () => {
         if (currentStep === 3) return password.length < 6;
 
         return false;
-    }, [currentStep, formData]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentStep, formData, terms]);
 
     const [errors, setErrors] = useState({});
 
@@ -207,6 +210,7 @@ const Register = () => {
                         />
                         <div className="flex items-center mb-4 mt-4 text-mm text-secondary dark:text-gray-300">
                             <input
+                                onChange={toggleTerms}
                                 ref={termRef}
                                 id="default-checkbox-1"
                                 type="checkbox"
@@ -222,12 +226,12 @@ const Register = () => {
                         </div>
                         <div className="flex items-center mb-4 mt-4 text-mm text-secondary dark:text-gray-300">
                             <input
+                                onChange={toggleTerms}
                                 ref={socialTermRef}
                                 id="default-checkbox-2"
                                 type="checkbox"
                                 value=""
                                 className="w-4 h-4 rounded"
-                                
                             />
                             <label htmlFor="default-checkbox" className="ms-2 font-medium">
                                 {t('register.phone-checkbox-1')}{' '}
@@ -284,7 +288,7 @@ const Register = () => {
                         {t('register.back')}
                     </Button>
                     {currentStep < 4 ? (
-                        <Button primary onClick={nextStep}>
+                        <Button disabled={disabled} primary onClick={nextStep}>
                             {t('register.next')}
                         </Button>
                     ) : (
