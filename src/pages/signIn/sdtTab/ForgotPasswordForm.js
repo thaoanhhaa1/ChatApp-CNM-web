@@ -1,18 +1,18 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import validator from 'validator';
 import { MobileIcon } from '~/assets';
 import Button from '~/components/button';
 import PhoneSelect from '~/components/phoneSelect';
 import UnderlineInput from '~/components/underlineInput';
 import { useBoolean } from '~/hooks';
 import UpdatePasswordForm from './UpdatePasswordForm';
+import validator from 'validator';
 
-const ForgotPasswordForm = ({ onBack = () => {} }) => {
+const ForgotPasswordForm = ({sdt, onBack = () => {} }) => {
     const { t } = useTranslation();
     const [showUpdatePass, setShowUpdatePass] = useState(false);
-    const [phone, setPhone] = useState('');
+    const [phone, setPhone] = useState(sdt);
     const [country, setCountry] = useState();
     const { value, setFalse, setTrue } = useBoolean();
 
@@ -83,6 +83,7 @@ const ForgotPasswordForm = ({ onBack = () => {} }) => {
 };
 
 ForgotPasswordForm.propTypes = {
+    sdt: PropTypes.string.isRequired,
     onBack: PropTypes.func.isRequired,
 };
 

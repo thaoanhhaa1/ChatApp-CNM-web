@@ -227,6 +227,7 @@ const Register = () => {
                                 type="checkbox"
                                 value=""
                                 className="w-4 h-4 rounded"
+                                
                             />
                             <label htmlFor="default-checkbox" className="ms-2 font-medium">
                                 {t('register.phone-checkbox-1')}{' '}
@@ -283,7 +284,7 @@ const Register = () => {
                         {t('register.back')}
                     </Button>
                     {currentStep < 4 ? (
-                        <Button disabled={disabled} primary onClick={nextStep}>
+                        <Button primary onClick={nextStep}>
                             {t('register.next')}
                         </Button>
                     ) : (

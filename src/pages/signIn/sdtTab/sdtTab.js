@@ -14,6 +14,7 @@ import { token } from '~/utils';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import MobileLoginForm from './MobileLoginForm';
 
+
 const SdtTab = () => {
     const { t } = useTranslation();
     const [showMobileLoginForm, setShowMobileLoginForm] = useState(false);
@@ -40,23 +41,6 @@ const SdtTab = () => {
         setShowMobileLoginForm(false);
         setShowForgotPasswordForm(false);
     };
-    const [formData, setFormData] = useState({
-        phone: '',
-        password: '',
-    });
-
-    const [errors, setErrors] = useState({});
-
-    const handleChangePhone = (phone) => {
-        setFormData({
-            ...formData,
-            phone: phone,
-        });
-        setErrors({
-            ...errors,
-            phone: undefined, // Xóa thông báo lỗi khi người dùng thay đổi giá trị
-        });
-    };
 
     const handleSubmit = async () => {
         setHideError();
@@ -71,6 +55,7 @@ const SdtTab = () => {
         console.groupEnd();
 
         // TODO Validate
+        
 
         try {
             const res = await login({ country, phone, password });
@@ -150,14 +135,12 @@ const SdtTab = () => {
             )}
             {showMobileLoginForm && (
                 <MobileLoginForm
-                    value={formData.phone}
-                    onChange={handleChangePhone}
-                    error={errors.phone}
+                    sdt={phone}
                     onBack={handleBackToLoginPasswordForm}
                 />
             )}
 
-            {showForgotPasswordForm && <ForgotPasswordForm onBack={handleBackToLoginPasswordForm} />}
+            {showForgotPasswordForm && <ForgotPasswordForm sdt={phone} onBack={handleBackToLoginPasswordForm} />}
         </div>
     );
 };
