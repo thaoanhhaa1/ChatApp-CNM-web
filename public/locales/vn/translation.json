@@ -255,6 +255,7 @@
         "confirm": "Xác nhận",
         "login-by-mobile-desc": "Chúng tôi sẽ gửi một yêu cầu đăng nhập đến ứng dụng Zalo trên thiết bị của bạn.",
         "agree": "Đồng ý"
+        
     },
     "register": {
         "zalo-name": "Tên Zalo",
@@ -276,6 +277,10 @@
         "male": "Nam",
         "female": "Nữ",
         "birthday": "Ngày sinh",
-        "register": "Đăng ký"
+        "register": "Đăng ký",
+        "error-name":"Tên Zalo phải có ít nhất 2-40 ký tự..",
+        "error-phone":"Số điện thoại không hợp lệ",
+        "error-password":"Mật khẩu ít nhất có 6 kí tự",
+        "error-datOfBirth":"Bạn phải đủ 14 tuổi"
     }
 }

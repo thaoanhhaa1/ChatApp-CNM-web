@@ -275,6 +275,10 @@
         "male": "Male",
         "female": "Female",
         "birthday": "Birthday",
-        "register": "Register"
+        "register": "Register",
+        "error-name":"Zalo name must have at least 2-40 characters.",
+        "error-phone":"Invalid phone number",
+        "error-password":"Password has at least 6 characters",
+        "error-datOfBirth":"You must be 14 years old"
     }
 }

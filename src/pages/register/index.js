@@ -64,23 +64,21 @@ const Register = () => {
         const validationErrors = {};
 
         if (step === 1 && !validator.matches(formData.name, /^[a-zA-ZÀ-ỹ\s]{2,40}$/))
-            validationErrors.name = 'Tên Zalo phải có ít nhất 2-40 kí tự.';
+            // validationErrors.name = 'Tên Zalo phải có ít nhất 2-40 kí tự.';
+            validationErrors.name = t('register.error-name');
+
 
         if (step === 2 && !validator.isMobilePhone(formData.phone, 'vi-VN'))
-            validationErrors.phone = 'Số điện thoại không hợp lệ.';
+            validationErrors.phone = t('register.error-phone');
 
         if (step === 3 && !validator.isLength(formData.password, { min: 6, max: undefined }))
-            validationErrors.password = 'Mật khẩu có ít nhất 6 kí tự';
+            validationErrors.password = t('registe.error-password');
 
         if (step === 4) {
-            if (!formData.dateOfBirth) {
-                validationErrors.dateOfBirth = 'Ngày sinh là bắt buộc.';
-            } else {
-                const currentDate = new Date();
-                const dateOfBirth = new Date(formData.dateOfBirth);
-                const age = currentDate.getFullYear() - dateOfBirth.getFullYear();
-                if (age < 14) validationErrors.dateOfBirth = 'Bạn phải đủ 14 tuổi.';
-            }
+            const currentDate = new Date();
+            const dateOfBirth = new Date(formData.dateOfBirth);
+            const age = currentDate.getFullYear() - dateOfBirth.getFullYear();
+            if (age < 14) validationErrors.dateOfBirth = t('register.error-datOfBirth');         
         }
         console.log(validationErrors);
 
