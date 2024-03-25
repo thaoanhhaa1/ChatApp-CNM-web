@@ -1,32 +1,62 @@
+import Tippy from '@tippyjs/react';
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
-import { useOnClickOutside } from '~/hooks';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { classNames } from '~/utils';
 import Item from './Item';
 
-const Popup = ({ data, children, className = '', popupClassName = 'top-full left-0' }) => {
-    const [showPopup, setShowPopup] = useState(false);
-    const ref = useRef();
+const Popup = ({ data, children, ...props }) => {
+    const tipRef = useRef();
+    const [instance, setInstance] = useState();
 
-    const handleClick = () => setShowPopup(!showPopup);
+    const handleHidden = useCallback(() => {
+        instance && instance.hide();
+        setInstance();
+    }, [instance]);
 
-    useOnClickOutside(ref, () => setShowPopup(false));
+    const content = (
+        <div className={classNames('-mx-2 -my-1')}>
+            {data.map((item, index) => (
+                <Popup.Item handleHiddenPopup={handleHidden} key={index} {...item}>
+                    {item.title}
+                </Popup.Item>
+            ))}
+        </div>
+    );
+
+    useEffect(() => {
+        const options = {
+            root: null,
+            rootMargin: '0px',
+        };
+        const ref = tipRef.current;
+        const observer = new IntersectionObserver((entries) => {
+            const [entry] = entries;
+            entry.isIntersecting || handleHidden();
+        }, options);
+
+        if (ref) observer.observe(ref);
+
+        return () => {
+            if (ref) observer.unobserve(ref);
+        };
+    }, [handleHidden, tipRef]);
 
     return (
-        <div ref={ref} className={classNames('relative', className)}>
-            <div onClick={handleClick}>{children}</div>
-
-            {showPopup && (
-                <div
-                    className={classNames('min-w-[160px] py-2 bg-white shadow-popup rounded absolute', popupClassName)}
-                >
-                    {data.map((item, index) => (
-                        <Popup.Item key={index} {...item}>
-                            {item.title}
-                        </Popup.Item>
-                    ))}
-                </div>
-            )}
+        <div className="flex">
+            <Tippy
+                ref={tipRef}
+                className="min-w-[160px] py-2 bg-white dark:bg-dark-popup-bg shadow-popup rounded"
+                content={content}
+                arrow={false}
+                trigger="click"
+                interactive
+                offset={[0, 0]}
+                onShown={setInstance}
+                role="popup"
+                {...props}
+            >
+                {children}
+            </Tippy>
         </div>
     );
 };
