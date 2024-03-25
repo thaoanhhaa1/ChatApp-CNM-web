@@ -253,7 +253,8 @@
         "description-get-code": "Please text the word \"ZALOPC\" and send to 6020 (VND1000/text) to request verification code (applicable to Viettel, Mobifone, Vinaphone, Vietnamobile, Gmobile)",
         "confirm": "Confirm",
         "login-by-mobile-desc": "We will send a request login to Zalo app on your device.",
-        "agree": "Agree"
+        "agree": "Agree",
+        "register": "Register"
     },
     "register": {
         "zalo-name": "Zalo name",
@@ -275,6 +276,7 @@
         "male": "Male",
         "female": "Female",
         "birthday": "Birthday",
-        "register": "Register"
+        "register": "Register",
+        "sign-in": "Sign in"
     }
 }

@@ -1,15 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { getUserInfo as getUserInfoService } from '~/services';
 
 const initialState = {
-    user: {
-        name: 'John Doe',
-        avatar: 'https://images.unsplash.com/photo-1705522409239-87c3c13496e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8',
-        id: 1,
-        phone: '0987967077',
-        dialling_code: '+84',
-    },
+    user: {},
     loading: false,
 };
+
+const getUserInfo = createAsyncThunk('getUserInfo', async () => {
+    const res = await getUserInfoService();
+
+    return res.data;
+});
 
 const userSlice = createSlice({
     name: 'user',
@@ -24,7 +25,21 @@ const userSlice = createSlice({
             state.loading = false;
         },
     },
+    extraReducers: (builder) => {
+        builder
+            .addCase(getUserInfo.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getUserInfo.rejected, (state) => {
+                state.loading = false;
+            })
+            .addCase(getUserInfo.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.user = payload;
+            });
+    },
 });
 
 export default userSlice.reducer;
 export const { remove, setUser } = userSlice.actions;
+export { getUserInfo };

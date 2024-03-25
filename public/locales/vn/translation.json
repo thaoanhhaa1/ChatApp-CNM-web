@@ -254,7 +254,8 @@
         "description-get-code": "Soạn tin nhắn với cú pháp \"ZALOPC\" gửi đến 6020 (1000đ/tin) để nhận mã xác thực (Chỉ áp dụng cho mạng Viettel, Mobifone, Vinaphone, Vietnamobile, Gmobile)",
         "confirm": "Xác nhận",
         "login-by-mobile-desc": "Chúng tôi sẽ gửi một yêu cầu đăng nhập đến ứng dụng Zalo trên thiết bị của bạn.",
-        "agree": "Đồng ý"
+        "agree": "Đồng ý",
+        "register": "Đăng ký tài khoản"
     },
     "register": {
         "zalo-name": "Tên Zalo",
@@ -276,6 +277,7 @@
         "male": "Nam",
         "female": "Nữ",
         "birthday": "Ngày sinh",
-        "register": "Đăng ký"
+        "register": "Đăng ký",
+        "sign-in": "Đăng nhập"
     }
 }

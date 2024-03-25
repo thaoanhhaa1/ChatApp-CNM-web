@@ -14,7 +14,6 @@ import { token } from '~/utils';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import MobileLoginForm from './MobileLoginForm';
 
-
 const SdtTab = () => {
     const { t } = useTranslation();
     const [showMobileLoginForm, setShowMobileLoginForm] = useState(false);
@@ -55,7 +54,6 @@ const SdtTab = () => {
         console.groupEnd();
 
         // TODO Validate
-        
 
         try {
             const res = await login({ country, phone, password });
@@ -123,22 +121,28 @@ const SdtTab = () => {
                         >
                             {t('login.sign-in-with-mobile')}
                         </Button>
-                        <Button
-                            small
-                            onClick={handleClickForgetPassword}
-                            className="w-full hover:underline hover:text-hoverPurple"
-                        >
-                            {t('login.forgot-password')}
-                        </Button>
+                        <div className="flex justify-between items-center">
+                            <Button
+                                small
+                                className="w-full hover:underline hover:text-hoverPurple"
+                                to={config.routes.register}
+                                align="left"
+                            >
+                                {t('login.register')}
+                            </Button>
+                            <Button
+                                small
+                                onClick={handleClickForgetPassword}
+                                className="w-full hover:underline hover:text-hoverPurple"
+                                align="right"
+                            >
+                                {t('login.forgot-password')}
+                            </Button>
+                        </div>
                     </div>
                 </>
             )}
-            {showMobileLoginForm && (
-                <MobileLoginForm
-                    sdt={phone}
-                    onBack={handleBackToLoginPasswordForm}
-                />
-            )}
+            {showMobileLoginForm && <MobileLoginForm sdt={phone} onBack={handleBackToLoginPasswordForm} />}
 
             {showForgotPasswordForm && <ForgotPasswordForm sdt={phone} onBack={handleBackToLoginPasswordForm} />}
         </div>
