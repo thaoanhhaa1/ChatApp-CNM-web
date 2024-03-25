@@ -242,7 +242,7 @@
         "login-with-password": "Đăng nhập với mật khẩu",
         "sign-in-with-mobile": "Đăng nhập bằng thiết bị di động",
         "forgot-password": "Quên mật khẩu?",
-        "error": "Tên đăng nhập hoặc mật khẩu không khớp, vui lòng nhập lại",
+        "error": "Số điện thoại hoặc mật khẩu không khớp, vui lòng nhập lại",
         "enter-phone-number": "Nhập số điện thoại của bạn",
         "error-forget-password": "Vui lòng nhập số điện thoại hợp lệ",
         "continue": "Tiếp tục",
@@ -278,6 +278,18 @@
         "female": "Nữ",
         "birthday": "Ngày sinh",
         "register": "Đăng ký",
-        "sign-in": "Đăng nhập"
+        "sign-in": "Đăng nhập",
+        "error-name": "Tên Zalo phải có ít nhất 2-40 ký tự..",
+        "error-phone": "Số điện thoại không hợp lệ",
+        "error-password": "Mật khẩu phải gồm chữ và số",
+        "error-datOfBirth": "Bạn phải đủ 14 tuổi",
+        "zalo-name-validate-min-length": "Tên quá ngắn. Tên hợp lệ phải gồm 2-40 ký tự. (1000150)",
+        "zalo-name-validate-max-length": "Tên quá dài. Tên hợp lệ phải gồm 2-40 ký tự. (1000151)",
+        "zalo-name-validate-special-character": "Tên chứa từ ngữ vi phạm Quy định đặt tên trên Zalo. (1000153)",
+        "zalo-name-validate-number-character": "Tên không được chứa chữ số. (1000155)",
+        "phone-validate": "Số điện thoại không hợp lệ",
+        "password-validate-min-length": "Mật khẩu phải chứa ít nhất 6 ký tự",
+        "password-validate-max-length": "Mật khẩu không được quá 30 ký tự",
+        "dob-validate": "Bạn phải ít nhất 14 tuổi để sử dụng ứng dụng"
     }
 }
