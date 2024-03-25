@@ -276,9 +276,17 @@
         "female": "Female",
         "birthday": "Birthday",
         "register": "Register",
-        "error-name":"Zalo name must have at least 2-40 characters.",
-        "error-phone":"Invalid phone number",
-        "error-password":"Password has at least 6 characters",
-        "error-datOfBirth":"You must be 14 years old"
+        "error-name": "Zalo name must have at least 2-40 characters.",
+        "error-phone": "Invalid phone number",
+        "error-password": "Password must include letters and numbers",
+        "error-datOfBirth": "You must be 14 years old",
+        "zalo-name-validate-min-length": "Name is too short. Valid names must contain 2-40 characters. (1000150)",
+        "zalo-name-validate-max-length": "Name is too long. Valid names must contain 2-40 characters. (1000151)",
+        "zalo-name-validate-special-character": "Name contains words that violate Zalo's Naming policy. (1000153)",
+        "zalo-name-validate-number-character": "Name must not contain numbers. (1000155)",
+        "phone-validate": "Invalid phone number",
+        "password-validate-min-length": "Password must contain at least 6 characters",
+        "password-validate-max-length": "Password not exceed 30 characters",
+        "dob-validate": "You must be at least 14 years old to use app"
     }
 }

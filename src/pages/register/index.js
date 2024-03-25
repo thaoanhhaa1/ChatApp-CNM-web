@@ -62,25 +62,33 @@ const Register = () => {
 
     const validateFormFields = (step) => {
         const validationErrors = {};
+        const { name, phone, password } = formData;
 
-        if (step === 1 && !validator.matches(formData.name, /^[a-zA-ZÀ-ỹ\s]{2,40}$/))
-            // validationErrors.name = 'Tên Zalo phải có ít nhất 2-40 kí tự.';
-            validationErrors.name = t('register.error-name');
+        if (step === 1) {
+            if (name?.length < 2) validationErrors.name = t('register.zalo-name-validate-min-length');
+            else if (name?.length > 40) validationErrors.name = t('register.zalo-name-validate-max-length');
+            else if (!validator.matches(name, /^[^!@#$%^&*(),.?":{}|<>]*$/))
+                validationErrors.name = t('register.zalo-name-validate-special-character');
+            else if (!validator.matches(name, /^[^0-9]*$/))
+                validationErrors.name = t('register.zalo-name-validate-number-character');
+        }
 
+        if (step === 2 && !validator.matches(phone, /^(?!0\d)\d{9}$|^0\d{9}$/))
+            validationErrors.phone = t('register.phone-validate');
 
-        if (step === 2 && !validator.isMobilePhone(formData.phone, 'vi-VN'))
-            validationErrors.phone = t('register.error-phone');
-
-        if (step === 3 && !validator.isLength(formData.password, { min: 6, max: undefined }))
-            validationErrors.password = t('registe.error-password');
+        if (step === 3) {
+            if (password?.length < 6) validationErrors.password = t('register.password-validate-min-length');
+            else if (password?.length > 30) validationErrors.password = t('register.password-validate-max-length');
+            else if (!validator.matches(password, /^(?=.*\d)(?=.*[a-zA-Z]).{6,32}$/))
+                validationErrors.password = t('register.error-password');
+        }
 
         if (step === 4) {
             const currentDate = new Date();
             const dateOfBirth = new Date(formData.dateOfBirth);
             const age = currentDate.getFullYear() - dateOfBirth.getFullYear();
-            if (age < 14) validationErrors.dateOfBirth = t('register.error-datOfBirth');         
+            if (age < 14) validationErrors.dateOfBirth = t('register.dob-validate');
         }
-        console.log(validationErrors);
 
         return validationErrors;
     };

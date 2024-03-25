@@ -14,7 +14,6 @@ import { token } from '~/utils';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import MobileLoginForm from './MobileLoginForm';
 
-
 const SdtTab = () => {
     const { t } = useTranslation();
     const [showMobileLoginForm, setShowMobileLoginForm] = useState(false);
@@ -55,7 +54,6 @@ const SdtTab = () => {
         console.groupEnd();
 
         // TODO Validate
-        
 
         try {
             const res = await login({ country, phone, password });
@@ -133,12 +131,7 @@ const SdtTab = () => {
                     </div>
                 </>
             )}
-            {showMobileLoginForm && (
-                <MobileLoginForm
-                    sdt={phone}
-                    onBack={handleBackToLoginPasswordForm}
-                />
-            )}
+            {showMobileLoginForm && <MobileLoginForm sdt={phone} onBack={handleBackToLoginPasswordForm} />}
 
             {showForgotPasswordForm && <ForgotPasswordForm sdt={phone} onBack={handleBackToLoginPasswordForm} />}
         </div>
