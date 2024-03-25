@@ -1,7 +1,7 @@
 import { useWindowSize } from '@uidotdev/usehooks';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Chat from '~/components/chat';
 import Loading from '~/components/loading';
@@ -9,33 +9,41 @@ import Navbar from '~/components/navbar';
 import config from '~/config';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
+import { getUserInfo } from '~/features/user/userSlice';
 import { classNames } from '~/utils';
 
 // TODO Check user
 /**
  * - User not exist
- *      + accessToken exist
- *          ++ accessToken valid ===> Get User
  *          ++ accessToken invalid
  *              +++ refreshToken valid ==> Get accessToken
  *              +++ refreshToken invalid ==> redirect to Home
- *      + accessToken not exist ==> redirect to Home
  */
 const DefaultLayout = ({ children }) => {
     const [showChat, setShowChat] = useState(false);
     const { width } = useWindowSize();
     const { user, loading } = useSelector((state) => state.user);
     const navigation = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         width > screens.DL && setShowChat(false);
     }, [width]);
 
     useEffect(() => {
-        if (user._id) return;
+        if (user._id || loading) return;
 
-        if (!user._id && !loading) navigation(config.routes.signIn);
-    }, [loading, navigation, user._id]);
+        const getData = async () => {
+            try {
+                await dispatch(getUserInfo()).unwrap();
+            } catch (error) {
+                console.error(error);
+                navigation(config.routes.signIn);
+            }
+        };
+
+        getData();
+    }, [dispatch, loading, navigation, user._id]);
 
     if (loading || !user._id) return <Loading />;
 

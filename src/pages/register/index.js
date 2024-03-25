@@ -10,6 +10,7 @@ import Languages from '~/components/languages';
 import PhoneSelect from '~/components/phoneSelect';
 import RadioGroup from '~/components/radioGroup';
 import UnderlineInput from '~/components/underlineInput';
+import config from '~/config';
 import routes from '~/config/routes';
 import { genders } from '~/constants';
 import { setUser } from '~/features/user/userSlice';
@@ -290,9 +291,21 @@ const Register = () => {
                 )}
 
                 <div className="flex justify-between mt-4">
-                    <Button primary disabled={currentStep <= 1 || loading} onClick={prevStep}>
-                        {t('register.back')}
-                    </Button>
+                    {currentStep === 1 ? (
+                        <Button
+                            align="left"
+                            small
+                            className="hover:underline hover:text-hoverPurple"
+                            to={config.routes.signIn}
+                        >
+                            {t('register.sign-in')}
+                        </Button>
+                    ) : (
+                        <Button primary disabled={currentStep <= 1 || loading} onClick={prevStep}>
+                            {t('register.back')}
+                        </Button>
+                    )}
+
                     {currentStep < 4 ? (
                         <Button disabled={disabled} primary onClick={nextStep}>
                             {t('register.next')}
