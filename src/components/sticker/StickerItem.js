@@ -11,13 +11,27 @@ const StickerItem = ({ count = 0, className, url, onClick = () => {} }) => {
     const length = useMemo(() => (dimensions ? dimensions.width / dimensions.height : 0), [dimensions]);
     const [countEffect, setCountEffect] = useState(count);
     const [loadedImage, setLoadedImage] = useState(false);
+    const [backgroundSize, setBackgroundSize] = useState('cover');
+
+    const handleMouseLeave = () => {
+        setFalse();
+        setCountEffect(false);
+    };
 
     useEffect(() => {
-        loadImage(url).then(() => {
-            ref.current.style.backgroundImage = `url(${url})`;
-            setLoadedImage(true);
-        });
+        loadImage(url).then(() => setLoadedImage(true));
     }, [url]);
+
+    useEffect(() => {
+        const element = ref.current;
+
+        if (!element || !dimensions) return () => {};
+
+        const elementWith = element.clientWidth;
+        const { width, height } = dimensions;
+
+        setBackgroundSize(`${(elementWith * width) / height}px ${elementWith}px`);
+    }, [dimensions]);
 
     useEffect(() => {
         if (!loadedImage) return () => {};
@@ -49,10 +63,18 @@ const StickerItem = ({ count = 0, className, url, onClick = () => {} }) => {
         <div
             onClick={onClick}
             onMouseEnter={setTrue}
-            onMouseLeave={setFalse}
-            className={classNames('p-1 cursor-pointer rounded-md hover:bg-[#f3f5f6] transition-all', className)}
+            onMouseLeave={handleMouseLeave}
+            className={classNames(
+                'p-1 cursor-pointer rounded-md transition-all',
+                count || 'hover:bg-[#f3f5f6] dark:hover:bg-dark-tooltip-color',
+                className,
+            )}
         >
-            <div ref={ref} className="aspect-square bg-left-top bg-no-repeat bg-cover" />
+            <div
+                style={{ backgroundImage: `url(${url})`, backgroundSize }}
+                ref={ref}
+                className="aspect-square bg-left-top bg-no-repeat"
+            />
         </div>
     );
 };

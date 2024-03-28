@@ -25,7 +25,7 @@ const StickerList = ({ sticker, setOffsetTop }) => {
 
     return (
         <div ref={stickerRef}>
-            <div className="px-2 ex:px-3 sm:px-4 py-1 text-sm font-medium leading-normal text-primary line-clamp-1">
+            <div className="px-2 ex:px-3 sm:px-4 py-1 text-sm font-medium leading-normal line-clamp-1">
                 {sticker.name}
             </div>
             <div style={{ width: `${widthSticker}px` }} className="px-2 ex:px-3 sm:px-4">

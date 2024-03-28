@@ -44,7 +44,7 @@ const PopupMultiLevel = ({ children, onClose = () => {} }) => {
                 </div>
                 <div
                     className={classNames(
-                        'absolute overflow-y-auto top-0 left-full w-full transition-transform duration-200',
+                        'absolute overflow-y-hidden top-0 left-full w-full transition-transform duration-200',
                         subs.length ? '-translate-x-full' : 'translate-x-0',
                     )}
                 >

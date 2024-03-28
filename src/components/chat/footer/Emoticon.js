@@ -25,7 +25,7 @@ const Emoticon = ({ handleEmojiClick }) => {
                 arrow={false}
                 interactive
                 content={
-                    <TabContext value={value}>
+                    <TabContext value={value} className="dark:bg-dark-sidebar-item-color">
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <TabList onChange={handleChange}>
                                 <Tab label="STICKER" value="1" />

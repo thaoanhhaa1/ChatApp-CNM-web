@@ -1,4 +1,6 @@
 import Tippy from '@tippyjs/react';
+import { useWindowSize } from '@uidotdev/usehooks';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -18,6 +20,7 @@ import Avatar from '~/components/avatar';
 import Call from '~/components/call';
 import Input from '~/components/input';
 import Popup from '~/components/popup';
+import { screens } from '~/constants';
 import { useChat, useLayout } from '~/context';
 import { useBoolean } from '~/hooks';
 import Button from './Button';
@@ -43,26 +46,33 @@ const Header = () => {
     const {
         active: { user },
     } = useSelector((state) => state.chats);
+    const { width } = useWindowSize();
+    const more = useMemo(() => {
+        const more = [];
 
-    const more = [
-        {
-            icon: UserIcon,
-            title: t('chat.profile'),
-            onClick: handleShowProfile,
-        },
-        {
-            icon: ArchiveIcon,
-            title: t('chat.archive'),
-        },
-        {
-            icon: MuteIcon,
-            title: t('chat.muted'),
-        },
-        {
-            icon: DeleteIcon,
-            title: t('chat.delete'),
-        },
-    ];
+        if (width < screens.DL)
+            more.push({
+                icon: UserIcon,
+                title: t('chat.profile'),
+                onClick: handleShowProfile,
+            });
+
+        return [
+            ...more,
+            {
+                icon: ArchiveIcon,
+                title: t('chat.archive'),
+            },
+            {
+                icon: MuteIcon,
+                title: t('chat.muted'),
+            },
+            {
+                icon: DeleteIcon,
+                title: t('chat.delete'),
+            },
+        ];
+    }, [handleShowProfile, t, width]);
 
     return (
         <div className="flex items-center justify-between p-2 sm:p-3 md:p-4 dl:p-5 border-b border-separate dark:border-dark-separate">

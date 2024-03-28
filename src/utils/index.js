@@ -20,4 +20,5 @@ export { default as loadImage } from './loadImage';
 export { default as phoneBookFilter } from './phoneBookFilter';
 export { default as reorder } from './reorder';
 export { default as splitMessage } from './splitMessage';
+export { default as theme } from './theme';
 export { default as token } from './token';

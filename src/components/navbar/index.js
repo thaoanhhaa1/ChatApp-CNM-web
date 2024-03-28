@@ -22,7 +22,7 @@ import images from '~/assets/images';
 import config from '~/config';
 import routes from '~/config/routes';
 import logout from '~/services/logout';
-import { classNames, token } from '~/utils';
+import { classNames, theme, token } from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
@@ -73,7 +73,7 @@ const html = document.querySelector('html');
 const Navbar = ({ className }) => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);
-    const [darkMode, setDarkMode] = useState(true);
+    const [darkMode, setDarkMode] = useState(() => theme.get() === 'dark');
     const navigate = useNavigate();
 
     const actions = useMemo(
@@ -103,7 +103,8 @@ const Navbar = ({ className }) => {
     const toggleDarkMode = () => setDarkMode(!darkMode);
 
     useLayoutEffect(() => {
-        html.classList[darkMode ? 'remove' : 'add']('dark');
+        html.classList[darkMode ? 'add' : 'remove']('dark');
+        theme.set(darkMode ? 'dark' : 'light');
     }, [darkMode]);
 
     return (
@@ -129,7 +130,7 @@ const Navbar = ({ className }) => {
                 </Popup>
 
                 <Tippy delay={[200, 0]} offset={[0, 0]} placement="right" content="Dark / Light mode">
-                    <Button onClick={toggleDarkMode} className="hidden dl:flex" icon={darkMode ? MoonIcon : SunIcon} />
+                    <Button onClick={toggleDarkMode} className="hidden dl:flex" icon={darkMode ? SunIcon : MoonIcon} />
                 </Tippy>
 
                 <Popup data={actions.map((action) => ({ ...action, title: t(action.title) }))}>
