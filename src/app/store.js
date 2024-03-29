@@ -12,6 +12,7 @@ import onlineUsersReducer from '~/features/onlineUsers/onlineUsersSlice';
 import phoneBookReducer from '~/features/phoneBook/phoneBookSlice';
 import popupMultiLevelReducer from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import receivedFriendRequestsReducer from '~/features/receivedFriendRequests/receivedFriendRequestsSlice';
+import searchReducer from '~/features/search/searchSlice';
 import sentFriendRequestsReducer from '~/features/sentFriendRequests/sentFriendRequestsSlice';
 import socketReducer from '~/features/socket/socketSlice';
 import userReducer from '~/features/user/userSlice';
@@ -34,6 +35,7 @@ export const store = configureStore({
         createGroup: createGroupReducer,
         socket: socketReducer,
         localSetting: localSettingReducer,
+        search: searchReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

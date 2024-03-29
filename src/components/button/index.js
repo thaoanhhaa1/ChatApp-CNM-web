@@ -49,6 +49,7 @@ function Button({
                     'px-2 ex:px-3 sm:px-4 py-1 ex:py-1.5 sm:py-2 text-mm leading-normal',
                 !outline && primary && 'bg-primary-color text-white',
                 !outline && secondary && 'bg-[#f0eff5] dark:bg-[#36404a] text-[#7a7f9a] dark:text-[#abb4d2]',
+                text && 'hover:underline hover:text-hoverPurple',
                 align === 'center' && 'justify-center',
                 align === 'left' && 'justify-start',
                 align === 'right' && 'justify-end',
@@ -57,6 +58,12 @@ function Button({
                     'border-transparent',
                 rounded && 'rounded-full',
                 !rounded && ((small && 'rounded') || 'rounded-md'),
+                primary ||
+                    secondary ||
+                    outline ||
+                    disabled ||
+                    text ||
+                    'hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5',
                 className,
             )}
             {...props}

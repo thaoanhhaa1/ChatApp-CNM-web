@@ -303,6 +303,7 @@
         "messages:": "Messages",
         "files": "Files",
         "search-empty-title": "No result found",
-        "search-empty-description": "Please try different keywords or use the Zalo app on your phone to find messages before "
+        "search-empty-description": "Please try different keywords or use the Zalo app on your phone to find messages before ",
+        "search-description": "Use the Zalo app on your phone to find messages before "
     }
 }

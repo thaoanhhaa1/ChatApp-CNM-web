@@ -294,12 +294,7 @@ const Register = () => {
 
                 <div className="flex justify-between mt-4">
                     {currentStep === 1 ? (
-                        <Button
-                            align="left"
-                            small
-                            className="hover:underline hover:text-hoverPurple"
-                            to={config.routes.signIn}
-                        >
+                        <Button align="left" small text to={config.routes.signIn}>
                             {t('register.sign-in')}
                         </Button>
                     ) : (

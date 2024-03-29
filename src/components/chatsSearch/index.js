@@ -1,56 +1,63 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { addRecentSearch } from '~/features/localSetting/localSettingSlice';
+import List from '../list';
+import Skeleton from '../skeleton';
 import RecentSearchUser from './RecentSearchUser';
 import SearchEmpty from './SearchEmpty';
 import SearchItem from './SearchItem';
+import SearchItemSkeleton from './SearchItemSkeleton';
+import SearchUserSkeleton from './SearchUserSkeleton';
 import UserSearchResult from './UserSearchResult';
 
 const ChatsSearch = ({ searchValue }) => {
     const { t } = useTranslation();
-    const [users] = useState([
-        {
-            id: 1,
-            name: 'Alice',
-            avatar: 'https://plus.unsplash.com/premium_photo-1711134826547-169d7de16190?q=80&w=1823&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 2,
-            name: 'Bob',
-            avatar: 'https://plus.unsplash.com/premium_photo-1711134826547-169d7de16190?q=80&w=1823&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 3,
-            name: 'Charlie',
-            avatar: 'https://plus.unsplash.com/premium_photo-1711134826547-169d7de16190?q=80&w=1823&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 4,
-            name: 'David',
-            avatar: 'https://plus.unsplash.com/premium_photo-1711134826547-169d7de16190?q=80&w=1823&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 5,
-            name: 'Eve',
-            avatar: 'https://plus.unsplash.com/premium_photo-1711134826547-169d7de16190?q=80&w=1823&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-    ]);
-    const [searchUsers, setSearchUsers] = useState([]);
+    const { settings } = useSelector((state) => state.localSetting);
+    const { contacts, loadingContacts } = useSelector((state) => state.search);
+    const dispatch = useDispatch();
+
+    const handleClickSearchUser = (user) => {
+        dispatch(addRecentSearch(user));
+    };
 
     return (
-        <div className="pt-4 pb-1 ex:pb-2 sm:pb-3 md:pb-4 dl:pb-5">
+        <div className="pt-4">
             {searchValue ? (
-                <SearchItem title={t('chats-search.contacts')}>
-                    {searchUsers.length ? (
-                        searchUsers.map((user) => <UserSearchResult key={user.id} user={user} />)
-                    ) : (
-                        <SearchEmpty />
-                    )}
-                </SearchItem>
+                loadingContacts ? (
+                    <>
+                        <SearchItemSkeleton>
+                            <List length={3} control={SearchUserSkeleton} />
+                            <Skeleton
+                                containerClassName="h-[53px] px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6"
+                                width="100%"
+                                height={32}
+                            />
+                        </SearchItemSkeleton>
+                        <div className="pt-4 px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6 text-sm text-center border-t border-separate dark:border-dark-separate">
+                            {t('chats-search.search-description')}
+                            {settings.loginAt.substring(0, 10).split('-').reverse().join('/')}.
+                        </div>
+                    </>
+                ) : (
+                    <SearchItem title={t('chats-search.contacts')}>
+                        {contacts.length ? (
+                            contacts.map((user) => (
+                                <UserSearchResult
+                                    onClick={() => handleClickSearchUser(user)}
+                                    key={user._id}
+                                    user={user}
+                                />
+                            ))
+                        ) : (
+                            <SearchEmpty />
+                        )}
+                    </SearchItem>
+                )
             ) : (
                 <SearchItem title={t('chats-search.search-recent')}>
-                    {users.length ? (
-                        users.map((user) => <RecentSearchUser key={user.id} user={user} />)
+                    {settings.recentSearch.length ? (
+                        settings.recentSearch.map((user) => <RecentSearchUser key={user._id} user={user} />)
                     ) : (
                         <div className="px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6 text-sm text-secondary dark:text-dark-secondary">
                             {t('chats-search.no-recent-search')}

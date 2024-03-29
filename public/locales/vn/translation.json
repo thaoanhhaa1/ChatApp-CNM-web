@@ -304,6 +304,7 @@
         "messages:": "Tin nhắn",
         "files": "File",
         "search-empty-title": "Không tìm thấy kết quả",
-        "search-empty-description": "Vui lòng thử lại từ khoá khác hoặc sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày "
+        "search-empty-description": "Vui lòng thử lại từ khoá khác hoặc sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày ",
+        "search-description": "Sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày "
     }
 }

@@ -3,7 +3,7 @@ import { More2FillIcon } from '~/assets';
 import Popup from '../popup';
 import SearchUser from './SearchUser';
 
-const UserSearchResult = ({ user }) => {
+const UserSearchResult = ({ user, onClick = () => {} }) => {
     const popup = [
         {
             title: 'Ghim cuộc hội thoại',
@@ -12,6 +12,7 @@ const UserSearchResult = ({ user }) => {
 
     return (
         <SearchUser
+            onClick={onClick}
             user={user}
             control={
                 <div>
@@ -22,7 +23,7 @@ const UserSearchResult = ({ user }) => {
                     </Popup>
                 </div>
             }
-        ></SearchUser>
+        />
     );
 };
 
