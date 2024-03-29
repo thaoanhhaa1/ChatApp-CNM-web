@@ -13,7 +13,10 @@
         "recent": "Recent",
         "search": "Search",
         "emptyTitle": "Welcome to Zalo PC!",
-        "emptyDescription": "Explore the best features to support your work and allow you to chat with your friends and family. All are optimized for your computer!"
+        "emptyDescription": "Explore the best features to support your work and allow you to chat with your friends and family. All are optimized for your computer!",
+        "no-conversations": "You have no conversations",
+        "no-conversations-description": "Zalo only display messages from the first login on this browser",
+        "no-conversations-description-1": "on"
     },
     "chat": {
         "search": "Search",

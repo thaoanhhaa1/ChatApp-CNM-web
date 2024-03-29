@@ -1,18 +1,21 @@
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ImageFillIcon } from '~/assets';
 import { useLayout } from '~/context';
 import { setActive } from '~/features/chats/chatsSlice';
-import { classNames, getUnseenMessageNumber } from '~/utils';
+import { classNames, getTimeChat, getUnseenMessageNumber } from '~/utils';
 import Avatar from '../avatar';
 import Message from '../message';
 import Typing from '../typing';
 
 const ChatItem = ({ chat, active }) => {
     const { setShowChat } = useLayout();
+    const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
+    const receiver = useMemo(() => (chat.isGroup ? {} : chat.users.find((u) => u._id !== user._id)), [chat, user]);
 
-    const message = chat.messages.at(-1);
+    const message = chat.lastMessage;
 
     const handleClickChat = () => {
         setShowChat(true);
@@ -27,23 +30,25 @@ const ChatItem = ({ chat, active }) => {
             )}
             onClick={handleClickChat}
         >
-            <Avatar status={chat.user.status} src={chat.user.avatar} />
-            <div className="flex-1 flex justify-between">
-                <div className="">
-                    <h5 className="text-mm font-semibold mb-1 line-clamp-1">{chat.user.name}</h5>
+            <Avatar status={receiver.status} src={chat.picture} />
+            <div className="flex-1 flex flex-col gap-1">
+                <div className="flex gap-1 items-center justify-between">
+                    <h5 className="text-mm font-semibold mb-1 line-clamp-1">{chat.name}</h5>
+                    <span className="text-ex text-secondary dark:text-dark-secondary text-nowrap">
+                        {getTimeChat(message.updatedAt)}
+                    </span>
+                </div>
+                <div className="flex gap-1 items-center justify-between">
                     {(chat.typing && <Typing />) || (
                         <div className="flex items-center">
                             {message?.images?.length && (
-                                <span className="mr-1 text-secondary dark:text-dark-secondary">
+                                <span className="text-secondary dark:text-dark-secondary">
                                     <ImageFillIcon className="w-[14px] h-[14px]" />
                                 </span>
                             )}
-                            <Message isMe className="line-clamp-1" isReply messages={message.messages} />
+                            <Message isMe className="line-clamp-1" isReply messages={message.messages || []} />
                         </div>
                     )}
-                </div>
-                <div className="flex flex-col justify-center">
-                    <span className="text-ex text-secondary dark:text-dark-secondary text-nowrap">02:50 PM</span>
                     {chat.unseenMessages && (
                         <div className="ml-auto w-fit px-1.5 py-0.5 rounded-full text-[10px] font-semibold leading-[1.6] text-danger bg-danger bg-opacity-20">
                             {getUnseenMessageNumber(chat.unseenMessages)}
@@ -57,14 +62,7 @@ const ChatItem = ({ chat, active }) => {
 
 ChatItem.propTypes = {
     active: PropTypes.bool,
-    chat: PropTypes.shape({
-        user: PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            avatar: PropTypes.string.isRequired,
-            status: PropTypes.string.isRequired,
-        }).isRequired,
-        typing: PropTypes.bool.isRequired,
-    }).isRequired,
+    chat: PropTypes.object.isRequired,
 };
 
 export default ChatItem;

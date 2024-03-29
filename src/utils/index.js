@@ -11,6 +11,7 @@ export { default as getDateFriendRequest } from './getDateFriendRequest';
 export { default as getDateTimeContactGroup } from './getDateTimeContactGroup';
 export { default as getFirstCharOfName } from './getFirstCharOfName';
 export { default as getNumberFormat } from './getNumberFormat';
+export { default as getTimeChat } from './getTimeChat';
 export { default as getTimeChatSeparate } from './getTimeChatSeparate';
 export { default as getUnseenMessageNumber } from './getUnseenMessageNumber';
 export { default as handleScaleImage } from './handleScaleImage';

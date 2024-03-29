@@ -6,12 +6,16 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { SearchIcon } from '~/assets';
 import Button from '~/components/button';
 import ChatItem from '~/components/chatItem';
+import ChatItemSkeleton from '~/components/chatItem/ChatItemSkeleton';
 import ChatsSearch from '~/components/chatsSearch';
+import EmptyChats from '~/components/emptyChats';
 import HeaderPage from '~/components/headerPage';
 import Input from '~/components/input';
+import List from '~/components/list';
 import OnlineUser from '~/components/onlineUser';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { screens } from '~/constants';
+import { getChats } from '~/features/chats/chatsSlice';
 import { searchUsers, setSearch } from '~/features/search/searchSlice';
 import { useBoolean } from '~/hooks';
 
@@ -21,7 +25,7 @@ const Chats = () => {
     const { t } = useTranslation();
     const { width, height } = useWindowSize();
     const { users: onlineUsers } = useSelector((state) => state.onlineUsers);
-    const { chats, active } = useSelector((state) => state.chats);
+    const { chats, active, loading } = useSelector((state) => state.chats);
     const { search } = useSelector((state) => state.search);
     const [searchValue, setSearchValue] = useState('');
     const inputWrapRef = useRef();
@@ -54,6 +58,10 @@ const Chats = () => {
         dispatch(searchUsers(searchDebounce));
         dispatch(setSearch(searchDebounce));
     }, [dispatch, search, searchDebounce]);
+
+    useEffect(() => {
+        dispatch(getChats());
+    }, [dispatch]);
 
     return (
         <div className="relative h-full flex flex-col">
@@ -89,9 +97,15 @@ const Chats = () => {
                 </h3>
                 <ScrollbarCustomize>
                     <div className="flex flex-col gap-[1px] px-1 ex:px-2">
-                        {chats.map((chat) => (
-                            <ChatItem key={chat.id} chat={chat} active={chat.id === active?.id} />
-                        ))}
+                        {loading ? (
+                            <List length={3} control={ChatItemSkeleton} />
+                        ) : chats.length ? (
+                            chats.map((chat) => (
+                                <ChatItem key={chat._id} chat={chat} active={chat._id === active?._id} />
+                            ))
+                        ) : (
+                            <EmptyChats />
+                        )}
                     </div>
                 </ScrollbarCustomize>
             </div>

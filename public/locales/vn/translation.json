@@ -13,7 +13,10 @@
         "recent": "Gần đây",
         "search": "Tìm kiếm tin nhắn",
         "emptyTitle": "Chào mừng đến với Zalo PC!",
-        "emptyDescription": "Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn."
+        "emptyDescription": "Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn.",
+        "no-conversations": "Chưa có hội thoại",
+        "no-conversations-description": "Zalo chỉ hiển thị tin nhắn từ sau lần đăng nhập đầu tiên trên trình duyệt này",
+        "no-conversations-description-1": "ngày"
     },
     "chat": {
         "search": "Tìm tin nhắn",
@@ -156,8 +159,7 @@
             "update": "Cập nhật",
             "change-avatar": "Đổi ảnh đại diện",
             "delete-avatar": "Xoá ảnh đại diện"
-        },
-        "message-empty": "Lời chào không được để trống."
+        }
     },
     "profile": {
         "title": "Hồ sơ của tôi"

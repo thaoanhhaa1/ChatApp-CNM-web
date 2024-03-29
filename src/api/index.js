@@ -4,6 +4,7 @@ const api = {
     logout: () => `/auth/logout`,
     userInfo: () => `/user/info`,
     getAllConversations: () => `/conversation`,
+    openConversation: () => `/conversation`,
     searchUsers: (value) => `/user?search=${value}`,
 };
 

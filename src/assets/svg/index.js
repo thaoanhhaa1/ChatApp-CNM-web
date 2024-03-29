@@ -601,4 +601,16 @@ export const RoundPlusIcon = ({ className }) => (
     </svg>
 );
 
+export const ListIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 11">
+        <circle cx="3" cy="2.5" r="1" fill="currentColor" />
+        <circle cx="3" cy="5.5" r="1" fill="currentColor" />
+        <circle cx="3" cy="8.5" r="1" fill="currentColor" />
+        <path
+            fill="currentColor"
+            d="M13.5 3h-7c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5m0 3h-7c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5m0 3h-7c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5"
+        />
+    </svg>
+);
+
 // export const Icon = ({className}) => ()
