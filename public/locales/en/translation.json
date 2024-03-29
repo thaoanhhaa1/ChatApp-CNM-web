@@ -290,5 +290,19 @@
         "password-validate-min-length": "Password must contain at least 6 characters",
         "password-validate-max-length": "Password not exceed 30 characters",
         "dob-validate": "You must be at least 14 years old to use app"
+    },
+    "chats-search": {
+        "search-recent": "Recent search",
+        "no-recent-search": "No recent searches",
+        "message-filtering": "Message filtering",
+        "mention": "Mention",
+        "emotion": "Emotion",
+        "close": "Close",
+        "all": "All",
+        "contacts": "Contacts",
+        "messages:": "Messages",
+        "files": "Files",
+        "search-empty-title": "No result found",
+        "search-empty-description": "Please try different keywords or use the Zalo app on your phone to find messages before "
     }
 }

@@ -7,6 +7,7 @@ import Button from '~/components/button';
 import PhoneSelect from '~/components/phoneSelect';
 import UnderlineInput from '~/components/underlineInput';
 import config from '~/config';
+import { setSetting } from '~/features/localSetting/localSettingSlice';
 import { setUser } from '~/features/user/userSlice';
 import { useBoolean } from '~/hooks';
 import { login } from '~/services';
@@ -61,6 +62,7 @@ const SdtTab = () => {
 
             token.set(accessToken);
             dispatch(setUser(user));
+            dispatch(setSetting({ loginAt: new Date().toISOString() }));
             navigation(config.routes.chats);
         } catch (error) {
             setShowError();

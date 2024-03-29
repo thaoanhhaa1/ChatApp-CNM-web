@@ -16,6 +16,7 @@ const images = {
     teammates: require('./teammates.png'),
     enhance: require('./enhance.png'),
     notFoundBg: require('./not-found-bg.gif'),
+    searchEmpty: require('./search-empty.png'),
 };
 
 export default images;

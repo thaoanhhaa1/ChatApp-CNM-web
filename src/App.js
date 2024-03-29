@@ -1,9 +1,23 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { setSetting } from './features/localSetting/localSettingSlice';
 import DefaultLayout from './layouts';
 import routes from './routes';
+import { localSetting } from './utils';
 
 function App() {
+    const dispatch = useDispatch();
+    const { settings } = useSelector((state) => state.localSetting);
+
+    useEffect(() => {
+        dispatch(setSetting(localSetting.get()));
+    }, [dispatch]);
+
+    useEffect(() => {
+        localSetting.set(settings);
+    }, [settings]);
+
     return (
         <Router>
             <Routes>

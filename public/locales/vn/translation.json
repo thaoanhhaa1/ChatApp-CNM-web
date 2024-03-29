@@ -291,5 +291,19 @@
         "password-validate-min-length": "Mật khẩu phải chứa ít nhất 6 ký tự",
         "password-validate-max-length": "Mật khẩu không được quá 30 ký tự",
         "dob-validate": "Bạn phải ít nhất 14 tuổi để sử dụng ứng dụng"
+    },
+    "chats-search": {
+        "search-recent": "Tìm gần đây",
+        "no-recent-search": "Không có tìm kiếm nào gần đây",
+        "message-filtering": "Lọc tin nhắn",
+        "mention": "Nhắc bạn",
+        "emotion": "Biểu cảm",
+        "close": "Đóng",
+        "all": "Tất cả",
+        "contacts": "Liên hệ",
+        "messages:": "Tin nhắn",
+        "files": "File",
+        "search-empty-title": "Không tìm thấy kết quả",
+        "search-empty-description": "Vui lòng thử lại từ khoá khác hoặc sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày "
     }
 }

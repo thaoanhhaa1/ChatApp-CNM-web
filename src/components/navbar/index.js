@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import PropTypes from 'prop-types';
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import {
     ClockIcon,
@@ -21,8 +21,9 @@ import {
 import images from '~/assets/images';
 import config from '~/config';
 import routes from '~/config/routes';
+import { reset, setSetting } from '~/features/localSetting/localSettingSlice';
 import logout from '~/services/logout';
-import { classNames, theme, token } from '~/utils';
+import { classNames, token } from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
@@ -73,8 +74,10 @@ const html = document.querySelector('html');
 const Navbar = ({ className }) => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);
-    const [darkMode, setDarkMode] = useState(() => theme.get() === 'dark');
+    const { settings } = useSelector((state) => state.localSetting);
+    const [darkMode, setDarkMode] = useState(() => settings.theme === 'dark');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const actions = useMemo(
         () => [
@@ -93,19 +96,21 @@ const Navbar = ({ className }) => {
                 onClick: () => {
                     logout().then();
                     token.set('');
+                    html.classList.remove('dark');
+                    dispatch(reset());
                     navigate(config.routes.signIn);
                 },
             },
         ],
-        [navigate],
+        [dispatch, navigate],
     );
 
     const toggleDarkMode = () => setDarkMode(!darkMode);
 
     useLayoutEffect(() => {
         html.classList[darkMode ? 'add' : 'remove']('dark');
-        theme.set(darkMode ? 'dark' : 'light');
-    }, [darkMode]);
+        dispatch(setSetting({ theme: darkMode ? 'dark' : 'light' }));
+    }, [darkMode, dispatch]);
 
     return (
         <nav
