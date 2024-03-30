@@ -43,7 +43,11 @@
         },
         "emoji": "Biểu cảm",
         "attached-file": "Đính kèm file",
-        "images": "Gửi hình ảnh"
+        "images": "Gửi hình ảnh",
+        "empty-chat-description-1": "Zalo chỉ hiển thị tin nhắn từ sau lần đăng nhập đầu tiên trên trình duyệt này",
+        "empty-chat-description-1-1": "ngày",
+        "empty-chat-description-2": "Vui lòng sử dụng Zalo PC hoặc Zalo trên điện thoại để xem đầy đủ lịch sử trò chuyện.",
+        "empty-chat-download": "Tải Zalo PC"
     },
     "contacts": {
         "title": "Danh bạ",

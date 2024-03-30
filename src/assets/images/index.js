@@ -10,6 +10,7 @@ const images = {
     quickMessage: require('./quick-message.png'),
     vanish: require('./vanish.png'),
     welcome: require('./inapp-welcome-screen.svg').default,
+    transferMessages: require('./transfer-messages-double-devices.svg').default,
     groupCall: require('./group-call.png'),
     syncMessage: require('./sync-message.png'),
     heavyFiles: require('./heavy-files.png'),
