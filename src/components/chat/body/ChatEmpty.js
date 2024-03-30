@@ -12,7 +12,7 @@ const ChatEmpty = ({ className }) => {
     return (
         <div
             className={classNames(
-                'rounded-lg p-4 bg-primary-color bg-opacity-10 flex flex-col items-center gap-4',
+                'rounded-lg p-3 ex:p-3.5 sm:p-4 bg-primary-color bg-opacity-10 flex flex-col items-center gap-3 ex:gap-3.5 sm:gap-4',
                 className,
             )}
         >
