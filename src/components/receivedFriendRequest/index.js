@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import ReactShowMoreText from 'react-show-more-text';
 import { removeReceivedFriendRequest } from '~/features/receivedFriendRequests/receivedFriendRequestsSlice';
-import { getDateFriendRequest } from '~/utils';
+import { getDate } from '~/utils';
 import Avatar from '../avatar';
 import Button from '../button';
 
@@ -27,7 +27,7 @@ const ReceivedFriendRequest = ({ contact }) => {
                 <div>
                     <div className="text-sm font-medium line-clamp-1">{contact.name}</div>
                     <span className="text-ss text-secondary dark:text-dark-secondary">
-                        {getDateFriendRequest(new Date(contact.date))}
+                        {getDate(new Date(contact.date))}
                     </span>
                 </div>
                 <ReactShowMoreText

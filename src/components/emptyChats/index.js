@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { ListIcon } from '~/assets';
+import { getDate } from '~/utils';
 
 const EmptyChats = () => {
     const { t } = useTranslation();
@@ -18,7 +19,7 @@ const EmptyChats = () => {
                 &nbsp;
                 {t('chats.no-conversations-description-1')}
                 &nbsp;
-                {settings.loginAt.substring(0, 10).split('-').reverse().join('/')})
+                {getDate(settings.loginAt)})
             </p>
         </div>
     );

@@ -8,7 +8,6 @@ export { default as countContactsInPhoneBook } from './countContactsInPhoneBook'
 export { default as crypting } from './crypting';
 export { default as getBgByTypeFile } from './getBgByTypeFile';
 export { default as getDate } from './getDate';
-export { default as getDateFriendRequest } from './getDateFriendRequest';
 export { default as getDateTimeContactGroup } from './getDateTimeContactGroup';
 export { default as getFirstCharOfName } from './getFirstCharOfName';
 export { default as getNumberFormat } from './getNumberFormat';

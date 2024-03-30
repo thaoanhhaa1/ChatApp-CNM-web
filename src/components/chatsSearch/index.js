@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { addRecentSearch } from '~/features/localSetting/localSettingSlice';
+import { getDate } from '~/utils';
 import List from '../list';
 import Skeleton from '../skeleton';
 import RecentSearchUser from './RecentSearchUser';
@@ -36,7 +37,7 @@ const ChatsSearch = ({ searchValue }) => {
                         </SearchItemSkeleton>
                         <div className="pt-4 px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6 text-sm text-center border-t border-separate dark:border-dark-separate">
                             {t('chats-search.search-description')}
-                            {settings.loginAt.substring(0, 10).split('-').reverse().join('/')}.
+                            {getDate(settings.loginAt)}.
                         </div>
                     </>
                 ) : (

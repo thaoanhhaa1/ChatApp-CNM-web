@@ -1,8 +1,4 @@
-const options = {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-};
+import getDateString from './getDateString';
 
 const getTimeChatSeparate = (date) => {
     const dateNow = new Date();
@@ -21,7 +17,7 @@ const getTimeChatSeparate = (date) => {
         if (day === dateNow - 1) return 'Yesterday';
     }
 
-    return date.toLocaleDateString('en-GB', options);
+    return getDateString(date);
 };
 
 export default getTimeChatSeparate;

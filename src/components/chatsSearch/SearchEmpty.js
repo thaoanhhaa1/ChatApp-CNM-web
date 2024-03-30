@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import images from '~/assets/images';
+import { getDate } from '~/utils';
 
 const SearchEmpty = () => {
     const { t } = useTranslation();
@@ -13,7 +14,7 @@ const SearchEmpty = () => {
                 <h5 className="font-medium">{t('chats-search.search-empty-title')}</h5>
                 <p className="mt-1 text-secondary dark:text-dark-secondary">
                     {t('chats-search.search-empty-description')}
-                    {settings.loginAt.substring(0, 10).split('-').reverse().join('/')}.
+                    {getDate(settings.loginAt)}.
                 </p>
             </div>
         </div>

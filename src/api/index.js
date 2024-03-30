@@ -6,6 +6,8 @@ const api = {
     getAllConversations: () => `/conversation`,
     openConversation: () => `/conversation`,
     searchUsers: (value) => `/user?search=${value}`,
+    getMessages: (conversationId) => `/message/${conversationId}`,
+    addMessage: () => `/message`,
 };
 
 export default api;

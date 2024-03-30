@@ -1,17 +1,13 @@
+import getDate from './getDate';
+import getTime from './getTime';
+
 const getTimeChat = (time) => {
     const now = new Date();
-    now.setHours(now.getHours() + 7);
-
     const isoNow = now.toISOString();
 
-    if (isoNow.slice(0, 10) !== time.slice(0, 10)) return time.slice(0, 10).split('-').reverse().join('/');
+    if (isoNow.slice(0, 10) !== time.slice(0, 10)) return getDate(time);
 
-    const date = new Date(time);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const isAM = hours < 12;
-
-    return `${hours}:${minutes} ${isAM ? 'AM' : 'PM'}`;
+    return getTime(time);
 };
 
 export default getTimeChat;
