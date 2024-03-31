@@ -6,7 +6,9 @@ import validator from 'validator';
 import { saveToken } from '~/api/axiosClient';
 import Button from '~/components/button';
 import FormControl from '~/components/formControl';
+import Input from '~/components/input';
 import Languages from '~/components/languages';
+import Modal from '~/components/modal';
 import PhoneSelect from '~/components/phoneSelect';
 import RadioGroup from '~/components/radioGroup';
 import UnderlineInput from '~/components/underlineInput';
@@ -30,7 +32,7 @@ const Register = () => {
         password: '',
         gender: 'male',
         dateOfBirth: '',
-        country: {},
+        // country: {},
     });
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
@@ -53,10 +55,30 @@ const Register = () => {
 
     const [errors, setErrors] = useState({});
 
+    // const nextStep = () => {
+    //     const validationErrors = validateFormFields(currentStep);
+    //     if (Object.keys(validationErrors).length === 0) {
+    //         setCurrentStep(currentStep + 1);
+    //     } else {
+    //         setErrors(validationErrors);
+    //     }
+    // };
+    const [showModal, setShowModal] = useState(false); 
+    const handleClose = () => {
+        setShowModal(false); // Đảo ngược trạng thái hiển thị của modal
+    };
+
+    const handleAuthentication = () => {
+        setCurrentStep(currentStep + 1)
+    };
     const nextStep = () => {
         const validationErrors = validateFormFields(currentStep);
         if (Object.keys(validationErrors).length === 0) {
-            setCurrentStep(currentStep + 1);
+            if (currentStep === 2) {
+                setShowModal(true); // Show modal on step 2
+            } else {
+                setCurrentStep(currentStep + 1);
+            }
         } else {
             setErrors(validationErrors);
         }
@@ -97,7 +119,7 @@ const Register = () => {
 
     const prevStep = () => currentStep > 1 && setCurrentStep(currentStep - 1);
 
-    const handleChangeCountry = useCallback((country) => setFormData((prev) => ({ ...prev, country })), []);
+    // const handleChangeCountry = useCallback((country) => setFormData((prev) => ({ ...prev, country })), []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -213,9 +235,7 @@ const Register = () => {
                                     value={formData.phone}
                                     name="phone"
                                 />
-                            }
-
-                            
+                            } 
                             error={errors.phone}
                         />
                         <div className="flex items-center mb-4 mt-4 text-mm text-secondary dark:text-gray-300">
@@ -250,9 +270,26 @@ const Register = () => {
                                 </a>
                             </label>
                         </div>
+                        
+                        <Modal className='p-10' show={showModal} onClickOutside={handleClose}>
+                            <div className='text-center flex flex-col items-center justify-center'>
+                                
+                                <p>Bạn sẽ nhận được một mã OTP từ Zalo.</p>
+                                <p className="mb-1 text-hoverPurple text-xl font-bold">{formData.phone}</p>
+                                <p >Nhập mã kích hoạt</p>
+                                <div className="px-[15px] pt-[18px] pb-3 w-[300px]">
+                                    <Input 
+                                        className='text-center' 
+                                        placeholder={t('login.enter-activation-code')}
+                                        
+                                    />
+                                </div>
+                                <Button className='w-[280px] mt-2' primary onClick={handleAuthentication}>Xác nhận</Button>
+                                <Button text align="center" small className='w-[280px] mt-2'>Gửi lại mã</Button>
+                            </div>
+                        </Modal>
                     </div>
                 )}
-
                 {currentStep === 3 && (
                     <FormControl
                         label={t('register.password')}
