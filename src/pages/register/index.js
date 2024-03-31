@@ -97,7 +97,7 @@ const Register = () => {
                 validationErrors.name = t('register.zalo-name-validate-number-character');
         }
 
-        if (step === 2 && !validator.matches(phone, /^[a-zA-Z][\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+        if (step === 2 && !validator.matches(phone, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
             validationErrors.phone = t('register.error-email');
 
         if (step === 3) {
@@ -274,9 +274,9 @@ const Register = () => {
                         <Modal className='p-10' show={showModal} onClickOutside={handleClose}>
                             <div className='text-center flex flex-col items-center justify-center'>
                                 
-                                <p>Bạn sẽ nhận được một mã OTP từ Zalo.</p>
+                                <p>{t('register.modal-text-1')}</p>
                                 <p className="mb-1 text-hoverPurple text-xl font-bold">{formData.phone}</p>
-                                <p >Nhập mã kích hoạt</p>
+                                <p >{t('register.modal-text-2')}</p>
                                 <div className="px-[15px] pt-[18px] pb-3 w-[300px]">
                                     <Input 
                                         className='text-center' 
@@ -284,8 +284,8 @@ const Register = () => {
                                         
                                     />
                                 </div>
-                                <Button className='w-[280px] mt-2' primary onClick={handleAuthentication}>Xác nhận</Button>
-                                <Button text align="center" small className='w-[280px] mt-2'>Gửi lại mã</Button>
+                                <Button className='w-[280px] mt-2' primary onClick={handleAuthentication}>{t('register.authentication')}</Button>
+                                <Button text align="center" small className='w-[280px] mt-2'>{t('register.resend')}</Button>
                             </div>
                         </Modal>
                     </div>

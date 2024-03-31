@@ -303,7 +303,12 @@
         "password-validate-min-length": "Password must contain at least 6 characters",
         "password-validate-max-length": "Password not exceed 30 characters",
         "dob-validate": "You must be at least 14 years old to use app",
-        "error-password-01":"Passwords do not match"
+        "error-password-01":"Passwords do not match",
+        "modal-text-1":"You will receive an encrypted OTP from Zalo." ,
+        "modal-text-2": "Enter activation code",
+        "authentication": "Authentication",
+        "resend":"Resend the OTP code"
+
     },
     "chats-search": {
         "search-recent": "Recent search",
