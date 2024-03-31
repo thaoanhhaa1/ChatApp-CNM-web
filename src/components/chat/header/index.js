@@ -43,10 +43,13 @@ const Header = () => {
     const { value: showVideo, setTrue: setShowVideo, setFalse: setHideVideo } = useBoolean(false);
     const { setShowChat } = useLayout();
     const { handleShowProfile } = useChat();
-    const {
-        active: { user },
-    } = useSelector((state) => state.chats);
+    const { active } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
     const { width } = useWindowSize();
+    const receiver = useMemo(
+        () => (active.isGroup ? {} : active.users.find((u) => u._id !== user._id)),
+        [active, user],
+    );
     const more = useMemo(() => {
         const more = [];
 
@@ -83,9 +86,9 @@ const Header = () => {
                 >
                     <ChevronDownIcon className="w-4 h-4" />
                 </button>
-                <Avatar containerClassName="flex-shrink-0" src={user.avatar} status={user.status} />
+                <Avatar containerClassName="flex-shrink-0" src={active.picture} status={receiver.status} />
                 <Link to="/" className="text-base font-semibold line-clamp-1">
-                    {user.name}
+                    {active.name}
                 </Link>
                 <RecordCircleFillIcon className="flex-shrink-0 -ml-1 sm:-ml-2 w-2.5 h-2.5 text-success" />
             </div>

@@ -7,6 +7,7 @@ import Button from '~/components/button';
 import PhoneSelect from '~/components/phoneSelect';
 import UnderlineInput from '~/components/underlineInput';
 import config from '~/config';
+import { setSetting } from '~/features/localSetting/localSettingSlice';
 import { setUser } from '~/features/user/userSlice';
 import { useBoolean } from '~/hooks';
 import { login } from '~/services';
@@ -61,6 +62,7 @@ const SdtTab = () => {
 
             token.set(accessToken);
             dispatch(setUser(user));
+            dispatch(setSetting({ loginAt: new Date().toISOString() }));
             navigation(config.routes.chats);
         } catch (error) {
             setShowError();
@@ -114,28 +116,14 @@ const SdtTab = () => {
                         >
                             {t('login.login-with-password')}
                         </Button>
-                        <Button
-                            disabled={phone.length < 6}
-                            onClick={handleClickSignInWithMobile}
-                            className="w-full border border-1 border-gray-500 hover:border-hoverPurple !text-primary-color"
-                        >
+                        <Button disabled={phone.length < 6} onClick={handleClickSignInWithMobile} outline>
                             {t('login.sign-in-with-mobile')}
                         </Button>
                         <div className="flex justify-between items-center">
-                            <Button
-                                small
-                                className="w-full hover:underline hover:text-hoverPurple"
-                                to={config.routes.register}
-                                align="left"
-                            >
+                            <Button small text to={config.routes.register} align="left">
                                 {t('login.register')}
                             </Button>
-                            <Button
-                                small
-                                onClick={handleClickForgetPassword}
-                                className="w-full hover:underline hover:text-hoverPurple"
-                                align="right"
-                            >
+                            <Button small onClick={handleClickForgetPassword} text align="right">
                                 {t('login.forgot-password')}
                             </Button>
                         </div>

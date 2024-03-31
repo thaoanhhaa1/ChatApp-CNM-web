@@ -13,7 +13,10 @@
         "recent": "Gần đây",
         "search": "Tìm kiếm tin nhắn",
         "emptyTitle": "Chào mừng đến với Zalo PC!",
-        "emptyDescription": "Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn."
+        "emptyDescription": "Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn.",
+        "no-conversations": "Chưa có hội thoại",
+        "no-conversations-description": "Zalo chỉ hiển thị tin nhắn từ sau lần đăng nhập đầu tiên trên trình duyệt này",
+        "no-conversations-description-1": "ngày"
     },
     "chat": {
         "search": "Tìm tin nhắn",
@@ -40,7 +43,14 @@
         },
         "emoji": "Biểu cảm",
         "attached-file": "Đính kèm file",
-        "images": "Gửi hình ảnh"
+        "images": "Gửi hình ảnh",
+        "empty-chat-description-1": "Zalo chỉ hiển thị tin nhắn từ sau lần đăng nhập đầu tiên trên trình duyệt này",
+        "empty-chat-description-1-1": "ngày",
+        "empty-chat-description-2": "Vui lòng sử dụng Zalo PC hoặc Zalo trên điện thoại để xem đầy đủ lịch sử trò chuyện.",
+        "empty-chat-download": "Tải Zalo PC",
+        "sending": "Đang gửi",
+        "sent": "Đã gửi",
+        "received": "Đã nhận"
     },
     "contacts": {
         "title": "Danh bạ",
@@ -156,8 +166,7 @@
             "update": "Cập nhật",
             "change-avatar": "Đổi ảnh đại diện",
             "delete-avatar": "Xoá ảnh đại diện"
-        },
-        "message-empty": "Lời chào không được để trống."
+        }
     },
     "profile": {
         "title": "Hồ sơ của tôi"
@@ -291,5 +300,20 @@
         "password-validate-min-length": "Mật khẩu phải chứa ít nhất 6 ký tự",
         "password-validate-max-length": "Mật khẩu không được quá 30 ký tự",
         "dob-validate": "Bạn phải ít nhất 14 tuổi để sử dụng ứng dụng"
+    },
+    "chats-search": {
+        "search-recent": "Tìm gần đây",
+        "no-recent-search": "Không có tìm kiếm nào gần đây",
+        "message-filtering": "Lọc tin nhắn",
+        "mention": "Nhắc bạn",
+        "emotion": "Biểu cảm",
+        "close": "Đóng",
+        "all": "Tất cả",
+        "contacts": "Liên hệ",
+        "messages:": "Tin nhắn",
+        "files": "File",
+        "search-empty-title": "Không tìm thấy kết quả",
+        "search-empty-description": "Vui lòng thử lại từ khoá khác hoặc sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày ",
+        "search-description": "Sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày "
     }
 }

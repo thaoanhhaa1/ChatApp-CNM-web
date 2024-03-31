@@ -1,9 +1,5 @@
-import getNumberFormat from './getNumberFormat';
+import getDateString from './getDateString';
 
-const getDateTimeContactGroup = (date) => {
-    const [day, month] = date.toLocaleDateString().split('/');
-
-    return `${getNumberFormat(day)}/${getNumberFormat(month)}`;
-};
+const getDateTimeContactGroup = (date) => getDateString(date).substring(0, 5);
 
 export default getDateTimeContactGroup;

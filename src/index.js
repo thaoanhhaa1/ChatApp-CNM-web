@@ -2,6 +2,7 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Provider } from 'react-redux';
@@ -15,6 +16,7 @@ import 'tippy.js/animations/shift-toward.css';
 import 'tippy.js/dist/tippy.css';
 import App from './App';
 import { store } from './app/store';
+import Loading from './components/loading';
 import './i18n';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
@@ -22,7 +24,9 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
-        <App />
+        <Suspense fallback={<Loading />}>
+            <App />
+        </Suspense>
     </Provider>,
 );
 

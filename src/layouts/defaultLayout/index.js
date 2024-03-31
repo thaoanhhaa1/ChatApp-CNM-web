@@ -10,6 +10,7 @@ import config from '~/config';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
 import { getUserInfo } from '~/features/user/userSlice';
+import { connect } from '~/features/socket/socketSlice';
 import { classNames } from '~/utils';
 
 // TODO Check user
@@ -23,6 +24,7 @@ const DefaultLayout = ({ children }) => {
     const [showChat, setShowChat] = useState(false);
     const { width } = useWindowSize();
     const { user, loading } = useSelector((state) => state.user);
+    const { socket } = useSelector((state) => state.socket);
     const navigation = useNavigate();
     const dispatch = useDispatch();
 
@@ -44,6 +46,21 @@ const DefaultLayout = ({ children }) => {
 
         getData();
     }, [dispatch, loading, navigation, user._id]);
+
+    useEffect(() => {
+        if (!user._id) return;
+
+        if (!socket) {
+            dispatch(connect());
+            return;
+        }
+
+        socket.emit('online', user._id);
+
+        socket.on('usersOnline', (data) => {
+            console.log(data);
+        });
+    }, [dispatch, socket, user._id]);
 
     if (loading || !user._id) return <Loading />;
 

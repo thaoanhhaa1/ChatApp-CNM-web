@@ -13,6 +13,7 @@ import UnderlineInput from '~/components/underlineInput';
 import config from '~/config';
 import routes from '~/config/routes';
 import { genders } from '~/constants';
+import { setSetting } from '~/features/localSetting/localSettingSlice';
 import { setUser } from '~/features/user/userSlice';
 import { useBoolean } from '~/hooks';
 import { register } from '~/services';
@@ -132,6 +133,7 @@ const Register = () => {
 
             saveToken(accessToken);
             dispatch(setUser(user));
+            dispatch(setSetting({ loginAt: new Date().toISOString() }));
             navigation(routes.chats);
         } catch (error) {
             setErrors({
@@ -292,12 +294,7 @@ const Register = () => {
 
                 <div className="flex justify-between mt-4">
                     {currentStep === 1 ? (
-                        <Button
-                            align="left"
-                            small
-                            className="hover:underline hover:text-hoverPurple"
-                            to={config.routes.signIn}
-                        >
+                        <Button align="left" small text to={config.routes.signIn}>
                             {t('register.sign-in')}
                         </Button>
                     ) : (

@@ -13,7 +13,10 @@
         "recent": "Recent",
         "search": "Search",
         "emptyTitle": "Welcome to Zalo PC!",
-        "emptyDescription": "Explore the best features to support your work and allow you to chat with your friends and family. All are optimized for your computer!"
+        "emptyDescription": "Explore the best features to support your work and allow you to chat with your friends and family. All are optimized for your computer!",
+        "no-conversations": "You have no conversations",
+        "no-conversations-description": "Zalo only display messages from the first login on this browser",
+        "no-conversations-description-1": "on"
     },
     "chat": {
         "search": "Search",
@@ -40,7 +43,14 @@
         },
         "emoji": "Emoji",
         "attached-file": "Attached File",
-        "images": "Images"
+        "images": "Images",
+        "empty-chat-description-1": "Zalo can only display messages from the first login on this browser",
+        "empty-chat-description-1-1": "on",
+        "empty-chat-description-2": "Please download Zalo PC or use the Zalo app on your phone to view the full chat history.",
+        "empty-chat-download": "Download Zalo PC",
+        "sending": "Sending",
+        "sent": "Sent",
+        "received": "Received"
     },
     "contacts": {
         "title": "Contacts",
@@ -290,5 +300,20 @@
         "password-validate-min-length": "Password must contain at least 6 characters",
         "password-validate-max-length": "Password not exceed 30 characters",
         "dob-validate": "You must be at least 14 years old to use app"
+    },
+    "chats-search": {
+        "search-recent": "Recent search",
+        "no-recent-search": "No recent searches",
+        "message-filtering": "Message filtering",
+        "mention": "Mention",
+        "emotion": "Emotion",
+        "close": "Close",
+        "all": "All",
+        "contacts": "Contacts",
+        "messages:": "Messages",
+        "files": "Files",
+        "search-empty-title": "No result found",
+        "search-empty-description": "Please try different keywords or use the Zalo app on your phone to find messages before ",
+        "search-description": "Use the Zalo app on your phone to find messages before "
     }
 }

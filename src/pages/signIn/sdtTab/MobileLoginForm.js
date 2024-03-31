@@ -16,9 +16,8 @@ const MobileLoginForm = ({ sdt, onBack = () => {} }) => {
 
     const handleSubmit = () => {
         setFalse();
-        if (!validator.isMobilePhone(phone, 'vi-VN')) 
-            setTrue();
-        
+        if (!validator.isMobilePhone(phone, 'vi-VN')) setTrue();
+
         console.group('MobileLoginForm');
         console.log(`phone`, phone);
         console.log(`country`, country);
@@ -36,10 +35,10 @@ const MobileLoginForm = ({ sdt, onBack = () => {} }) => {
                 type="tel"
             />
             {value && (
-                        <div className="rounded-sm text-xs font-medium text-[#b64848] bg-[#ffe7e7] p-[15px] mt-4">
-                            {t('login.error-forget-password')}
-                        </div>
-                    )}
+                <div className="rounded-sm text-xs font-medium text-[#b64848] bg-[#ffe7e7] p-[15px] mt-4">
+                    {t('login.error-forget-password')}
+                </div>
+            )}
             <div className="text-center text-ss ml-6 mr-6 mt-4">
                 <p className="text-secondary dark:text-secondary">{t('login.login-by-mobile-desc')}</p>
             </div>

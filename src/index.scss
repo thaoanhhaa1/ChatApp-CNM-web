@@ -326,3 +326,16 @@ span.MuiSlider-root {
         }
     }
 }
+
+// Skeleton customize
+span.MuiSkeleton-root {
+    @apply scale-100;
+}
+
+.dark .MuiSkeleton-root {
+    @apply bg-white bg-opacity-10;
+
+    &::after {
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+    }
+}
