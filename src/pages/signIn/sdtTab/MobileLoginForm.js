@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
-import { MobileIcon } from '~/assets';
+import { EmailIcon, MobileIcon } from '~/assets';
 import Button from '~/components/button';
 import PhoneSelect from '~/components/phoneSelect';
 import UnderlineInput from '~/components/underlineInput';
@@ -16,7 +16,9 @@ const MobileLoginForm = ({ sdt, onBack = () => {} }) => {
 
     const handleSubmit = () => {
         setFalse();
-        if (!validator.isMobilePhone(phone, 'vi-VN')) setTrue();
+        // if (!validator.isMobilePhone(phone, 'vi-VN')) setTrue();
+        if (!validator.matches(phone, /^[a-zA-Z][\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+            setTrue();
 
         console.group('MobileLoginForm');
         console.log(`phone`, phone);
@@ -27,12 +29,12 @@ const MobileLoginForm = ({ sdt, onBack = () => {} }) => {
     return (
         <div>
             <UnderlineInput
-                more={<PhoneSelect onChange={setCountry} />}
-                Icon={MobileIcon}
+                // more={<PhoneSelect onChange={setCountry} />}
+                Icon={EmailIcon}
                 value={phone}
                 onChangeText={setPhone}
                 placeholder={t('login.phone-number')}
-                type="tel"
+                type="email"
             />
             {value && (
                 <div className="rounded-sm text-xs font-medium text-[#b64848] bg-[#ffe7e7] p-[15px] mt-4">

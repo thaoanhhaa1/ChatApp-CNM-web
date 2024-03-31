@@ -44,8 +44,8 @@ const Register = () => {
 
         if (currentStep === 1) return name.length < 2;
         if (currentStep === 2)
-            return phone.length < 6 || !termRef?.current?.checked || !socialTermRef?.current?.checked;
-        if (currentStep === 3) return password.length < 6;
+            return phone.length < 1 || !termRef?.current?.checked || !socialTermRef?.current?.checked;
+        if (currentStep === 3) return password.length < 2;
 
         return false;
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,8 +75,8 @@ const Register = () => {
                 validationErrors.name = t('register.zalo-name-validate-number-character');
         }
 
-        if (step === 2 && !validator.matches(phone, /^(?!0\d)\d{9}$|^0\d{9}$/))
-            validationErrors.phone = t('register.phone-validate');
+        if (step === 2 && !validator.matches(phone, /^[a-zA-Z][\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+            validationErrors.phone = t('register.error-email');
 
         if (step === 3) {
             if (password?.length < 6) validationErrors.password = t('register.password-validate-min-length');
@@ -204,17 +204,18 @@ const Register = () => {
                 {currentStep === 2 && (
                     <div>
                         <FormControl
-                            label={t('register.phone')}
+                            label={t('register.email')}
                             control={
                                 <UnderlineInput
-                                    placeholder={t('register.phone-placeholder')}
-                                    value={formData.phone}
+                                    type='email'
+                                    placeholder={t('register.email-placeholder')}
                                     onChange={handleChange}
+                                    value={formData.phone}
                                     name="phone"
-                                    type="tel"
-                                    more={<PhoneSelect onChange={handleChangeCountry} />}
                                 />
                             }
+
+                            
                             error={errors.phone}
                         />
                         <div className="flex items-center mb-4 mt-4 text-mm text-secondary dark:text-gray-300">

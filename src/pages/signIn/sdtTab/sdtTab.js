@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { LockIcon, MobileIcon } from '~/assets';
+import { EmailIcon, LockIcon, MobileIcon } from '~/assets';
 import Button from '~/components/button';
 import PhoneSelect from '~/components/phoneSelect';
 import UnderlineInput from '~/components/underlineInput';
@@ -89,9 +89,8 @@ const SdtTab = () => {
                         <UnderlineInput
                             value={phone}
                             onChangeText={setPhone}
-                            more={<PhoneSelect onChange={setCountry} />}
-                            type="tel"
-                            Icon={MobileIcon}
+                            type="email"
+                            Icon={EmailIcon}
                             placeholder={t('login.phone-number')}
                         />
                         <UnderlineInput
