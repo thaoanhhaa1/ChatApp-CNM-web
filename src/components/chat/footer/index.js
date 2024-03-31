@@ -65,9 +65,11 @@ const Footer = () => {
             addMessage({
                 ...message,
                 sender: user,
+                reply,
             }),
         );
         dispatch(setChat(''));
+        dispatch(setReply());
     };
 
     useEffect(() => {

@@ -8,6 +8,7 @@ const api = {
     searchUsers: (value) => `/user?search=${value}`,
     getMessages: (conversationId) => `/message/${conversationId}`,
     addMessage: () => `/message`,
+    getReplyMessages: (messageId) => `/message/reply/${messageId}`,
 };
 
 export default api;

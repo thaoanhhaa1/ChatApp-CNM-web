@@ -52,6 +52,8 @@ ReplyMessage.propTypes = {
             name: PropTypes.string,
         }),
         images: PropTypes.arrayOf(PropTypes.string),
+        messages: PropTypes.arrayOf(PropTypes.object),
+        sticker: PropTypes.string,
     }).isRequired,
     isMe: PropTypes.bool.isRequired,
     showClose: PropTypes.bool,
