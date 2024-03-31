@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import api, { axiosClient } from '~/api';
+import { sentMessageStatus } from '~/constants';
+import { getMessages as getMessagesService, addMessage as sendMessageService } from '~/services';
 
 const initialState = {
     messages: [],
@@ -9,17 +10,20 @@ const initialState = {
 };
 
 const getMessages = createAsyncThunk('getMessages', async ({ conversationId, page = 1, size = 20 }) => {
-    const response = await axiosClient.get(api.getMessages(conversationId), {
-        params: {
-            page,
-            size,
-        },
-    });
+    const response = await getMessagesService(conversationId, page, size);
 
     return {
         data: response.data,
         page,
     };
+});
+
+const sendMessage = createAsyncThunk('sendMessage', async (data) => {
+    const { timeSend, ...rest } = data;
+
+    const response = await sendMessageService(rest);
+
+    return { data: response.data, timeSend };
 });
 
 const messagesSlice = createSlice({
@@ -36,8 +40,12 @@ const messagesSlice = createSlice({
         setMessages: (state, { payload }) => {
             state.messages = payload;
         },
-        addMessages: (state, { payload }) => {
-            state.messages.push(...payload);
+        addMessage: (state, { payload }) => {
+            const message = { ...payload, _id: Date.now() };
+
+            message.state = sentMessageStatus.SENDING;
+
+            state.messages.unshift(message);
         },
     },
     extraReducers: (builder) => {
@@ -54,9 +62,23 @@ const messagesSlice = createSlice({
         builder.addCase(getMessages.rejected, (state) => {
             state.loading = false;
         });
+
+        builder.addCase(sendMessage.fulfilled, (state, { payload }) => {
+            const { timeSend, data } = payload;
+
+            state.loading = false;
+            state.messages.find((message) => {
+                if (message.timeSend === timeSend) {
+                    data.state = sentMessageStatus.SENT;
+                    message = data;
+                }
+
+                return false;
+            });
+        });
     },
 });
 
 export default messagesSlice.reducer;
-export const { setOffsetTop, setMessages, addMessages } = messagesSlice.actions;
-export { getMessages };
+export const { setOffsetTop, setMessages, addMessage } = messagesSlice.actions;
+export { getMessages, sendMessage };

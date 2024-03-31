@@ -12,6 +12,7 @@ export * as personalInformation from './personalInformation';
 export { default as phoneBookFilter } from './phoneBookFilter';
 export { default as sortGroup } from './sortGroup';
 export { default as statusUser } from './statusUser';
+export { default as sentMessageStatus } from './sentMessageStatus';
 
 export const constants = {
     MAX_LENGTH_OF_GREETING_MESSAGE: 150,

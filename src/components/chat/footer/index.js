@@ -1,5 +1,5 @@
 import { useWindowSize } from '@uidotdev/usehooks';
-import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mention, MentionsInput } from 'react-mentions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,100 +8,38 @@ import { AttachmentLineIcon, ImageFillIcon, SendPlaneFillIcon } from '~/assets';
 import AttachFiles from '~/components/attachFiles';
 import ReplyMessage from '~/components/replyMessage';
 import { setChat, setReply } from '~/features/chat/chatSlice';
-import { insertEmojiToChat, splitMessage } from '~/utils';
+import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
+import { getMentions, insertEmojiToChat, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
 import MentionItem from './Mention';
 import SendFiles from './SendFiles';
 
+// TODO Chat and Reply
+// Send message: messages, files, conversationId, reply, sticker
 const Footer = () => {
     const { t } = useTranslation();
     const [selectionStart, setSelectionStart] = useState(-1);
-    const [mentions] = useState([
-        {
-            id: 'walter',
-            display: 'Walter White',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 'pipilu',
-            display: '皮皮鲁',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 'luxixi',
-            display: '鲁西西',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 'satoshi1',
-            display: '中本聪',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 'satoshi2',
-            display: 'サトシ・ナカモト',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 'nobi',
-            display: '野比のび太',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 'sung',
-            display: '성덕선',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 'jesse',
-            display: 'Jesse Pinkman',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        },
-        {
-            id: 'gus',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            display: 'Gustavo "Gus" Fring',
-        },
-        {
-            id: 'saul',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            display: 'Saul Goodman',
-        },
-        {
-            id: 'hank',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            display: 'Hank Schrader',
-        },
-        {
-            id: 'skyler',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            display: 'Skyler White',
-        },
-        {
-            id: 'mike',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            display: 'Mike Ehrmantraut',
-        },
-        {
-            id: 'lydia',
-            avatar: 'https://images.unsplash.com/photo-1706562017807-1ace3fbcb8df?q=80&w=1612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            display: 'Lydìã Rôdarté-Qüayle',
-        },
-    ]);
+    const { active } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
+    const mentions = useMemo(() => getMentions(active.users, user), [active.users, user]);
+
     const { files, reply, chat } = useSelector((state) => state.chat);
     const ref = useRef();
     const { width } = useWindowSize();
     const dispatch = useDispatch();
 
     const handleChange = (e) => dispatch(setChat(checkText(e.target.value)));
-    const handleEmojiClick = (e) => {
-        const inputElement = ref.current.inputElement;
-        const selectionStart = inputElement.selectionStart;
+    const handleEmojiClick = useCallback(
+        (emoji) => {
+            const inputElement = ref.current.inputElement;
+            const selectionStart = inputElement.selectionStart;
 
-        dispatch(setChat(insertEmojiToChat(e.emoji, chat, ref.current.inputElement)));
-        setSelectionStart(selectionStart + 2);
-    };
+            dispatch(setChat(insertEmojiToChat(emoji, chat, ref.current.inputElement)));
+            setSelectionStart(selectionStart + 2);
+        },
+        [chat, dispatch],
+    );
 
     const handleKeyDown = (e) => {
         if (e.code === 'Enter' && !e.shiftKey) {
@@ -119,8 +57,16 @@ const Footer = () => {
         if (!chat) return;
 
         const messages = splitMessage(chat);
+        const timeSend = Date.now();
+        const message = { messages, files, conversationId: active._id, reply: reply?._id, timeSend };
 
-        console.log('🚀 ~ messages ~ messages:', messages);
+        dispatch(sendMessage(message));
+        dispatch(
+            addMessage({
+                ...message,
+                sender: user,
+            }),
+        );
         dispatch(setChat(''));
     };
 

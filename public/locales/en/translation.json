@@ -47,7 +47,10 @@
         "empty-chat-description-1": "Zalo can only display messages from the first login on this browser",
         "empty-chat-description-1-1": "on",
         "empty-chat-description-2": "Please download Zalo PC or use the Zalo app on your phone to view the full chat history.",
-        "empty-chat-download": "Download Zalo PC"
+        "empty-chat-download": "Download Zalo PC",
+        "sending": "Sending",
+        "sent": "Sent",
+        "received": "Received"
     },
     "contacts": {
         "title": "Contacts",

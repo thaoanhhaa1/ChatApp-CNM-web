@@ -34,8 +34,8 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const { messages } = useSelector((state) => state.messages);
 
     const isYourPrev = prevChat?.sender._id === chat.sender._id;
-    const date = new Date(chat.updatedAt);
-    const prevDate = prevChat && new Date(prevChat.updatedAt);
+    const date = new Date(chat.updatedAt || chat.timeSend);
+    const prevDate = prevChat && new Date(prevChat.updatedAt || prevChat.timeSend);
     const showSeparate = prevDate && isShowTimeChatSeparate(date, prevDate);
     const reacts = ['love'];
 
@@ -122,7 +122,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                     )}
                                 >
                                     <ClockIcon className="mr-1" />
-                                    <span>{getTimeChat(chat.updatedAt)}</span>
+                                    <span>{getTimeChat(chat.updatedAt || new Date(chat.timeSend))}</span>
                                 </div>
 
                                 <ChatItemReaction

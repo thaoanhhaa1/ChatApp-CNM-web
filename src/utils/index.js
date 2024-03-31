@@ -10,6 +10,7 @@ export { default as getBgByTypeFile } from './getBgByTypeFile';
 export { default as getDate } from './getDate';
 export { default as getDateTimeContactGroup } from './getDateTimeContactGroup';
 export { default as getFirstCharOfName } from './getFirstCharOfName';
+export { default as getMentions } from './getMentions';
 export { default as getNumberFormat } from './getNumberFormat';
 export { default as getTime } from './getTime';
 export { default as getTimeChat } from './getTimeChat';

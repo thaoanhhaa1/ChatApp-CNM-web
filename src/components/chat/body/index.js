@@ -2,8 +2,10 @@ import { memo, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { getMessages } from '~/features/messages/messagesSlice';
+import { getTimeChatSeparate } from '~/utils';
 import ChatEmpty from './ChatEmpty';
 import ChatItem from './ChatItem';
+import ChatItemSeparate from './ChatItemSeparate';
 
 // TODO Typing
 const Body = () => {
@@ -54,6 +56,12 @@ const Body = () => {
                             prevChat={arr[index - 1]}
                         />
                     ))}
+
+                {messages.length > 0 && (
+                    <ChatItemSeparate>
+                        {getTimeChatSeparate(new Date(messages.at(-1).updatedAt || messages.at(-1).timeSend))}
+                    </ChatItemSeparate>
+                )}
 
                 {/* <ChatItemTyping chat={user} /> */}
             </div>

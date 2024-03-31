@@ -18,6 +18,7 @@ const images = {
     enhance: require('./enhance.png'),
     notFoundBg: require('./not-found-bg.gif'),
     searchEmpty: require('./search-empty.png'),
+    mentionAll: require('./mention-all.png'),
 };
 
 export default images;
