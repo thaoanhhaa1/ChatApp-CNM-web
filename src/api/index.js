@@ -3,6 +3,14 @@ const api = {
     login: () => `/auth/login`,
     logout: () => `/auth/logout`,
     userInfo: () => `/user/info`,
+    getAllConversations: () => `/conversation`,
+    openConversation: () => `/conversation`,
+    searchUsers: (value) => `/user?search=${value}`,
+    getMessages: (conversationId) => `/message/${conversationId}`,
+    addMessage: () => `/message`,
+    getReplyMessages: (messageId) => `/message/reply/${messageId}`,
+    createOTP: () => `/auth/createOTP`,
+    verifyOTP: () => `/auth/verifyOTP`,
 };
 
 export default api;

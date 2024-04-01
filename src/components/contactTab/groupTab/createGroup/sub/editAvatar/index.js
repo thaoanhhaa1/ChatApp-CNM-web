@@ -113,7 +113,9 @@ const EditAvatar = ({ onClose }) => {
                                     <div
                                         className={classNames(
                                             'rounded-full border',
-                                            avatar.url === url ? 'border-white' : 'border-[#b6bec9]',
+                                            avatar.url === url
+                                                ? 'border-white dark:border-transparent'
+                                                : 'border-[#b6bec9] dark:border-[#7b7c7d]',
                                         )}
                                     >
                                         <Avatar size={`${IMAGE_SIZE}px`} src={url} />
@@ -122,8 +124,8 @@ const EditAvatar = ({ onClose }) => {
                             ))}
                             <div className="w-2 flex-shrink-0"></div>
                         </div>
-                        <div className="pointer-events-none absolute w-[30px] h-full top-0 left-0 bg-[linear-gradient(90deg,#fff_20%,hsla(0,0%,100%,0)_80%)]"></div>
-                        <div className="pointer-events-none absolute w-[30px] h-full top-0 right-0 bg-[linear-gradient(270deg,#fff_20%,hsla(0,0%,100%,0)_80%)]"></div>
+                        <div className="dark:hidden pointer-events-none absolute w-[30px] h-full top-0 left-0 bg-[linear-gradient(90deg,#fff_20%,hsla(0,0%,100%,0)_80%)]"></div>
+                        <div className="dark:hidden pointer-events-none absolute w-[30px] h-full top-0 right-0 bg-[linear-gradient(270deg,#fff_20%,hsla(0,0%,100%,0)_80%)]"></div>
                     </div>
                     <ArrowButton
                         disabled={slide.max === slide.select}

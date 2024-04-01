@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { forwardRef, useImperativeHandle } from 'react';
 import ReactCrop from 'react-image-crop';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { constants } from '~/constants';
 import { useCropImage } from '~/hooks';
 import ControlScale from './ControlScale';
@@ -86,7 +85,7 @@ const CropImage = forwardRef(({ imageUrl }, forwardRef) => {
                             height: `${constants.CROP_IMAGE_SIZE}px`,
                         }}
                     />
-                    <LazyLoadImage
+                    <img
                         onLoad={handleImageLoad}
                         className="opacity-0 aspect-square pointer-events-none"
                         src={imageUrl}

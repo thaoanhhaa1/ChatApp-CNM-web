@@ -1,0 +1,37 @@
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
+    settings: {
+        theme: 'light',
+        loginAt: '',
+        recentSearch: [],
+    },
+};
+
+const localSettingSlice = createSlice({
+    name: 'localSetting',
+    initialState,
+    reducers: {
+        setSetting: (state, { payload }) => {
+            Object.assign(state.settings, payload);
+        },
+        reset: (state) => {
+            state.settings = initialState.settings;
+        },
+        addRecentSearch: (state, { payload }) => {
+            const recentSearch = state.settings.recentSearch;
+
+            if (recentSearch.length >= 10) recentSearch.pop();
+
+            recentSearch.unshift(payload);
+        },
+        removeRecentSearch: (state, { payload }) => {
+            const recentSearch = state.settings.recentSearch;
+
+            state.settings.recentSearch = recentSearch.filter((user) => user._id !== payload);
+        },
+    },
+});
+
+export const { setSetting, reset, addRecentSearch, removeRecentSearch } = localSettingSlice.actions;
+export default localSettingSlice.reducer;

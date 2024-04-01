@@ -2,7 +2,6 @@ import { useDebounce } from '@uidotdev/usehooks';
 import PropTypes from 'prop-types';
 import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { CameraFilledIcon, SearchIcon } from '~/assets';
 import Input from '~/components/input';
@@ -110,7 +109,7 @@ const CreateGroup = ({ show, onClickOutside }) => {
                                             title: t(item.title),
                                         }))}
                                     >
-                                        <LazyLoadImage
+                                        <img
                                             src={avatar.url || imageUrl}
                                             className="cursor-pointer absolute top-0 left-0 w-full h-full object-cover rounded-full"
                                             alt=""

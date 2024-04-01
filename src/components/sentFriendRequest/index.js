@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getDateFriendRequest } from '~/utils';
+import { getDate } from '~/utils';
 import Avatar from '../avatar';
 import Button from '../button';
 
@@ -19,7 +19,7 @@ const SentFriendRequest = ({ contact }) => {
             <div className="flex-1">
                 <div className="text-sm font-medium line-clamp-1">{contact.name}</div>
                 <span className="text-ss text-secondary dark:text-dark-secondary">
-                    {getDateFriendRequest(new Date(contact.date))}
+                    {getDate(new Date(contact.date))}
                 </span>
             </div>
             <Button onClick={handleClick} primary={!isRecall} secondary={isRecall} small rounded>

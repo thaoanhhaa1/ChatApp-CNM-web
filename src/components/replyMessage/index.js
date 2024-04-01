@@ -28,7 +28,7 @@ const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {},
             {image && <LazyLoadImage alt="" src={image} className="w-9 h-9 object-cover" />}
             {message.sticker ? <StickerItem url={message.sticker} className="w-9 h-9" /> : null}
             <div className="flex-1">
-                <div className="text-ss font-medium line-clamp-1">{message.name}</div>
+                <div className="text-ss font-medium line-clamp-1">{message.sender.name}</div>
                 {message.sticker ? (
                     <span className="text-secondary dark:text-dark-secondary text-sm">[Sticker]</span>
                 ) : (
@@ -48,8 +48,12 @@ const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {},
 ReplyMessage.propTypes = {
     className: PropTypes.string,
     message: PropTypes.shape({
-        name: PropTypes.string.isRequired,
+        sender: PropTypes.shape({
+            name: PropTypes.string,
+        }),
         images: PropTypes.arrayOf(PropTypes.string),
+        messages: PropTypes.arrayOf(PropTypes.object),
+        sticker: PropTypes.string,
     }).isRequired,
     isMe: PropTypes.bool.isRequired,
     showClose: PropTypes.bool,

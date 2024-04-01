@@ -13,7 +13,10 @@
         "recent": "Gần đây",
         "search": "Tìm kiếm tin nhắn",
         "emptyTitle": "Chào mừng đến với Zalo PC!",
-        "emptyDescription": "Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn."
+        "emptyDescription": "Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn.",
+        "no-conversations": "Chưa có hội thoại",
+        "no-conversations-description": "Zalo chỉ hiển thị tin nhắn từ sau lần đăng nhập đầu tiên trên trình duyệt này",
+        "no-conversations-description-1": "ngày"
     },
     "chat": {
         "search": "Tìm tin nhắn",
@@ -40,7 +43,14 @@
         },
         "emoji": "Biểu cảm",
         "attached-file": "Đính kèm file",
-        "images": "Gửi hình ảnh"
+        "images": "Gửi hình ảnh",
+        "empty-chat-description-1": "Zalo chỉ hiển thị tin nhắn từ sau lần đăng nhập đầu tiên trên trình duyệt này",
+        "empty-chat-description-1-1": "ngày",
+        "empty-chat-description-2": "Vui lòng sử dụng Zalo PC hoặc Zalo trên điện thoại để xem đầy đủ lịch sử trò chuyện.",
+        "empty-chat-download": "Tải Zalo PC",
+        "sending": "Đang gửi",
+        "sent": "Đã gửi",
+        "received": "Đã nhận"
     },
     "contacts": {
         "title": "Danh bạ",
@@ -156,8 +166,7 @@
             "update": "Cập nhật",
             "change-avatar": "Đổi ảnh đại diện",
             "delete-avatar": "Xoá ảnh đại diện"
-        },
-        "message-empty": "Lời chào không được để trống."
+        }
     },
     "profile": {
         "title": "Hồ sơ của tôi"
@@ -233,23 +242,23 @@
     },
     "login": {
         "with-qr-code": "Với mã QR",
-        "with-phone-number": "Với số điện thoai",
+        "with-phone-number": "Với email",
         "only-for-logging-into": "Chỉ dùng để đăng nhập",
         "zalo-on-computer": "Zalo trên máy tính",
         "use-zalo-on-mobile-to-scan": "Sử dụng ứng dụng Zalo để quét QR",
-        "phone-number": "Số điện thoại",
+        "phone-number": "Email",
         "password": "Mật khẩu",
         "login-with-password": "Đăng nhập với mật khẩu",
         "sign-in-with-mobile": "Đăng nhập bằng thiết bị di động",
         "forgot-password": "Quên mật khẩu?",
         "error": "Số điện thoại hoặc mật khẩu không khớp, vui lòng nhập lại",
-        "enter-phone-number": "Nhập số điện thoại của bạn",
-        "error-forget-password": "Vui lòng nhập số điện thoại hợp lệ",
+        "enter-phone-number": "Nhập địa chỉ email của bạn",
+        "error-forget-password": "Vui lòng nhập email hợp lệ",
         "continue": "Tiếp tục",
         "back": "Quay lại",
         "forget-password-enter-password": "Vui lòng nhập mật khẩu",
         "forget-password-reenter-password": "Nhập lại mật khẩu",
-        "send-message-to-get-code": "Gửi tin nhắn để nhận mã xác thực",
+        "send-message-to-get-code": "Kiểm tra email để nhận mã xác thực",
         "enter-activation-code": "Nhập mã kích hoạt",
         "description-get-code": "Soạn tin nhắn với cú pháp \"ZALOPC\" gửi đến 6020 (1000đ/tin) để nhận mã xác thực (Chỉ áp dụng cho mạng Viettel, Mobifone, Vinaphone, Vietnamobile, Gmobile)",
         "confirm": "Xác nhận",
@@ -268,6 +277,11 @@
         "next": "Kế tiếp",
         "phone": "Số điện thoại",
         "phone-placeholder": "Nhập số điện thoại",
+        "email": "Email",
+        "email-placeholder": "Nhập email của bạn",
+        "error-email": "Email không hợp lệ. Vui lòng kiểm tra và thử lại.",
+        "email-exist": "Địa chỉ Email này đã tồn tại!",
+        "error-otp-code": "Mã OTP không hợp lệ",
         "phone-checkbox-1": "Tôi đồng ý với các",
         "phone-checkbox-1-1": "điều khoản sử dụng Zalo",
         "phone-checkbox-1-2": "điều khoản Mạng xã hội của Zalo",
@@ -290,6 +304,32 @@
         "phone-validate": "Số điện thoại không hợp lệ",
         "password-validate-min-length": "Mật khẩu phải chứa ít nhất 6 ký tự",
         "password-validate-max-length": "Mật khẩu không được quá 30 ký tự",
-        "dob-validate": "Bạn phải ít nhất 14 tuổi để sử dụng ứng dụng"
+        "dob-validate": "Bạn phải ít nhất 14 tuổi để sử dụng ứng dụng",
+        "error-password-01": "Mật khẩu nhập lại không khớp",
+        "modal-text-1": "Bạn sẽ nhận được một mã OTP từ Zalo.",
+        "modal-text-2": "Nhập mã kích hoạt",
+        "authentication": "Xác nhận",
+        "resend": "Gửi lại mã",
+        "confirm": "Xác thực",
+        "confirm-desc": "Bạn sẽ nhận được một mã xác thực qua email của bạn. Vui lòng nhập mã xác thực vào dưới để xác thực email của bạn",
+        "countdown": "Mã xác thực sẽ hêt hạn trong",
+        "second": "giây",
+        "enter-confirm": "Nhập mã xác thực",
+        "not-receive": "Didn't receive the verification OTP?"
+    },
+    "chats-search": {
+        "search-recent": "Tìm gần đây",
+        "no-recent-search": "Không có tìm kiếm nào gần đây",
+        "message-filtering": "Lọc tin nhắn",
+        "mention": "Nhắc bạn",
+        "emotion": "Biểu cảm",
+        "close": "Đóng",
+        "all": "Tất cả",
+        "contacts": "Liên hệ",
+        "messages:": "Tin nhắn",
+        "files": "File",
+        "search-empty-title": "Không tìm thấy kết quả",
+        "search-empty-description": "Vui lòng thử lại từ khoá khác hoặc sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày ",
+        "search-description": "Sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày "
     }
 }

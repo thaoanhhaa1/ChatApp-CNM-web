@@ -10,12 +10,16 @@ const images = {
     quickMessage: require('./quick-message.png'),
     vanish: require('./vanish.png'),
     welcome: require('./inapp-welcome-screen.svg').default,
-    groupCall: require('./group-call.jpg'),
-    syncMessage: require('./sync-message.jpg'),
+    transferMessages: require('./transfer-messages-double-devices.svg').default,
+    groupCall: require('./group-call.png'),
+    syncMessage: require('./sync-message.png'),
     heavyFiles: require('./heavy-files.png'),
-    teammates: require('./teammates.jpg'),
-    enhance: require('./enhance.jpg'),
+    teammates: require('./teammates.png'),
+    enhance: require('./enhance.png'),
     notFoundBg: require('./not-found-bg.gif'),
+    searchEmpty: require('./search-empty.png'),
+    mentionAll: require('./mention-all.png'),
+    imageVerify: require('./image_vetify.png'),
 };
 
 export default images;

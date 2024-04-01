@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MobileIcon } from '~/assets';
+import { EmailIcon, MobileIcon } from '~/assets';
 import Button from '~/components/button';
 import PhoneSelect from '~/components/phoneSelect';
 import UnderlineInput from '~/components/underlineInput';
@@ -25,11 +25,12 @@ const ForgotPasswordForm = ({sdt, onBack = () => {} }) => {
 
         console.groupEnd();
 
-        if (!validator.isMobilePhone(phone, 'vi-VN')) {
+        if (!validator.matches(phone, /^[a-zA-Z][\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
             setTrue();
-        } else {
+        else {
             setShowUpdatePass(true);
         }
+        
     };
 
     return (
@@ -43,9 +44,9 @@ const ForgotPasswordForm = ({sdt, onBack = () => {} }) => {
                         containerClassName="mb-[18px]"
                         value={phone}
                         onChangeText={setPhone}
-                        more={<PhoneSelect onChange={setCountry} />}
-                        type="tel"
-                        Icon={MobileIcon}
+                        // more={<PhoneSelect onChange={setCountry} />}
+                        type="email"
+                        Icon={EmailIcon}
                         placeholder={t('login.phone-number')}
                     />
 

@@ -1,24 +1,30 @@
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import { create } from '@mui/material/styles/createTransitions';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import validator from 'validator';
 import { saveToken } from '~/api/axiosClient';
+import images from '~/assets/images';
 import Button from '~/components/button';
 import FormControl from '~/components/formControl';
+import Input from '~/components/input';
 import Languages from '~/components/languages';
+import Modal from '~/components/modal';
 import PhoneSelect from '~/components/phoneSelect';
 import RadioGroup from '~/components/radioGroup';
 import UnderlineInput from '~/components/underlineInput';
 import config from '~/config';
 import routes from '~/config/routes';
 import { genders } from '~/constants';
+import { setSetting } from '~/features/localSetting/localSettingSlice';
 import { setUser } from '~/features/user/userSlice';
 import { useBoolean } from '~/hooks';
-import { register } from '~/services';
+import { createOTP, register, verifyOTP } from '~/services';
 import { classNames } from '~/utils';
 
 const NUMBER_OF_STEP = 4;
+const TIME_OTP = 300;
 
 const Register = () => {
     const { t } = useTranslation();
@@ -29,7 +35,7 @@ const Register = () => {
         password: '',
         gender: 'male',
         dateOfBirth: '',
-        country: {},
+        // country: {},
     });
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
@@ -43,25 +49,76 @@ const Register = () => {
 
         if (currentStep === 1) return name.length < 2;
         if (currentStep === 2)
-            return phone.length < 6 || !termRef?.current?.checked || !socialTermRef?.current?.checked;
-        if (currentStep === 3) return password.length < 6;
+            return phone.length < 1 || !termRef?.current?.checked || !socialTermRef?.current?.checked;
+        if (currentStep === 3) return password.length < 2;
 
         return false;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentStep, formData, terms]);
 
     const [errors, setErrors] = useState({});
+    const [otpCode, setOtpCode] = useState('');
+    const [countdown, setCountdown] = useState(TIME_OTP);
 
-    const nextStep = () => {
-        const validationErrors = validateFormFields(currentStep);
-        if (Object.keys(validationErrors).length === 0) {
+    // const nextStep = () => {
+    //     const validationErrors = validateFormFields(currentStep);
+    //     if (Object.keys(validationErrors).length === 0) {
+    //         setCurrentStep(currentStep + 1);
+    //     } else {
+    //         setErrors(validationErrors);
+    //     }
+    // };
+    const [showModal, setShowModal] = useState(false);
+    const handleClose = () => {
+        setShowModal(false); // Đảo ngược trạng thái hiển thị của modal
+    };
+
+    const handleSendOTP = async () => {
+        try {
+            await createOTP(formData.phone);
+            setCountdown(TIME_OTP);
+        } finally {
+        }
+    };
+
+    const handleAuthentication = async () => {
+        setLoading(true);
+
+        try {
+            if (!otpCode) throw new Error('OTP code is required');
+
+            await verifyOTP({
+                phone: formData.phone,
+                otp: otpCode,
+            });
+
             setCurrentStep(currentStep + 1);
+        } catch (error) {
+            setErrors({
+                otpCode: t('register.error-otp-code'),
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+    const nextStep = async () => {
+        setLoading(true);
+
+        const validationErrors = await validateFormFields(currentStep);
+
+        setLoading(false);
+        if (Object.keys(validationErrors).length === 0) {
+            if (currentStep === 2) {
+                setShowModal(true); // Show modal on step 2
+            } else {
+                setCurrentStep(currentStep + 1);
+            }
         } else {
             setErrors(validationErrors);
         }
     };
 
-    const validateFormFields = (step) => {
+    const validateFormFields = async (step) => {
         const validationErrors = {};
         const { name, phone, password } = formData;
 
@@ -74,8 +131,17 @@ const Register = () => {
                 validationErrors.name = t('register.zalo-name-validate-number-character');
         }
 
-        if (step === 2 && !validator.matches(phone, /^(?!0\d)\d{9}$|^0\d{9}$/))
-            validationErrors.phone = t('register.phone-validate');
+        if (step === 2) {
+            if (!validator.matches(phone, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+                validationErrors.phone = t('register.error-email');
+            else {
+                try {
+                    await createOTP(phone);
+                } catch (error) {
+                    validationErrors.phone = t('register.email-exist');
+                }
+            }
+        }
 
         if (step === 3) {
             if (password?.length < 6) validationErrors.password = t('register.password-validate-min-length');
@@ -96,7 +162,7 @@ const Register = () => {
 
     const prevStep = () => currentStep > 1 && setCurrentStep(currentStep - 1);
 
-    const handleChangeCountry = useCallback((country) => setFormData((prev) => ({ ...prev, country })), []);
+    // const handleChangeCountry = useCallback((country) => setFormData((prev) => ({ ...prev, country })), []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -132,6 +198,7 @@ const Register = () => {
 
             saveToken(accessToken);
             dispatch(setUser(user));
+            dispatch(setSetting({ loginAt: new Date().toISOString() }));
             navigation(routes.chats);
         } catch (error) {
             setErrors({
@@ -142,6 +209,16 @@ const Register = () => {
 
         setLoading(false);
     };
+
+    useEffect(() => {
+        if (showModal) {
+            const interval = setInterval(() => {
+                setCountdown((prev) => Math.max(0, prev - 1));
+            }, 1000);
+
+            return () => clearInterval(interval);
+        }
+    }, [showModal]);
 
     return (
         <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden px-2">
@@ -202,15 +279,14 @@ const Register = () => {
                 {currentStep === 2 && (
                     <div>
                         <FormControl
-                            label={t('register.phone')}
+                            label={t('register.email')}
                             control={
                                 <UnderlineInput
-                                    placeholder={t('register.phone-placeholder')}
-                                    value={formData.phone}
+                                    type="email"
+                                    placeholder={t('register.email-placeholder')}
                                     onChange={handleChange}
+                                    value={formData.phone}
                                     name="phone"
-                                    type="tel"
-                                    more={<PhoneSelect onChange={handleChangeCountry} />}
                                 />
                             }
                             error={errors.phone}
@@ -247,9 +323,61 @@ const Register = () => {
                                 </a>
                             </label>
                         </div>
+
+                        <Modal className="p-10" show={showModal} onClickOutside={handleClose}>
+                            <div className="text-center flex flex-col items-center gap-2 justify-center">
+                                <img src={images.imageVerify} alt="" className="w-[140px] aspect-square mb-6" />
+                                <h3 className="font-semibold text-2xl">{t('register.confirm')}</h3>
+                                <p className="text-secondary dark:text-dark-secondary text-sm">
+                                    {t('register.confirm-desc')}
+                                </p>
+                                <p className="text-sm">
+                                    {t('register.countdown')}: &nbsp;
+                                    {countdown}
+                                    &nbsp;
+                                    {t('register.second')}
+                                </p>
+                                <div className="px-[15px] pt-[18px] pb-3 w-[300px]">
+                                    <FormControl
+                                        control={
+                                            <Input
+                                                maxLength={6}
+                                                value={otpCode}
+                                                onChangeText={setOtpCode}
+                                                type="number"
+                                                className="text-center"
+                                                placeholder={t('register.enter-confirm')}
+                                                outline
+                                            />
+                                        }
+                                        error={errors.otpCode}
+                                    />
+                                </div>
+                                <Button
+                                    disabled={loading || !countdown}
+                                    loading={loading}
+                                    className="w-[280px] mt-2 uppercase"
+                                    primary
+                                    onClick={handleAuthentication}
+                                >
+                                    {t('register.confirm')}
+                                </Button>
+                                <p className="text-sm mt-2">
+                                    <span className="text-secondary dark:text-dark-secondary">
+                                        {t('register.not-receive')}
+                                    </span>
+                                    &nbsp;
+                                    <span
+                                        onClick={handleSendOTP}
+                                        className="text-primary-color hover:underline cursor-pointer"
+                                    >
+                                        {t('register.resend')}
+                                    </span>
+                                </p>
+                            </div>
+                        </Modal>
                     </div>
                 )}
-
                 {currentStep === 3 && (
                     <FormControl
                         label={t('register.password')}
@@ -292,12 +420,7 @@ const Register = () => {
 
                 <div className="flex justify-between mt-4">
                     {currentStep === 1 ? (
-                        <Button
-                            align="left"
-                            small
-                            className="hover:underline hover:text-hoverPurple"
-                            to={config.routes.signIn}
-                        >
+                        <Button align="left" small text to={config.routes.signIn}>
                             {t('register.sign-in')}
                         </Button>
                     ) : (
@@ -307,7 +430,7 @@ const Register = () => {
                     )}
 
                     {currentStep < 4 ? (
-                        <Button disabled={disabled} primary onClick={nextStep}>
+                        <Button disabled={disabled || loading} loading={loading} primary onClick={nextStep}>
                             {t('register.next')}
                         </Button>
                     ) : (

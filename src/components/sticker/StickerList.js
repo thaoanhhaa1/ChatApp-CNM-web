@@ -1,15 +1,30 @@
 import { useWindowSize } from '@uidotdev/usehooks';
 import PropTypes from 'prop-types';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import StickerItem from './StickerItem';
 
 const StickerList = ({ sticker, setOffsetTop }) => {
     const stickerRef = useRef();
     const { width } = useWindowSize();
     const [widthSticker, setWidthSticker] = useState(0);
+    const { active } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
+    const { reply } = useSelector((state) => state.chat);
+    const dispatch = useDispatch();
 
     const handleClick = (sticker) => {
-        console.log('🚀 ~ handleClick ~ sticker:', sticker);
+        const timeSend = Date.now();
+        const message = { sticker: sticker.spriteURL, conversationId: active._id, reply: reply?._id, timeSend };
+
+        dispatch(sendMessage(message));
+        dispatch(
+            addMessage({
+                ...message,
+                sender: user,
+            }),
+        );
     };
 
     useEffect(() => {
@@ -25,7 +40,7 @@ const StickerList = ({ sticker, setOffsetTop }) => {
 
     return (
         <div ref={stickerRef}>
-            <div className="px-2 ex:px-3 sm:px-4 py-1 text-sm font-medium leading-normal text-primary line-clamp-1">
+            <div className="px-2 ex:px-3 sm:px-4 py-1 text-sm font-medium leading-normal line-clamp-1">
                 {sticker.name}
             </div>
             <div style={{ width: `${widthSticker}px` }} className="px-2 ex:px-3 sm:px-4">

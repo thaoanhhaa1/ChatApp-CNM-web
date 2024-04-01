@@ -9,6 +9,7 @@ const Input = ({
     className = '',
     iconClassName = '',
     containerClassName = '',
+    value = '',
     onChangeText = () => {},
     onChange = () => {},
     ...props
@@ -17,6 +18,8 @@ const Input = ({
         onChange(e);
         onChangeText(e.target.value);
     };
+
+
 
     return (
         <div
@@ -35,6 +38,7 @@ const Input = ({
                 </span>
             )}
             <input
+                value={value}
                 placeholder={placeholder}
                 className={classNames(
                     'flex-1 px-2 sm:px-4 py-1 sm:py-2 outline-none text-sm leading-normal placeholder:text-secondary dark:placeholder:text-dark-secondary text-input dark:text-dark-primary',
@@ -50,6 +54,7 @@ const Input = ({
 
 Input.propTypes = {
     Icon: PropTypes.func,
+    value: PropTypes.string,
     placeholder: PropTypes.string,
     className: PropTypes.string,
     containerClassName: PropTypes.string,

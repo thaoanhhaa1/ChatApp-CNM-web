@@ -62,7 +62,7 @@ const Sticker = () => {
                     </ScrollbarCustomize>
                 </div>
             </div>
-            <div className="flex h-12 border-t border-[#d6dbe1] bg-white rounded-b-lg z-1">
+            <div className="flex h-12 border-t border-[#d6dbe1] dark:border-dark-separate bg-white dark:bg-dark rounded-b-lg z-1">
                 <Button onClick={handleClickPrev} hidden={isBeginning}>
                     <LeftIcon />
                 </Button>

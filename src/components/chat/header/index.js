@@ -1,4 +1,6 @@
 import Tippy from '@tippyjs/react';
+import { useWindowSize } from '@uidotdev/usehooks';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -18,6 +20,7 @@ import Avatar from '~/components/avatar';
 import Call from '~/components/call';
 import Input from '~/components/input';
 import Popup from '~/components/popup';
+import { screens } from '~/constants';
 import { useChat, useLayout } from '~/context';
 import { useBoolean } from '~/hooks';
 import Button from './Button';
@@ -40,29 +43,39 @@ const Header = () => {
     const { value: showVideo, setTrue: setShowVideo, setFalse: setHideVideo } = useBoolean(false);
     const { setShowChat } = useLayout();
     const { handleShowProfile } = useChat();
-    const {
-        active: { user },
-    } = useSelector((state) => state.chats);
+    const { active } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
+    const { width } = useWindowSize();
+    const receiver = useMemo(
+        () => (active.isGroup ? {} : active.users.find((u) => u._id !== user._id)),
+        [active, user],
+    );
+    const more = useMemo(() => {
+        const more = [];
 
-    const more = [
-        {
-            icon: UserIcon,
-            title: t('chat.profile'),
-            onClick: handleShowProfile,
-        },
-        {
-            icon: ArchiveIcon,
-            title: t('chat.archive'),
-        },
-        {
-            icon: MuteIcon,
-            title: t('chat.muted'),
-        },
-        {
-            icon: DeleteIcon,
-            title: t('chat.delete'),
-        },
-    ];
+        if (width < screens.DL)
+            more.push({
+                icon: UserIcon,
+                title: t('chat.profile'),
+                onClick: handleShowProfile,
+            });
+
+        return [
+            ...more,
+            {
+                icon: ArchiveIcon,
+                title: t('chat.archive'),
+            },
+            {
+                icon: MuteIcon,
+                title: t('chat.muted'),
+            },
+            {
+                icon: DeleteIcon,
+                title: t('chat.delete'),
+            },
+        ];
+    }, [handleShowProfile, t, width]);
 
     return (
         <div className="flex items-center justify-between p-2 sm:p-3 md:p-4 dl:p-5 border-b border-separate dark:border-dark-separate">
@@ -73,9 +86,9 @@ const Header = () => {
                 >
                     <ChevronDownIcon className="w-4 h-4" />
                 </button>
-                <Avatar containerClassName="flex-shrink-0" src={user.avatar} status={user.status} />
+                <Avatar containerClassName="flex-shrink-0" src={active.picture} status={receiver.status} />
                 <Link to="/" className="text-base font-semibold line-clamp-1">
-                    {user.name}
+                    {active.name}
                 </Link>
                 <RecordCircleFillIcon className="flex-shrink-0 -ml-1 sm:-ml-2 w-2.5 h-2.5 text-success" />
             </div>
