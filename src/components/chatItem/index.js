@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ImageFillIcon } from '~/assets';
+import { ImageFillIcon, StickerSmileIcon } from '~/assets';
 import { useLayout } from '~/context';
 import { setActive } from '~/features/chats/chatsSlice';
 import { classNames, getTimeChat, getUnseenMessageNumber } from '~/utils';
@@ -35,18 +35,27 @@ const ChatItem = ({ chat, active }) => {
                 <div className="flex gap-1 items-center justify-between">
                     <h5 className="text-mm font-semibold mb-1 line-clamp-1">{chat.name}</h5>
                     <span className="text-ex text-secondary dark:text-dark-secondary text-nowrap">
-                        {getTimeChat(message.updatedAt)}
+                        {getTimeChat(message.updatedAt || new Date(message.timeSend))}
                     </span>
                 </div>
                 <div className="flex gap-1 items-center justify-between">
                     {(chat.typing && <Typing />) || (
-                        <div className="flex items-center">
-                            {message?.images?.length && (
+                        <div className="flex gap-1 items-center">
+                            {message?.images?.length ? (
                                 <span className="text-secondary dark:text-dark-secondary">
                                     <ImageFillIcon className="w-[14px] h-[14px]" />
                                 </span>
+                            ) : null}
+                            {message.sticker ? (
+                                <>
+                                    <span className="text-secondary dark:text-dark-secondary">
+                                        <StickerSmileIcon className="w-[14px] h-[14px]" />
+                                    </span>
+                                    <span className="text-sm text-secondary dark:text-dark-secondary">Sticker</span>
+                                </>
+                            ) : (
+                                <Message isMe className="line-clamp-1" isReply messages={message.messages || []} />
                             )}
-                            <Message isMe className="line-clamp-1" isReply messages={message.messages || []} />
                         </div>
                     )}
                     {chat.unseenMessages && (

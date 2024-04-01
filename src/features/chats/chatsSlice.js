@@ -4,7 +4,7 @@ import { getAllConversations } from '~/services';
 const initialState = {
     chats: [],
     loading: false,
-    active: null
+    active: null,
 };
 
 const getChats = createAsyncThunk('getChats', async () => {
@@ -31,6 +31,12 @@ const chatsSlice = createSlice({
         setActive: (state, { payload }) => {
             state.active = payload;
         },
+        updateLastMessage: (state, { payload }) => {
+            const { conversationId, message } = payload;
+
+            const chat = state.chats.find((chat) => chat._id === conversationId);
+            chat.lastMessage = message;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -48,5 +54,5 @@ const chatsSlice = createSlice({
 });
 
 export default chatsSlice.reducer;
-export const { setTyping, setActive } = chatsSlice.actions;
+export const { setTyping, setActive, updateLastMessage } = chatsSlice.actions;
 export { getChats };

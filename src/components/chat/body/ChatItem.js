@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -18,7 +18,7 @@ import Popup from '~/components/popup';
 import ReplyMessage from '~/components/replyMessage';
 import StickerItem from '~/components/sticker/StickerItem';
 import { setReply } from '~/features/chat/chatSlice';
-import { setOffsetTop } from '~/features/messages/messagesSlice';
+import { getReplyMessages, setOffsetTop } from '~/features/messages/messagesSlice';
 import { classNames, getTimeChat, getTimeChatSeparate, isShowTimeChatSeparate } from '~/utils';
 import ChatImage from './ChatImage';
 import ChatItemButton from './ChatItemButton';
@@ -27,6 +27,7 @@ import ChatItemSeparate from './ChatItemSeparate';
 import Reaction from './ReactionChat';
 
 const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
+    const [, startTransition] = useTransition();
     const { t } = useTranslation();
     const [react, setReact] = useState('haha');
     const ref = useRef();
@@ -58,17 +59,29 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
         },
     ];
 
-    const handleClickReply = (message) => messages.forEach((mess) => mess.id === message.id && scrollY(mess.offsetTop));
+    const handleClickReply = (message) => {
+        const mess = messages.find((mess) => mess._id === message._id);
+
+        if (mess) scrollY(mess.offsetTop);
+        else {
+            scrollY(0);
+
+            startTransition(async () => {
+                await dispatch(getReplyMessages(message._id)).unwrap();
+                scrollY(0);
+            });
+        }
+    };
     const handleReply = () => dispatch(setReply(chat));
 
     useEffect(() => {
         dispatch(
             setOffsetTop({
-                id: chat.id,
+                _id: chat._id,
                 offsetTop: ref.current.offsetTop,
             }),
         );
-    }, [chat.id, dispatch]);
+    }, [chat._id, dispatch]);
 
     return (
         <div ref={ref} className="flex flex-col gap-2 ex:gap-3 sm:gap-4">
@@ -86,7 +99,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                     src={chat.sender.avatar}
                 />
                 <div className={isMe ? 'ml-1 mr-2 sm:mr-4' : 'ml-2 sm:ml-4 mr-1'}>
-                    {(chat.messages && (
+                    {chat.messages.length > 0 ? (
                         <>
                             <div
                                 className={classNames(
@@ -125,11 +138,13 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                     <span>{getTimeChat(chat.updatedAt || new Date(chat.timeSend))}</span>
                                 </div>
 
-                                <ChatItemReaction
-                                    reacts={reacts}
-                                    react={react}
-                                    className="absolute right-0 bottom-0 translate-y-[calc(100%-7px)]"
-                                />
+                                {chat.sticker ? null : (
+                                    <ChatItemReaction
+                                        reacts={reacts}
+                                        react={react}
+                                        className="absolute right-0 bottom-0 translate-y-[calc(100%-7px)]"
+                                    />
+                                )}
                             </div>
                             <div
                                 className={classNames(
@@ -150,13 +165,15 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                 </div>
                             )}
                         </>
-                    )) || <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} />}
+                    ) : (
+                        <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} />
+                    )}
                 </div>
                 <div className={classNames('flex', isMe && 'flex-row-reverse')}>
                     <ChatItemButton onClick={handleReply}>
                         <QuoteRightIcon className="w-[14px] h-[14px]" />
                     </ChatItemButton>
-                    {chat.messages ? <Reaction setReact={setReact} react={react} /> : null}
+                    {chat.sticker ? null : <Reaction setReact={setReact} react={react} />}
                     <Popup data={mores} animation="shift-toward" placement={isMe ? 'bottom-end' : 'bottom-start'}>
                         <ChatItemButton>
                             <MoreFillIcon className="w-[15px] h-[15px] rotate-90" />

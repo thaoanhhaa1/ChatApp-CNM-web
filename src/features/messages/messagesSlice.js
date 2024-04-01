@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { sentMessageStatus } from '~/constants';
-import { getMessages as getMessagesService, addMessage as sendMessageService } from '~/services';
+import {
+    getMessages as getMessagesService,
+    getReplyMessages as getReplyMessagesService,
+    addMessage as sendMessageService,
+} from '~/services';
 
 const initialState = {
     messages: [],
@@ -26,15 +30,21 @@ const sendMessage = createAsyncThunk('sendMessage', async (data) => {
     return { data: response.data, timeSend };
 });
 
+const getReplyMessages = createAsyncThunk('getReplyMessages', async (messageId) => {
+    const response = await getReplyMessagesService(messageId);
+
+    return response.data;
+});
+
 const messagesSlice = createSlice({
     name: 'messages',
     initialState,
     reducers: {
         setOffsetTop: (state, { payload }) => {
             state.messages.find((message) => {
-                if (message.id === payload.id) message.offsetTop = payload.offsetTop;
+                if (message._id === payload._id) message.offsetTop = payload.offsetTop;
 
-                return message.id === payload.id;
+                return message._id === payload._id;
             });
         },
         setMessages: (state, { payload }) => {
@@ -76,9 +86,22 @@ const messagesSlice = createSlice({
                 return false;
             });
         });
+
+        builder.addCase(getReplyMessages.pending, (state) => {
+            state.loading = true;
+        });
+
+        builder.addCase(getReplyMessages.rejected, (state) => {
+            state.loading = false;
+        });
+
+        builder.addCase(getReplyMessages.fulfilled, (state, { payload }) => {
+            state.loading = false;
+            state.messages = payload;
+        });
     },
 });
 
 export default messagesSlice.reducer;
 export const { setOffsetTop, setMessages, addMessage } = messagesSlice.actions;
-export { getMessages, sendMessage };
+export { getMessages, getReplyMessages, sendMessage };
