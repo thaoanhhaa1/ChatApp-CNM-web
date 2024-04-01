@@ -99,7 +99,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                     src={chat.sender.avatar}
                 />
                 <div className={isMe ? 'ml-1 mr-2 sm:mr-4' : 'ml-2 sm:ml-4 mr-1'}>
-                    {chat.messages.length > 0 ? (
+                    {chat.messages?.length > 0 ? (
                         <>
                             <div
                                 className={classNames(

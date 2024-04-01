@@ -12,6 +12,8 @@ import ChatEmpty from './chatEmpty';
 import Footer from './footer';
 import Header from './header';
 import Profile from './profile';
+import HeaderSkeleton from './header/HeaderSkeleton';
+import { setMessages } from '~/features/messages/messagesSlice';
 
 const Chat = () => {
     const { t } = useTranslation();
@@ -20,7 +22,7 @@ const Chat = () => {
     const dropZoneRef = useRef();
     const [dropZoneHeights, setDropZoneHeights] = useState([0, 0]);
     const { files } = useSelector((state) => state.chat);
-    const { active } = useSelector((state) => state.chats);
+    const { active, activeLoading } = useSelector((state) => state.chats);
     const { width } = useWindowSize();
     const dispatch = useDispatch();
 
@@ -85,13 +87,17 @@ const Chat = () => {
         setDropZoneHeights([firstHeight, parentHeight - firstHeight]);
     }, [files, width, active]);
 
+    useEffect(() => {
+        dispatch(setMessages([]));
+    }, [dispatch]);
+
     return (
         <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile }}>
             <div className="flex h-full shadow-navbar z-1 dark:bg-dark">
                 <div className="w-full flex flex-col flex-1">
-                    {(active && (
+                    {active || activeLoading ? (
                         <>
-                            <Header />
+                            {activeLoading ? <HeaderSkeleton /> : <Header />}
                             <div ref={dropZoneRef} className="relative flex-1 flex flex-col">
                                 <Body />
                                 <Footer />
@@ -114,7 +120,9 @@ const Chat = () => {
                                 )}
                             </div>
                         </>
-                    )) || <ChatEmpty />}
+                    ) : (
+                        <ChatEmpty />
+                    )}
                 </div>
                 {showProfile && <Profile />}
             </div>

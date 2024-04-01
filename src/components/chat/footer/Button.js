@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 import { classNames } from '~/utils';
 
-const Button = forwardRef(({ type = 'text-primary', icon, className, onClick = () => {} }, ref) => {
+const Button = forwardRef(({ type = 'text-primary', icon, className, onClick = () => {}, ...props }, ref) => {
     const Icon = icon;
 
     return (
@@ -16,6 +16,7 @@ const Button = forwardRef(({ type = 'text-primary', icon, className, onClick = (
                     : 'text-white bg-primary-color hover:brightness-90',
                 className,
             )}
+            {...props}
         >
             <Icon className="w-4 h-4" />
         </button>

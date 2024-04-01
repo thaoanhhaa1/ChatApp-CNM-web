@@ -169,7 +169,8 @@
         }
     },
     "profile": {
-        "title": "My Profile"
+        "title": "My Profile",
+        "date-of-birth": "Birthday"
     },
     "not-found": {
         "title": "Look like you're lost",

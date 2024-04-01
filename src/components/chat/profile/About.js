@@ -1,24 +1,24 @@
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import AboutItem from '~/components/aboutItem';
+import { getDate } from '~/utils';
 
 const About = () => {
     const { t } = useTranslation();
+    const { user } = useSelector((state) => state.user);
 
     const data = [
         {
             title: 'chat.name',
-            value: 'General',
+            value: user.name,
         },
         {
             title: 'chat.email',
+            value: user.phone,
         },
         {
-            title: 'chat.time',
-            value: '11:40 PM',
-        },
-        {
-            title: 'chat.location',
-            value: 'California',
+            title: 'profile.date-of-birth',
+            value: getDate(user.dateOfBirth),
         },
     ];
 

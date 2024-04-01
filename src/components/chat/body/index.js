@@ -12,11 +12,26 @@ import ChatItemSeparate from './ChatItemSeparate';
 const Body = () => {
     const ref = useRef();
     const { messages, loading, page } = useSelector((state) => state.messages);
-    const { active } = useSelector((state) => state.chats);
+    const { active, activeLoading } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
     const scrollY = useCallback((y) => ref.current?.scrollY(y), [ref]);
+
+    const handleScroll = (e) => {
+        const clientTop = e.target.clientTop;
+
+        if (clientTop <= 200 && !loading) {
+            console.group('handleScroll');
+            console.log(`Load more message...`);
+            console.log(`messages: ${messages}`);
+            console.log(`loading: ${loading}`);
+            console.log(`page: ${page}`);
+            console.log(`active: ${active}`);
+            console.log(`activeLoading: ${activeLoading}`);
+            console.groupEnd();
+        }
+    };
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -27,8 +42,8 @@ const Body = () => {
             }
         };
 
-        fetchMessages();
-    }, [active._id, dispatch]);
+        if (active?._id) fetchMessages();
+    }, [active?._id, dispatch]);
 
     useEffect(() => {
         if (ref.current && page === 1) ref.current.scrollBottom();
@@ -37,20 +52,23 @@ const Body = () => {
     useEffect(() => {
         const message = messages[0];
 
-        if (!message) return;
+        if (!message || activeLoading) return;
+
+        const { _id } = active || {};
+        if (!active || _id !== message.conversationId) return;
 
         dispatch(
             updateLastMessage({
-                conversationId: active._id,
+                conversationId: _id,
                 message: message,
             }),
         );
-    }, [active._id, dispatch, messages]);
+    }, [active, activeLoading, dispatch, messages]);
 
     return (
-        <ScrollbarCustomize containerClassName="overflow-hidden" ref={ref}>
+        <ScrollbarCustomize containerClassName="overflow-hidden" ref={ref} onScroll={handleScroll}>
             <div className="flex flex-col-reverse gap-6 p-2 sm:p-3 md:p-4 dl:p-5">
-                {loading || !!messages.length || (
+                {loading || activeLoading || !!messages.length || (
                     <div className="absolute bottom-0 left-0 right-0 px-2 sm:px-3 md:px-4 dl:px-5">
                         <ChatEmpty className="mb-6 ex:mb-8 sm:mb-10 md:mb-12 dl:mb-14 max-w-[472px] mx-auto" />
                     </div>
@@ -73,7 +91,7 @@ const Body = () => {
                     </ChatItemSeparate>
                 )}
 
-                {loading && (
+                {(loading || activeLoading) && (
                     <div className="flex justify-center mb-4">
                         <span className="w-6 h-6 rounded-full border-2 border-primary-color border-t-transparent animate-spin"></span>
                     </div>

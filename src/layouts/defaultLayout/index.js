@@ -20,6 +20,9 @@ import { classNames } from '~/utils';
  *              +++ refreshToken valid ==> Get accessToken
  *              +++ refreshToken invalid ==> redirect to Home
  */
+
+let redirect = false;
+
 const DefaultLayout = ({ children }) => {
     const [showChat, setShowChat] = useState(false);
     const { width } = useWindowSize();
@@ -33,14 +36,17 @@ const DefaultLayout = ({ children }) => {
     }, [width]);
 
     useEffect(() => {
-        if (user._id || loading) return;
+        if (user._id || loading || redirect) return;
 
         const getData = async () => {
             try {
                 await dispatch(getUserInfo()).unwrap();
             } catch (error) {
                 console.error(error);
-                navigation(config.routes.signIn);
+                if (!redirect) {
+                    navigation(config.routes.signIn);
+                    redirect = true;
+                }
             }
         };
 

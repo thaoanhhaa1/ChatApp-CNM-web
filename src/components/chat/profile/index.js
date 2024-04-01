@@ -8,6 +8,7 @@ import Member from '~/components/member';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { useChat } from '~/context';
 import About from './About';
+import { useSelector } from 'react-redux';
 
 const Profile = () => {
     const [active, setActive] = useState(-1);
