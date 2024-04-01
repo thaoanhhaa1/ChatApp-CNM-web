@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { ListIcon } from '~/assets';
-import { getDate } from '~/utils';
+import { getDate, getTime } from '~/utils';
 
 const EmptyChats = () => {
     const { t } = useTranslation();
@@ -15,7 +15,7 @@ const EmptyChats = () => {
             <h4 className="text-sm font-medium mt-10">{t('chats.no-conversations')}</h4>
             <p className="text-sm text-secondary dark:text-dark-secondary mt-1 text-center">
                 {t('chats.no-conversations-description')}
-                &nbsp; ({settings.loginAt.substring(11, 16)}
+                &nbsp; {getTime(settings.loginAt)}
                 &nbsp;
                 {t('chats.no-conversations-description-1')}
                 &nbsp;

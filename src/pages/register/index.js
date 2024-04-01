@@ -1,9 +1,11 @@
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import { create } from '@mui/material/styles/createTransitions';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import validator from 'validator';
 import { saveToken } from '~/api/axiosClient';
+import images from '~/assets/images';
 import Button from '~/components/button';
 import FormControl from '~/components/formControl';
 import Input from '~/components/input';
@@ -18,10 +20,11 @@ import { genders } from '~/constants';
 import { setSetting } from '~/features/localSetting/localSettingSlice';
 import { setUser } from '~/features/user/userSlice';
 import { useBoolean } from '~/hooks';
-import { register } from '~/services';
+import { createOTP, register, verifyOTP } from '~/services';
 import { classNames } from '~/utils';
 
 const NUMBER_OF_STEP = 4;
+const TIME_OTP = 300;
 
 const Register = () => {
     const { t } = useTranslation();
@@ -54,6 +57,8 @@ const Register = () => {
     }, [currentStep, formData, terms]);
 
     const [errors, setErrors] = useState({});
+    const [otpCode, setOtpCode] = useState('');
+    const [countdown, setCountdown] = useState(TIME_OTP);
 
     // const nextStep = () => {
     //     const validationErrors = validateFormFields(currentStep);
@@ -63,16 +68,45 @@ const Register = () => {
     //         setErrors(validationErrors);
     //     }
     // };
-    const [showModal, setShowModal] = useState(false); 
+    const [showModal, setShowModal] = useState(false);
     const handleClose = () => {
         setShowModal(false); // Đảo ngược trạng thái hiển thị của modal
     };
 
-    const handleAuthentication = () => {
-        setCurrentStep(currentStep + 1)
+    const handleSendOTP = async () => {
+        try {
+            await createOTP(formData.phone);
+            setCountdown(TIME_OTP);
+        } finally {
+        }
     };
-    const nextStep = () => {
-        const validationErrors = validateFormFields(currentStep);
+
+    const handleAuthentication = async () => {
+        setLoading(true);
+
+        try {
+            if (!otpCode) throw new Error('OTP code is required');
+
+            await verifyOTP({
+                phone: formData.phone,
+                otp: otpCode,
+            });
+
+            setCurrentStep(currentStep + 1);
+        } catch (error) {
+            setErrors({
+                otpCode: t('register.error-otp-code'),
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+    const nextStep = async () => {
+        setLoading(true);
+
+        const validationErrors = await validateFormFields(currentStep);
+
+        setLoading(false);
         if (Object.keys(validationErrors).length === 0) {
             if (currentStep === 2) {
                 setShowModal(true); // Show modal on step 2
@@ -84,7 +118,7 @@ const Register = () => {
         }
     };
 
-    const validateFormFields = (step) => {
+    const validateFormFields = async (step) => {
         const validationErrors = {};
         const { name, phone, password } = formData;
 
@@ -97,8 +131,17 @@ const Register = () => {
                 validationErrors.name = t('register.zalo-name-validate-number-character');
         }
 
-        if (step === 2 && !validator.matches(phone, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
-            validationErrors.phone = t('register.error-email');
+        if (step === 2) {
+            if (!validator.matches(phone, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+                validationErrors.phone = t('register.error-email');
+            else {
+                try {
+                    await createOTP(phone);
+                } catch (error) {
+                    validationErrors.phone = t('register.email-exist');
+                }
+            }
+        }
 
         if (step === 3) {
             if (password?.length < 6) validationErrors.password = t('register.password-validate-min-length');
@@ -167,6 +210,16 @@ const Register = () => {
         setLoading(false);
     };
 
+    useEffect(() => {
+        if (showModal) {
+            const interval = setInterval(() => {
+                setCountdown((prev) => Math.max(0, prev - 1));
+            }, 1000);
+
+            return () => clearInterval(interval);
+        }
+    }, [showModal]);
+
     return (
         <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden px-2">
             <h1 className="text-4xl text-primary-color font-bold mb-10">Zalo</h1>
@@ -229,13 +282,13 @@ const Register = () => {
                             label={t('register.email')}
                             control={
                                 <UnderlineInput
-                                    type='email'
+                                    type="email"
                                     placeholder={t('register.email-placeholder')}
                                     onChange={handleChange}
                                     value={formData.phone}
                                     name="phone"
                                 />
-                            } 
+                            }
                             error={errors.phone}
                         />
                         <div className="flex items-center mb-4 mt-4 text-mm text-secondary dark:text-gray-300">
@@ -270,22 +323,57 @@ const Register = () => {
                                 </a>
                             </label>
                         </div>
-                        
-                        <Modal className='p-10' show={showModal} onClickOutside={handleClose}>
-                            <div className='text-center flex flex-col items-center justify-center'>
-                                
-                                <p>{t('register.modal-text-1')}</p>
-                                <p className="mb-1 text-hoverPurple text-xl font-bold">{formData.phone}</p>
-                                <p >{t('register.modal-text-2')}</p>
+
+                        <Modal className="p-10" show={showModal} onClickOutside={handleClose}>
+                            <div className="text-center flex flex-col items-center gap-2 justify-center">
+                                <img src={images.imageVerify} alt="" className="w-[140px] aspect-square mb-6" />
+                                <h3 className="font-semibold text-2xl">{t('register.confirm')}</h3>
+                                <p className="text-secondary dark:text-dark-secondary text-sm">
+                                    {t('register.confirm-desc')}
+                                </p>
+                                <p className="text-sm">
+                                    {t('register.countdown')}: &nbsp;
+                                    {countdown}
+                                    &nbsp;
+                                    {t('register.second')}
+                                </p>
                                 <div className="px-[15px] pt-[18px] pb-3 w-[300px]">
-                                    <Input 
-                                        className='text-center' 
-                                        placeholder={t('login.enter-activation-code')}
-                                        
+                                    <FormControl
+                                        control={
+                                            <Input
+                                                maxLength={6}
+                                                value={otpCode}
+                                                onChangeText={setOtpCode}
+                                                type="number"
+                                                className="text-center"
+                                                placeholder={t('register.enter-confirm')}
+                                                outline
+                                            />
+                                        }
+                                        error={errors.otpCode}
                                     />
                                 </div>
-                                <Button className='w-[280px] mt-2' primary onClick={handleAuthentication}>{t('register.authentication')}</Button>
-                                <Button text align="center" small className='w-[280px] mt-2'>{t('register.resend')}</Button>
+                                <Button
+                                    disabled={loading || !countdown}
+                                    loading={loading}
+                                    className="w-[280px] mt-2 uppercase"
+                                    primary
+                                    onClick={handleAuthentication}
+                                >
+                                    {t('register.confirm')}
+                                </Button>
+                                <p className="text-sm mt-2">
+                                    <span className="text-secondary dark:text-dark-secondary">
+                                        {t('register.not-receive')}
+                                    </span>
+                                    &nbsp;
+                                    <span
+                                        onClick={handleSendOTP}
+                                        className="text-primary-color hover:underline cursor-pointer"
+                                    >
+                                        {t('register.resend')}
+                                    </span>
+                                </p>
                             </div>
                         </Modal>
                     </div>
@@ -342,7 +430,7 @@ const Register = () => {
                     )}
 
                     {currentStep < 4 ? (
-                        <Button disabled={disabled} primary onClick={nextStep}>
+                        <Button disabled={disabled || loading} loading={loading} primary onClick={nextStep}>
                             {t('register.next')}
                         </Button>
                     ) : (
