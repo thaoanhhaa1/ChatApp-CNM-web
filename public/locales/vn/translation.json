@@ -169,7 +169,8 @@
         }
     },
     "profile": {
-        "title": "Hồ sơ của tôi"
+        "title": "Hồ sơ của tôi",
+        "date-of-birth": "Ngày sinh"
     },
     "not-found": {
         "title": "Có vẻ như bạn đang bị lạc",

@@ -11,15 +11,31 @@ import SearchItem from './SearchItem';
 import SearchItemSkeleton from './SearchItemSkeleton';
 import SearchUserSkeleton from './SearchUserSkeleton';
 import UserSearchResult from './UserSearchResult';
+import { getConversation, setActive } from '~/features/chats/chatsSlice';
 
 const ChatsSearch = ({ searchValue }) => {
     const { t } = useTranslation();
     const { settings } = useSelector((state) => state.localSetting);
     const { contacts, loadingContacts } = useSelector((state) => state.search);
+    const { chats } = useSelector((state) => state.chats);
     const dispatch = useDispatch();
 
     const handleClickSearchUser = (user) => {
         dispatch(addRecentSearch(user));
+
+        handleClickUser(user);
+    };
+
+    const handleClickUser = (user) => {
+        const chat = chats.find((chat) => chat.users.length === 2 && chat.users.find((u) => u._id === user._id));
+
+        if (chat) {
+            // conversation loaded
+            dispatch(setActive(chat));
+        } else {
+            // conversation not load
+            dispatch(getConversation(user._id));
+        }
     };
 
     return (
@@ -58,7 +74,9 @@ const ChatsSearch = ({ searchValue }) => {
             ) : (
                 <SearchItem title={t('chats-search.search-recent')}>
                     {settings.recentSearch.length ? (
-                        settings.recentSearch.map((user) => <RecentSearchUser key={user._id} user={user} />)
+                        settings.recentSearch.map((user) => (
+                            <RecentSearchUser onClick={() => handleClickUser(user)} key={user._id} user={user} />
+                        ))
                     ) : (
                         <div className="px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6 text-sm text-secondary dark:text-dark-secondary">
                             {t('chats-search.no-recent-search')}

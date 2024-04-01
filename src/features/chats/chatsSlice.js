@@ -1,14 +1,21 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllConversations } from '~/services';
+import { getAllConversations, openConversation } from '~/services';
 
 const initialState = {
     chats: [],
     loading: false,
     active: null,
+    activeLoading: false,
 };
 
 const getChats = createAsyncThunk('getChats', async () => {
     const response = await getAllConversations();
+
+    return response.data;
+});
+
+const getConversation = createAsyncThunk('getConversation', async (receiverId) => {
+    const response = await openConversation(receiverId);
 
     return response.data;
 });
@@ -49,10 +56,24 @@ const chatsSlice = createSlice({
             })
             .addCase(getChats.rejected, (state) => {
                 state.loading = false;
+            })
+            .addCase(getConversation.pending, (state) => {
+                state.activeLoading = true;
+            })
+            .addCase(getConversation.fulfilled, (state, { payload }) => {
+                state.active = payload;
+                state.activeLoading = false;
+
+                const chat = state.chats.find((chat) => chat._id === payload._id);
+
+                if (!chat) state.chats.unshift(payload);
+            })
+            .addCase(getConversation.rejected, (state) => {
+                state.activeLoading = false;
             });
     },
 });
 
 export default chatsSlice.reducer;
 export const { setTyping, setActive, updateLastMessage } = chatsSlice.actions;
-export { getChats };
+export { getChats, getConversation };

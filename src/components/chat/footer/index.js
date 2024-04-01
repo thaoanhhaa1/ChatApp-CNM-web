@@ -20,9 +20,9 @@ import SendFiles from './SendFiles';
 const Footer = () => {
     const { t } = useTranslation();
     const [selectionStart, setSelectionStart] = useState(-1);
-    const { active } = useSelector((state) => state.chats);
+    const { active, activeLoading } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
-    const mentions = useMemo(() => getMentions(active.users, user), [active.users, user]);
+    const mentions = useMemo(() => (active?.users ? getMentions(active.users, user) : []), [active?.users, user]);
 
     const { files, reply, chat } = useSelector((state) => state.chat);
     const ref = useRef();
@@ -145,7 +145,7 @@ const Footer = () => {
                         tooltip={t('chat.images')}
                         accept="image/*"
                     />
-                    <Button onClick={handleSend} icon={SendPlaneFillIcon} type="primary" />
+                    <Button disabled={activeLoading} onClick={handleSend} icon={SendPlaneFillIcon} type="primary" />
                 </div>
             </div>
             {files.length > 0 && <AttachFiles />}

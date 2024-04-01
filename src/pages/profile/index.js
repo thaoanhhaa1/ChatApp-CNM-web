@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { AttachmentLineIcon, More2FillIcon, RecordCircleFillIcon, UserIcon } from '~/assets';
 import Accordion from '~/components/accordion';
 import AttachedFile from '~/components/attachedFile';
@@ -11,6 +12,8 @@ import ScrollbarCustomize from '~/components/scrollbarCustomize';
 const Profile = () => {
     const [active, setActive] = useState(-1);
     const { t } = useTranslation();
+    const { user } = useSelector((state) => state.user);
+    console.log('🚀 ~ Profile ~ user:', user);
 
     const more = [
         {
@@ -58,11 +61,8 @@ const Profile = () => {
             <HeaderPage title={t('profile.title')} rightIcon={More2FillIcon} data={more} />
             <div className="p-2 ex:p-3 sm:p-4 md:p-5 dl:p-6 border-b border-separate dark:border-dark-separate">
                 <div className="flex flex-col items-center mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6">
-                    <Avatar
-                        size="96px"
-                        src="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                    />
-                    <h5 className="mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6 mb-1 font-semibold">General</h5>
+                    <Avatar size="96px" src={user.avatar} />
+                    <h5 className="mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6 mb-1 font-semibold">{user.name}</h5>
                     <div className="flex items-center gap-1">
                         <RecordCircleFillIcon className="flex-shrink-0 w-2.5 h-2.5 text-success" />
                         <p className="text-mm text-secondary dark:text-dark-secondary">{t('chat.active')}</p>

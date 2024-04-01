@@ -1,5 +1,4 @@
 import axios from 'axios';
-import config from '~/config';
 import { token } from '~/utils';
 
 const baseURL = process.env.REACT_APP_BASE_URL;
@@ -17,16 +16,13 @@ function destroyToken() {
 function refresh() {
     return new Promise((resolve, reject) => {
         axiosClient
-            .post('/auth/refreshToken', {
-                refresh_token: token.get(),
-            })
+            .post('/auth/refreshToken')
             .then((response) => {
                 saveToken(response.data.accessToken);
                 return resolve(response.data.accessToken);
             })
             .catch((error) => {
                 destroyToken();
-                window.location.replace(config.routes.signIn);
                 return reject(error);
             });
     });
@@ -37,7 +33,6 @@ axiosClient.interceptors.response.use(
     (error) => {
         const status = error.response ? error.response.status : null;
         if (status === 401) {
-            window.location.replace(config.routes.signIn);
             token.set('');
         }
         // status might be undefined

@@ -34,9 +34,11 @@ const ChatItem = ({ chat, active }) => {
             <div className="flex-1 flex flex-col gap-1">
                 <div className="flex gap-1 items-center justify-between">
                     <h5 className="text-mm font-semibold mb-1 line-clamp-1">{chat.name}</h5>
-                    <span className="text-ex text-secondary dark:text-dark-secondary text-nowrap">
-                        {getTimeChat(message.updatedAt || new Date(message.timeSend))}
-                    </span>
+                    {message ? (
+                        <span className="text-ex text-secondary dark:text-dark-secondary text-nowrap">
+                            {getTimeChat(message.updatedAt || new Date(message.timeSend))}
+                        </span>
+                    ) : null}
                 </div>
                 <div className="flex gap-1 items-center justify-between">
                     {(chat.typing && <Typing />) || (
@@ -46,7 +48,7 @@ const ChatItem = ({ chat, active }) => {
                                     <ImageFillIcon className="w-[14px] h-[14px]" />
                                 </span>
                             ) : null}
-                            {message.sticker ? (
+                            {message?.sticker ? (
                                 <>
                                     <span className="text-secondary dark:text-dark-secondary">
                                         <StickerSmileIcon className="w-[14px] h-[14px]" />
@@ -54,7 +56,7 @@ const ChatItem = ({ chat, active }) => {
                                     <span className="text-sm text-secondary dark:text-dark-secondary">Sticker</span>
                                 </>
                             ) : (
-                                <Message isMe className="line-clamp-1" isReply messages={message.messages || []} />
+                                <Message isMe className="line-clamp-1" isReply messages={message?.messages || []} />
                             )}
                         </div>
                     )}

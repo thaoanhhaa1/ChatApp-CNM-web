@@ -63,6 +63,10 @@ const Chats = () => {
         dispatch(getChats());
     }, [dispatch]);
 
+    useEffect(() => {
+        hideSearch();
+    }, [hideSearch, active]);
+
     return (
         <div className="relative h-full flex flex-col">
             <HeaderPage title={t('chats.title')}>
@@ -100,11 +104,9 @@ const Chats = () => {
                         {loading ? (
                             <List length={3} control={ChatItemSkeleton} />
                         ) : chats.length ? (
-                            chats.map((chat) =>
-                                chat.lastMessage ? (
-                                    <ChatItem key={chat._id} chat={chat} active={chat._id === active?._id} />
-                                ) : null,
-                            )
+                            chats.map((chat) => (
+                                <ChatItem key={chat._id} chat={chat} active={chat._id === active?._id} />
+                            ))
                         ) : (
                             <EmptyChats />
                         )}

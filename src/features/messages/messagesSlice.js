@@ -61,6 +61,7 @@ const messagesSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(getMessages.pending, (state) => {
             state.loading = true;
+            state.messages = [];
         });
 
         builder.addCase(getMessages.fulfilled, (state, { payload }) => {
