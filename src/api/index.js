@@ -9,6 +9,8 @@ const api = {
     getMessages: (conversationId) => `/message/${conversationId}`,
     addMessage: () => `/message`,
     getReplyMessages: (messageId) => `/message/reply/${messageId}`,
+    createOTP: () => `/auth/createOTP`,
+    verifyOTP: () => `/auth/verifyOTP`,
 };
 
 export default api;

@@ -100,9 +100,11 @@ const Chats = () => {
                         {loading ? (
                             <List length={3} control={ChatItemSkeleton} />
                         ) : chats.length ? (
-                            chats.map((chat) => (
-                                <ChatItem key={chat._id} chat={chat} active={chat._id === active?._id} />
-                            ))
+                            chats.map((chat) =>
+                                chat.lastMessage ? (
+                                    <ChatItem key={chat._id} chat={chat} active={chat._id === active?._id} />
+                                ) : null,
+                            )
                         ) : (
                             <EmptyChats />
                         )}

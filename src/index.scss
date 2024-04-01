@@ -339,3 +339,16 @@ span.MuiSkeleton-root {
         background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
     }
 }
+
+// Hidden arrow input number
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+    -moz-appearance: textfield;
+}

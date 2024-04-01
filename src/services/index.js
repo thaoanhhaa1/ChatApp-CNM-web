@@ -8,3 +8,5 @@ export { default as logout } from './logout';
 export { default as openConversation } from './openConversation';
 export { default as register } from './register';
 export { default as searchUsers } from './searchUsers';
+export { default as createOTP } from './createOTP';
+export { default as verifyOTP } from './verifyOTP';

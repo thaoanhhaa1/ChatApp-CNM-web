@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { LockIcon, MobileIcon } from '~/assets';
+import validator from 'validator';
+import { EmailIcon, LockIcon } from '~/assets';
 import Button from '~/components/button';
-import PhoneSelect from '~/components/phoneSelect';
 import UnderlineInput from '~/components/underlineInput';
 import config from '~/config';
 import { setSetting } from '~/features/localSetting/localSettingSlice';
@@ -20,7 +20,7 @@ const SdtTab = () => {
     const [showMobileLoginForm, setShowMobileLoginForm] = useState(false);
     const [showForgotPasswordForm, setShowForgotPasswordForm] = useState(false);
     const { value: showError, setFalse: setHideError, setTrue: setShowError } = useBoolean(false);
-    const [country, setCountry] = useState();
+    // const [country, setCountry] = useState();
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
@@ -46,18 +46,11 @@ const SdtTab = () => {
         setHideError();
         setLoading(true);
 
-        console.group(`handleSubmit`);
-
-        console.log(`country`, country);
-        console.log(`phone`, phone);
-        console.log(`password`, password);
-
-        console.groupEnd();
-
-        // TODO Validate
-
         try {
-            const res = await login({ country, phone, password });
+            // TODO Validate
+            if (!validator.matches(phone, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) throw new Error('Invalid email');
+
+            const res = await login({ phone, password });
             const { accessToken, user } = res.data;
 
             token.set(accessToken);
@@ -72,12 +65,12 @@ const SdtTab = () => {
     };
 
     const handleClickForgetPassword = () => {
-        handleSubmit();
+        // handleSubmit();
         handleShowForgotPasswordForm();
     };
 
     const handleClickSignInWithMobile = () => {
-        handleSubmit();
+        // handleSubmit();
         handleShowMobileLoginForm();
     };
 
@@ -89,22 +82,23 @@ const SdtTab = () => {
                         <UnderlineInput
                             value={phone}
                             onChangeText={setPhone}
-                            more={<PhoneSelect onChange={setCountry} />}
-                            type="tel"
-                            Icon={MobileIcon}
+                            type="email"
+                            Icon={EmailIcon}
                             placeholder={t('login.phone-number')}
                         />
-                        <UnderlineInput
-                            containerClassName="mb-[18px]"
-                            value={password}
-                            onChangeText={setPassword}
-                            type="password"
-                            Icon={LockIcon}
-                            placeholder={t('login.password')}
-                        />
-                        {showError ? (
-                            <span className="text-ss leading-normal text-[#DD4B39]">{t('login.error')}</span>
-                        ) : null}
+                        <div>
+                            <UnderlineInput
+                                containerClassName="mb-[18px]"
+                                value={password}
+                                onChangeText={setPassword}
+                                type="password"
+                                Icon={LockIcon}
+                                placeholder={t('login.password')}
+                            />
+                            {showError ? (
+                                <span className="text-ss leading-normal text-[#DD4B39]">{t('login.error')}</span>
+                            ) : null}
+                        </div>
                     </div>
                     <div className="flex flex-col gap-3 mt-2.5">
                         <Button
@@ -116,7 +110,7 @@ const SdtTab = () => {
                         >
                             {t('login.login-with-password')}
                         </Button>
-                        <Button disabled={phone.length < 6} onClick={handleClickSignInWithMobile} outline>
+                        <Button disabled onClick={handleClickSignInWithMobile} outline>
                             {t('login.sign-in-with-mobile')}
                         </Button>
                         <div className="flex justify-between items-center">
