@@ -6,7 +6,7 @@ import { LockIcon } from '~/assets';
 import Button from '~/components/button';
 import UnderlineInput from '~/components/underlineInput';
 
-const UpdatePasswordForm = ({ sdt, country }) => {
+const UpdatePasswordForm = ({ sdt}) => {
     const { t } = useTranslation();
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -14,35 +14,31 @@ const UpdatePasswordForm = ({ sdt, country }) => {
 
     const handleConfirm = () => {
         console.group(`UpdatePasswordForm`);
-        console.log(`country`, country);
+        // console.log(`country`, country);
         console.log(`sdt`, sdt);
         console.log(`password`, password);
         console.groupEnd();
 
-        if (!validator.isLength(password, { min: 6, max: undefined })) setError('Mật khẩu có ít nhất 6 kí tự');
-        if (password !== confirmPassword) {
-            setError('Mật khẩu nhập lại không khớp');
+        if (!validator.isLength(password, { min: 6, max: undefined })) setError(t('register.error-password'));
+        else if (password !== confirmPassword) {
+            setError(t('register.error-password-01'));
         } else {
-            // Check phone
-            // Registered
             console.log('updating password');
-            setError('');
-
-            // Unregister
+            setError('')
         }
     };
 
     return (
         <div className="flex flex-col items-center justify-center">
-            <div className="text-center p-4 rounded-lg bg-primary-color bg-opacity-10 mb-3">
+            <div className="text-center px-10 py-4 rounded-lg bg-primary-color bg-opacity-10 mb-3">
                 <p className="mb-1 text-ss">{t('login.send-message-to-get-code')}</p>
-                <p className="mb-1 text-hoverPurple text-2xl font-bold">
-                    ({country.dialling_code}) {sdt}
+                <p className="mb-1 text-hoverPurple text-xl font-bold">
+                     {sdt}
                 </p>
                 <div className="px-[15px] pt-[18px] pb-3">
                     <UnderlineInput align="center" placeholder={t('login.enter-activation-code')} />
                 </div>
-                <p className="text-xs mt-3">{t('login.description-get-code')}</p>
+                {/* <p className="text-xs mt-3">{t('login.description-get-code')}</p> */}
             </div>
 
             <UnderlineInput
@@ -68,7 +64,7 @@ const UpdatePasswordForm = ({ sdt, country }) => {
                 </div>
             )}
 
-            <Button className="hover:bg-hoverPurple w-full" primary onClick={handleConfirm}>
+            <Button className="hover:bg-hoverPurple w-full" primary onClick={handleConfirm} disabled={password.length < 6}>
                 {t('login.confirm')}
             </Button>
         </div>
@@ -76,6 +72,5 @@ const UpdatePasswordForm = ({ sdt, country }) => {
 };
 UpdatePasswordForm.propTypes = {
     sdt: PropTypes.string.isRequired,
-    country: PropTypes.object,
 };
 export default UpdatePasswordForm;

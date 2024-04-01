@@ -8,6 +8,8 @@ const api = {
     searchUsers: (value) => `/user?search=${value}`,
     getMessages: (conversationId) => `/message/${conversationId}`,
     addMessage: () => `/message`,
+    createOTP: () => `/auth/createOTP`,
+    verifyOTP: () => `/auth/verifyOTP`,
 };
 
 export default api;
