@@ -50,7 +50,7 @@ const SdtTab = () => {
             // TODO Validate
             if (!validator.matches(phone, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) throw new Error('Invalid email');
 
-            const res = await login({ phone, password });
+            const res = await login({ contact: phone, password });
             const { accessToken, user } = res.data;
 
             token.set(accessToken);

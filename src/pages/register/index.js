@@ -1,5 +1,4 @@
-import { create } from '@mui/material/styles/createTransitions';
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +10,6 @@ import FormControl from '~/components/formControl';
 import Input from '~/components/input';
 import Languages from '~/components/languages';
 import Modal from '~/components/modal';
-import PhoneSelect from '~/components/phoneSelect';
 import RadioGroup from '~/components/radioGroup';
 import UnderlineInput from '~/components/underlineInput';
 import config from '~/config';
@@ -75,7 +73,7 @@ const Register = () => {
 
     const handleSendOTP = async () => {
         try {
-            await createOTP(formData.phone);
+            await createOTP(formData.contact);
             setCountdown(TIME_OTP);
         } finally {
         }
@@ -88,7 +86,7 @@ const Register = () => {
             if (!otpCode) throw new Error('OTP code is required');
 
             await verifyOTP({
-                phone: formData.phone,
+                phone: formData.contact,
                 otp: otpCode,
             });
 
@@ -285,7 +283,7 @@ const Register = () => {
                                     type="email"
                                     placeholder={t('register.email-placeholder')}
                                     onChange={handleChange}
-                                    value={formData.phone}
+                                    value={formData.contact}
                                     name="phone"
                                 />
                             }

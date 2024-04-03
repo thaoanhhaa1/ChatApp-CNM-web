@@ -6,7 +6,7 @@ import { LockIcon } from '~/assets';
 import Button from '~/components/button';
 import UnderlineInput from '~/components/underlineInput';
 
-const UpdatePasswordForm = ({ sdt}) => {
+const UpdatePasswordForm = ({ sdt }) => {
     const { t } = useTranslation();
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -24,7 +24,7 @@ const UpdatePasswordForm = ({ sdt}) => {
             setError(t('register.error-password-01'));
         } else {
             console.log('updating password');
-            setError('')
+            setError('');
         }
     };
 
@@ -32,9 +32,7 @@ const UpdatePasswordForm = ({ sdt}) => {
         <div className="flex flex-col items-center justify-center">
             <div className="text-center px-10 py-4 rounded-lg bg-primary-color bg-opacity-10 mb-3">
                 <p className="mb-1 text-ss">{t('login.send-message-to-get-code')}</p>
-                <p className="mb-1 text-hoverPurple text-xl font-bold">
-                     {sdt}
-                </p>
+                <p className="mb-1 text-hoverPurple text-xl font-bold">{sdt}</p>
                 <div className="px-[15px] pt-[18px] pb-3">
                     <UnderlineInput align="center" placeholder={t('login.enter-activation-code')} />
                 </div>
@@ -64,7 +62,12 @@ const UpdatePasswordForm = ({ sdt}) => {
                 </div>
             )}
 
-            <Button className="hover:bg-hoverPurple w-full" primary onClick={handleConfirm} disabled={password.length < 6}>
+            <Button
+                className="hover:bg-hoverPurple w-full"
+                primary
+                onClick={handleConfirm}
+                disabled={password.length < 6}
+            >
                 {t('login.confirm')}
             </Button>
         </div>
