@@ -50,7 +50,8 @@
         "empty-chat-download": "Download Zalo PC",
         "sending": "Sending",
         "sent": "Sent",
-        "received": "Received"
+        "received": "Received",
+        "limit-files-send": "You should only send up to 50 files/photos each times"
     },
     "contacts": {
         "title": "Contacts",

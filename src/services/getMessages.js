@@ -1,11 +1,9 @@
 import api, { axiosClient } from '~/api';
 
-const getMessages = (conversationId, page = 1, size = 20) =>
-    axiosClient.get(api.getMessages(conversationId), {
-        params: {
-            page,
-            size,
-        },
+const getMessages = ({ param = [], query, signal }) =>
+    axiosClient.get(api.getMessages(...param), {
+        params: query,
+        signal,
     });
 
 export default getMessages;

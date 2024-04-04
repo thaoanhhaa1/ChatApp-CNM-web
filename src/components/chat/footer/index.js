@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Mention, MentionsInput } from 'react-mentions';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkText } from 'smile2emoji';
-import { AttachmentLineIcon, ImageFillIcon, SendPlaneFillIcon } from '~/assets';
+import { ImageFillIcon, MicIcon, SendPlaneFillIcon } from '~/assets';
 import AttachFiles from '~/components/attachFiles';
 import ReplyMessage from '~/components/replyMessage';
 import { setChat, setReply } from '~/features/chat/chatSlice';
@@ -51,8 +51,31 @@ const Footer = () => {
     const renderUserSuggestion = (mention) => <MentionItem mention={mention} />;
     const displayTransform = (_, display) => `@${display}`;
     const handleCloseReply = () => dispatch(setReply());
-    const handleSendFiles = (files) => console.log('Send files...', files);
+    // TODO Send file
+    const handleSendFiles = async (files) => {
+        const timeSend = Date.now();
 
+        const formData = new FormData();
+
+        files.forEach((file) => formData.append('files', file));
+        formData.append('conversationId', active._id);
+        formData.append('sender', user);
+        formData.append('reply', reply?._id);
+        formData.append('timeSend', timeSend);
+
+        dispatch(sendMessage(formData));
+        dispatch(
+            addMessage({
+                sender: user,
+                reply,
+                files,
+                conversationId: active._id,
+                timeSend,
+            }),
+        );
+        dispatch(setChat(''));
+        dispatch(setReply());
+    };
     const handleSend = () => {
         if (!chat) return;
 
@@ -138,13 +161,14 @@ const Footer = () => {
                 </label>
                 <div className="flex">
                     <Emoticon handleEmojiClick={handleEmojiClick} />
-                    <SendFiles onSend={handleSendFiles} Icon={AttachmentLineIcon} tooltip={t('chat.attached-file')} />
+                    {/* <SendFiles onSend={handleSendFiles} Icon={AttachmentLineIcon} tooltip={t('chat.attached-file')} /> */}
                     <SendFiles
                         onSend={handleSendFiles}
                         Icon={ImageFillIcon}
                         tooltip={t('chat.images')}
                         accept="image/*"
                     />
+                    <Button icon={MicIcon} />
                     <Button disabled={activeLoading} onClick={handleSend} icon={SendPlaneFillIcon} type="primary" />
                 </div>
             </div>

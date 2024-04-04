@@ -36,7 +36,7 @@ const DefaultLayout = ({ children }) => {
     }, [width]);
 
     useEffect(() => {
-        if (user._id || loading || redirect) return;
+        if (user?._id || loading || redirect) return;
 
         const getData = async () => {
             try {
@@ -51,10 +51,10 @@ const DefaultLayout = ({ children }) => {
         };
 
         getData();
-    }, [dispatch, loading, navigation, user._id]);
+    }, [dispatch, loading, navigation, user?._id]);
 
     useEffect(() => {
-        if (!user._id) return;
+        if (!user?._id) return;
 
         if (!socket) {
             dispatch(connect());
@@ -66,9 +66,9 @@ const DefaultLayout = ({ children }) => {
         socket.on('usersOnline', (data) => {
             console.log(data);
         });
-    }, [dispatch, socket, user._id]);
+    }, [dispatch, socket, user?._id]);
 
-    if (loading || !user._id) return <Loading />;
+    if (loading || !user?._id) return <Loading />;
 
     return (
         <LayoutProvider value={{ setShowChat }}>

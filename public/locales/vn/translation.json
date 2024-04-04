@@ -50,7 +50,8 @@
         "empty-chat-download": "Tải Zalo PC",
         "sending": "Đang gửi",
         "sent": "Đã gửi",
-        "received": "Đã nhận"
+        "received": "Đã nhận",
+        "limit-files-send": "Bạn chỉ nên chia sẻ tối đa 50 tập tin/ảnh mỗi lần"
     },
     "contacts": {
         "title": "Danh bạ",

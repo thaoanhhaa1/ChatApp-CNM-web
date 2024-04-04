@@ -1,5 +1,5 @@
 import { useDebounce, useWindowSize } from '@uidotdev/usehooks';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -16,6 +16,7 @@ import OnlineUser from '~/components/onlineUser';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { screens } from '~/constants';
 import { getChats } from '~/features/chats/chatsSlice';
+import { setMessages } from '~/features/messages/messagesSlice';
 import { searchUsers, setSearch } from '~/features/search/searchSlice';
 import { useBoolean } from '~/hooks';
 
@@ -32,6 +33,7 @@ const Chats = () => {
     const [boundClientRect, setBoundingClientRect] = useState({ top: 0 });
     const { value: isShowSearch, setFalse: hideSearch, setTrue: showSearch } = useBoolean(false);
     const searchDebounce = useDebounce(searchValue, 300);
+    const chatsCanShow = useMemo(() => chats.filter((chat) => chat.lastMessage), [chats]);
     const dispatch = useDispatch();
 
     const handleCloseSearch = () => {
@@ -64,8 +66,12 @@ const Chats = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        hideSearch();
-    }, [hideSearch, active]);
+        dispatch(setMessages([]));
+    }, [active, dispatch]);
+
+    useEffect(() => {
+        active?.lastMessage && hideSearch();
+    }, [active?.lastMessage, hideSearch]);
 
     return (
         <div className="relative h-full flex flex-col">
@@ -81,7 +87,7 @@ const Chats = () => {
                             onFocus={showSearch}
                         />
                         {isShowSearch && (
-                            <Button onClick={handleCloseSearch} className="min-w-[72px] h-8">
+                            <Button onClick={handleCloseSearch} className="min-w-[72px] h-8 font-semibold">
                                 {t('chats-search.close')}
                             </Button>
                         )}
@@ -103,8 +109,8 @@ const Chats = () => {
                     <div className="flex flex-col gap-[1px] px-1 ex:px-2">
                         {loading ? (
                             <List length={3} control={ChatItemSkeleton} />
-                        ) : chats.length ? (
-                            chats.map((chat) => (
+                        ) : chatsCanShow.length ? (
+                            chatsCanShow.map((chat) => (
                                 <ChatItem key={chat._id} chat={chat} active={chat._id === active?._id} />
                             ))
                         ) : (

@@ -26,6 +26,13 @@ import ChatItemReaction from './ChatItemReaction';
 import ChatItemSeparate from './ChatItemSeparate';
 import Reaction from './ReactionChat';
 
+//  TODO
+//  [x] Chat text
+//  [ ] Chat file
+//  [x] Chat Emoji
+//  [ ] Recall message
+//  [ ] Delete message for me (24h)
+//  [ ] Forward message
 const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const [, startTransition] = useTransition();
     const { t } = useTranslation();
@@ -39,6 +46,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const prevDate = prevChat && new Date(prevChat.updatedAt || prevChat.timeSend);
     const showSeparate = prevDate && isShowTimeChatSeparate(date, prevDate);
     const reacts = ['love'];
+    // const isImageList = chat.files && isPhotoFile();
 
     const mores = [
         {
@@ -52,6 +60,10 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
         {
             icon: ChatForwardIcon,
             title: t('chat.more.forward'),
+        },
+        {
+            icon: DeleteBinLineIcon,
+            title: t('chat.more.delete'),
         },
         {
             icon: DeleteBinLineIcon,
@@ -165,9 +177,9 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                 </div>
                             )}
                         </>
-                    ) : (
-                        <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} />
-                    )}
+                    ) : null}
+
+                    {chat.sticker ? <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} /> : null}
                 </div>
                 <div className={classNames('flex', isMe && 'flex-row-reverse')}>
                     <ChatItemButton onClick={handleReply}>

@@ -34,15 +34,27 @@ const Body = () => {
     };
 
     useEffect(() => {
+        let controller;
+
         const fetchMessages = async () => {
             try {
-                await dispatch(getMessages({ conversationId: active._id })).unwrap();
+                controller = new AbortController();
+                await dispatch(
+                    getMessages({
+                        param: [active._id],
+                        signal: controller.signal,
+                    }),
+                ).unwrap();
             } catch (error) {
                 console.log(error);
             }
         };
 
         if (active?._id) fetchMessages();
+
+        return () => {
+            controller && controller.abort();
+        };
     }, [active?._id, dispatch]);
 
     useEffect(() => {
@@ -60,7 +72,7 @@ const Body = () => {
         dispatch(
             updateLastMessage({
                 conversationId: _id,
-                message: message,
+                message,
             }),
         );
     }, [active, activeLoading, dispatch, messages]);
@@ -74,7 +86,8 @@ const Body = () => {
                     </div>
                 )}
 
-                {messages.length > 0 &&
+                {!activeLoading &&
+                    messages.length > 0 &&
                     messages.map((chat, index, arr) => (
                         <ChatItem
                             scrollY={scrollY}

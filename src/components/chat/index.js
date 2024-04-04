@@ -5,15 +5,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { v4 } from 'uuid';
 import { ChatProvider } from '~/context';
 import { addFiles } from '~/features/chat/chatSlice';
+import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { useBoolean } from '~/hooks';
+import { classNames } from '~/utils';
 import DropZone from '../dropZone';
+import Toast from '../toast';
 import Body from './body';
 import ChatEmpty from './chatEmpty';
 import Footer from './footer';
 import Header from './header';
-import Profile from './profile';
 import HeaderSkeleton from './header/HeaderSkeleton';
-import { setMessages } from '~/features/messages/messagesSlice';
+import Profile from './profile';
 
 const Chat = () => {
     const { t } = useTranslation();
@@ -21,8 +23,10 @@ const Chat = () => {
     const { value: showDropZone, setFalse: setHiddenDropZone, setTrue: setShowDropZone } = useBoolean(false);
     const dropZoneRef = useRef();
     const [dropZoneHeights, setDropZoneHeights] = useState([0, 0]);
+    const [showToast, setShowToast] = useState(false);
     const { files } = useSelector((state) => state.chat);
     const { active, activeLoading } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
     const { width } = useWindowSize();
     const dispatch = useDispatch();
 
@@ -37,10 +41,25 @@ const Chat = () => {
 
     const handleDropQuickSend = useCallback(
         (acceptedFiles) => {
-            console.log('Handle send files...', acceptedFiles);
+            if (!active?._id) return;
+
+            if (acceptedFiles.length > 50) setShowToast(true);
+            else {
+                const timeSend = Date.now();
+                const message = { files: acceptedFiles, conversationId: active._id, timeSend };
+
+                dispatch(sendMessage(message));
+                dispatch(
+                    addMessage({
+                        ...message,
+                        sender: user,
+                    }),
+                );
+            }
+
             setHiddenDropZone();
         },
-        [setHiddenDropZone],
+        [active?._id, dispatch, setHiddenDropZone, user],
     );
 
     useEffect(() => {
@@ -88,11 +107,21 @@ const Chat = () => {
     }, [files, width, active]);
 
     useEffect(() => {
-        dispatch(setMessages([]));
-    }, [dispatch]);
+        let id;
+
+        if (showToast) id = setTimeout(() => setShowToast(false), 1000);
+
+        return () => {
+            clearTimeout(id);
+        };
+    }, [showToast]);
 
     return (
         <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile }}>
+            <Toast
+                message={t('chat.limit-files-send')}
+                className={classNames('transition-opacity duration-150', showToast ? 'opacity-100' : 'opacity-0')}
+            />
             <div className="flex h-full shadow-navbar z-1 dark:bg-dark">
                 <div className="w-full flex flex-col flex-1">
                     {active || activeLoading ? (

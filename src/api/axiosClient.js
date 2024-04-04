@@ -30,24 +30,29 @@ function refresh() {
 
 axiosClient.interceptors.response.use(
     (res) => res,
-    (error) => {
-        const status = error.response ? error.response.status : null;
-        if (status === 401) {
-            token.set('');
-        }
-        // status might be undefined
-        if (!status) {
-            refresh();
+    async (error) => {
+        // TODO refreshToken
+        const prevRequest = error?.config;
+
+        if (error?.response?.status === 401 && !prevRequest?.sent) {
+            prevRequest.sent = true;
+            const newAccessToken = await refresh();
+            prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            token.set(newAccessToken);
+            return axiosClient(prevRequest);
         }
         return Promise.reject(error);
     },
 );
 
-axiosClient.interceptors.request.use((config) => {
-    const access_token = token.get();
-    config.headers.Authorization = `Bearer ${access_token}`;
-    return config;
-});
+axiosClient.interceptors.request.use(
+    (config) => {
+        const access_token = token.get();
+        config.headers.Authorization = `Bearer ${access_token}`;
+        return config;
+    },
+    (error) => Promise.reject(error),
+);
 
 export default axiosClient;
 export { destroyToken, saveToken };

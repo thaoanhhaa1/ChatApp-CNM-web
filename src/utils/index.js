@@ -20,6 +20,7 @@ export { default as handleScaleImage } from './handleScaleImage';
 export { default as insertEmojiToChat } from './insertEmojiToChat';
 export { default as isPhotoFile } from './isPhotoFile';
 export { default as isShowTimeChatSeparate } from './isShowTimeChatSeparate';
+export { default as isUserInConversation } from './isUserInConversation';
 export { default as loadImage } from './loadImage';
 export { default as localSetting } from './localSetting';
 export { default as phoneBookFilter } from './phoneBookFilter';

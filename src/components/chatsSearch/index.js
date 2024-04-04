@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { getConversation, setActive } from '~/features/chats/chatsSlice';
 import { addRecentSearch } from '~/features/localSetting/localSettingSlice';
 import { getDate } from '~/utils';
 import List from '../list';
@@ -11,7 +12,6 @@ import SearchItem from './SearchItem';
 import SearchItemSkeleton from './SearchItemSkeleton';
 import SearchUserSkeleton from './SearchUserSkeleton';
 import UserSearchResult from './UserSearchResult';
-import { getConversation, setActive } from '~/features/chats/chatsSlice';
 
 const ChatsSearch = ({ searchValue }) => {
     const { t } = useTranslation();
@@ -42,20 +42,14 @@ const ChatsSearch = ({ searchValue }) => {
         <div className="pt-4">
             {searchValue ? (
                 loadingContacts ? (
-                    <>
-                        <SearchItemSkeleton>
-                            <List length={3} control={SearchUserSkeleton} />
-                            <Skeleton
-                                containerClassName="h-[53px] px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6"
-                                width="100%"
-                                height={32}
-                            />
-                        </SearchItemSkeleton>
-                        <div className="pt-4 px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6 text-sm text-center border-t border-separate dark:border-dark-separate">
-                            {t('chats-search.search-description')}
-                            {getDate(settings.loginAt)}.
-                        </div>
-                    </>
+                    <SearchItemSkeleton>
+                        <List length={3} control={SearchUserSkeleton} />
+                        <Skeleton
+                            containerClassName="h-[53px] px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6"
+                            width="100%"
+                            height={32}
+                        />
+                    </SearchItemSkeleton>
                 ) : (
                     <SearchItem title={t('chats-search.contacts')}>
                         {contacts.length ? (
@@ -84,6 +78,13 @@ const ChatsSearch = ({ searchValue }) => {
                     )}
                 </SearchItem>
             )}
+
+            {searchValue && (contacts.length || loadingContacts) ? (
+                <div className="pt-4 px-2 ex:px-3 sm:px-4 md:px-5 dl:px-6 text-sm text-center border-t border-separate dark:border-dark-separate text-secondary dark:text-dark-secondary">
+                    {t('chats-search.search-description')}
+                    {getDate(settings.loginAt)}.
+                </div>
+            ) : null}
         </div>
     );
 };

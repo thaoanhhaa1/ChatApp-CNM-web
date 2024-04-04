@@ -13,21 +13,16 @@ const initialState = {
     maxPage: 1,
 };
 
-const getMessages = createAsyncThunk('getMessages', async ({ conversationId, page = 1, size = 20 }) => {
-    const response = await getMessagesService(conversationId, page, size);
+const getMessages = createAsyncThunk('getMessages', async ({ param, query, signal }) => {
+    const response = await getMessagesService({ param, query, signal });
 
-    return {
-        data: response.data,
-        page,
-    };
+    return response.data;
 });
 
 const sendMessage = createAsyncThunk('sendMessage', async (data) => {
-    const { timeSend, ...rest } = data;
+    const response = await sendMessageService(data);
 
-    const response = await sendMessageService(rest);
-
-    return { data: response.data, timeSend };
+    return { data: response.data, timeSend: data.timeSend };
 });
 
 const getReplyMessages = createAsyncThunk('getReplyMessages', async (messageId) => {
@@ -66,8 +61,7 @@ const messagesSlice = createSlice({
 
         builder.addCase(getMessages.fulfilled, (state, { payload }) => {
             state.loading = false;
-            state.messages = payload.data;
-            state.page = payload.page;
+            state.messages = payload;
         });
 
         builder.addCase(getMessages.rejected, (state) => {

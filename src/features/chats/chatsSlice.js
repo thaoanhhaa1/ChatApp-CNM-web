@@ -43,6 +43,8 @@ const chatsSlice = createSlice({
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
             chat.lastMessage = message;
+
+            if (state.active?._id === conversationId) state.lastMessage = message;
         },
     },
     extraReducers: (builder) => {
