@@ -109,6 +109,7 @@ const Profile = () => {
                 </div>
             </ScrollbarCustomize>
         </div>
+        
     );
 };
 

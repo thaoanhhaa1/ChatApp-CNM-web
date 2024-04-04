@@ -27,6 +27,7 @@ import { classNames, token } from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
+import { Profile } from '~/pages';
 
 const navBars = [
     {
@@ -78,12 +79,17 @@ const Navbar = ({ className }) => {
     const [darkMode, setDarkMode] = useState(() => settings.theme === 'dark');
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [openProfileModal, setOpenProfileModal] = useState(false);
+    const handleClose = () => {
+        setOpenProfileModal(false); // Đảo ngược trạng thái hiển thị của modal
+    };
 
     const actions = useMemo(
         () => [
             {
                 title: 'navbar.profile',
                 icon: ProfileIcon,
+                onClick: () =>{setOpenProfileModal(true)}
             },
             {
                 title: 'navbar.settings',
@@ -122,12 +128,15 @@ const Navbar = ({ className }) => {
             <Link className="hidden dl:flex justify-center items-center w-full h-[70px]">
                 <LogoIcon />
             </Link>
+            
             <div className="flex-5 dl:flex-none flex dl:flex-col justify-evenly dl:justify-start items-center ex:gap-2">
+            
                 {navBars.map(({ title, ...navbar }, index) => (
                     <Tippy delay={[200, 0]} offset={[0, 0]} content={t(title)} key={index}>
                         <Button {...navbar}>{t(title)}</Button>
                     </Tippy>
                 ))}
+
             </div>
             <div className="flex-1 dl:flex-none flex dl:flex-col items-center gap-2.5 dl:pb-2">
                 <Popup data={languages}>
@@ -140,16 +149,23 @@ const Navbar = ({ className }) => {
 
                 <Popup data={actions.map((action) => ({ ...action, title: t(action.title) }))}>
                     <button className="w-12 h-12 flex justify-center items-center">
-                        <Avatar src={user.avatar} />
+                        <Avatar src={user.avatar} 
+                        />
                     </button>
+                    
                 </Popup>
+                {openProfileModal && (
+                    <Profile onClose={handleClose}/>
+                )}
             </div>
+           
         </nav>
     );
 };
 
 Navbar.propTypes = {
     className: PropTypes.string,
+    
 };
 
 export default Navbar;

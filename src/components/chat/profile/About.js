@@ -14,7 +14,7 @@ const About = () => {
         },
         {
             title: 'chat.email',
-            value: user.phone,
+            value: user.contact,
         },
         {
             title: 'profile.date-of-birth',

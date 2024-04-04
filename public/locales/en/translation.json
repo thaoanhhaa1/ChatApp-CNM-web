@@ -170,7 +170,20 @@
     },
     "profile": {
         "title": "My Profile",
-        "date-of-birth": "Birthday"
+        "date-of-birth": "Birthday",
+        "information": "Personal Information",
+        "gender": "Gender",
+        "contact": "Email",
+        "phone": "Phone Number",
+        "note": "Only friends who have saved your number in their phonebook can see this number.",
+        "update": "Update",
+        "male":"Male",
+        "female":"Female",
+        "email": "Email",
+        "updateProfile":"Edit your personal information",
+        "name": "Dispaly name",
+        "cancel":"Cancel",
+        "placeholder":"Enter dispaly name"
     },
     "not-found": {
         "title": "Look like you're lost",
@@ -306,6 +319,7 @@
         "password-validate-min-length": "Password must contain at least 6 characters",
         "password-validate-max-length": "Password not exceed 30 characters",
         "dob-validate": "You must be at least 14 years old to use app",
+        "dob-validate1": "Please enter your date of birth",
         "error-password-01": "Passwords do not match",
         "modal-text-1": "You will receive an encrypted OTP from Zalo.",
         "modal-text-2": "Enter activation code",

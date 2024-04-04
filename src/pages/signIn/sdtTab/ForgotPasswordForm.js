@@ -7,6 +7,7 @@ import Button from '~/components/button';
 import UnderlineInput from '~/components/underlineInput';
 import { useBoolean } from '~/hooks';
 import UpdatePasswordForm from './UpdatePasswordForm';
+import { createOTP } from '~/services';
 
 const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
     const { t } = useTranslation();
@@ -15,7 +16,7 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
     const [country, setCountry] = useState();
     const { value, setFalse, setTrue } = useBoolean();
 
-    const handleContinue = () => {
+    const handleContinue = async() => {
         setFalse();
         console.group(`handleSubmit`);
 
@@ -23,10 +24,18 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
 
         console.groupEnd();
 
-        if (!validator.matches(phone, /^[a-zA-Z][\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) setTrue();
+        if (!validator.matches(phone, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) setTrue();
         else {
-            setShowUpdatePass(true);
+            try {
+                // const response = await createOTP(phone);
+                // console.log(response.data); 
+                setShowUpdatePass(true);
+            } catch (error) {    
+                console.error('Lỗi khi tạo mã OTP:', error);
+                
+            }
         }
+        
     };
 
     return (
