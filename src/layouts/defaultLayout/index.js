@@ -1,6 +1,6 @@
 import { useWindowSize } from '@uidotdev/usehooks';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Chat from '~/components/chat';
@@ -9,9 +9,11 @@ import Navbar from '~/components/navbar';
 import config from '~/config';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
-import { getUserInfo } from '~/features/user/userSlice';
 import { connect } from '~/features/socket/socketSlice';
-import { classNames } from '~/utils';
+import { getUserInfo } from '~/features/user/userSlice';
+import { classNames, location } from '~/utils';
+
+location.getCoords().then();
 
 // TODO Check user
 /**
@@ -30,6 +32,7 @@ const DefaultLayout = ({ children }) => {
     const { socket } = useSelector((state) => state.socket);
     const navigation = useNavigate();
     const dispatch = useDispatch();
+    const refSection = useRef(null);
 
     useEffect(() => {
         width > screens.DL && setShowChat(false);
@@ -68,6 +71,13 @@ const DefaultLayout = ({ children }) => {
         });
     }, [dispatch, socket, user?._id]);
 
+    useEffect(() => {
+        if (!refSection.current) return;
+
+        if (showChat && width < screens.DL) refSection.current.style.zIndex = 20;
+        else refSection.current.style.zIndex = 1;
+    }, [showChat, width]);
+
     if (loading || !user?._id) return <Loading />;
 
     return (
@@ -75,9 +85,10 @@ const DefaultLayout = ({ children }) => {
             <main className="flex flex-col dl:flex-row h-screen">
                 <Navbar />
                 <section
+                    ref={refSection}
                     className={classNames(
-                        'relative flex flex-1 dl:order-2 overflow-hidden transition-[z-index]',
-                        showChat ? 'z-20' : 'z-1 delay-400 dl:delay-0',
+                        'relative flex flex-1 dl:order-2 overflow-hidden transition-[z-index] delay-400 dl:delay-0',
+                        // showChat ? 'z-20' : 'z-1 delay-400 dl:delay-0',
                     )}
                 >
                     <div className="flex-shrink-0 relative w-full dl:w-sidebar bg-sidebar-sub-bg dark:bg-dark-sidebar-sub-bg transition-width ease-linear duration-400">

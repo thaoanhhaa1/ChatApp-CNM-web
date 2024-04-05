@@ -31,15 +31,22 @@ function refresh() {
 axiosClient.interceptors.response.use(
     (res) => res,
     async (error) => {
+        console.log('🚀 ~ error:', error);
         // TODO refreshToken
         const prevRequest = error?.config;
+        console.log('🚀 ~ prevRequest:', prevRequest);
 
-        if (error?.response?.status === 401 && !prevRequest?.sent) {
+        if (error?.response?.status === 401 && !prevRequest?.sent && token.get()) {
             prevRequest.sent = true;
-            const newAccessToken = await refresh();
-            prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-            token.set(newAccessToken);
-            return axiosClient(prevRequest);
+
+            try {
+                const newAccessToken = await refresh();
+                prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                token.set(newAccessToken);
+                return axiosClient(prevRequest);
+            } catch (error) {
+                console.error(error);
+            }
         }
         return Promise.reject(error);
     },

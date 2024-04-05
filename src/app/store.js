@@ -7,6 +7,7 @@ import contactsReducer from '~/features/contacts/contactsSlice';
 import contactsGroupReducer from '~/features/contactsGroup/contactsGroupSlice';
 import createGroupReducer from '~/features/createGroup/createGroupSlice';
 import localSettingReducer from '~/features/localSetting/localSettingSlice';
+import locationReducer from '~/features/location/locationSlice';
 import messagesReducer from '~/features/messages/messagesSlice';
 import onlineUsersReducer from '~/features/onlineUsers/onlineUsersSlice';
 import phoneBookReducer from '~/features/phoneBook/phoneBookSlice';
@@ -36,6 +37,7 @@ export const store = configureStore({
         socket: socketReducer,
         localSetting: localSettingReducer,
         search: searchReducer,
+        location: locationReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

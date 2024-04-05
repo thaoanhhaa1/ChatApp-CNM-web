@@ -4,11 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { Mention, MentionsInput } from 'react-mentions';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkText } from 'smile2emoji';
-import { ImageFillIcon, MicIcon, SendPlaneFillIcon } from '~/assets';
+import { ImageFillIcon, LocationIcon, MicIcon, SendPlaneFillIcon } from '~/assets';
 import AttachFiles from '~/components/attachFiles';
+import Location from '~/components/location';
+import Modal from '~/components/modal';
+import PopupMultiLevel from '~/components/popupMultiLevel';
 import ReplyMessage from '~/components/replyMessage';
 import { setChat, setReply } from '~/features/chat/chatSlice';
 import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
+import { resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
+import { useBoolean } from '~/hooks';
 import { getMentions, insertEmojiToChat, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
@@ -23,6 +28,7 @@ const Footer = () => {
     const { active, activeLoading } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const mentions = useMemo(() => (active?.users ? getMentions(active.users, user) : []), [active?.users, user]);
+    const { value: showLocation, setTrue: setShowLocation, setFalse: setHideLocation } = useBoolean(false);
 
     const { files, reply, chat } = useSelector((state) => state.chat);
     const ref = useRef();
@@ -95,6 +101,11 @@ const Footer = () => {
         dispatch(setReply());
     };
 
+    const handleCloseLocation = () => {
+        setHideLocation();
+        dispatch(resetSubs());
+    };
+
     useEffect(() => {
         if (!ref.current) return () => {};
 
@@ -128,51 +139,62 @@ const Footer = () => {
     }, [width]);
 
     return (
-        <div className="border-t border-separate dark:border-dark-separate p-2 sm:p-3 md:p-4 dl:p-5">
-            {reply ? <ReplyMessage showClose isMe onClose={handleCloseReply} message={reply} /> : null}
-
-            <div className="items-end flex gap-2">
-                <label className="flex-1">
-                    <MentionsInput
-                        onKeyDown={handleKeyDown}
-                        allowSpaceInQuery
-                        forceSuggestionsAboveCursor
-                        spellCheck={false}
-                        maxLength={135813}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        ref={ref}
-                        rows={1}
-                        value={chat}
-                        onChange={handleChange}
-                        placeholder={t('chat.chat')}
-                        className="mentions-input rounded text-sm leading-normal placeholder:text-secondary dark:placeholder:text-dark-secondary text-input dark:text-dark-primary bg-input-bg dark:bg-dark-input-bg flex-1 my-0.5"
-                    >
-                        <Mention
-                            displayTransform={displayTransform}
-                            markup="@~~__id__~~__display__~~@"
-                            appendSpaceOnAdd
-                            className="text-[#0068ff]"
-                            trigger="@"
-                            data={mentions}
-                            renderSuggestion={renderUserSuggestion}
-                        />
-                    </MentionsInput>
-                </label>
-                <div className="flex">
-                    <Emoticon handleEmojiClick={handleEmojiClick} />
-                    {/* <SendFiles onSend={handleSendFiles} Icon={AttachmentLineIcon} tooltip={t('chat.attached-file')} /> */}
-                    <SendFiles
-                        onSend={handleSendFiles}
-                        Icon={ImageFillIcon}
-                        tooltip={t('chat.images')}
-                        accept="image/*"
-                    />
-                    <Button icon={MicIcon} />
-                    <Button disabled={activeLoading} onClick={handleSend} icon={SendPlaneFillIcon} type="primary" />
-                </div>
+        <div>
+            <div className="flex flex-col justify-center gap-2 px-2 h-10 border-t border-separate dark:border-dark-separate">
+                <Button onClick={setShowLocation} icon={LocationIcon} />
             </div>
-            {files.length > 0 && <AttachFiles />}
+            <div className="border-t border-separate dark:border-dark-separate p-2 sm:p-3 md:p-4 dl:p-5 focus-within:border-primary-color transition-colors duration-150">
+                {reply ? <ReplyMessage showClose isMe onClose={handleCloseReply} message={reply} /> : null}
+
+                <div className="items-end flex gap-2">
+                    <label className="flex-1">
+                        <MentionsInput
+                            onKeyDown={handleKeyDown}
+                            allowSpaceInQuery
+                            forceSuggestionsAboveCursor
+                            spellCheck={false}
+                            maxLength={135813}
+                            autoComplete="off"
+                            autoCorrect="off"
+                            ref={ref}
+                            rows={1}
+                            value={chat}
+                            onChange={handleChange}
+                            placeholder={t('chat.chat')}
+                            className="mentions-input rounded text-sm leading-normal placeholder:text-secondary dark:placeholder:text-dark-secondary text-input dark:text-dark-primary bg-input-bg dark:bg-dark-input-bg flex-1 my-0.5"
+                        >
+                            <Mention
+                                displayTransform={displayTransform}
+                                markup="@~~__id__~~__display__~~@"
+                                appendSpaceOnAdd
+                                className="text-[#0068ff]"
+                                trigger="@"
+                                data={mentions}
+                                renderSuggestion={renderUserSuggestion}
+                            />
+                        </MentionsInput>
+                    </label>
+                    <div className="flex">
+                        <Emoticon handleEmojiClick={handleEmojiClick} />
+                        {/* <SendFiles onSend={handleSendFiles} Icon={AttachmentLineIcon} tooltip={t('chat.attached-file')} /> */}
+                        <SendFiles
+                            onSend={handleSendFiles}
+                            Icon={ImageFillIcon}
+                            tooltip={t('chat.images')}
+                            accept="image/*"
+                        />
+                        <Button icon={MicIcon} />
+                        <Button disabled={activeLoading} onClick={handleSend} icon={SendPlaneFillIcon} type="primary" />
+                    </div>
+                </div>
+                {files.length > 0 && <AttachFiles />}
+            </div>
+
+            <Modal show={showLocation} onClickOutside={handleCloseLocation}>
+                <PopupMultiLevel onClose={handleCloseLocation}>
+                    <Location onClose={handleCloseLocation} />
+                </PopupMultiLevel>
+            </Modal>
         </div>
     );
 };

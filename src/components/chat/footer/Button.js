@@ -18,7 +18,7 @@ const Button = forwardRef(({ type = 'text-primary', icon, className, onClick = (
             )}
             {...props}
         >
-            <Icon className="w-4 h-4" />
+            <Icon className="w-5 h-5" />
         </button>
     );
 });

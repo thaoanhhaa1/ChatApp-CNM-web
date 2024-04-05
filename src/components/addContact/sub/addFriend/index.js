@@ -42,7 +42,7 @@ const AddFriend = ({ onClose }) => {
                 {t('contacts.modal.profile')}
             </Modal.Header>
 
-            <div className="h-[calc(min(600px,80vh)-144px)]">
+            <div className="h-[min(350px,60vh)] overflow-hidden">
                 <ScrollbarCustomize>
                     <AddFriendBody
                         blockViewTitle={t('contacts.modal.notAllowViewFeed')}

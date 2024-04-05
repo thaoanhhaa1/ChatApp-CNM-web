@@ -7,7 +7,15 @@ import Button from './Button';
 import Footer from './Footer';
 import Header from './Header';
 
-const Modal = ({ children, show, className, containerClassName, onClickOutside = () => {} }) => {
+const Modal = ({
+    width = '500px',
+    height = 'auto',
+    children,
+    show,
+    className,
+    containerClassName,
+    onClickOutside = () => {},
+}) => {
     const [showDebounce, setShowDebounce] = useState(show);
     const [showAnimationDebounce, setShowAnimationDebounce] = useState(show);
     const ref = useRef();
@@ -37,10 +45,11 @@ const Modal = ({ children, show, className, containerClassName, onClickOutside =
                     <div
                         ref={ref}
                         className={classNames(
-                            'rounded-md border border-[rgba(0,0,0,.175)] w-[500px] bg-white dark:bg-dark-sidebar-sub-bg transition-all duration-300 mx-2 overflow-hidden',
+                            'max-w-[calc(100vw-8px)] rounded-md border border-[rgba(0,0,0,.175)] w-[500px] bg-white dark:bg-dark-sidebar-sub-bg transition-all duration-300 mx-2 overflow-hidden',
                             (showAnimationDebounce && 'translate-y-0') || '-translate-y-10',
                             className,
                         )}
+                        style={{ width, height }}
                     >
                         {children}
                     </div>
@@ -52,6 +61,8 @@ const Modal = ({ children, show, className, containerClassName, onClickOutside =
 };
 
 Modal.propTypes = {
+    width: PropTypes.string,
+    height: PropTypes.string,
     children: PropTypes.node.isRequired,
     show: PropTypes.bool.isRequired,
     className: PropTypes.string,

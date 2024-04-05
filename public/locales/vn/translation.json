@@ -333,5 +333,12 @@
         "search-empty-title": "Không tìm thấy kết quả",
         "search-empty-description": "Vui lòng thử lại từ khoá khác hoặc sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày ",
         "search-description": "Sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày "
+    },
+    "location": {
+        "title": "Vị trí",
+        "description": "Gửi địa điểm cụ thể",
+        "send-to": "Gửi vị trí này cho",
+        "cancel": "Huỷ",
+        "send": "Gửi"
     }
 }
