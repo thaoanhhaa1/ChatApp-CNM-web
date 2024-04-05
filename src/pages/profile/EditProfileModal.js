@@ -8,6 +8,9 @@ import UnderlineInput from '~/components/underlineInput';
 import RadioGroup from '~/components/radioGroup';
 import { genders } from '~/constants';
 import validator from 'validator';
+import { updateUser } from '~/services';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const EditProfileModal = ({ onClose }) => {
     const { user } = useSelector((state) => state.user);
@@ -50,11 +53,21 @@ const EditProfileModal = ({ onClose }) => {
         }
     };
 
-    const handleUpdateProfile = () => {
+    const handleUpdateProfile = async() => {
         if (!errors.name && !errors.dateOfBirth) {
+            try {
+                const updatedInfo = { name, gender, dateOfBirth };
+                const response = await updateUser(updatedInfo);
+                console.log('Thông tin người dùng đã được cập nhật:', response.data);
+                toast.success(t('profile.updateSuccess'));
 
-            const updatedInfo = { name, gender, dateOfBirth };
-            console.log(updatedInfo);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } catch (error) {
+                console.error('Đã xảy ra lỗi khi cập nhật thông tin người dùng:', error);
+                toast.error(t('profile.updateError'));
+            }
         }
     };
 
@@ -108,7 +121,9 @@ const EditProfileModal = ({ onClose }) => {
                 </Modal.Button>
                 <Modal.Button onClick={handleUpdateProfile}>{t('profile.update')}</Modal.Button>
             </Modal.Footer>
+            <ToastContainer />
         </>
+        
     );
 };
 export default EditProfileModal;

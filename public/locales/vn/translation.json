@@ -182,7 +182,9 @@
         "updateProfile":"Cập nhật thông tin cá nhân",
         "name": "Tên hiển thị",
         "cancel":"Huỷ",
-        "placeholder":"Nhập tên hiển thị"
+        "placeholder":"Nhập tên hiển thị",
+        "updateError": "Cập nhật không thành công",
+        "updateSuccess": "Cập nhật thông tin thành công."
     },
     "not-found": {
         "title": "Có vẻ như bạn đang bị lạc",

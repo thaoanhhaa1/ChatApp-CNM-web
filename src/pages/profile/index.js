@@ -1,19 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AttachmentLineIcon, BlockIcon, CameraIcon, More2FillIcon, PencilLineIcon, RecordCircleFillIcon, UserIcon, WarningIcon } from '~/assets';
-import Accordion from '~/components/accordion';
-import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
 import Button from '~/components/button';
-import About from '~/components/chat/profile/About';
-import FormControl from '~/components/formControl';
-import HeaderPage from '~/components/headerPage';
-import Input from '~/components/input';
 
-import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import PropTypes from 'prop-types';
 import Modal from '~/components/modal';
-import ProfileHeader from '~/components/addContact/sub/ProfileHeader';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import PersonalInformation from '~/components/addContact/sub/profile/PersonalInformation';
 import EditProfileModal from './EditProfileModal';

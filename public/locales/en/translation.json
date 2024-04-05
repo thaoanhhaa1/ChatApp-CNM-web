@@ -183,7 +183,9 @@
         "updateProfile":"Edit your personal information",
         "name": "Dispaly name",
         "cancel":"Cancel",
-        "placeholder":"Enter dispaly name"
+        "placeholder":"Enter dispaly name",
+        "updateError": "Update error",
+        "updateSuccess": "Update success"
     },
     "not-found": {
         "title": "Look like you're lost",
