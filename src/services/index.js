@@ -10,3 +10,8 @@ export { default as register } from './register';
 export { default as searchUsers } from './searchUsers';
 export { default as createOTP } from './createOTP';
 export { default as verifyOTP } from './verifyOTP';
+export { default as sendOTPForgotPassword } from './sendOtpForgotPassword';
+export { default as verifyOTPForgotPassword } from './verifyForgotPassword';
+
+
+

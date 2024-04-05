@@ -11,6 +11,8 @@ const api = {
     getReplyMessages: (messageId) => `/message/reply/${messageId}`,
     createOTP: () => `/auth/createOTP`,
     verifyOTP: () => `/auth/verifyOTP`,
+    sendOTPForgotPassword: () => `/auth/forgotpassword`,
+    verifyOTPForgotPassword: () => `auth/forgot-password`
 };
 
 export default api;
