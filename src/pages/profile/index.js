@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AttachmentLineIcon, BlockIcon, More2FillIcon, PencilLineIcon, RecordCircleFillIcon, UserIcon, WarningIcon } from '~/assets';
+import { AttachmentLineIcon, BlockIcon, CameraIcon, More2FillIcon, PencilLineIcon, RecordCircleFillIcon, UserIcon, WarningIcon } from '~/assets';
 import Accordion from '~/components/accordion';
 import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
@@ -42,6 +42,13 @@ const Profile = ({onClose}) => {
         subs.length || dispatch(reset());
     }, [dispatch, subs.length]);
 
+    const handleImageChange = (event) => {
+        const selectedImage = event.target.files[0]; // Lấy ra file hình ảnh được chọn
+        // Thực hiện xử lý với hình ảnh được chọn, ví dụ:
+        // Hiển thị hình ảnh trong console
+        console.log(selectedImage);
+    };
+
     return (
         <>
             <Modal show={true} onClickOutside={handleClose}>
@@ -58,13 +65,25 @@ const Profile = ({onClose}) => {
                             <div className="flex gap-2 ex:gap-3 sm:gap-4">
                                 <div className="relative">
                                     <Avatar src={user.avatar} size="60px" />
+                                    <span className="absolute bottom-0 right-0 bg-gray-300 hover:bg-gray-500 rounded-full">
+                                        <label htmlFor="avatarInput">
+                                        <CameraIcon className="w-[24px] h-[24px] p-[3px]"/>
+                                        <input 
+                                            type="file" 
+                                            id="avatarInput" 
+                                            className="hidden" 
+                                            onChange={handleImageChange} 
+                                            accept="image/*"
+                                        />
+                                        </label>
+                                    </span>
                                 </div>
                                 <div className="flex items-center">
                                     <h3 className="text-lg leading-normal font-medium line-clamp-1">
                                         {user.name}
                                     </h3>
                                     <span
-                                        // onClick={handleChangeAlias}
+                                        onClick={handleShowUpdateProfile}
                                         className="p-1 ml-2 cursor-pointer rounded-lg hover:bg-[#dfe2e7] dark:hover:bg-white dark:hover:bg-opacity-5 transition-all"
                                     >
                                         <PencilLineIcon className="w-4 h-4" />
