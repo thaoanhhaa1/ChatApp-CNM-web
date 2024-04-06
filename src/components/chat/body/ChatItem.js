@@ -33,7 +33,7 @@ import Reaction from './ReactionChat';
 
 //  TODO
 //  [x] Chat text
-//  [ ] Chat file
+//  [x] Chat file
 //  [x] Chat Emoji
 //  [ ] Recall message
 //  [ ] Delete message for me (24h)
@@ -55,6 +55,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const reacts = [];
     const isImageList = chat.files?.length > 0 && isImageFileByType(chat.files[0].type || chat.files[0].contentType);
     const loading = chat.state === sentMessageStatus.SENDING;
+    const recalled = chat?.deleted === DeleteMessageStatus.RECALL;
 
     const handleClickReply = (message) => {
         const mess = messages.find((mess) => mess._id === message._id);
@@ -126,7 +127,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                     src={chat.sender.avatar}
                 />
                 <div className={isMe ? 'ml-1 mr-2 sm:mr-4' : 'ml-2 sm:ml-4 mr-1'}>
-                    {chat.messages?.length > 0 || chat?.files?.length === 1 ? (
+                    {chat.messages?.length > 0 || chat?.files?.length === 1 || recalled ? (
                         <>
                             <div
                                 className={classNames(
@@ -136,13 +137,13 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                         : 'rounded-r-lg bg-primary-color bg-opacity-40',
                                 )}
                             >
-                                {chat.reply ? (
+                                {chat.reply && !recalled ? (
                                     <ReplyMessage isMe={isMe} onClick={handleClickReply} message={chat.reply} />
                                 ) : null}
 
                                 <Message status={chat.deleted} messages={chat.messages || []} isMe={isMe} />
 
-                                {chat.files && isImageList ? (
+                                {chat.files && isImageList && !recalled ? (
                                     <div className="flex gap-1 px-1 flex-col ex:flex-row flex-wrap">
                                         {chat.files.map((image, index) => (
                                             <ChatImage
@@ -155,7 +156,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                     </div>
                                 ) : null}
 
-                                {chat.files && !isImageList
+                                {chat.files && !isImageList && !recalled
                                     ? chat.files.map((file, index) => <AttachedFile file={file} key={index} />)
                                     : null}
 
@@ -171,7 +172,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                     <span>{getTimeChat(chat.updatedAt || new Date(chat.timeSend))}</span>
                                 </div>
 
-                                {chat.sticker ? null : (
+                                {chat.sticker && !recalled ? null : (
                                     <ChatItemReaction
                                         reacts={reacts}
                                         react={react}
@@ -202,19 +203,23 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
 
                     {chat.sticker ? <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} /> : null}
 
-                    {chat.files?.length > 1 && isImageList && <MessageImageList loading={loading} files={chat.files} />}
+                    {chat.files?.length > 1 && isImageList && !recalled ? (
+                        <MessageImageList loading={loading} files={chat.files} />
+                    ) : null}
                 </div>
-                <div className={classNames('flex', isMe && 'flex-row-reverse')}>
-                    <ChatItemButton onClick={handleReply}>
-                        <QuoteRightIcon className="w-[14px] h-[14px]" />
-                    </ChatItemButton>
-                    {chat.sticker ? null : <Reaction setReact={setReact} react={react} />}
-                    <Popup data={mores} animation="shift-toward" placement={isMe ? 'bottom-end' : 'bottom-start'}>
-                        <ChatItemButton>
-                            <MoreFillIcon className="w-[15px] h-[15px] rotate-90" />
+                {recalled ? null : (
+                    <div className={classNames('flex', isMe && 'flex-row-reverse')}>
+                        <ChatItemButton onClick={handleReply}>
+                            <QuoteRightIcon className="w-[14px] h-[14px]" />
                         </ChatItemButton>
-                    </Popup>
-                </div>
+                        {chat.sticker ? null : <Reaction setReact={setReact} react={react} />}
+                        <Popup data={mores} animation="shift-toward" placement={isMe ? 'bottom-end' : 'bottom-start'}>
+                            <ChatItemButton>
+                                <MoreFillIcon className="w-[15px] h-[15px] rotate-90" />
+                            </ChatItemButton>
+                        </Popup>
+                    </div>
+                )}
             </div>
             {showSeparate && <ChatItemSeparate>{getTimeChatSeparate(prevDate)}</ChatItemSeparate>}
         </div>

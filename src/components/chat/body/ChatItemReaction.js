@@ -37,7 +37,7 @@ const ChatItemReaction = ({ reacts, react, className }) => {
 
 ChatItemReaction.propTypes = {
     reacts: PropTypes.array.isRequired,
-    react: PropTypes.string.isRequired,
+    react: PropTypes.string,
     className: PropTypes.string,
 };
 

@@ -14,7 +14,7 @@ const ReactionChat = ({ react, setReact }) => {
         else setReact(item.id);
         instance && instance.hide();
 
-        // Update chat in DB
+        // TODO Update chat in DB
     };
 
     return (
@@ -48,7 +48,7 @@ const ReactionChat = ({ react, setReact }) => {
 };
 
 ReactionChat.propTypes = {
-    react: PropTypes.string.isRequired,
+    react: PropTypes.string,
     setReact: PropTypes.func.isRequired,
 };
 

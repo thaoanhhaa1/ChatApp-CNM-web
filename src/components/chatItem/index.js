@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { FileTextFillIcon, ImageFillIcon, StickerSmileIcon } from '~/assets';
+import { DeleteMessageStatus } from '~/constants';
 import { useLayout } from '~/context';
 import { setActive } from '~/features/chats/chatsSlice';
 import { classNames, getTimeChat, getUnseenMessageNumber, isImageFileByType } from '~/utils';
@@ -29,6 +30,7 @@ const ChatItem = ({ chat, active }) => {
     }, [chat.lastMessage?.files, chat.lastMessage?.sticker, isHasFiles, isImageList]);
 
     const message = chat.lastMessage;
+    const recalled = message?.deleted === DeleteMessageStatus.RECALL;
 
     const handleClickChat = () => {
         setShowChat(true);
@@ -56,22 +58,22 @@ const ChatItem = ({ chat, active }) => {
                 <div className="flex gap-1 items-center justify-between">
                     {(chat.typing && <Typing />) || (
                         <div className="flex gap-1 items-center">
-                            {isImageList ? (
+                            {!recalled && isImageList ? (
                                 <span className="text-secondary dark:text-dark-secondary">
                                     <ImageFillIcon className="w-[14px] h-[14px]" />
                                 </span>
                             ) : null}
-                            {message?.sticker ? (
+                            {!recalled && message?.sticker ? (
                                 <span className="text-secondary dark:text-dark-secondary">
                                     <StickerSmileIcon className="w-[14px] h-[14px]" />
                                 </span>
                             ) : null}
-                            {isHasFiles && !isImageList ? (
+                            {!recalled && isHasFiles && !isImageList ? (
                                 <span className="text-secondary dark:text-dark-secondary">
                                     <FileTextFillIcon className="w-[14px] h-[14px]" />
                                 </span>
                             ) : null}
-                            {message?.messages ? (
+                            {message?.messages || recalled ? (
                                 <Message
                                     status={message?.deleted}
                                     isMe
@@ -80,7 +82,7 @@ const ChatItem = ({ chat, active }) => {
                                     messages={message?.messages || []}
                                 />
                             ) : null}
-                            {subTitle ? (
+                            {subTitle && !recalled ? (
                                 <span className="text-sm text-secondary dark:text-dark-secondary">{t(subTitle)}</span>
                             ) : null}
                         </div>

@@ -127,7 +127,7 @@ const Footer = () => {
                         messages,
                         sender: user,
                         conversationId: active._id,
-                        reply: reply?._id,
+                        reply,
                         timeSend,
                     }),
                 );
