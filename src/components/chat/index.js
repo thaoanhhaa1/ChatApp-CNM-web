@@ -7,7 +7,7 @@ import { ChatProvider } from '~/context';
 import { addFiles } from '~/features/chat/chatSlice';
 import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { useBoolean } from '~/hooks';
-import { classNames } from '~/utils';
+import { classNames, isImageFileByType } from '~/utils';
 import DropZone from '../dropZone';
 import Toast from '../toast';
 import Body from './body';
@@ -46,15 +46,54 @@ const Chat = () => {
             if (acceptedFiles.length > 50) setShowToast(true);
             else {
                 const timeSend = Date.now();
-                const message = { files: acceptedFiles, conversationId: active._id, timeSend };
+                const imageFiles = [];
+                const otherFiles = [];
 
-                dispatch(sendMessage(message));
-                dispatch(
-                    addMessage({
-                        ...message,
-                        sender: user,
-                    }),
-                );
+                (acceptedFiles || []).forEach((file) => {
+                    if (isImageFileByType(file.type)) return imageFiles.push(file);
+
+                    otherFiles.push(file);
+                });
+
+                if (imageFiles.length) {
+                    const formData = new FormData();
+
+                    imageFiles.forEach((file) => formData.append('files', file));
+                    formData.append('conversationId', active._id);
+                    formData.append('sender', user);
+                    formData.append('timeSend', timeSend);
+
+                    dispatch(sendMessage(formData));
+                    dispatch(
+                        addMessage({
+                            sender: user,
+                            files: imageFiles,
+                            conversationId: active._id,
+                            timeSend,
+                        }),
+                    );
+                }
+
+                if (otherFiles.length) {
+                    otherFiles.forEach((file) => {
+                        const formData = new FormData();
+
+                        formData.append('files', file);
+                        formData.append('conversationId', active._id);
+                        formData.append('sender', user);
+                        formData.append('timeSend', timeSend);
+
+                        dispatch(sendMessage(formData));
+                        dispatch(
+                            addMessage({
+                                sender: user,
+                                files: [file],
+                                conversationId: active._id,
+                                timeSend,
+                            }),
+                        );
+                    });
+                }
             }
 
             setHiddenDropZone();

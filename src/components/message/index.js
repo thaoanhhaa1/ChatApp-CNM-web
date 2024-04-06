@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+import { DeleteMessageStatus } from '~/constants';
 import { classNames } from '~/utils';
 
-const Message = ({ large, messages, isMe, className, isReply }) => {
+const Message = ({ status = DeleteMessageStatus.NO_DELETE, large, messages, isMe, className, isReply }) => {
+    const { t } = useTranslation();
+
     const handleClickMessage = (message) => {
         if (message.type === 'text' || isReply) return;
 
@@ -12,7 +16,7 @@ const Message = ({ large, messages, isMe, className, isReply }) => {
         <p
             className={classNames(
                 isMe
-                    ? isReply
+                    ? isReply || status === DeleteMessageStatus.RECALL
                         ? 'text-secondary dark:text-dark-secondary'
                         : 'text-primary dark:text-dark-primary'
                     : 'text-white',
@@ -20,16 +24,19 @@ const Message = ({ large, messages, isMe, className, isReply }) => {
                 className,
             )}
         >
-            {messages.map((message, index) => (
-                <span
-                    key={index}
-                    onClick={() => handleClickMessage(message)}
-                    className={classNames(message.type === 'tag' && !isReply && 'text-[#0068ff] cursor-pointer')}
-                >
-                    {message.type === 'tag' && '@'}
-                    {message.content}
-                </span>
-            ))}
+            {status === DeleteMessageStatus.RECALL && <span>{t('chat.message-recalled')}</span>}
+            {status !== DeleteMessageStatus.RECALL
+                ? messages.map((message, index) => (
+                      <span
+                          key={index}
+                          onClick={() => handleClickMessage(message)}
+                          className={classNames(message.type === 'tag' && !isReply && 'text-[#0068ff] cursor-pointer')}
+                      >
+                          {message.type === 'tag' && '@'}
+                          {message.content}
+                      </span>
+                  ))
+                : null}
         </p>
     );
 };
@@ -46,6 +53,7 @@ Message.propTypes = {
     className: PropTypes.string,
     large: PropTypes.bool,
     isReply: PropTypes.bool,
+    status: PropTypes.string,
 };
 
 export default Message;

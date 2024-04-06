@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { v4 } from 'uuid';
 import { sentMessageStatus } from '~/constants';
 import {
     getMessages as getMessagesService,
@@ -22,7 +23,7 @@ const getMessages = createAsyncThunk('getMessages', async ({ param, query, signa
 const sendMessage = createAsyncThunk('sendMessage', async (data) => {
     const response = await sendMessageService(data);
 
-    return { data: response.data, timeSend: data.timeSend };
+    return { data: response.data, timeSend: data.timeSend || data.get('timeSend') };
 });
 
 const getReplyMessages = createAsyncThunk('getReplyMessages', async (messageId) => {
@@ -46,57 +47,53 @@ const messagesSlice = createSlice({
             state.messages = payload;
         },
         addMessage: (state, { payload }) => {
-            const message = { ...payload, _id: Date.now() };
+            const message = { ...payload, _id: v4() };
 
             message.state = sentMessageStatus.SENDING;
 
             state.messages.unshift(message);
         },
+        updateDeletedMessage: (state, { payload }) => {
+            const message = state.messages.find((message) => message._id === payload._id);
+            message.deleted = payload.deleted;
+        },
     },
     extraReducers: (builder) => {
-        builder.addCase(getMessages.pending, (state) => {
-            state.loading = true;
-            state.messages = [];
-        });
+        builder
+            .addCase(getMessages.pending, (state) => {
+                state.loading = true;
+                state.messages = [];
+            })
+            .addCase(getMessages.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.messages = payload;
+            })
+            .addCase(getMessages.rejected, (state) => {
+                state.loading = false;
+            })
+            .addCase(sendMessage.fulfilled, (state, { payload }) => {
+                const {
+                    timeSend,
+                    data: { message },
+                } = payload;
 
-        builder.addCase(getMessages.fulfilled, (state, { payload }) => {
-            state.loading = false;
-            state.messages = payload;
-        });
-
-        builder.addCase(getMessages.rejected, (state) => {
-            state.loading = false;
-        });
-
-        builder.addCase(sendMessage.fulfilled, (state, { payload }) => {
-            const { timeSend, data } = payload;
-
-            state.loading = false;
-            state.messages.find((message) => {
-                if (message.timeSend === timeSend) {
-                    data.state = sentMessageStatus.SENT;
-                    message = data;
-                }
-
-                return false;
+                state.loading = false;
+                const index = state.messages.findIndex((message) => +message.timeSend === +timeSend);
+                if (index >= 0) state.messages.splice(index, 1, message);
+            })
+            .addCase(getReplyMessages.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getReplyMessages.rejected, (state) => {
+                state.loading = false;
+            })
+            .addCase(getReplyMessages.fulfilled, (state, { payload }) => {
+                state.loading = false;
+                state.messages = payload;
             });
-        });
-
-        builder.addCase(getReplyMessages.pending, (state) => {
-            state.loading = true;
-        });
-
-        builder.addCase(getReplyMessages.rejected, (state) => {
-            state.loading = false;
-        });
-
-        builder.addCase(getReplyMessages.fulfilled, (state, { payload }) => {
-            state.loading = false;
-            state.messages = payload;
-        });
     },
 });
 
 export default messagesSlice.reducer;
-export const { setOffsetTop, setMessages, addMessage } = messagesSlice.actions;
+export const { setOffsetTop, setMessages, addMessage, updateDeletedMessage } = messagesSlice.actions;
 export { getMessages, getReplyMessages, sendMessage };

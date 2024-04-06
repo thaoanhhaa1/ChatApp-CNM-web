@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { DownloadLineIcon, FileTextFillIcon, ImageFillIcon, MoreFillIcon } from '~/assets';
+import { DownloadLineIcon, FileTextFillIcon, ImageFillIcon } from '~/assets';
+import { useDownloadFile } from '~/hooks';
 import { convertFileSize, isPhotoFile } from '~/utils';
 import Button from './Button';
 
@@ -14,6 +15,7 @@ const getIcon = (fileName) => {
 
 const AttachedFile = ({ file }) => {
     const Icon = getIcon(file.name);
+    const handleDownload = useDownloadFile(file.link, file.name);
 
     return (
         <div className="flex gap-2 sm:gap-4 items-center p-2 border border-separate dark:border-[#39414b] rounded bg-white dark:bg-dark">
@@ -27,8 +29,7 @@ const AttachedFile = ({ file }) => {
                 )}
             </div>
             <div className="flex gap-1 sm:gap-2">
-                <Button icon={DownloadLineIcon} />
-                <Button icon={MoreFillIcon} />
+                <Button onClick={handleDownload} icon={DownloadLineIcon} />
             </div>
         </div>
     );

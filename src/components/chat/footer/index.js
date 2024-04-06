@@ -10,11 +10,11 @@ import Location from '~/components/location';
 import Modal from '~/components/modal';
 import PopupMultiLevel from '~/components/popupMultiLevel';
 import ReplyMessage from '~/components/replyMessage';
-import { setChat, setReply } from '~/features/chat/chatSlice';
+import { setChat, setFiles, setReply } from '~/features/chat/chatSlice';
 import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { useBoolean } from '~/hooks';
-import { getMentions, insertEmojiToChat, splitMessage } from '~/utils';
+import { getMentions, insertEmojiToChat, isImageFileByType, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
 import MentionItem from './Mention';
@@ -66,7 +66,7 @@ const Footer = () => {
         files.forEach((file) => formData.append('files', file));
         formData.append('conversationId', active._id);
         formData.append('sender', user);
-        formData.append('reply', reply?._id);
+        reply?._id && formData.append('reply', reply?._id);
         formData.append('timeSend', timeSend);
 
         dispatch(sendMessage(formData));
@@ -83,22 +83,100 @@ const Footer = () => {
         dispatch(setReply());
     };
     const handleSend = () => {
-        if (!chat) return;
+        if (!chat && !files?.length) return;
 
         const messages = splitMessage(chat);
         const timeSend = Date.now();
-        const message = { messages, files, conversationId: active._id, reply: reply?._id, timeSend };
+        const imageFiles = [];
+        const otherFiles = [];
 
-        dispatch(sendMessage(message));
-        dispatch(
-            addMessage({
-                ...message,
-                sender: user,
-                reply,
-            }),
-        );
+        (files || []).forEach((file) => {
+            if (isImageFileByType(file.type)) return imageFiles.push(file);
+
+            otherFiles.push(file);
+        });
+
+        // Text + 1 image
+        if (messages.length && imageFiles.length === 1 && !otherFiles.length) {
+            const formData = new FormData();
+
+            formData.append('files', imageFiles[0]);
+            formData.append('conversationId', active._id);
+            formData.append('sender', user);
+            reply?._id && formData.append('reply', reply?._id);
+            formData.append('timeSend', timeSend);
+            formData.append('messages', messages[0]);
+
+            dispatch(sendMessage(formData));
+            dispatch(
+                addMessage({
+                    sender: user,
+                    reply,
+                    files: imageFiles,
+                    conversationId: active._id,
+                    timeSend,
+                    messages,
+                }),
+            );
+        } else {
+            // Text + n images + n other files
+            if (messages.length) {
+                dispatch(sendMessage({ messages, conversationId: active._id, reply: reply?._id, timeSend }));
+                dispatch(
+                    addMessage({
+                        messages,
+                        sender: user,
+                        conversationId: active._id,
+                        reply: reply?._id,
+                        timeSend,
+                    }),
+                );
+            }
+
+            if (imageFiles.length) {
+                const formData = new FormData();
+
+                imageFiles.forEach((file) => formData.append('files', file));
+                formData.append('conversationId', active._id);
+                formData.append('sender', user);
+                formData.append('timeSend', timeSend);
+
+                dispatch(sendMessage(formData));
+                dispatch(
+                    addMessage({
+                        sender: user,
+                        files: imageFiles,
+                        conversationId: active._id,
+                        timeSend,
+                    }),
+                );
+            }
+
+            if (otherFiles.length) {
+                otherFiles.forEach((file) => {
+                    const formData = new FormData();
+
+                    formData.append('files', file);
+                    formData.append('conversationId', active._id);
+                    formData.append('sender', user);
+                    formData.append('timeSend', timeSend);
+
+                    dispatch(sendMessage(formData));
+                    dispatch(
+                        addMessage({
+                            sender: user,
+                            files: [file],
+                            conversationId: active._id,
+                            timeSend,
+                        }),
+                    );
+                });
+            }
+        }
+
         dispatch(setChat(''));
         dispatch(setReply());
+        dispatch(setFiles([]));
     };
 
     const handleCloseLocation = () => {

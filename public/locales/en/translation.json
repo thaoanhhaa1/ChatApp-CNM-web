@@ -16,7 +16,9 @@
         "emptyDescription": "Explore the best features to support your work and allow you to chat with your friends and family. All are optimized for your computer!",
         "no-conversations": "You have no conversations",
         "no-conversations-description": "Zalo only display messages from the first login on this browser",
-        "no-conversations-description-1": "on"
+        "no-conversations-description-1": "on",
+        "photo": "Photo",
+        "sticker": "Sticker"
     },
     "chat": {
         "search": "Search",
@@ -39,7 +41,9 @@
             "copy": "Copy",
             "save": "Save",
             "forward": "Forward",
-            "delete": "Delete"
+            "delete": "Delete",
+            "delete-for-me": "Delete for me only",
+            "recall": "Recall"
         },
         "emoji": "Emoji",
         "attached-file": "Attached File",
@@ -51,7 +55,8 @@
         "sending": "Sending",
         "sent": "Sent",
         "received": "Received",
-        "limit-files-send": "You should only send up to 50 files/photos each times"
+        "limit-files-send": "You should only send up to 50 files/photos each times",
+        "message-recalled": "Message recalled"
     },
     "contacts": {
         "title": "Contacts",

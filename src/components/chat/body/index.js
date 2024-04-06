@@ -19,9 +19,9 @@ const Body = () => {
     const scrollY = useCallback((y) => ref.current?.scrollY(y), [ref]);
 
     const handleScroll = (e) => {
-        const clientTop = e.target.clientTop;
+        const scrollTop = e.target.scrollTop;
 
-        if (clientTop <= 200 && !loading) {
+        if (scrollTop <= 200 && !loading) {
             console.group('handleScroll');
             console.log(`Load more message...`);
             console.log(`messages: ${messages}`);

@@ -1,19 +1,32 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { ImageFillIcon, StickerSmileIcon } from '~/assets';
+import { FileTextFillIcon, ImageFillIcon, StickerSmileIcon } from '~/assets';
 import { useLayout } from '~/context';
 import { setActive } from '~/features/chats/chatsSlice';
-import { classNames, getTimeChat, getUnseenMessageNumber } from '~/utils';
+import { classNames, getTimeChat, getUnseenMessageNumber, isImageFileByType } from '~/utils';
 import Avatar from '../avatar';
 import Message from '../message';
 import Typing from '../typing';
 
 const ChatItem = ({ chat, active }) => {
+    const { t } = useTranslation();
     const { setShowChat } = useLayout();
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const receiver = useMemo(() => (chat.isGroup ? {} : chat.users.find((u) => u._id !== user._id)), [chat, user]);
+    const isHasFiles = chat.lastMessage?.files?.length;
+    const isImageList = isHasFiles && isImageFileByType(chat.lastMessage.files[0].type);
+    const subTitle = useMemo(() => {
+        if (chat.lastMessage?.sticker) return 'chats.sticker';
+
+        if (isImageList) return 'chats.photo';
+
+        if (isHasFiles) return chat.lastMessage?.files[0].name;
+
+        return '';
+    }, [chat.lastMessage?.files, chat.lastMessage?.sticker, isHasFiles, isImageList]);
 
     const message = chat.lastMessage;
 
@@ -43,21 +56,33 @@ const ChatItem = ({ chat, active }) => {
                 <div className="flex gap-1 items-center justify-between">
                     {(chat.typing && <Typing />) || (
                         <div className="flex gap-1 items-center">
-                            {message?.images?.length ? (
+                            {isImageList ? (
                                 <span className="text-secondary dark:text-dark-secondary">
                                     <ImageFillIcon className="w-[14px] h-[14px]" />
                                 </span>
                             ) : null}
                             {message?.sticker ? (
-                                <>
-                                    <span className="text-secondary dark:text-dark-secondary">
-                                        <StickerSmileIcon className="w-[14px] h-[14px]" />
-                                    </span>
-                                    <span className="text-sm text-secondary dark:text-dark-secondary">Sticker</span>
-                                </>
-                            ) : (
-                                <Message isMe className="line-clamp-1" isReply messages={message?.messages || []} />
-                            )}
+                                <span className="text-secondary dark:text-dark-secondary">
+                                    <StickerSmileIcon className="w-[14px] h-[14px]" />
+                                </span>
+                            ) : null}
+                            {isHasFiles && !isImageList ? (
+                                <span className="text-secondary dark:text-dark-secondary">
+                                    <FileTextFillIcon className="w-[14px] h-[14px]" />
+                                </span>
+                            ) : null}
+                            {message?.messages ? (
+                                <Message
+                                    status={message?.deleted}
+                                    isMe
+                                    className="line-clamp-1"
+                                    isReply
+                                    messages={message?.messages || []}
+                                />
+                            ) : null}
+                            {subTitle ? (
+                                <span className="text-sm text-secondary dark:text-dark-secondary">{t(subTitle)}</span>
+                            ) : null}
                         </div>
                     )}
                     {chat.unseenMessages && (

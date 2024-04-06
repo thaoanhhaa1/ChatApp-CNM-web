@@ -23,7 +23,7 @@ const Item = ({
         <>
             <div
                 className={classNames(
-                    'select-none min-w-[158px] cursor-pointer flex justify-between items-center px-3 sm:px-6 py-1 sm:py-1.5 text-secondary dark:text-dark-sidebar-item-color transition-all hover:bg-popup-item-hover-bg dark:hover:bg-dark-sidebar-bg',
+                    'select-none min-w-[158px] cursor-pointer flex justify-between items-center gap-2 px-3 sm:px-6 py-1 sm:py-1.5 text-secondary dark:text-dark-sidebar-item-color transition-all hover:bg-popup-item-hover-bg dark:hover:bg-dark-sidebar-bg',
                     active && '!bg-popup-item-active-bg !text-white',
                     className,
                 )}
@@ -48,6 +48,7 @@ Item.propTypes = {
     separate: PropTypes.bool,
     className: PropTypes.string,
     onClick: PropTypes.func,
+    handleHiddenPopup: PropTypes.func,
 };
 
 export default Item;

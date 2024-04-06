@@ -7,6 +7,7 @@ import {
     ClockIcon,
     DeleteBinLineIcon,
     FileCopyIcon,
+    MessageRecallIcon,
     MoreFillIcon,
     QuoteRightIcon,
     SaveLineIcon,
@@ -14,12 +15,16 @@ import {
 import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
 import Message from '~/components/message';
+import MessageImageList from '~/components/messageImageList';
 import Popup from '~/components/popup';
 import ReplyMessage from '~/components/replyMessage';
 import StickerItem from '~/components/sticker/StickerItem';
+import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
 import { setReply } from '~/features/chat/chatSlice';
-import { getReplyMessages, setOffsetTop } from '~/features/messages/messagesSlice';
-import { classNames, getTimeChat, getTimeChatSeparate, isShowTimeChatSeparate } from '~/utils';
+import { updateLastMessage } from '~/features/chats/chatsSlice';
+import { getReplyMessages, setOffsetTop, updateDeletedMessage } from '~/features/messages/messagesSlice';
+import { recallMessage } from '~/services';
+import { classNames, getTimeChat, getTimeChatSeparate, isImageFileByType, isShowTimeChatSeparate } from '~/utils';
 import ChatImage from './ChatImage';
 import ChatItemButton from './ChatItemButton';
 import ChatItemReaction from './ChatItemReaction';
@@ -33,10 +38,12 @@ import Reaction from './ReactionChat';
 //  [ ] Recall message
 //  [ ] Delete message for me (24h)
 //  [ ] Forward message
+//  [ ] Pin message
+//  [ ] Pin conversation
 const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const [, startTransition] = useTransition();
     const { t } = useTranslation();
-    const [react, setReact] = useState('haha');
+    const [react, setReact] = useState();
     const ref = useRef();
     const dispatch = useDispatch();
     const { messages } = useSelector((state) => state.messages);
@@ -45,31 +52,9 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const date = new Date(chat.updatedAt || chat.timeSend);
     const prevDate = prevChat && new Date(prevChat.updatedAt || prevChat.timeSend);
     const showSeparate = prevDate && isShowTimeChatSeparate(date, prevDate);
-    const reacts = ['love'];
-    // const isImageList = chat.files && isPhotoFile();
-
-    const mores = [
-        {
-            icon: FileCopyIcon,
-            title: t('chat.more.copy'),
-        },
-        {
-            icon: SaveLineIcon,
-            title: t('chat.more.save'),
-        },
-        {
-            icon: ChatForwardIcon,
-            title: t('chat.more.forward'),
-        },
-        {
-            icon: DeleteBinLineIcon,
-            title: t('chat.more.delete'),
-        },
-        {
-            icon: DeleteBinLineIcon,
-            title: t('chat.more.delete'),
-        },
-    ];
+    const reacts = [];
+    const isImageList = chat.files?.length > 0 && isImageFileByType(chat.files[0].type || chat.files[0].contentType);
+    const loading = chat.state === sentMessageStatus.SENDING;
 
     const handleClickReply = (message) => {
         const mess = messages.find((mess) => mess._id === message._id);
@@ -85,6 +70,36 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
         }
     };
     const handleReply = () => dispatch(setReply(chat));
+
+    const handleRecall = () => {
+        recallMessage(chat._id).then();
+        dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.RECALL }));
+        dispatch(updateLastMessage({ ...chat, deleted: DeleteMessageStatus.RECALL }));
+    };
+
+    const mores = [
+        {
+            icon: FileCopyIcon,
+            title: t('chat.more.copy'),
+        },
+        {
+            icon: SaveLineIcon,
+            title: t('chat.more.save'),
+        },
+        {
+            icon: ChatForwardIcon,
+            title: t('chat.more.forward'),
+        },
+        {
+            icon: MessageRecallIcon,
+            title: t('chat.more.recall'),
+            onClick: handleRecall,
+        },
+        {
+            icon: DeleteBinLineIcon,
+            title: t('chat.more.delete-for-me'),
+        },
+    ];
 
     useEffect(() => {
         dispatch(
@@ -111,7 +126,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                     src={chat.sender.avatar}
                 />
                 <div className={isMe ? 'ml-1 mr-2 sm:mr-4' : 'ml-2 sm:ml-4 mr-1'}>
-                    {chat.messages?.length > 0 ? (
+                    {chat.messages?.length > 0 || chat?.files?.length === 1 ? (
                         <>
                             <div
                                 className={classNames(
@@ -125,18 +140,24 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                     <ReplyMessage isMe={isMe} onClick={handleClickReply} message={chat.reply} />
                                 ) : null}
 
-                                <Message messages={chat.messages} isMe={isMe} />
+                                <Message status={chat.deleted} messages={chat.messages || []} isMe={isMe} />
 
-                                {chat.images && (
+                                {chat.files && isImageList ? (
                                     <div className="flex gap-1 px-1 flex-col ex:flex-row flex-wrap">
-                                        {chat.images.map((image, index) => (
-                                            <ChatImage src={image} key={index} />
+                                        {chat.files.map((image, index) => (
+                                            <ChatImage
+                                                loading={loading}
+                                                src={image.link || URL.createObjectURL(image)}
+                                                name={image.name}
+                                                key={index}
+                                            />
                                         ))}
                                     </div>
-                                )}
+                                ) : null}
 
-                                {chat.files &&
-                                    chat.files.map((file, index) => <AttachedFile file={file} key={index} />)}
+                                {chat.files && !isImageList
+                                    ? chat.files.map((file, index) => <AttachedFile file={file} key={index} />)
+                                    : null}
 
                                 <div
                                     className={classNames(
@@ -180,6 +201,8 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                     ) : null}
 
                     {chat.sticker ? <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} /> : null}
+
+                    {chat.files?.length > 1 && isImageList && <MessageImageList loading={loading} files={chat.files} />}
                 </div>
                 <div className={classNames('flex', isMe && 'flex-row-reverse')}>
                     <ChatItemButton onClick={handleReply}>

@@ -16,7 +16,9 @@
         "emptyDescription": "Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn.",
         "no-conversations": "Chưa có hội thoại",
         "no-conversations-description": "Zalo chỉ hiển thị tin nhắn từ sau lần đăng nhập đầu tiên trên trình duyệt này",
-        "no-conversations-description-1": "ngày"
+        "no-conversations-description-1": "ngày",
+        "photo": "Hình ảnh",
+        "sticker": "Sticker"
     },
     "chat": {
         "search": "Tìm tin nhắn",
@@ -39,7 +41,8 @@
             "copy": "Sao chép",
             "save": "Lưu",
             "forward": "Chuyển tiếp",
-            "delete": "Xoá"
+            "delete-for-me": "Xoá chỉ ở phía tôi",
+            "recall": "Thu hồi"
         },
         "emoji": "Biểu cảm",
         "attached-file": "Đính kèm file",
@@ -51,7 +54,8 @@
         "sending": "Đang gửi",
         "sent": "Đã gửi",
         "received": "Đã nhận",
-        "limit-files-send": "Bạn chỉ nên chia sẻ tối đa 50 tập tin/ảnh mỗi lần"
+        "limit-files-send": "Bạn chỉ nên chia sẻ tối đa 50 tập tin/ảnh mỗi lần",
+        "message-recalled": "Tin nhắn đã được thu hồi"
     },
     "contacts": {
         "title": "Danh bạ",

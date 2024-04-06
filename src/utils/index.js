@@ -19,6 +19,7 @@ export { default as getUnseenMessageNumber } from './getUnseenMessageNumber';
 export { default as googleMaps } from './googleMaps';
 export { default as handleScaleImage } from './handleScaleImage';
 export { default as insertEmojiToChat } from './insertEmojiToChat';
+export { default as isImageFileByType } from './isImageFileByType';
 export { default as isPhotoFile } from './isPhotoFile';
 export { default as isShowTimeChatSeparate } from './isShowTimeChatSeparate';
 export { default as isUserInConversation } from './isUserInConversation';
