@@ -26,6 +26,7 @@ export { default as isPhotoFile } from './isPhotoFile';
 export { default as isPinConversation } from './isPinConversation';
 export { default as isShowTimeChatSeparate } from './isShowTimeChatSeparate';
 export { default as isUserInConversation } from './isUserInConversation';
+export { default as isValidURL } from './isValidURL';
 export { default as loadImage } from './loadImage';
 export { default as localSetting } from './localSetting';
 export { default as location } from './location';

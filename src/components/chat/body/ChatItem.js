@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -35,12 +35,14 @@ import {
     isCanRecall,
     isImageFileByType,
     isShowTimeChatSeparate,
+    isValidURL,
 } from '~/utils';
 import ChatImage from './ChatImage';
 import ChatItemButton from './ChatItemButton';
 import ChatItemReaction from './ChatItemReaction';
 import ChatItemSeparate from './ChatItemSeparate';
 import Reaction from './ReactionChat';
+import LinkPreview from '~/components/linkPreview';
 
 // TODO
 // [x] Chat text
@@ -65,6 +67,13 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const [toastRecall, setToastRecall] = useToast(1000);
     const { socket } = useSelector((state) => state.socket);
 
+    const url = useMemo(() => {
+        const message = (chat?.messages || []).find(
+            (message) => message.type === 'text' && isValidURL(message.content),
+        );
+
+        return message?.content;
+    });
     const isYourPrev = prevChat?.sender._id === chat.sender?._id;
     const date = new Date(chat.updatedAt || chat.timeSend);
     const prevDate = prevChat && new Date(prevChat.updatedAt || prevChat.timeSend);
@@ -206,6 +215,8 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                 {chat.files && !isImageList && !recalled
                                     ? chat.files.map((file, index) => <AttachedFile file={file} key={index} />)
                                     : null}
+
+                                {url ? <LinkPreview url={url} /> : null}
 
                                 <div
                                     className={classNames(
