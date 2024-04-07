@@ -31,6 +31,7 @@ const Footer = () => {
     const mentions = useMemo(() => (active?.users ? getMentions(active.users, user) : []), [active?.users, user]);
     const { value: showLocation, setTrue: setShowLocation, setFalse: setHideLocation } = useBoolean(false);
     const { files, reply, chat } = useSelector((state) => state.chat);
+    const { socket } = useSelector((state) => state.socket);
     const ref = useRef();
     const { width } = useWindowSize();
     const dispatch = useDispatch();
@@ -189,6 +190,14 @@ const Footer = () => {
         dispatch(resetSubs());
     };
 
+    const handleFocus = () => {
+        socket.emit('typing', { conversation: active, userId: user._id });
+    };
+
+    const handleBlur = () => {
+        socket.emit('stopTyping', { conversation: active, userId: user._id });
+    };
+
     useEffect(() => {
         if (!ref.current) return () => {};
 
@@ -249,6 +258,8 @@ const Footer = () => {
                             onChange={handleChange}
                             placeholder={t('chat.chat')}
                             className="mentions-input rounded text-sm leading-normal placeholder:text-secondary dark:placeholder:text-dark-secondary text-input dark:text-dark-primary bg-input-bg dark:bg-dark-input-bg flex-1 my-0.5"
+                            onFocus={handleFocus}
+                            onBlur={handleBlur}
                         >
                             <Mention
                                 displayTransform={displayTransform}

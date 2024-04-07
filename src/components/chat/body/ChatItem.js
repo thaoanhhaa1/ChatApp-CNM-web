@@ -23,7 +23,7 @@ import StickerItem from '~/components/sticker/StickerItem';
 import Toast from '~/components/toast';
 import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
 import { setReply } from '~/features/chat/chatSlice';
-import { addPinMessage, updateLastMessage, updateMessage } from '~/features/chats/chatsSlice';
+import { addPinMessage, setMessages, updateLastMessage, updateMessage } from '~/features/chats/chatsSlice';
 import { getReplyMessages, setOffsetTop, updateDeletedMessage } from '~/features/messages/messagesSlice';
 import { useToast } from '~/hooks';
 import { deleteMessageForMe, pinMessage, recallMessage } from '~/services';
@@ -51,7 +51,8 @@ import Reaction from './ReactionChat';
 // [ ] Forward message
 // [ ] Pin message
 // [ ] Pin conversation
-// [ ] Reply message
+// [x] Reply message
+// [ ] Load more message
 const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const [, startTransition] = useTransition();
     const { t } = useTranslation();
@@ -59,7 +60,9 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const ref = useRef();
     const dispatch = useDispatch();
     const { messages } = useSelector((state) => state.messages);
+    const { active } = useSelector((state) => state.chats);
     const [toastRecall, setToastRecall] = useToast(1000);
+    const { socket } = useSelector((state) => state.socket);
 
     const isYourPrev = prevChat?.sender._id === chat.sender?._id;
     const date = new Date(chat.updatedAt || chat.timeSend);
@@ -78,7 +81,10 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
             scrollY(0);
 
             startTransition(async () => {
-                await dispatch(getReplyMessages(message._id)).unwrap();
+                const messages = await dispatch(getReplyMessages(message._id)).unwrap();
+
+                dispatch(setMessages(messages));
+
                 scrollY(0);
             });
         }
@@ -95,13 +101,14 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                     message: { ...chat, deleted: DeleteMessageStatus.RECALL },
                 }),
             );
+            socket.emit('recallMessage', { ...chat, conversation: active });
         } else setToastRecall(true);
     };
 
     const handleDeleteForMe = () => {
         deleteMessageForMe(chat._id).then();
         dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.DELETE_FOR_ME }));
-        dispatch(updateLastMessage({ conversationId: chat._id, message: getMessageNoDelete(messages, chat._id) }));
+        dispatch(updateMessage({ conversationId: chat._id, message: getMessageNoDelete(messages, chat._id) }));
     };
 
     const handlePinMessage = () => {

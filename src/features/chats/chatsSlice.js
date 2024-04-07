@@ -15,6 +15,7 @@ const getChats = createAsyncThunk('getChats', async () => {
 });
 
 const getConversation = createAsyncThunk('getConversation', async (receiverId) => {
+    console.log('Get conversation....');
     const response = await openConversation(receiverId);
 
     return response.data;
@@ -25,15 +26,16 @@ const chatsSlice = createSlice({
     initialState,
     reducers: {
         setTyping: (state, { payload }) => {
-            state.chats.find((chat) => {
-                const find = chat.id === payload.id;
+            const { conversationId, userId, typing } = payload;
 
-                if (find) {
-                    chat.typing = payload.typing;
-                }
+            const chat = state.chats.find((chat) => chat._id === conversationId);
 
-                return find;
-            });
+            if (!chat) return state;
+
+            const user = chat.users.find((user) => user._id === userId);
+
+            if (user) user.typing = typing;
+            if (state.active?._id === conversationId) state.active.users = chat.users;
         },
         setActive: (state, { payload }) => {
             state.active = payload;
@@ -41,23 +43,24 @@ const chatsSlice = createSlice({
             const chat = state.chats.find((chat) => chat._id === payload._id);
             if (chat) chat.unseenMessages = 0;
         },
-        updateLastMessage: (state, { payload }) => {
-            const { conversationId, message } = payload;
-
-            const chat = state.chats.find((chat) => chat._id === conversationId);
-
-            if (chat) chat.lastMessage = message;
-            if (state.active?._id === conversationId) state.lastMessage = message;
-        },
         updateMessage: (state, { payload }) => {
             const { conversationId, message } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
 
-            if (chat && chat.lastMessage?._id === message._id) chat.lastMessage = message;
+            if (!chat.messages?.length) return state;
 
-            if (state.active?._id === conversationId && state?.lastMessage?._id === message._id)
-                state.lastMessage = message;
+            chat.messages.forEach((item, index) => {
+                if (item._id === message._id) chat.messages[index] = message;
+
+                if (item.reply?._id === message._id) item.reply = message;
+            });
+
+            if (state.active?._id === conversationId) {
+                state.active.messages = chat.messages;
+
+                if (state?.lastMessage?._id === message._id) state.active.lastMessage = message;
+            }
         },
         togglePin: (state, { payload }) => {
             const { conversationId, userId } = payload;
@@ -69,6 +72,8 @@ const chatsSlice = createSlice({
 
                 if (index >= 0) chat.pinBy.splice(index, 1);
                 else chat.pinBy.push(userId);
+
+                if (state.active?._id === conversationId) state.active.pinBy = chat.pinBy;
             }
         },
         addPinMessage: (state, { payload }) => {
@@ -79,7 +84,7 @@ const chatsSlice = createSlice({
             if (chat.pinnedMessages.length >= 3) chat.pinnedMessages.shift();
 
             if (chat) chat.pinnedMessages.unshift(message);
-            if (state.active?._id === conversationId) state.active.pinnedMessages.unshift(message);
+            if (state.active?._id === conversationId) state.active.pinnedMessages = chat.pinnedMessages;
         },
         addMessages: (state, { payload }) => {
             if (!payload?.length) return state;
@@ -91,6 +96,8 @@ const chatsSlice = createSlice({
             if (chat) {
                 if (chat.messages?.length) chat.messages = [...chat.messages, ...payload];
                 else chat.messages = payload;
+
+                if (state.active?._id === conversationId) state.active.messages = chat.messages;
             }
         },
         addMessageHead: (state, { payload }) => {
@@ -108,7 +115,8 @@ const chatsSlice = createSlice({
                 // FIXME
                 chat.unseenMessages = chat.unseenMessages ? chat.unseenMessages + 1 : 1;
                 if (state.active?._id === conversationId) {
-                    state.lastMessage = payload;
+                    state.active.lastMessage = payload;
+                    state.active.messages = chat.messages;
                     chat.unseenMessages = 0;
                 }
             }
@@ -117,6 +125,17 @@ const chatsSlice = createSlice({
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
 
             if (index < 0) state.chats.unshift(payload);
+            else state.chats[index] = payload;
+        },
+        setMessages: (state, { payload }) => {
+            if (!payload?.length) return state;
+
+            const conversationId = payload[0].conversationId || payload[0].conversation._id;
+
+            const chat = state.chats.find((chat) => chat._id === conversationId);
+            chat.messages = payload;
+
+            if (state.active?._id === conversationId) state.active.messages = chat.messages;
         },
     },
     extraReducers: (builder) => {
@@ -150,9 +169,9 @@ const chatsSlice = createSlice({
 
 export default chatsSlice.reducer;
 export const {
+    setMessages,
     setTyping,
     setActive,
-    updateLastMessage,
     updateMessage,
     togglePin,
     addPinMessage,

@@ -6,7 +6,7 @@ import { v4 } from 'uuid';
 import { sentMessageStatus } from '~/constants';
 import { ChatProvider } from '~/context';
 import { addFiles } from '~/features/chat/chatSlice';
-import { updateLastMessage } from '~/features/chats/chatsSlice';
+import { updateMessage } from '~/features/chats/chatsSlice';
 import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { useBoolean, useToast } from '~/hooks';
 import { classNames, isImageFileByType } from '~/utils';
@@ -28,8 +28,10 @@ const Chat = () => {
     const [dropZoneHeights, setDropZoneHeights] = useState([0, 0]);
     const [showToast, setShowToast] = useToast(1000);
     const { files } = useSelector((state) => state.chat);
-    const { active, activeLoading } = useSelector((state) => state.chats);
+    const { chats, active, activeLoading } = useSelector((state) => state.chats);
+    console.log('🚀 ~ Chat ~ chats:', chats);
     const { messages } = useSelector((state) => state.messages);
+    console.log('🚀 ~ Chat ~ messages:', messages);
     const { user } = useSelector((state) => state.user);
     const { socket } = useSelector((state) => state.socket);
     const { width } = useWindowSize();
@@ -158,7 +160,7 @@ const Chat = () => {
         if (lastMessage.state === sentMessageStatus.SENT) socket.emit('sendMessage', lastMessage);
 
         dispatch(
-            updateLastMessage({
+            updateMessage({
                 conversationId: lastMessage.conversation?._id || lastMessage?.conversationId,
                 message: lastMessage,
             }),

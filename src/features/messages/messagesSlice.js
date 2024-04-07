@@ -15,6 +15,7 @@ const initialState = {
 };
 
 const getMessages = createAsyncThunk('getMessages', async ({ param, query, signal }) => {
+    console.log('Get messages....');
     const response = await getMessagesService({ param, query, signal });
 
     return response.data;
@@ -54,8 +55,14 @@ const messagesSlice = createSlice({
             state.messages.unshift(message);
         },
         updateDeletedMessage: (state, { payload }) => {
-            const message = state.messages.find((message) => message._id === payload._id);
-            if (message) message.deleted = payload.deleted;
+            const { _id, deleted } = payload;
+
+            const message = state.messages.find((message) => message._id === _id);
+            if (message) message.deleted = deleted;
+
+            state.messages.forEach((message) => {
+                if (message.reply?._id === _id) message.reply.deleted = deleted;
+            });
         },
         addMessageSocket: (state, { payload }) => {
             if (

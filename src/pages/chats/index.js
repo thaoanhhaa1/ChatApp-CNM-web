@@ -67,7 +67,7 @@ const Chats = () => {
 
     useEffect(() => {
         dispatch(setMessages([]));
-    }, [active, dispatch]);
+    }, [active?._id, dispatch]);
 
     useEffect(() => {
         active?.lastMessage && hideSearch();

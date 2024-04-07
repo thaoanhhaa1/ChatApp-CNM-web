@@ -2,12 +2,13 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
-import { addMessages, updateLastMessage } from '~/features/chats/chatsSlice';
-import { getMessages, setMessages } from '~/features/messages/messagesSlice';
+import { addMessageHead, addMessages } from '~/features/chats/chatsSlice';
+import { getMessages } from '~/features/messages/messagesSlice';
 import { getTimeChatSeparate } from '~/utils';
 import ChatEmpty from './ChatEmpty';
 import ChatItem from './ChatItem';
 import ChatItemSeparate from './ChatItemSeparate';
+import ChatItemTyping from './ChatItemTyping';
 
 // TODO Typing
 const Body = () => {
@@ -22,6 +23,12 @@ const Body = () => {
         [messages],
     );
     const latestMessage = useMemo(() => messagesCanShow.at(-1), [messagesCanShow]);
+    const typingUsers = useMemo(() => {
+        if (!active) return [];
+
+        return active.users.filter((u) => u.typing && u._id !== user._id);
+    }, [active, user._id]);
+    console.log('🚀 ~ typingUsers ~ typingUsers:', typingUsers);
 
     const scrollY = useCallback((y) => ref.current?.scrollY(y), [ref]);
 
@@ -59,42 +66,37 @@ const Body = () => {
             }
         };
 
-        if (active?._id) {
-            console.log(active.messages);
-
+        if (active?._id && !messages?.length) {
             if (active.messages && active.messages.at(-1).state !== sentMessageStatus.SENT) {
-                dispatch(setMessages(active.messages));
             } else fetchMessages();
         }
 
         return () => {
             controller && controller.abort();
         };
-    }, [active, dispatch]);
+    }, [active?._id, active?.messages, dispatch, messages?.length]);
 
     useEffect(() => {
         if (ref.current && page === 1) ref.current.scrollBottom();
     }, [messages, page]);
 
     useEffect(() => {
-        const message = messages[0];
+        const message = messages?.[0];
 
-        if (!message || activeLoading) return;
+        if (!message) return;
 
-        const { _id } = active || {};
-        if (!active || _id !== message.conversationId) return;
-
-        dispatch(
-            updateLastMessage({
-                conversationId: _id,
-                message,
-            }),
-        );
-    }, [active, activeLoading, dispatch, messages]);
+        if (message.state === sentMessageStatus.SENT) {
+            dispatch(addMessageHead(message));
+        }
+    }, [dispatch, messages]);
 
     return (
         <ScrollbarCustomize containerClassName="overflow-hidden" ref={ref} onScroll={handleScroll}>
             <div className="flex flex-col-reverse gap-6 p-2 sm:p-3 md:p-4 dl:p-5">
+                {typingUsers.map((user) => (
+                    <ChatItemTyping key={user._id} chat={user} />
+                ))}
+
                 {loading || activeLoading || !!messages.length || (
                     <div className="absolute bottom-0 left-0 right-0 px-2 sm:px-3 md:px-4 dl:px-5">
                         <ChatEmpty className="mb-6 ex:mb-8 sm:mb-10 md:mb-12 dl:mb-14 max-w-[472px] mx-auto" />
@@ -124,8 +126,6 @@ const Body = () => {
                         <span className="w-6 h-6 rounded-full border-2 border-primary-color border-t-transparent animate-spin"></span>
                     </div>
                 )}
-
-                {/* <ChatItemTyping chat={user} /> */}
             </div>
         </ScrollbarCustomize>
     );

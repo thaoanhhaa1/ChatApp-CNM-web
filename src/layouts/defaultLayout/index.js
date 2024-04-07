@@ -7,10 +7,10 @@ import Chat from '~/components/chat';
 import Loading from '~/components/loading';
 import Navbar from '~/components/navbar';
 import config from '~/config';
-import { screens } from '~/constants';
+import { DeleteMessageStatus, screens } from '~/constants';
 import { LayoutProvider } from '~/context';
-import { addChat, addMessageHead } from '~/features/chats/chatsSlice';
-import { addMessageSocket } from '~/features/messages/messagesSlice';
+import { addChat, addMessageHead, setTyping, updateMessage } from '~/features/chats/chatsSlice';
+import { addMessageSocket, updateDeletedMessage } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
 import { getUserInfo } from '~/features/user/userSlice';
 import { classNames, location } from '~/utils';
@@ -75,13 +75,42 @@ const DefaultLayout = ({ children }) => {
         });
 
         socket.on('receivedMessage', (message) => {
+            console.log('🚀 ~ socket.on ~ message:', message);
             dispatch(addMessageHead(message));
 
-            if (active && active._id === message.conversation._id) dispatch(addMessageSocket(message));
+            if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));
         });
 
         socket.on('openConversation', (data) => dispatch(addChat(data)));
-    }, [active, dispatch, socket, user._id]);
+
+        socket.on('typing', (data) =>
+            dispatch(
+                setTyping({
+                    ...data,
+                    typing: true,
+                }),
+            ),
+        );
+
+        socket.on('stopTyping', (data) =>
+            dispatch(
+                setTyping({
+                    ...data,
+                    typing: false,
+                }),
+            ),
+        );
+
+        socket.on('recallMessage', (message) => {
+            dispatch(updateDeletedMessage({ _id: message._id, deleted: DeleteMessageStatus.RECALL }));
+            dispatch(
+                updateMessage({
+                    conversationId: message.conversation._id,
+                    message: { ...message, deleted: DeleteMessageStatus.RECALL },
+                }),
+            );
+        });
+    }, [active?._id, dispatch, socket, user._id]);
 
     useEffect(() => {
         if (!refSection.current) return;

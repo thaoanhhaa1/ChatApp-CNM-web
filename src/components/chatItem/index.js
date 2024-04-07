@@ -23,6 +23,7 @@ const ChatItem = ({ chat, active }) => {
     const isHasFiles = chat.lastMessage?.files?.length;
     const isImageList = isHasFiles && isImageFileByType(chat.lastMessage.files[0].type);
     const isPin = isPinConversation(chat, user);
+    const isTyping = chat.users.some((u) => u.typing);
 
     const togglePinConversation = useCallback(() => {
         // TODO Unpin
@@ -111,7 +112,7 @@ const ChatItem = ({ chat, active }) => {
                     </div>
                 </div>
                 <div className="flex gap-1 items-center justify-between">
-                    {(chat.typing && <Typing />) || (
+                    {(isTyping && <Typing />) || (
                         <div className="flex gap-1 items-center">
                             {!recalled && isImageList ? (
                                 <span className="text-secondary dark:text-dark-secondary">
