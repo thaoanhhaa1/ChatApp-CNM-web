@@ -41,6 +41,8 @@ import ChatItemButton from './ChatItemButton';
 import ChatItemReaction from './ChatItemReaction';
 import ChatItemSeparate from './ChatItemSeparate';
 import Reaction from './ReactionChat';
+import ViewImage from '~/components/viewImage';
+
 
 // TODO
 // [x] Chat text
@@ -155,7 +157,19 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
             }),
         );
     }, [chat._id, dispatch]);
+    const [viewImage, setViewImage] = useState(null);
 
+  // Xử lý sự kiện khi chọn vào ảnh
+  // Trong component của bạn
+const handleImageClick = (imageUrl, imageName) => {
+    console.log("Image URL:", imageName); // Log đường dẫn của ảnh khi được click
+    setViewImage({ url: imageUrl, name: imageName });
+};
+
+
+  // Xử lý sự kiện đóng view xem ảnh
+  const handleCloseImageViewer = () => {
+    setViewImage(null);}
     return (
         <div ref={ref} className="flex flex-col gap-2 ex:gap-3 sm:gap-4">
             <Toast
@@ -191,7 +205,15 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                 ) : null}
 
                                 <Message status={chat.deleted} messages={chat.messages || []} isMe={isMe} />
-
+                                {viewImage !== null && (
+                                <ViewImage
+                                    title="hieu"
+                                    name={viewImage.name}
+                                    url={viewImage.url}
+                                    onClose={handleCloseImageViewer}
+                                />
+            
+            )}
                                 {chat.files && isImageList && !recalled ? (
                                     <div className="flex gap-1 px-1 flex-col ex:flex-row flex-wrap">
                                         {chat.files.map((image, index) => (
@@ -200,6 +222,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                                 src={image.link || URL.createObjectURL(image)}
                                                 name={image.name}
                                                 key={index}
+                                                onClick={() => handleImageClick(image.link || URL.createObjectURL(image), image.name)}
                                             />
                                         ))}
                                     </div>

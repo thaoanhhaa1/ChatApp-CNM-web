@@ -4,13 +4,14 @@ import { DownloadLineIcon } from '~/assets';
 import { useDownloadFile } from '~/hooks';
 import { classNames } from '~/utils';
 
-const ChatImage = ({ imageInList = false, loading = false, src, name }) => {
+const ChatImage = ({ imageInList = false, onClick = () => {}, loading = false, src, name ,}) => {
     const download = useDownloadFile(src, name);
 
     const handleLoadImage = () => URL.revokeObjectURL(src);
 
     return (
         <div
+        onClick={onClick}
             className={classNames(
                 'relative',
                 imageInList || 'w-[150px] aspect-[3/2] border border-separate dark:border-dark-separate rounded',
@@ -41,6 +42,7 @@ ChatImage.propTypes = {
     name: PropTypes.string.isRequired,
     loading: PropTypes.bool,
     imageInList: PropTypes.bool,
+    onClick: PropTypes.func,
 };
 
 export default ChatImage;
