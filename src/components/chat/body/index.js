@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
 import { addMessageHead, addMessages } from '~/features/chats/chatsSlice';
-import { getMessages } from '~/features/messages/messagesSlice';
+import { getMessages, setMessages } from '~/features/messages/messagesSlice';
 import { getTimeChatSeparate } from '~/utils';
 import ChatEmpty from './ChatEmpty';
 import ChatItem from './ChatItem';
@@ -13,7 +13,7 @@ import ChatItemTyping from './ChatItemTyping';
 // TODO Typing
 const Body = () => {
     const ref = useRef();
-    const { messages, loading, page } = useSelector((state) => state.messages);
+    const { messages, loading, page, maxPage } = useSelector((state) => state.messages);
     const { active, activeLoading } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
@@ -28,22 +28,14 @@ const Body = () => {
 
         return active.users.filter((u) => u.typing && u._id !== user._id);
     }, [active, user._id]);
-    console.log('🚀 ~ typingUsers ~ typingUsers:', typingUsers);
 
     const scrollY = useCallback((y) => ref.current?.scrollY(y), [ref]);
 
-    const handleScroll = (e) => {
+    const handleScroll = async (e) => {
         const scrollTop = e.target.scrollTop;
-
-        if (scrollTop <= 200 && !loading) {
-            console.group('handleScroll');
-            console.log(`Load more message...`);
-            console.log(`messages: ${messages}`);
-            console.log(`loading: ${loading}`);
-            console.log(`page: ${page}`);
-            console.log(`active: ${active}`);
-            console.log(`activeLoading: ${activeLoading}`);
-            console.groupEnd();
+        if (scrollTop <= 200 && !loading && page < maxPage) {
+            await dispatch(getMessages({ param: [active._id], query: { messageId: messages?.at(-1)?._id } })).unwrap();
+            ref.current.scrollY(205);
         }
     };
 
@@ -68,13 +60,14 @@ const Body = () => {
 
         if (active?._id && !messages?.length) {
             if (active.messages && active.messages.at(-1).state !== sentMessageStatus.SENT) {
+                dispatch(setMessages(active.messages));
             } else fetchMessages();
         }
 
         return () => {
             controller && controller.abort();
         };
-    }, [active?._id, active?.messages, dispatch, messages?.length]);
+    }, [active._id, active.messages, dispatch, messages?.length]);
 
     useEffect(() => {
         if (ref.current && page === 1) ref.current.scrollBottom();

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { popSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { useLoader } from '~/hooks';
 import { googleMaps } from '~/utils';
@@ -12,12 +13,29 @@ const Detail = ({ onClose = () => {} }) => {
     const { t } = useTranslation();
     const { location } = useSelector((state) => state.location);
     const { active } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
     const { google, places, marker } = useLoader();
     const dispatch = useDispatch();
 
     const handleCancel = () => dispatch(popSub());
     const handleSend = () => {
-        console.log('Send location:', location);
+        const timeSend = Date.now();
+
+        const formData = new FormData();
+
+        formData.append('conversationId', active._id);
+        formData.append('sender', user);
+        formData.append('timeSend', timeSend);
+        formData.append('location', location);
+
+        dispatch(sendMessage(formData));
+        dispatch(
+            addMessage({
+                sender: user,
+                conversationId: active._id,
+                timeSend,
+            }),
+        );
         onClose();
     };
 

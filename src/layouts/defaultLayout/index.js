@@ -1,17 +1,20 @@
 import { useWindowSize } from '@uidotdev/usehooks';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Chat from '~/components/chat';
 import Loading from '~/components/loading';
 import Navbar from '~/components/navbar';
+import Toast from '~/components/toast';
 import config from '~/config';
 import { DeleteMessageStatus, screens } from '~/constants';
 import { LayoutProvider } from '~/context';
 import { addChat, addMessageHead, setTyping, updateMessage } from '~/features/chats/chatsSlice';
 import { addMessageSocket, updateDeletedMessage } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
+import { setLocationError } from '~/features/toastAll/toastAllSlice';
 import { getUserInfo } from '~/features/user/userSlice';
 import { classNames, location } from '~/utils';
 
@@ -28,11 +31,13 @@ location.getCoords().then();
 let redirect = false;
 
 const DefaultLayout = ({ children }) => {
+    const { t } = useTranslation();
     const [showChat, setShowChat] = useState(false);
     const { width } = useWindowSize();
     const { user, loading } = useSelector((state) => state.user);
     const { socket } = useSelector((state) => state.socket);
     const { active } = useSelector((state) => state.chats);
+    const { locationError } = useSelector((state) => state.toastAll);
     const navigation = useNavigate();
     const dispatch = useDispatch();
     const refSection = useRef(null);
@@ -119,11 +124,20 @@ const DefaultLayout = ({ children }) => {
         else refSection.current.style.zIndex = 1;
     }, [showChat, width]);
 
+    useEffect(() => {
+        if (!locationError) return;
+
+        setTimeout(() => {
+            dispatch(setLocationError(false));
+        }, 1500);
+    }, [dispatch, locationError]);
+
     if (loading || !user?._id) return <Loading />;
 
     return (
         <LayoutProvider value={{ setShowChat }}>
             <main className="flex flex-col dl:flex-row h-screen">
+                <Toast showToast={locationError} message={t('location.error-api')} />
                 <Navbar />
                 <section
                     ref={refSection}

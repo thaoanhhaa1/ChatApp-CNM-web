@@ -1,7 +1,7 @@
 const googleMaps = (location, google, marker, element) => {
     const map = new google.maps.Map(element, {
         center: location.coords,
-        zoom: 8,
+        zoom: 15,
         mapId: `DEMO_MAP_ID`,
     });
 

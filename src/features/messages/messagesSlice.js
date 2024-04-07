@@ -10,7 +10,7 @@ import {
 const initialState = {
     messages: [],
     loading: false,
-    page: 1,
+    page: 0,
     maxPage: 1,
 };
 
@@ -46,6 +46,8 @@ const messagesSlice = createSlice({
         },
         setMessages: (state, { payload }) => {
             state.messages = payload;
+            state.page = 0;
+            state.maxPage = 1;
         },
         addMessage: (state, { payload }) => {
             const message = { ...payload, _id: v4() };
@@ -77,11 +79,20 @@ const messagesSlice = createSlice({
         builder
             .addCase(getMessages.pending, (state) => {
                 state.loading = true;
-                state.messages = [];
+                // state.messages = [];
             })
             .addCase(getMessages.fulfilled, (state, { payload }) => {
+                if (payload.length === 0) state.maxPage = state.page;
+
+                if (payload.at(-1)?._id !== state.messages.at(-1)?._id) {
+                    if (state.messages) state.messages.push(...payload);
+                    else state.messages = payload;
+                    state.page += 1;
+
+                    if (payload.length < 20) state.maxPage = state.page;
+                    else state.maxPage += 1;
+                }
                 state.loading = false;
-                state.messages = payload;
             })
             .addCase(getMessages.rejected, (state) => {
                 state.loading = false;

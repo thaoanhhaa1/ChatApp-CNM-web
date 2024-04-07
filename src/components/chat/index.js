@@ -169,10 +169,7 @@ const Chat = () => {
 
     return (
         <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile }}>
-            <Toast
-                message={t('chat.limit-files-send')}
-                className={classNames('transition-opacity duration-150', showToast ? 'opacity-100' : 'opacity-0')}
-            />
+            <Toast showToast={showToast} message={t('chat.limit-files-send')} />
             <div className="flex h-full shadow-navbar z-1 dark:bg-dark">
                 <div className="w-full flex flex-col flex-1">
                     {active || activeLoading ? (

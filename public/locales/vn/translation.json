@@ -357,6 +357,7 @@
         "description": "Gửi địa điểm cụ thể",
         "send-to": "Gửi vị trí này cho",
         "cancel": "Huỷ",
-        "send": "Gửi"
+        "send": "Gửi",
+        "error-api": "Có một vài lỗi đối với Google Maps API, vui lòng thử lại sau"
     }
 }

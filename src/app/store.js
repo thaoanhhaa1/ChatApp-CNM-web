@@ -16,6 +16,7 @@ import receivedFriendRequestsReducer from '~/features/receivedFriendRequests/rec
 import searchReducer from '~/features/search/searchSlice';
 import sentFriendRequestsReducer from '~/features/sentFriendRequests/sentFriendRequestsSlice';
 import socketReducer from '~/features/socket/socketSlice';
+import toastAllReducer from '~/features/toastAll/toastAllSlice';
 import userReducer from '~/features/user/userSlice';
 
 export const store = configureStore({
@@ -38,6 +39,7 @@ export const store = configureStore({
         localSetting: localSettingReducer,
         search: searchReducer,
         location: locationReducer,
+        toastAll: toastAllReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

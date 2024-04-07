@@ -52,7 +52,8 @@ import Reaction from './ReactionChat';
 // [ ] Pin message
 // [ ] Pin conversation
 // [x] Reply message
-// [ ] Load more message
+// [x] Load more message
+// [ ] Location
 const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const [, startTransition] = useTransition();
     const { t } = useTranslation();
@@ -158,10 +159,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
 
     return (
         <div ref={ref} className="flex flex-col gap-2 ex:gap-3 sm:gap-4">
-            <Toast
-                message={t('chat.recall-notify')}
-                className={classNames('transition-opacity duration-150', toastRecall ? 'opacity-100' : 'opacity-0')}
-            />
+            <Toast showToast={toastRecall} message={t('chat.recall-notify')} />
             <div
                 className={classNames(
                     'max-w-[90%] ex:max-w-[85%] xs:max-w-[80%] sm:max-w-[75%] flex',

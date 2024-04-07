@@ -15,7 +15,7 @@ import { setChat, setFiles, setReply } from '~/features/chat/chatSlice';
 import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { useBoolean, useToast } from '~/hooks';
-import { classNames, getMentions, insertEmojiToChat, isImageFileByType, splitMessage } from '~/utils';
+import { getMentions, insertEmojiToChat, isImageFileByType, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
 import MentionItem from './Mention';
@@ -232,10 +232,7 @@ const Footer = () => {
 
     return (
         <div>
-            <Toast
-                message="Invalid message"
-                className={classNames('transition-opacity duration-150', showToast ? 'opacity-100' : 'opacity-0')}
-            />
+            <Toast showToast={showToast} message="Invalid message" />
             <div className="flex flex-col justify-center gap-2 px-2 h-10 border-t border-separate dark:border-dark-separate">
                 <Button onClick={setShowLocation} icon={LocationIcon} />
             </div>

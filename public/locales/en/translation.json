@@ -358,6 +358,7 @@
         "description": "Send specific location",
         "send-to": "Send this location to",
         "cancel": "Cancel",
-        "send": "Send"
+        "send": "Send",
+        "error-api": "There were some errors with the Google Maps API, please try again later"
     }
 }
