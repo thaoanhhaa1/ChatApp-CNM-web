@@ -12,8 +12,9 @@ const api = {
     createOTP: () => `/auth/createOTP`,
     verifyOTP: () => `/auth/verifyOTP`,
     sendOTPForgotPassword: () => `/auth/forgotpassword`,
-    verifyOTPForgotPassword: () => `auth/forgot-password`,
-    updateUser: () => `/user`
+    verifyOTPForgotPassword: () => `/auth/forgot-password`,
+    updateUser: () => `/user`,
+    changePassword: () => `/auth/changePassword/`,
 };
 
 export default api;

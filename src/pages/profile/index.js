@@ -35,9 +35,7 @@ const Profile = ({onClose}) => {
     }, [dispatch, subs.length]);
 
     const handleImageChange = (event) => {
-        const selectedImage = event.target.files[0]; // Lấy ra file hình ảnh được chọn
-        // Thực hiện xử lý với hình ảnh được chọn, ví dụ:
-        // Hiển thị hình ảnh trong console
+        const selectedImage = event.target.files[0]; 
         console.log(selectedImage);
     };
 
@@ -109,7 +107,6 @@ const Profile = ({onClose}) => {
                         <div class="border border-gray-300 w-full mt-3 mb-2"></div>
 
                         <div className="flex items-center justify-center">
-                        {/* {showEditModal && <EditProfileModal user={user} onClose={() => setShowEditModal(false)} />} */}
                             <Button className="w-full" RightIcon={PencilLineIcon} onClick={handleShowUpdateProfile}>
                                 {t('profile.update')}
                             </Button>

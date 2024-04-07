@@ -13,6 +13,7 @@ export { default as verifyOTP } from './verifyOTP';
 export { default as sendOTPForgotPassword } from './sendOtpForgotPassword';
 export { default as verifyOTPForgotPassword } from './verifyForgotPassword';
 export { default as updateUser } from './updateUser';
+export { default as changePassword } from './changePassword';
 
 
 

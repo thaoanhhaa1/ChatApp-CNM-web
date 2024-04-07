@@ -27,7 +27,7 @@ import { classNames, token } from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
-import { Profile } from '~/pages';
+import { Profile, Setting } from '~/pages';
 
 const navBars = [
     {
@@ -80,8 +80,14 @@ const Navbar = ({ className }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [openProfileModal, setOpenProfileModal] = useState(false);
-    const handleClose = () => {
-        setOpenProfileModal(false); // Đảo ngược trạng thái hiển thị của modal
+    const [openSettingModal, setOpenSettingModal] = useState(false);
+
+    const handleCloseProfile = () => {
+        setOpenProfileModal(false); 
+    };
+
+    const handleCloseSetting = () => {
+        setOpenSettingModal(false); 
     };
 
     const actions = useMemo(
@@ -95,6 +101,8 @@ const Navbar = ({ className }) => {
                 title: 'navbar.settings',
                 icon: SettingIcon,
                 separate: true,
+                onClick: () =>{setOpenSettingModal(true)}
+
             },
             {
                 title: 'navbar.logout',
@@ -155,7 +163,11 @@ const Navbar = ({ className }) => {
                     
                 </Popup>
                 {openProfileModal && (
-                    <Profile onClose={handleClose}/>
+                    <Profile onClose={handleCloseProfile}/>
+                )}
+
+                {openSettingModal && (
+                    <Setting onClose={handleCloseSetting}/>
                 )}
             </div>
            
