@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { v4 } from 'uuid';
-import { sentMessageStatus } from '~/constants';
+import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
 import {
     getMessages as getMessagesService,
     getReplyMessages as getReplyMessagesService,
@@ -55,7 +55,15 @@ const messagesSlice = createSlice({
         },
         updateDeletedMessage: (state, { payload }) => {
             const message = state.messages.find((message) => message._id === payload._id);
-            message.deleted = payload.deleted;
+            if (message) message.deleted = payload.deleted;
+        },
+        addMessageSocket: (state, { payload }) => {
+            if (
+                payload &&
+                payload._id !== state.messages?.[0]._id &&
+                payload.conversation._id === state.messages[0].conversation._id
+            )
+                state.messages.unshift(payload);
         },
     },
     extraReducers: (builder) => {
@@ -79,7 +87,12 @@ const messagesSlice = createSlice({
 
                 state.loading = false;
                 const index = state.messages.findIndex((message) => +message.timeSend === +timeSend);
-                if (index >= 0) state.messages.splice(index, 1, message);
+                if (message?._id) {
+                    message.state = sentMessageStatus.SENT;
+                    if (index >= 0) state.messages.splice(index, 1, message);
+                } else if (state.messages[index]) {
+                    state.messages[index].deleted = DeleteMessageStatus.DELETE_FOR_ME;
+                }
             })
             .addCase(getReplyMessages.pending, (state) => {
                 state.loading = true;
@@ -95,5 +108,5 @@ const messagesSlice = createSlice({
 });
 
 export default messagesSlice.reducer;
-export const { setOffsetTop, setMessages, addMessage, updateDeletedMessage } = messagesSlice.actions;
+export const { setOffsetTop, setMessages, addMessage, updateDeletedMessage, addMessageSocket } = messagesSlice.actions;
 export { getMessages, getReplyMessages, sendMessage };

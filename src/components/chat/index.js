@@ -3,12 +3,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 } from 'uuid';
+import { sentMessageStatus } from '~/constants';
 import { ChatProvider } from '~/context';
 import { addFiles } from '~/features/chat/chatSlice';
+import { updateLastMessage } from '~/features/chats/chatsSlice';
 import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
-import { useBoolean } from '~/hooks';
+import { useBoolean, useToast } from '~/hooks';
 import { classNames, isImageFileByType } from '~/utils';
 import DropZone from '../dropZone';
+import PinMessages from '../pinMessages';
 import Toast from '../toast';
 import Body from './body';
 import ChatEmpty from './chatEmpty';
@@ -23,10 +26,12 @@ const Chat = () => {
     const { value: showDropZone, setFalse: setHiddenDropZone, setTrue: setShowDropZone } = useBoolean(false);
     const dropZoneRef = useRef();
     const [dropZoneHeights, setDropZoneHeights] = useState([0, 0]);
-    const [showToast, setShowToast] = useState(false);
+    const [showToast, setShowToast] = useToast(1000);
     const { files } = useSelector((state) => state.chat);
     const { active, activeLoading } = useSelector((state) => state.chats);
+    const { messages } = useSelector((state) => state.messages);
     const { user } = useSelector((state) => state.user);
+    const { socket } = useSelector((state) => state.socket);
     const { width } = useWindowSize();
     const dispatch = useDispatch();
 
@@ -98,7 +103,7 @@ const Chat = () => {
 
             setHiddenDropZone();
         },
-        [active?._id, dispatch, setHiddenDropZone, user],
+        [active?._id, dispatch, setHiddenDropZone, setShowToast, user],
     );
 
     useEffect(() => {
@@ -146,14 +151,19 @@ const Chat = () => {
     }, [files, width, active]);
 
     useEffect(() => {
-        let id;
+        const lastMessage = messages?.[0];
 
-        if (showToast) id = setTimeout(() => setShowToast(false), 1000);
+        if (!lastMessage) return;
 
-        return () => {
-            clearTimeout(id);
-        };
-    }, [showToast]);
+        if (lastMessage.state === sentMessageStatus.SENT) socket.emit('sendMessage', lastMessage);
+
+        dispatch(
+            updateLastMessage({
+                conversationId: lastMessage.conversation?._id || lastMessage?.conversationId,
+                message: lastMessage,
+            }),
+        );
+    }, [dispatch, messages, socket]);
 
     return (
         <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile }}>
@@ -167,7 +177,10 @@ const Chat = () => {
                         <>
                             {activeLoading ? <HeaderSkeleton /> : <Header />}
                             <div ref={dropZoneRef} className="relative flex-1 flex flex-col">
+                                {/* <div className="relative flex-1 flex flex-col"> */}
+                                <PinMessages messages={active?.pinnedMessages} />
                                 <Body />
+                                {/* </div> */}
                                 <Footer />
 
                                 {showDropZone && (

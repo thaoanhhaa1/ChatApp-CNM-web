@@ -12,8 +12,12 @@ const socketSlice = createSlice({
 
             state.socket = socket;
         },
+        disconnect: (state) => {
+            state.socket?.disconnect();
+            state.socket = null;
+        },
     },
 });
 
 export default socketSlice.reducer;
-export const { connect } = socketSlice.actions;
+export const { connect, disconnect } = socketSlice.actions;

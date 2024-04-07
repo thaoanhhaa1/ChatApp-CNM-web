@@ -9,6 +9,8 @@ import Navbar from '~/components/navbar';
 import config from '~/config';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
+import { addChat, addMessageHead } from '~/features/chats/chatsSlice';
+import { addMessageSocket } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
 import { getUserInfo } from '~/features/user/userSlice';
 import { classNames, location } from '~/utils';
@@ -30,6 +32,7 @@ const DefaultLayout = ({ children }) => {
     const { width } = useWindowSize();
     const { user, loading } = useSelector((state) => state.user);
     const { socket } = useSelector((state) => state.socket);
+    const { active } = useSelector((state) => state.chats);
     const navigation = useNavigate();
     const dispatch = useDispatch();
     const refSection = useRef(null);
@@ -67,9 +70,18 @@ const DefaultLayout = ({ children }) => {
         socket.emit('online', user._id);
 
         socket.on('usersOnline', (data) => {
-            console.log(data);
+            // TODO
+            // console.log(data);
         });
-    }, [dispatch, socket, user?._id]);
+
+        socket.on('receivedMessage', (message) => {
+            dispatch(addMessageHead(message));
+
+            if (active && active._id === message.conversation._id) dispatch(addMessageSocket(message));
+        });
+
+        socket.on('openConversation', (data) => dispatch(addChat(data)));
+    }, [active, dispatch, socket, user._id]);
 
     useEffect(() => {
         if (!refSection.current) return;

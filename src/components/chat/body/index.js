@@ -1,8 +1,9 @@
-import { memo, useCallback, useEffect, useRef } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
-import { updateLastMessage } from '~/features/chats/chatsSlice';
-import { getMessages } from '~/features/messages/messagesSlice';
+import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
+import { addMessages, updateLastMessage } from '~/features/chats/chatsSlice';
+import { getMessages, setMessages } from '~/features/messages/messagesSlice';
 import { getTimeChatSeparate } from '~/utils';
 import ChatEmpty from './ChatEmpty';
 import ChatItem from './ChatItem';
@@ -15,6 +16,12 @@ const Body = () => {
     const { active, activeLoading } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
+
+    const messagesCanShow = useMemo(
+        () => messages.filter((message) => message.deleted !== DeleteMessageStatus.DELETE_FOR_ME),
+        [messages],
+    );
+    const latestMessage = useMemo(() => messagesCanShow.at(-1), [messagesCanShow]);
 
     const scrollY = useCallback((y) => ref.current?.scrollY(y), [ref]);
 
@@ -39,23 +46,31 @@ const Body = () => {
         const fetchMessages = async () => {
             try {
                 controller = new AbortController();
-                await dispatch(
+                const messages = await dispatch(
                     getMessages({
                         param: [active._id],
                         signal: controller.signal,
                     }),
                 ).unwrap();
+
+                dispatch(addMessages(messages));
             } catch (error) {
                 console.log(error);
             }
         };
 
-        if (active?._id) fetchMessages();
+        if (active?._id) {
+            console.log(active.messages);
+
+            if (active.messages && active.messages.at(-1).state !== sentMessageStatus.SENT) {
+                dispatch(setMessages(active.messages));
+            } else fetchMessages();
+        }
 
         return () => {
             controller && controller.abort();
         };
-    }, [active?._id, dispatch]);
+    }, [active, dispatch]);
 
     useEffect(() => {
         if (ref.current && page === 1) ref.current.scrollBottom();
@@ -87,20 +102,20 @@ const Body = () => {
                 )}
 
                 {!activeLoading &&
-                    messages.length > 0 &&
-                    messages.map((chat, index, arr) => (
+                    messagesCanShow.length > 0 &&
+                    messagesCanShow.map((chat, index, arr) => (
                         <ChatItem
                             scrollY={scrollY}
                             key={chat._id}
-                            isMe={user._id === chat.sender._id}
+                            isMe={user._id === chat.sender?._id}
                             chat={chat}
                             prevChat={arr[index - 1]}
                         />
                     ))}
 
-                {messages.length > 0 && (
+                {messagesCanShow.length > 0 && (
                     <ChatItemSeparate>
-                        {getTimeChatSeparate(new Date(messages.at(-1).updatedAt || messages.at(-1).timeSend))}
+                        {getTimeChatSeparate(new Date(latestMessage.updatedAt || latestMessage.timeSend))}
                     </ChatItemSeparate>
                 )}
 

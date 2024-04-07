@@ -9,6 +9,7 @@ import {
     FileCopyIcon,
     MessageRecallIcon,
     MoreFillIcon,
+    PinAngleIcon,
     QuoteRightIcon,
     SaveLineIcon,
 } from '~/assets';
@@ -19,27 +20,38 @@ import MessageImageList from '~/components/messageImageList';
 import Popup from '~/components/popup';
 import ReplyMessage from '~/components/replyMessage';
 import StickerItem from '~/components/sticker/StickerItem';
+import Toast from '~/components/toast';
 import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
 import { setReply } from '~/features/chat/chatSlice';
-import { updateLastMessage } from '~/features/chats/chatsSlice';
+import { addPinMessage, updateLastMessage, updateMessage } from '~/features/chats/chatsSlice';
 import { getReplyMessages, setOffsetTop, updateDeletedMessage } from '~/features/messages/messagesSlice';
-import { recallMessage } from '~/services';
-import { classNames, getTimeChat, getTimeChatSeparate, isImageFileByType, isShowTimeChatSeparate } from '~/utils';
+import { useToast } from '~/hooks';
+import { deleteMessageForMe, pinMessage, recallMessage } from '~/services';
+import {
+    classNames,
+    getMessageNoDelete,
+    getTimeChat,
+    getTimeChatSeparate,
+    isCanRecall,
+    isImageFileByType,
+    isShowTimeChatSeparate,
+} from '~/utils';
 import ChatImage from './ChatImage';
 import ChatItemButton from './ChatItemButton';
 import ChatItemReaction from './ChatItemReaction';
 import ChatItemSeparate from './ChatItemSeparate';
 import Reaction from './ReactionChat';
 
-//  TODO
-//  [x] Chat text
-//  [x] Chat file
-//  [x] Chat Emoji
-//  [ ] Recall message
-//  [ ] Delete message for me (24h)
-//  [ ] Forward message
-//  [ ] Pin message
-//  [ ] Pin conversation
+// TODO
+// [x] Chat text
+// [x] Chat file
+// [x] Chat Emoji
+// [x] Recall message
+// [ ] Delete message for me (24h)
+// [ ] Forward message
+// [ ] Pin message
+// [ ] Pin conversation
+// [ ] Reply message
 const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const [, startTransition] = useTransition();
     const { t } = useTranslation();
@@ -47,8 +59,9 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const ref = useRef();
     const dispatch = useDispatch();
     const { messages } = useSelector((state) => state.messages);
+    const [toastRecall, setToastRecall] = useToast(1000);
 
-    const isYourPrev = prevChat?.sender._id === chat.sender._id;
+    const isYourPrev = prevChat?.sender._id === chat.sender?._id;
     const date = new Date(chat.updatedAt || chat.timeSend);
     const prevDate = prevChat && new Date(prevChat.updatedAt || prevChat.timeSend);
     const showSeparate = prevDate && isShowTimeChatSeparate(date, prevDate);
@@ -73,15 +86,39 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const handleReply = () => dispatch(setReply(chat));
 
     const handleRecall = () => {
-        recallMessage(chat._id).then();
-        dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.RECALL }));
-        dispatch(updateLastMessage({ ...chat, deleted: DeleteMessageStatus.RECALL }));
+        if (isCanRecall(chat.createdAt)) {
+            recallMessage(chat._id).then();
+            dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.RECALL }));
+            dispatch(
+                updateMessage({
+                    conversationId: chat.conversation._id,
+                    message: { ...chat, deleted: DeleteMessageStatus.RECALL },
+                }),
+            );
+        } else setToastRecall(true);
+    };
+
+    const handleDeleteForMe = () => {
+        deleteMessageForMe(chat._id).then();
+        dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.DELETE_FOR_ME }));
+        dispatch(updateLastMessage({ conversationId: chat._id, message: getMessageNoDelete(messages, chat._id) }));
+    };
+
+    const handlePinMessage = () => {
+        pinMessage(chat._id).then();
+        addPinMessage({ conversationId: chat.conversation._id, message: chat });
     };
 
     const mores = [
         {
             icon: FileCopyIcon,
             title: t('chat.more.copy'),
+            separate: true,
+        },
+        {
+            icon: PinAngleIcon,
+            title: t('chat.more.pin'),
+            onClick: handlePinMessage,
         },
         {
             icon: SaveLineIcon,
@@ -99,6 +136,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
         {
             icon: DeleteBinLineIcon,
             title: t('chat.more.delete-for-me'),
+            onClick: handleDeleteForMe,
         },
     ];
 
@@ -113,6 +151,10 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
 
     return (
         <div ref={ref} className="flex flex-col gap-2 ex:gap-3 sm:gap-4">
+            <Toast
+                message={t('chat.recall-notify')}
+                className={classNames('transition-opacity duration-150', toastRecall ? 'opacity-100' : 'opacity-0')}
+            />
             <div
                 className={classNames(
                     'max-w-[90%] ex:max-w-[85%] xs:max-w-[80%] sm:max-w-[75%] flex',
@@ -195,7 +237,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                         isMe && 'text-right',
                                     )}
                                 >
-                                    {chat.name}
+                                    {chat.sender.name}
                                 </div>
                             )}
                         </>

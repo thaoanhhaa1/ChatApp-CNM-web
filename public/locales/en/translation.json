@@ -18,7 +18,15 @@
         "no-conversations-description": "Zalo only display messages from the first login on this browser",
         "no-conversations-description-1": "on",
         "photo": "Photo",
-        "sticker": "Sticker"
+        "sticker": "Sticker",
+        "more": {
+            "pin": "Pin this conversation",
+            "unpin": "Unpin this conversation",
+            "mark-as-unread": "Mark as unread",
+            "add-to-group": "Add to group",
+            "delete-conversation": "Delete conversation",
+            "report": "Report"
+        }
     },
     "chat": {
         "search": "Search",
@@ -43,7 +51,8 @@
             "forward": "Forward",
             "delete": "Delete",
             "delete-for-me": "Delete for me only",
-            "recall": "Recall"
+            "recall": "Recall",
+            "pin": "Pin message"
         },
         "emoji": "Emoji",
         "attached-file": "Attached File",
@@ -56,7 +65,12 @@
         "sent": "Sent",
         "received": "Received",
         "limit-files-send": "You should only send up to 50 files/photos each times",
-        "message-recalled": "Message recalled"
+        "message-recalled": "Message recalled",
+        "recall-notify": "You cannot recall message after 24 hours",
+        "pin-more": {
+            "copy": "Copy",
+            "unpin": "Unpin"
+        }
     },
     "contacts": {
         "title": "Contacts",

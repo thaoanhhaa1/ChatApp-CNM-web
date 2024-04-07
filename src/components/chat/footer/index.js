@@ -10,11 +10,12 @@ import Location from '~/components/location';
 import Modal from '~/components/modal';
 import PopupMultiLevel from '~/components/popupMultiLevel';
 import ReplyMessage from '~/components/replyMessage';
+import Toast from '~/components/toast';
 import { setChat, setFiles, setReply } from '~/features/chat/chatSlice';
 import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
-import { useBoolean } from '~/hooks';
-import { getMentions, insertEmojiToChat, isImageFileByType, splitMessage } from '~/utils';
+import { useBoolean, useToast } from '~/hooks';
+import { classNames, getMentions, insertEmojiToChat, isImageFileByType, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
 import MentionItem from './Mention';
@@ -29,11 +30,11 @@ const Footer = () => {
     const { user } = useSelector((state) => state.user);
     const mentions = useMemo(() => (active?.users ? getMentions(active.users, user) : []), [active?.users, user]);
     const { value: showLocation, setTrue: setShowLocation, setFalse: setHideLocation } = useBoolean(false);
-
     const { files, reply, chat } = useSelector((state) => state.chat);
     const ref = useRef();
     const { width } = useWindowSize();
     const dispatch = useDispatch();
+    const [showToast, setShowToast] = useToast(1000);
 
     const handleChange = (e) => dispatch(setChat(checkText(e.target.value)));
     const handleEmojiClick = useCallback(
@@ -97,7 +98,7 @@ const Footer = () => {
         });
 
         // Text + 1 image
-        if (messages.length && imageFiles.length === 1 && !otherFiles.length) {
+        if (chat.trim() && imageFiles.length === 1 && !otherFiles.length) {
             const formData = new FormData();
 
             formData.append('files', imageFiles[0]);
@@ -105,9 +106,11 @@ const Footer = () => {
             formData.append('sender', user);
             reply?._id && formData.append('reply', reply?._id);
             formData.append('timeSend', timeSend);
-            formData.append('messages', messages[0]);
+            formData.append('messages', messages);
 
-            dispatch(sendMessage(formData));
+            dispatch(sendMessage(formData))
+                .unwrap()
+                .then(({ data }) => setShowToast(data.invalidMessage));
             dispatch(
                 addMessage({
                     sender: user,
@@ -120,8 +123,10 @@ const Footer = () => {
             );
         } else {
             // Text + n images + n other files
-            if (messages.length) {
-                dispatch(sendMessage({ messages, conversationId: active._id, reply: reply?._id, timeSend }));
+            if (messages.length && chat.trim()) {
+                dispatch(sendMessage({ messages, conversationId: active._id, reply: reply?._id, timeSend }))
+                    .unwrap()
+                    .then(({ data }) => setShowToast(data.invalidMessage));
                 dispatch(
                     addMessage({
                         messages,
@@ -218,6 +223,10 @@ const Footer = () => {
 
     return (
         <div>
+            <Toast
+                message="Invalid message"
+                className={classNames('transition-opacity duration-150', showToast ? 'opacity-100' : 'opacity-0')}
+            />
             <div className="flex flex-col justify-center gap-2 px-2 h-10 border-t border-separate dark:border-dark-separate">
                 <Button onClick={setShowLocation} icon={LocationIcon} />
             </div>

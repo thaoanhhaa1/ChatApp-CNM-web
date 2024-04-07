@@ -18,7 +18,15 @@
         "no-conversations-description": "Zalo chỉ hiển thị tin nhắn từ sau lần đăng nhập đầu tiên trên trình duyệt này",
         "no-conversations-description-1": "ngày",
         "photo": "Hình ảnh",
-        "sticker": "Sticker"
+        "sticker": "Sticker",
+        "more": {
+            "pin": "Ghim hội thoại",
+            "unpin": "Bỏ ghim hội thoại",
+            "mark-as-unread": "Đánh dấu chưa đọc",
+            "add-to-group": "Thêm vào nhóm",
+            "delete-conversation": "Xoá hội thoại",
+            "report": "Báo xấu"
+        }
     },
     "chat": {
         "search": "Tìm tin nhắn",
@@ -42,7 +50,8 @@
             "save": "Lưu",
             "forward": "Chuyển tiếp",
             "delete-for-me": "Xoá chỉ ở phía tôi",
-            "recall": "Thu hồi"
+            "recall": "Thu hồi",
+            "pin": "Ghim tin nhắn"
         },
         "emoji": "Biểu cảm",
         "attached-file": "Đính kèm file",
@@ -55,7 +64,12 @@
         "sent": "Đã gửi",
         "received": "Đã nhận",
         "limit-files-send": "Bạn chỉ nên chia sẻ tối đa 50 tập tin/ảnh mỗi lần",
-        "message-recalled": "Tin nhắn đã được thu hồi"
+        "message-recalled": "Tin nhắn đã được thu hồi",
+        "recall-notify": "Bạn chỉ có thể thu hồi tin nhắn trong vòng 24h",
+        "pin-more": {
+            "copy": "Copy",
+            "unpin": "Bỏ ghim"
+        }
     },
     "contacts": {
         "title": "Danh bạ",

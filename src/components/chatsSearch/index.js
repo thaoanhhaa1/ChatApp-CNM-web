@@ -18,6 +18,8 @@ const ChatsSearch = ({ searchValue }) => {
     const { settings } = useSelector((state) => state.localSetting);
     const { contacts, loadingContacts } = useSelector((state) => state.search);
     const { chats } = useSelector((state) => state.chats);
+    const { socket } = useSelector((state) => state.socket);
+    const { user: me } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
     const handleClickSearchUser = (user) => {
@@ -32,9 +34,15 @@ const ChatsSearch = ({ searchValue }) => {
         if (chat) {
             // conversation loaded
             dispatch(setActive(chat));
+            socket.emit('openConversation', {
+                conversation: chat,
+                user: me,
+            });
         } else {
             // conversation not load
-            dispatch(getConversation(user._id));
+            dispatch(getConversation(user._id))
+                .unwrap()
+                .then((data) => socket.emit('openConversation', { conversation: data, user: me }));
         }
     };
 

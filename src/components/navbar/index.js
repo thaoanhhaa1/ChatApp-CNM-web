@@ -28,34 +28,6 @@ import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
 
-const navBars = [
-    {
-        title: 'navbar.profile',
-        icon: UserIcon,
-        to: routes.profile,
-    },
-    {
-        title: 'navbar.chats',
-        icon: MessageIcon,
-        to: routes.chats,
-    },
-    {
-        title: 'navbar.groups',
-        icon: ClockIcon,
-        to: routes.feed,
-    },
-    {
-        title: 'navbar.contacts',
-        icon: ContactIcon,
-        to: routes.contacts,
-    },
-    {
-        title: 'navbar.settings',
-        icon: SettingIcon,
-        to: routes.settings,
-    },
-];
-
 const languages = [
     {
         url: images.americaFlag,
@@ -78,6 +50,40 @@ const Navbar = ({ className }) => {
     const [darkMode, setDarkMode] = useState(() => settings.theme === 'dark');
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { chats } = useSelector((state) => state.chats);
+    const countMessagesUnseen = useMemo(
+        () => chats.reduce((acc, chat) => acc + (chat.unseenMessages || 0), 0),
+        [chats],
+    );
+
+    const navBars = [
+        {
+            title: 'navbar.profile',
+            icon: UserIcon,
+            to: routes.profile,
+        },
+        {
+            title: 'navbar.chats',
+            icon: MessageIcon,
+            to: routes.chats,
+            badge: countMessagesUnseen,
+        },
+        {
+            title: 'navbar.groups',
+            icon: ClockIcon,
+            to: routes.feed,
+        },
+        {
+            title: 'navbar.contacts',
+            icon: ContactIcon,
+            to: routes.contacts,
+        },
+        {
+            title: 'navbar.settings',
+            icon: SettingIcon,
+            to: routes.settings,
+        },
+    ];
 
     const actions = useMemo(
         () => [
@@ -125,7 +131,14 @@ const Navbar = ({ className }) => {
             <div className="flex-5 dl:flex-none flex dl:flex-col justify-evenly dl:justify-start items-center ex:gap-2">
                 {navBars.map(({ title, ...navbar }, index) => (
                     <Tippy delay={[200, 0]} offset={[0, 0]} content={t(title)} key={index}>
-                        <Button {...navbar}>{t(title)}</Button>
+                        <div className="relative">
+                            <Button {...navbar}>{t(title)}</Button>
+                            {navbar.badge ? (
+                                <span className="absolute min-w-4 text-center bg-danger top-2 right-2 rounded-full px-1 text-xs text-white">
+                                    {navbar.badge}
+                                </span>
+                            ) : null}
+                        </div>
                     </Tippy>
                 ))}
             </div>
