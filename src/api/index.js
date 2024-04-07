@@ -13,7 +13,7 @@ const api = {
     // Conversation
     getAllConversations: () => `/conversation`,
     openConversation: () => `/conversation`,
-    togglePinConversation: (conversationId) => `/conversation/${conversationId}`,
+    togglePinConversation: (conversationId) => `/conversation/pin/${conversationId}`,
 
     // Message
     getMessages: (conversationId) => `/message/${conversationId}`,

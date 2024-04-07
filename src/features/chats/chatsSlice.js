@@ -65,13 +65,18 @@ const chatsSlice = createSlice({
         togglePin: (state, { payload }) => {
             const { conversationId, userId } = payload;
 
-            const chat = state.chats.find((chat) => chat._id === conversationId);
+            const chatIndex = state.chats.findIndex((chat) => chat._id === conversationId);
 
-            if (chat) {
+            if (chatIndex >= 0) {
+                const chat = state.chats[chatIndex];
                 const index = chat.pinBy.findIndex((item) => item === userId);
 
                 if (index >= 0) chat.pinBy.splice(index, 1);
-                else chat.pinBy.push(userId);
+                else {
+                    chat.pinBy.push(userId);
+                    state.chats.splice(chatIndex, 1);
+                    state.chats.unshift(chat);
+                }
 
                 if (state.active?._id === conversationId) state.active.pinBy = chat.pinBy;
             }

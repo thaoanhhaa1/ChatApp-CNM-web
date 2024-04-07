@@ -21,14 +21,14 @@ const Detail = ({ onClose = () => {} }) => {
     const handleSend = () => {
         const timeSend = Date.now();
 
-        const formData = new FormData();
-
-        formData.append('conversationId', active._id);
-        formData.append('sender', user);
-        formData.append('timeSend', timeSend);
-        formData.append('location', location);
-
-        dispatch(sendMessage(formData));
+        dispatch(
+            sendMessage({
+                conversationId: active._id,
+                timeSend,
+                location,
+                sender: user,
+            }),
+        );
         dispatch(
             addMessage({
                 sender: user,

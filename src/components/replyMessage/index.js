@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { CloseLineIcon, FileTextFillIcon } from '~/assets';
 import { DeleteMessageStatus } from '~/constants';
@@ -8,6 +9,7 @@ import Message from '../message';
 import StickerItem from '../sticker/StickerItem';
 
 const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {}, onClick = () => {} }) => {
+    const { t } = useTranslation();
     const isHasFiles = message.files?.length;
     const image = isHasFiles && isImageFileByType(message.files[0].type) && message.files[0].link;
     const otherFileName = !image && isHasFiles && message.files[0].name;
@@ -19,8 +21,10 @@ const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {},
 
         if (!message.messages?.length && image) return message.files[0].name;
 
+        if (message.location) return `[${t('chat.location')}] ${message.location.name}`;
+
         return '';
-    }, [image, message.files, message.messages?.length, message.sticker, otherFileName]);
+    }, [image, message.files, message.location, message.messages?.length, message.sticker, otherFileName, t]);
 
     const handleClick = () => onClick(message);
     const handleClose = (e) => {

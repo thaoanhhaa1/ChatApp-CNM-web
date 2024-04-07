@@ -24,6 +24,7 @@ import { screens } from '~/constants';
 import { useChat, useLayout } from '~/context';
 import { useBoolean } from '~/hooks';
 import Button from './Button';
+import { getNameConversation } from '~/utils';
 
 const tippyProps = {
     role: 'popup',
@@ -46,6 +47,7 @@ const Header = () => {
     const { active } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const { width } = useWindowSize();
+    const conversationName = getNameConversation(active, user);
     const receiver = useMemo(
         () => (active.isGroup ? {} : active.users.find((u) => u._id !== user._id)),
         [active, user],
@@ -88,7 +90,7 @@ const Header = () => {
                 </button>
                 <Avatar containerClassName="flex-shrink-0" src={active.picture} status={receiver.status} />
                 <Link to="/" className="text-base font-semibold line-clamp-1">
-                    {active.name}
+                    {conversationName}
                 </Link>
                 <RecordCircleFillIcon className="flex-shrink-0 -ml-1 sm:-ml-2 w-2.5 h-2.5 text-success" />
             </div>

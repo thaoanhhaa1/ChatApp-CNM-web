@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -15,6 +15,7 @@ import {
 } from '~/assets';
 import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
+import LinkPreview from '~/components/linkPreview';
 import Message from '~/components/message';
 import MessageImageList from '~/components/messageImageList';
 import Popup from '~/components/popup';
@@ -23,39 +24,41 @@ import StickerItem from '~/components/sticker/StickerItem';
 import Toast from '~/components/toast';
 import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
 import { setReply } from '~/features/chat/chatSlice';
-import { addPinMessage, setMessages, updateLastMessage, updateMessage } from '~/features/chats/chatsSlice';
+import { addPinMessage, setMessages, updateMessage } from '~/features/chats/chatsSlice';
 import { getReplyMessages, setOffsetTop, updateDeletedMessage } from '~/features/messages/messagesSlice';
-import { useToast } from '~/hooks';
+import { setLocationError } from '~/features/toastAll/toastAllSlice';
+import { useLoader, useToast } from '~/hooks';
 import { deleteMessageForMe, pinMessage, recallMessage } from '~/services';
 import {
     classNames,
     getMessageNoDelete,
     getTimeChat,
     getTimeChatSeparate,
+    googleMaps,
     isCanRecall,
     isImageFileByType,
     isShowTimeChatSeparate,
     isValidURL,
+    location,
 } from '~/utils';
 import ChatImage from './ChatImage';
 import ChatItemButton from './ChatItemButton';
 import ChatItemReaction from './ChatItemReaction';
 import ChatItemSeparate from './ChatItemSeparate';
 import Reaction from './ReactionChat';
-import LinkPreview from '~/components/linkPreview';
 
 // TODO
 // [x] Chat text
 // [x] Chat file
 // [x] Chat Emoji
 // [x] Recall message
-// [ ] Delete message for me (24h)
+// [ ] Delete message for me (24h) --> BE upload last message
 // [ ] Forward message
 // [ ] Pin message
-// [ ] Pin conversation
+// [x] Pin conversation
 // [x] Reply message
 // [x] Load more message
-// [ ] Location
+// [x] Location
 const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const [, startTransition] = useTransition();
     const { t } = useTranslation();
@@ -66,6 +69,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const { active } = useSelector((state) => state.chats);
     const [toastRecall, setToastRecall] = useToast(1000);
     const { socket } = useSelector((state) => state.socket);
+    const { google, places, marker } = useLoader();
 
     const url = useMemo(() => {
         const message = (chat?.messages || []).find(
@@ -73,7 +77,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
         );
 
         return message?.content;
-    });
+    }, [chat?.messages]);
     const isYourPrev = prevChat?.sender._id === chat.sender?._id;
     const date = new Date(chat.updatedAt || chat.timeSend);
     const prevDate = prevChat && new Date(prevChat.updatedAt || prevChat.timeSend);
@@ -101,7 +105,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     };
     const handleReply = () => dispatch(setReply(chat));
 
-    const handleRecall = () => {
+    const handleRecall = useCallback(() => {
         if (isCanRecall(chat.createdAt)) {
             recallMessage(chat._id).then();
             dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.RECALL }));
@@ -113,49 +117,59 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
             );
             socket.emit('recallMessage', { ...chat, conversation: active });
         } else setToastRecall(true);
-    };
+    }, [active, chat, dispatch, setToastRecall, socket]);
 
-    const handleDeleteForMe = () => {
+    const handleDeleteForMe = useCallback(() => {
+        if (!chat?._id || !chat?.conversation?._id) return;
+
         deleteMessageForMe(chat._id).then();
         dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.DELETE_FOR_ME }));
-        dispatch(updateMessage({ conversationId: chat._id, message: getMessageNoDelete(messages, chat._id) }));
-    };
+        dispatch(
+            updateMessage({ conversationId: chat.conversation._id, message: getMessageNoDelete(messages, chat._id) }),
+        );
+    }, [chat?._id, chat?.conversation?._id, dispatch, messages]);
 
-    const handlePinMessage = () => {
+    const handlePinMessage = useCallback(() => {
         pinMessage(chat._id).then();
         addPinMessage({ conversationId: chat.conversation._id, message: chat });
-    };
+    }, [chat]);
 
-    const mores = [
-        {
-            icon: FileCopyIcon,
-            title: t('chat.more.copy'),
-            separate: true,
-        },
-        {
-            icon: PinAngleIcon,
-            title: t('chat.more.pin'),
-            onClick: handlePinMessage,
-        },
-        {
-            icon: SaveLineIcon,
-            title: t('chat.more.save'),
-        },
-        {
-            icon: ChatForwardIcon,
-            title: t('chat.more.forward'),
-        },
-        {
-            icon: MessageRecallIcon,
-            title: t('chat.more.recall'),
-            onClick: handleRecall,
-        },
-        {
-            icon: DeleteBinLineIcon,
-            title: t('chat.more.delete-for-me'),
-            onClick: handleDeleteForMe,
-        },
-    ];
+    const mores = useMemo(() => {
+        const mores = [
+            {
+                icon: FileCopyIcon,
+                title: t('chat.more.copy'),
+                separate: true,
+            },
+            {
+                icon: PinAngleIcon,
+                title: t('chat.more.pin'),
+                onClick: handlePinMessage,
+            },
+            {
+                icon: SaveLineIcon,
+                title: t('chat.more.save'),
+            },
+            {
+                icon: ChatForwardIcon,
+                title: t('chat.more.forward'),
+            },
+            {
+                icon: MessageRecallIcon,
+                title: t('chat.more.recall'),
+                onClick: handleRecall,
+            },
+            {
+                icon: DeleteBinLineIcon,
+                title: t('chat.more.delete-for-me'),
+                onClick: handleDeleteForMe,
+            },
+        ];
+
+        if (!isMe) mores.splice(4, 1);
+
+        return mores;
+    }, [handleDeleteForMe, handlePinMessage, handleRecall, isMe, t]);
 
     useEffect(() => {
         dispatch(
@@ -165,6 +179,17 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
             }),
         );
     }, [chat._id, dispatch]);
+
+    useEffect(() => {
+        (async () => {
+            if (!places?.PlacesService || !marker?.AdvancedMarkerElement) return;
+            try {
+                googleMaps(location, google, marker, document.querySelector('#map'));
+            } catch (error) {
+                dispatch(setLocationError(true));
+            }
+        })();
+    }, [dispatch, google, marker, places]);
 
     return (
         <div ref={ref} className="flex flex-col gap-2 ex:gap-3 sm:gap-4">
@@ -259,6 +284,21 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                         </>
                     ) : null}
 
+                    {chat.location?._id ? (
+                        <div
+                            className={classNames(
+                                'relative w-fit flex flex-col px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
+                                isMe
+                                    ? 'rounded-l-lg bg-sidebar-sub-bg dark:bg-dark-sidebar-bg'
+                                    : 'rounded-r-lg bg-primary-color bg-opacity-40',
+                            )}
+                        >
+                            <h5 className="text-sm font-medium line-clamp-1 mb-1">{chat.location.name}</h5>
+                            <p className="text-sm line-clamp-1 mb-2.5">{chat.location.vicinity}</p>
+                            <div id="map" className="w-[417px] h-[150px]"></div>
+                        </div>
+                    ) : null}
+
                     {chat.sticker ? <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} /> : null}
 
                     {chat.files?.length > 1 && isImageList && !recalled ? (
@@ -270,7 +310,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                         <ChatItemButton onClick={handleReply}>
                             <QuoteRightIcon className="w-[14px] h-[14px]" />
                         </ChatItemButton>
-                        {chat.sticker ? null : <Reaction setReact={setReact} react={react} />}
+                        {chat.sticker || chat.location ? null : <Reaction setReact={setReact} react={react} />}
                         <Popup data={mores} animation="shift-toward" placement={isMe ? 'bottom-end' : 'bottom-start'}>
                             <ChatItemButton>
                                 <MoreFillIcon className="w-[15px] h-[15px] rotate-90" />
