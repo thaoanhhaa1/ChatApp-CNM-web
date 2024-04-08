@@ -19,6 +19,9 @@ import { getChats } from '~/features/chats/chatsSlice';
 import { setMessages } from '~/features/messages/messagesSlice';
 import { searchUsers, setSearch } from '~/features/search/searchSlice';
 import { useBoolean } from '~/hooks';
+import { location } from '~/utils';
+
+location.getCoords().then();
 
 // TODO Search
 // TODO Click online user

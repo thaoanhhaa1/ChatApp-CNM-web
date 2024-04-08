@@ -23,9 +23,7 @@ import { addMessageSocket, updateDeletedMessage } from '~/features/messages/mess
 import { connect } from '~/features/socket/socketSlice';
 import { setLocationError } from '~/features/toastAll/toastAllSlice';
 import { getUserInfo } from '~/features/user/userSlice';
-import { classNames, location } from '~/utils';
-
-location.getCoords().then();
+import { classNames } from '~/utils';
 
 // TODO Check user
 /**

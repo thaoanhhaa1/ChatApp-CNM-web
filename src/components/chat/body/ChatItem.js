@@ -31,6 +31,7 @@ import { useLoader, useToast } from '~/hooks';
 import { deleteMessageForMe, pinMessage, recallMessage } from '~/services';
 import {
     classNames,
+    convertToDMS,
     getMessageNoDelete,
     getTimeChat,
     getTimeChatSeparate,
@@ -39,6 +40,7 @@ import {
     isImageFileByType,
     isShowTimeChatSeparate,
     isValidURL,
+    isVideoFile,
     location,
 } from '~/utils';
 import ChatImage from './ChatImage';
@@ -85,6 +87,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const showSeparate = prevDate && isShowTimeChatSeparate(date, prevDate);
     const reacts = [];
     const isImageList = chat.files?.length > 0 && isImageFileByType(chat.files[0].type || chat.files[0].contentType);
+    const isVideo = chat.files?.length > 0 && isVideoFile(chat.files[0].link || chat.files[0].name);
     const loading = chat.state === sentMessageStatus.SENDING;
     const recalled = chat?.deleted === DeleteMessageStatus.RECALL;
 
@@ -239,7 +242,23 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                     </div>
                                 ) : null}
 
-                                {chat.files && !isImageList && !recalled
+                                {isVideo && !recalled ? (
+                                    <div
+                                        className={classNames(
+                                            'relative w-fit flex flex-col px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
+                                            isMe
+                                                ? 'rounded-l-lg bg-sidebar-sub-bg dark:bg-dark-sidebar-bg'
+                                                : 'rounded-r-lg bg-primary-color bg-opacity-40',
+                                        )}
+                                    >
+                                        <video width="320" height="240" controls>
+                                            <source src={chat.files[0].link} type={chat.files[0].type} />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                ) : null}
+
+                                {chat.files && !isImageList && !recalled && !isVideo
                                     ? chat.files.map((file, index) => <AttachedFile file={file} key={index} />)
                                     : null}
 
@@ -297,7 +316,14 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                         >
                             <h5 className="text-sm font-medium line-clamp-1 mb-1">{chat.location.name}</h5>
                             <p className="text-sm line-clamp-1 mb-2.5">{chat.location.vicinity}</p>
-                            <div id="map" className="w-[417px] h-[150px]"></div>
+                            <a
+                                target="_blank"
+                                href={`${process.env.REACT_APP_GOOGLE_MAPS_ENDPOINT}/${convertToDMS(
+                                    chat.location.coords,
+                                )}`}
+                                id="map"
+                                className="w-[417px] h-[150px]"
+                            ></a>
                         </div>
                     ) : null}
 
