@@ -22,6 +22,7 @@ const api = {
     deleteMessageForMe: () => `/message/deleteForMe`,
     recallMessage: () => `/message/deleteForAll`,
     pinMessage: (messageId) => `/message/pin/${messageId}`,
+    unpinMessage: (messageId) => `/message/unpinMessage/${messageId}`,
 };
 
 export default api;

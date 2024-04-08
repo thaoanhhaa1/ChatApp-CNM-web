@@ -85,11 +85,25 @@ const chatsSlice = createSlice({
             const { conversationId, message } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
+            const index = chat.pinnedMessages.findIndex((item) => item._id === message._id);
 
-            if (chat.pinnedMessages.length >= 3) chat.pinnedMessages.shift();
+            if (index >= 0) chat.pinnedMessages.splice(index, 1);
+            else if (chat.pinnedMessages.length >= 3) chat.pinnedMessages.shift();
 
             if (chat) chat.pinnedMessages.unshift(message);
             if (state.active?._id === conversationId) state.active.pinnedMessages = chat.pinnedMessages;
+        },
+        removePinMessage: (state, { payload }) => {
+            const { conversationId, message } = payload;
+
+            const chat = state.chats.find((chat) => chat._id === conversationId);
+
+            if (chat) {
+                const index = chat.pinnedMessages.findIndex((item) => item._id === message._id);
+
+                if (index >= 0) chat.pinnedMessages.splice(index, 1);
+                if (state.active?._id === conversationId) state.active.pinnedMessages = chat.pinnedMessages;
+            }
         },
         addMessages: (state, { payload }) => {
             if (!payload?.length) return state;
@@ -180,6 +194,7 @@ export const {
     updateMessage,
     togglePin,
     addPinMessage,
+    removePinMessage,
     addMessages,
     addMessageHead,
     addChat,

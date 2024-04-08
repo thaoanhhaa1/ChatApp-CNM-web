@@ -11,7 +11,14 @@ import Toast from '~/components/toast';
 import config from '~/config';
 import { DeleteMessageStatus, screens } from '~/constants';
 import { LayoutProvider } from '~/context';
-import { addChat, addMessageHead, setTyping, updateMessage } from '~/features/chats/chatsSlice';
+import {
+    addChat,
+    addMessageHead,
+    addPinMessage,
+    removePinMessage,
+    setTyping,
+    updateMessage,
+} from '~/features/chats/chatsSlice';
 import { addMessageSocket, updateDeletedMessage } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
 import { setLocationError } from '~/features/toastAll/toastAllSlice';
@@ -114,6 +121,13 @@ const DefaultLayout = ({ children }) => {
                     message: { ...message, deleted: DeleteMessageStatus.RECALL },
                 }),
             );
+        });
+
+        socket.on('pinMessage', ({ message }) => {
+            dispatch(addPinMessage({ conversationId: message.conversation._id, message }));
+        });
+        socket.on('unpinMessage', ({ message }) => {
+            dispatch(removePinMessage({ conversationId: message.conversation._id, message }));
         });
     }, [active?._id, dispatch, socket, user._id]);
 

@@ -1,54 +1,25 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { ChatTextLineIcon, ChevronDownIcon, MoreFillIcon } from '~/assets';
+import { removePinMessage } from '~/features/chats/chatsSlice';
+import unpinMessage from '~/services/unpinMessage';
+import { classNames } from '~/utils';
 import Message from '../message';
 import Popup from '../popup';
 
-const message = {
-    location: null,
-    _id: '6611223f8acfb025ab6df693',
-    sender: {
-        _id: 'thaoanhhaa1@gmail.com',
-        name: 'Thao',
-        avatar: 'https://res.cloudinary.com/dttv3mbki/image/upload/v1704809257/chat-app-cnm-DB/y9x5eessbbrewmffzrwv.png',
-    },
-    messages: [
-        {
-            content: '9',
-            type: 'text',
-            _id: '6611223f8acfb025ab6df694',
-        },
-    ],
-    conversation: {
-        _id: '660fa673359d29deb5153f8b',
-        pinnedMessages: [
-            {
-                sender: {
-                    _id: 'thaoanhhaa1@gmail.com',
-                    name: 'Thao',
-                },
-                messages: [
-                    {
-                        content: '9',
-                        type: 'text',
-                        _id: '6611223f8acfb025ab6df694',
-                    },
-                ],
-                files: [],
-            },
-        ],
-    },
-    files: [],
-    reply: null,
-    deleted: '0',
-    statuses: [],
-    createdAt: '2024-04-06T10:21:51.103Z',
-    updatedAt: '2024-04-06T10:21:51.103Z',
-    __v: 0,
-};
-
-const PinMessage = ({ pinCount }) => {
+const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }) => {
     const { t } = useTranslation();
+    const { active } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
+    const { socket } = useSelector((state) => state.socket);
+    const dispatch = useDispatch();
+
+    const handleUnpin = () => {
+        unpinMessage(message._id).then();
+        dispatch(removePinMessage({ conversationId: active._id, message: message }));
+        socket.emit('pinMessage', { message, userId: user._id, users: active.users });
+    };
 
     const more = [
         {
@@ -57,11 +28,24 @@ const PinMessage = ({ pinCount }) => {
         },
         {
             title: t('chat.pin-more.unpin'),
+            onClick: handleUnpin,
         },
     ];
 
+    const handleClickMore = (e) => {
+        e.stopPropagation();
+        onMore();
+    };
+
     return (
-        <div className="group/pin flex px-4 items-center gap-3 h-[50px] cursor-pointer">
+        <div
+            onClick={onClick}
+            className={classNames(
+                'group/pin flex px-4 items-center gap-3 h-[50px] cursor-pointer',
+                Number.isInteger(pinCount) ||
+                    'hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-all duration-150',
+            )}
+        >
             <ChatTextLineIcon className="w-6 h-6 text-primary-color" />
             <div className="flex-1">
                 <h5 className="text-ss">Message</h5>
@@ -73,7 +57,10 @@ const PinMessage = ({ pinCount }) => {
                 </span>
             </Popup>
             {pinCount > 1 ? (
-                <div className="border border-primary-color rounded-lg flex items-center gap-1 h-6 px-4 text-sm text-primary-color font-medium hover:bg-primary-color hover:bg-opacity-5 transition-all duration-150">
+                <div
+                    onClick={handleClickMore}
+                    className="border border-primary-color rounded-lg flex items-center gap-1 h-6 px-4 text-sm text-primary-color font-medium hover:bg-primary-color hover:bg-opacity-5 transition-all duration-150"
+                >
                     <span>1</span>
                     <span>more</span>
                     <ChevronDownIcon className="w-4 h-4" />
@@ -85,6 +72,9 @@ const PinMessage = ({ pinCount }) => {
 
 PinMessage.propTypes = {
     pinCount: PropTypes.number,
+    message: PropTypes.object.isRequired,
+    onMore: PropTypes.func,
+    onClick: PropTypes.func,
 };
 
 export default PinMessage;

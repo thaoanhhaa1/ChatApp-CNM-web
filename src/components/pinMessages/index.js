@@ -1,15 +1,31 @@
 import PropTypes from 'prop-types';
+import { useRef } from 'react';
+import { useBoolean, useOnClickOutside } from '~/hooks';
+import Header from './Header';
 import PinMessage from './PinMessage';
 
 const PinMessages = ({ messages }) => {
-    return null;
+    const { value, setTrue, setFalse } = useBoolean(false);
+    const ref = useRef(null);
 
-    console.log('🚀 ~ PinMessages ~ messages:', messages);
+    useOnClickOutside(ref, setFalse);
+
     if (!messages?.length) return null;
 
     return (
         <div className="border-b border-separate dark:border-dark-separate">
-            <PinMessage />
+            <PinMessage onMore={setTrue} pinCount={messages.length} message={messages[0]} />
+
+            {value ? (
+                <div className="absolute inset-0 z-51 bg-black bg-opacity-30">
+                    <div ref={ref} className="bg-white">
+                        <Header onClick={setFalse} count={messages.length} />
+                        {messages.map((message) => (
+                            <PinMessage key={message._id} message={message} />
+                        ))}
+                    </div>
+                </div>
+            ) : null}
         </div>
     );
 };

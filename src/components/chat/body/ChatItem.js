@@ -54,7 +54,7 @@ import Reaction from './ReactionChat';
 // [x] Recall message
 // [ ] Delete message for me (24h) --> BE upload last message
 // [ ] Forward message
-// [ ] Pin message
+// [x] Pin message
 // [x] Pin conversation
 // [x] Reply message
 // [x] Load more message
@@ -67,6 +67,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const dispatch = useDispatch();
     const { messages } = useSelector((state) => state.messages);
     const { active } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
     const [toastRecall, setToastRecall] = useToast(1000);
     const { socket } = useSelector((state) => state.socket);
     const { google, places, marker } = useLoader();
@@ -131,8 +132,9 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
 
     const handlePinMessage = useCallback(() => {
         pinMessage(chat._id).then();
-        addPinMessage({ conversationId: chat.conversation._id, message: chat });
-    }, [chat]);
+        dispatch(addPinMessage({ conversationId: chat.conversation._id, message: chat }));
+        socket.emit('pinMessage', { message: chat, userId: user._id, users: active.users });
+    }, [active.users, chat, dispatch, socket, user._id]);
 
     const mores = useMemo(() => {
         const mores = [
