@@ -2,8 +2,10 @@ import { useDebounce } from '@uidotdev/usehooks';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SearchIcon } from '~/assets';
+import { addMessageHeadSocket } from '~/features/chats/chatsSlice';
+import { addMessageSocket } from '~/features/messages/messagesSlice';
 import { forwardMessage } from '~/services';
 import Input from '../input';
 import Modal from '../modal';
@@ -15,8 +17,10 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
     const searchDebounce = useDebounce(name, 500);
     const [selectedContacts, setSelectedContacts] = useState([]);
     const { user } = useSelector((state) => state.user);
-    const { chats } = useSelector((state) => state.chats);
+    const { chats, active } = useSelector((state) => state.chats);
+    const { socket } = useSelector((state) => state.socket);
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
     const phoneBookFilterResult = useMemo(() => {
         const phoneBook = [];
 
@@ -39,9 +43,18 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
         setLoading(true);
 
         try {
-            await forwardMessage({
+            const res = await forwardMessage({
                 messageId,
                 conversationIds: selectedContacts.map((contact) => contact._id),
+            });
+
+            socket.emit('forward', res.data);
+            res.data.forEach((message) => {
+                // Messages Slice
+                if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));
+
+                // Chats Slice
+                dispatch(addMessageHeadSocket(message));
             });
         } catch (error) {
             alert(error.message);

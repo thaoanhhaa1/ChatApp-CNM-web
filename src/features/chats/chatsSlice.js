@@ -140,6 +140,25 @@ const chatsSlice = createSlice({
                 }
             }
         },
+        addMessageHeadSocket: (state, { payload }) => {
+            const conversationId = payload.conversationId || payload.conversation._id;
+
+            const chat = state.chats.find((chat) => chat._id === conversationId);
+
+            if (chat && chat.messages?.[0]._id !== payload._id) {
+                console.log(chat.messages?.length);
+
+                if (chat.messages?.length) chat.messages = [payload, ...chat.messages];
+                else chat.messages = [payload];
+
+                chat.lastMessage = payload;
+                // FIXME
+                if (state.active?._id === conversationId) {
+                    state.active.lastMessage = payload;
+                    state.active.messages = chat.messages;
+                }
+            }
+        },
         addChat: (state, { payload }) => {
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
 
@@ -198,5 +217,6 @@ export const {
     addMessages,
     addMessageHead,
     addChat,
+    addMessageHeadSocket,
 } = chatsSlice.actions;
 export { getChats, getConversation };
