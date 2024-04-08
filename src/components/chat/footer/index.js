@@ -287,7 +287,7 @@ const Footer = () => {
 
             <Modal show={showLocation} onClickOutside={handleCloseLocation}>
                 <PopupMultiLevel onClose={handleCloseLocation}>
-                    <Location onClose={handleCloseLocation} />
+                    <Location showLocation={showLocation} onClose={handleCloseLocation} />
                 </PopupMultiLevel>
             </Modal>
         </div>

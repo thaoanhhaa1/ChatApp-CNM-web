@@ -67,7 +67,7 @@ const Body = () => {
         return () => {
             controller && controller.abort();
         };
-    }, [active._id, active.messages, dispatch, messages?.length]);
+    }, [active?._id, active?.messages, dispatch, messages?.length]);
 
     useEffect(() => {
         if (ref.current && page === 1) ref.current.scrollBottom();

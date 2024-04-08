@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { classNames } from '~/utils';
 
-const Button = ({ children, type = 'primary', disabled = false, ...props }) => {
+const Button = ({ loading = false, children, type = 'primary', disabled = false, ...props }) => {
     const styles = [];
     const passProps = {};
 
@@ -15,13 +15,16 @@ const Button = ({ children, type = 'primary', disabled = false, ...props }) => {
         <button
             disabled={disabled}
             className={classNames(
-                'border border-transparent px-2 ex:px-3 sm:px-4 py-1 ex:py-1.5 sm:py-2 text-mm leading-normal rounded transition-all',
+                'relative flex justify-center items-center border border-transparent px-2 ex:px-3 sm:px-4 py-1 ex:py-1.5 sm:py-2 text-mm leading-normal rounded transition-all',
                 disabled && 'opacity-60 cursor-default',
                 ...styles,
             )}
             {...passProps}
         >
-            {children}
+            <span className={classNames(loading ? 'opacity-0' : 'opacity-100')}>{children}</span>
+            {loading && (
+                <span className="absolute w-6 h-6 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+            )}
         </button>
     );
 };
@@ -31,6 +34,7 @@ Button.propTypes = {
     type: PropTypes.oneOf(['primary', 'text-primary']),
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
+    loading: PropTypes.bool,
 };
 
 export default Button;

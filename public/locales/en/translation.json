@@ -70,7 +70,8 @@
         "pin-more": {
             "copy": "Copy",
             "unpin": "Unpin"
-        }
+        },
+        "share": "Share"
     },
     "contacts": {
         "title": "Contacts",

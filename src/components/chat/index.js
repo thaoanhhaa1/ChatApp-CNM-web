@@ -175,7 +175,7 @@ const Chat = () => {
                             {activeLoading ? <HeaderSkeleton /> : <Header />}
                             <div ref={dropZoneRef} className="relative flex-1 flex flex-col">
                                 <div className="relative flex-1 flex flex-col">
-                                    <PinMessages messages={active?.pinnedMessages} />
+                                    {active?.pinnedMessages ? <PinMessages messages={active.pinnedMessages} /> : null}
                                     <Body />
                                 </div>
                                 <Footer />

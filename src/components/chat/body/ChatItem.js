@@ -15,6 +15,7 @@ import {
 } from '~/assets';
 import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
+import ForwardMessage from '~/components/forwardMessage';
 import LinkPreview from '~/components/linkPreview';
 import Message from '~/components/message';
 import MessageImageList from '~/components/messageImageList';
@@ -65,6 +66,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const [, startTransition] = useTransition();
     const { t } = useTranslation();
     const [react, setReact] = useState();
+    const [showForward, setShowForward] = useState(false);
     const ref = useRef();
     const dispatch = useDispatch();
     const { messages } = useSelector((state) => state.messages);
@@ -139,6 +141,9 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
         socket.emit('pinMessage', { message: chat, userId: user._id, users: active.users });
     }, [active.users, chat, dispatch, socket, user._id]);
 
+    const handleClickForward = useCallback(() => setShowForward(true), []);
+    const handleCloseForward = useCallback(() => setShowForward(false), []);
+
     const mores = useMemo(() => {
         const mores = [
             {
@@ -158,6 +163,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
             {
                 icon: ChatForwardIcon,
                 title: t('chat.more.forward'),
+                onClick: handleClickForward,
             },
             {
                 icon: MessageRecallIcon,
@@ -174,7 +180,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
         if (!isMe) mores.splice(4, 1);
 
         return mores;
-    }, [handleDeleteForMe, handlePinMessage, handleRecall, isMe, t]);
+    }, [handleClickForward, handleDeleteForMe, handlePinMessage, handleRecall, isMe, t]);
 
     useEffect(() => {
         dispatch(
@@ -348,6 +354,7 @@ const ChatItem = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                 )}
             </div>
             {showSeparate && <ChatItemSeparate>{getTimeChatSeparate(prevDate)}</ChatItemSeparate>}
+            <ForwardMessage messageId={chat?._id} show={showForward} handleClickOutside={handleCloseForward} />
         </div>
     );
 };

@@ -12,7 +12,7 @@ import Skeleton from '../skeleton';
 import Item from './Item';
 import ItemSkeleton from './ItemSkeleton';
 
-const Location = ({ onClose = () => {} }) => {
+const Location = ({ showLocation, onClose = () => {} }) => {
     const { t } = useTranslation();
     const [locations, setLocations] = useState([]);
     const { google, places, marker } = useLoader();
@@ -21,7 +21,7 @@ const Location = ({ onClose = () => {} }) => {
 
     useEffect(() => {
         (async () => {
-            if (!places?.PlacesService || !marker?.AdvancedMarkerElement) return;
+            if (!places?.PlacesService || !marker?.AdvancedMarkerElement || !showLocation) return;
             setLoading(true);
 
             try {
@@ -47,13 +47,13 @@ const Location = ({ onClose = () => {} }) => {
                     })),
                 );
             } catch (error) {
-                dispatch(setLocationError(true));
+                dispatch(setLocationError(showLocation));
                 onClose();
             } finally {
                 setLoading(false);
             }
         })();
-    }, [dispatch, google, marker, onClose, places]);
+    }, [dispatch, google, marker, onClose, places, showLocation]);
 
     return (
         <>
@@ -79,6 +79,7 @@ const Location = ({ onClose = () => {} }) => {
 
 Location.propTypes = {
     onClose: PropTypes.func,
+    showLocation: PropTypes.bool,
 };
 
 export default Location;

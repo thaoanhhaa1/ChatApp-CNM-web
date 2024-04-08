@@ -157,7 +157,7 @@ const ChatItem = ({ chat, active }) => {
                             ) : null}
                             {subTitle && !recalled ? (
                                 <span className="text-sm text-secondary dark:text-dark-secondary line-clamp-1">
-                                    {t(subTitle)}
+                                    {subTitle}
                                 </span>
                             ) : null}
                         </div>

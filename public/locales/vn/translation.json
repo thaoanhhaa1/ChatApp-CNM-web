@@ -69,7 +69,8 @@
         "pin-more": {
             "copy": "Copy",
             "unpin": "Bỏ ghim"
-        }
+        },
+        "share": "Chia sẻ"
     },
     "contacts": {
         "title": "Danh bạ",

@@ -1,6 +1,7 @@
 export { default as addMessage } from './addMessage';
 export { default as createOTP } from './createOTP';
 export { default as deleteMessageForMe } from './deleteMessageForMe';
+export { default as forwardMessage } from './forwardMessage';
 export { default as getAllConversations } from './getAllConversations';
 export { default as getMessages } from './getMessages';
 export { default as getReplyMessages } from './getReplyMessages';
