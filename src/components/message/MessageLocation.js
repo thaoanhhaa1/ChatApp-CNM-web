@@ -1,18 +1,11 @@
 import PropTypes from 'prop-types';
-import { classNames, convertToDMS } from '~/utils';
+import { convertToDMS } from '~/utils';
 
-const MessageLocation = ({ isMe, location }) => {
+const MessageLocation = ({ location }) => {
     if (!location?._id) return null;
 
     return (
-        <div
-            className={classNames(
-                'relative w-fit flex flex-col px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
-                isMe
-                    ? 'rounded-l-lg bg-sidebar-sub-bg dark:bg-dark-sidebar-bg'
-                    : 'rounded-r-lg bg-primary-color bg-opacity-40',
-            )}
-        >
+        <div className="relative w-fit flex flex-col">
             <h5 className="text-sm font-medium line-clamp-1 mb-1">{location.name}</h5>
             <p className="text-sm line-clamp-1 mb-2.5">{location.vicinity}</p>
             <a
@@ -29,7 +22,6 @@ const MessageLocation = ({ isMe, location }) => {
 };
 
 MessageLocation.propTypes = {
-    isMe: PropTypes.bool,
     location: PropTypes.object,
 };
 

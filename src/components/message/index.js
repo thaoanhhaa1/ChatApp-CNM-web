@@ -44,6 +44,7 @@ import {
 } from '~/utils';
 import Button from './Button';
 import MessageImage from './MessageImage';
+import MessageLoading from './MessageLoading';
 import MessageLocation from './MessageLocation';
 import MessageReaction from './MessageReaction';
 import MessageSeparate from './MessageSeparate';
@@ -71,18 +72,20 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
 
         return message?.content;
     }, [chat?.messages]);
-    const isYourPrev = prevChat?.sender._id === chat.sender?._id;
+    const isYourPrev = prevChat?.sender?._id === chat.sender?._id;
     const date = new Date(chat.updatedAt || chat.timeSend);
     const prevDate = prevChat && new Date(prevChat.updatedAt || prevChat.timeSend);
     const showSeparate = prevDate && isShowTimeChatSeparate(date, prevDate);
     const lengthFiles = chat.files?.length;
-    const firstFile = lengthFiles ? chat.files[0] : null;
-    const isImageList = lengthFiles && isImageFileByType(firstFile.type || firstFile.contentType);
-    const isVideo = lengthFiles && isVideoFile(firstFile.type);
+    const firstFile = lengthFiles ? chat.files?.[0] : null;
+    const isImageList = firstFile && isImageFileByType(firstFile.type || firstFile.contentType);
+    const isVideo = firstFile && isVideoFile(firstFile.type);
     const loading = chat.state === sentMessageStatus.SENDING;
-    const recalled = chat?.deleted === DeleteMessageStatus.RECALL;
+    const recalled = chat.deleted === DeleteMessageStatus.RECALL;
 
     const handleClickReply = (message) => {
+        if (!message._id) return;
+
         const mess = messages.find((mess) => mess._id === message._id);
 
         if (mess) scrollY(mess.offsetTop);
@@ -106,7 +109,7 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
             dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.RECALL }));
             dispatch(
                 updateMessage({
-                    conversationId: chat.conversation._id,
+                    conversationId: chat.conversation?._id,
                     message: { ...chat, deleted: DeleteMessageStatus.RECALL },
                 }),
             );
@@ -211,77 +214,75 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                         containerClassName={classNames('self-end', !showSeparate && isYourPrev && 'opacity-0')}
                         src={chat.sender.avatar}
                     />
-                    <div className={isMe ? 'ml-1 mr-2 sm:mr-4' : 'ml-2 sm:ml-4 mr-1'}>
-                        {chat.messages?.length > 0 || lengthFiles || recalled ? (
-                            <>
-                                <div
-                                    className={classNames(
-                                        'relative w-fit flex flex-col gap-1 px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
-                                        isMe
-                                            ? 'rounded-l-lg bg-sidebar-sub-bg dark:bg-dark-sidebar-bg'
-                                            : 'rounded-r-lg bg-primary-color bg-opacity-40',
-                                    )}
-                                >
-                                    {chat.reply && !recalled ? (
-                                        <ReplyMessage isMe={isMe} onClick={handleClickReply} message={chat.reply} />
-                                    ) : null}
+                    <div className={classNames('relative', isMe ? 'ml-1 mr-2 sm:mr-4' : 'ml-2 sm:ml-4 mr-1')}>
+                        <div
+                            className={classNames(
+                                'relative w-fit flex flex-col gap-1 px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
+                                isMe
+                                    ? 'rounded-l-lg bg-sidebar-sub-bg dark:bg-dark-sidebar-bg'
+                                    : 'rounded-r-lg bg-primary-color bg-opacity-40',
+                            )}
+                        >
+                            {chat.reply && !recalled ? (
+                                <ReplyMessage isMe={isMe} onClick={handleClickReply} message={chat.reply} />
+                            ) : null}
 
-                                    <ChatMessage status={chat.deleted} messages={chat.messages || []} isMe={isMe} />
+                            <ChatMessage status={chat.deleted} messages={chat.messages || []} isMe={isMe} />
 
-                                    {chat.files && isImageList && !recalled ? (
-                                        <MessageImage
-                                            loading={loading}
-                                            src={firstFile.link || URL.createObjectURL(firstFile)}
-                                            name={firstFile.name}
-                                        />
-                                    ) : null}
-
-                                    {isVideo && !recalled ? <MessageVideo loading={loading} file={firstFile} /> : null}
-
-                                    {firstFile && !isImageList && !recalled && !isVideo
-                                        ? chat.files.map((file, index) => <AttachedFile key={index} file={file} />)
-                                        : null}
-
-                                    {url ? <LinkPreview url={url} /> : null}
-
-                                    <MessageTime time={chat.updatedAt || new Date(chat.timeSend)} />
-
-                                    {chat.sticker && !recalled ? null : (
-                                        <MessageReaction className="absolute right-0 bottom-0 translate-y-[calc(100%-7px)]" />
-                                    )}
-                                </div>
-                                <div
-                                    className={classNames(
-                                        'border-5 w-0',
-                                        isMe
-                                            ? 'border-sidebar-sub-bg dark:border-dark-sidebar-bg ml-auto border-b-transparent border-l-transparent dark:border-b-transparent dark:border-l-transparent'
-                                            : 'border-primary-color border-opacity-40 border-r-transparent border-b-transparent',
-                                    )}
+                            {lengthFiles === 1 && isImageList && !recalled ? (
+                                <MessageImage
+                                    loading={loading}
+                                    src={firstFile.link || URL.createObjectURL(firstFile)}
+                                    name={firstFile.name}
                                 />
-                                {isYourPrev || (
-                                    <div
-                                        className={classNames(
-                                            'text-sm font-medium dark:text-[rgb(166,176,207)]',
-                                            isMe && 'text-right',
-                                        )}
-                                    >
-                                        {chat.sender.name}
-                                    </div>
+                            ) : null}
+
+                            {isImageList && lengthFiles > 1 && !recalled ? (
+                                <MessageImageList loading={loading} files={chat.files} />
+                            ) : null}
+
+                            {isVideo && !recalled ? <MessageVideo loading={loading} file={firstFile} /> : null}
+
+                            {firstFile && !isImageList && !recalled && !isVideo
+                                ? chat.files.map((file, index) => <AttachedFile key={index} file={file} />)
+                                : null}
+
+                            {url ? <LinkPreview url={url} /> : null}
+
+                            <MessageLocation isMe={isMe} location={chat.location} />
+
+                            {chat.sticker ? (
+                                <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} />
+                            ) : null}
+
+                            <MessageTime time={chat.updatedAt || new Date(chat.timeSend)} />
+
+                            {chat.sticker && !recalled ? null : (
+                                <MessageReaction className="absolute right-0 bottom-0 translate-y-[calc(100%-7px)]" />
+                            )}
+                        </div>
+                        <div
+                            className={classNames(
+                                'border-5 w-0',
+                                isMe
+                                    ? 'border-sidebar-sub-bg dark:border-dark-sidebar-bg ml-auto border-b-transparent border-l-transparent dark:border-b-transparent dark:border-l-transparent'
+                                    : 'border-primary-color border-opacity-40 border-r-transparent border-b-transparent',
+                            )}
+                        />
+                        {isYourPrev || (
+                            <div
+                                className={classNames(
+                                    'text-sm font-medium dark:text-[rgb(166,176,207)]',
+                                    isMe && 'text-right',
                                 )}
-                            </>
-                        ) : null}
+                            >
+                                {chat.sender.name}
+                            </div>
+                        )}
 
-                        <MessageLocation isMe={isMe} location={chat.location} />
-
-                        {chat.sticker ? (
-                            <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} />
-                        ) : null}
-
-                        {isImageList && chat.files.length > 1 && !recalled ? (
-                            <MessageImageList loading={loading} files={chat.files} />
-                        ) : null}
+                        <MessageLoading loading={loading} />
                     </div>
-                    {recalled ? null : (
+                    {recalled || loading ? null : (
                         <div className={classNames('flex', isMe && 'flex-row-reverse')}>
                             <Button onClick={handleReply}>
                                 <QuoteRightIcon className="w-[14px] h-[14px]" />

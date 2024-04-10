@@ -10,7 +10,6 @@ import { getMessages, setMessages } from '~/features/messages/messagesSlice';
 import { getTimeChatSeparate } from '~/utils';
 import ChatEmpty from './ChatEmpty';
 
-// TODO Typing
 const Body = () => {
     const ref = useRef();
     const { messages, loading, page, maxPage } = useSelector((state) => state.messages);
@@ -23,7 +22,6 @@ const Body = () => {
         [messages],
     );
     const latestMessage = useMemo(() => messagesCanShow.at(-1), [messagesCanShow]);
-    console.log('🚀 ~ Body ~ latestMessage:', latestMessage);
     const typingUsers = useMemo(() => {
         if (!active) return [];
 
@@ -34,7 +32,7 @@ const Body = () => {
 
     const handleScroll = async (e) => {
         const scrollTop = e.target.scrollTop;
-        if (scrollTop <= 200 && !loading && page < maxPage) {
+        if (scrollTop <= 200 && !loading && page < maxPage && active?._id) {
             await dispatch(getMessages({ param: [active._id], query: { messageId: messages?.at(-1)?._id } })).unwrap();
             ref.current.scrollY(205);
         }

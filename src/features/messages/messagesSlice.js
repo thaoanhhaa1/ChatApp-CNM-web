@@ -121,7 +121,10 @@ const messagesSlice = createSlice({
                 const index = state.messages.findIndex((message) => +message.timeSend === +timeSend);
                 if (message?._id) {
                     message.state = sentMessageStatus.SENT;
-                    if (index >= 0) state.messages.splice(index, 1, message);
+                    if (index >= 0) {
+                        state.messages.splice(index, 1);
+                        state.messages.unshift(message);
+                    }
                 } else if (state.messages[index]) {
                     state.messages[index].deleted = DeleteMessageStatus.DELETE_FOR_ME;
                 }

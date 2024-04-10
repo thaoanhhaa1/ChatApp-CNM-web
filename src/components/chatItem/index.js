@@ -42,16 +42,16 @@ const ChatItem = ({ chat, active }) => {
     }, [chat._id, dispatch, user._id]);
 
     const subTitle = useMemo(() => {
-        if (lastMessage?.sticker) return 'chats.sticker';
+        if (lastMessage?.sticker) return t('chats.sticker');
 
-        if (isImageList) return 'chats.photo';
+        if (isImageList) return t('chats.photo');
 
         if (isHasFiles) return lastMessage?.files[0].name;
 
         if (lastMessage.location) return lastMessage.location.vicinity;
 
         return '';
-    }, [lastMessage?.sticker, lastMessage?.files, lastMessage.location, isImageList, isHasFiles]);
+    }, [lastMessage?.sticker, lastMessage?.files, lastMessage.location, t, isImageList, isHasFiles]);
     const more = useMemo(() => {
         const more = [
             {

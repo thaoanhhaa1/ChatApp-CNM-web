@@ -50,7 +50,6 @@ const Chat = () => {
 
             if (acceptedFiles.length > 50) setShowToast(true);
             else {
-                const timeSend = Date.now();
                 const imageFiles = [];
                 const otherFiles = [];
 
@@ -62,6 +61,7 @@ const Chat = () => {
 
                 if (imageFiles.length) {
                     const formData = new FormData();
+                    const timeSend = Date.now();
 
                     imageFiles.forEach((file) => formData.append('files', file));
                     formData.append('conversationId', active._id);
@@ -82,6 +82,7 @@ const Chat = () => {
                 if (otherFiles.length) {
                     otherFiles.forEach((file) => {
                         const formData = new FormData();
+                        const timeSend = Date.now();
 
                         formData.append('files', file);
                         formData.append('conversationId', active._id);
@@ -155,7 +156,10 @@ const Chat = () => {
 
         if (!lastMessage) return;
 
-        if (lastMessage.state === sentMessageStatus.SENT) socket.emit('sendMessage', lastMessage);
+        if (lastMessage.state === sentMessageStatus.SENT) {
+            console.log(`lastMessage`, lastMessage);
+            socket.emit('sendMessage', lastMessage);
+        }
 
         dispatch(
             updateMessage({
