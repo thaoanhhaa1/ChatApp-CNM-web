@@ -1,14 +1,14 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Message from '~/components/message';
+import MessageSeparate from '~/components/message/MessageSeparate';
+import MessageTyping from '~/components/message/MessageTyping';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
 import { addMessageHead, addMessages } from '~/features/chats/chatsSlice';
 import { getMessages, setMessages } from '~/features/messages/messagesSlice';
 import { getTimeChatSeparate } from '~/utils';
 import ChatEmpty from './ChatEmpty';
-import ChatItem from './ChatItem';
-import ChatItemSeparate from './ChatItemSeparate';
-import ChatItemTyping from './ChatItemTyping';
 
 // TODO Typing
 const Body = () => {
@@ -23,6 +23,7 @@ const Body = () => {
         [messages],
     );
     const latestMessage = useMemo(() => messagesCanShow.at(-1), [messagesCanShow]);
+    console.log('🚀 ~ Body ~ latestMessage:', latestMessage);
     const typingUsers = useMemo(() => {
         if (!active) return [];
 
@@ -87,7 +88,7 @@ const Body = () => {
         <ScrollbarCustomize containerClassName="overflow-hidden" ref={ref} onScroll={handleScroll}>
             <div className="flex flex-col-reverse gap-6 p-2 sm:p-3 md:p-4 dl:p-5">
                 {typingUsers.map((user) => (
-                    <ChatItemTyping key={user._id} chat={user} />
+                    <MessageTyping key={user._id} chat={user} />
                 ))}
 
                 {loading || activeLoading || !!messages.length || (
@@ -99,7 +100,7 @@ const Body = () => {
                 {!activeLoading &&
                     messagesCanShow.length > 0 &&
                     messagesCanShow.map((chat, index, arr) => (
-                        <ChatItem
+                        <Message
                             scrollY={scrollY}
                             key={chat._id}
                             isMe={user._id === chat.sender?._id}
@@ -109,9 +110,9 @@ const Body = () => {
                     ))}
 
                 {messagesCanShow.length > 0 && (
-                    <ChatItemSeparate>
+                    <MessageSeparate>
                         {getTimeChatSeparate(new Date(latestMessage.updatedAt || latestMessage.timeSend))}
-                    </ChatItemSeparate>
+                    </MessageSeparate>
                 )}
 
                 {(loading || activeLoading) && (

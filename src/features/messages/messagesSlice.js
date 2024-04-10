@@ -53,6 +53,7 @@ const messagesSlice = createSlice({
             const message = { ...payload, _id: v4() };
 
             message.state = sentMessageStatus.SENDING;
+            message.statuses = [];
 
             state.messages.unshift(message);
         },
@@ -73,6 +74,19 @@ const messagesSlice = createSlice({
                 payload.conversation._id === state.messages[0].conversation._id
             )
                 state.messages.unshift(payload);
+        },
+        updateReact: (state, { payload }) => {
+            const { _id, userId, react } = payload;
+
+            const message = state.messages.find((message) => message._id === _id);
+
+            if (!message) return state;
+
+            const status = message.statuses.find((item) => item.user === userId);
+
+            if (!status) return state;
+
+            status.react = react;
         },
     },
     extraReducers: (builder) => {
@@ -126,5 +140,6 @@ const messagesSlice = createSlice({
 });
 
 export default messagesSlice.reducer;
-export const { setOffsetTop, setMessages, addMessage, updateDeletedMessage, addMessageSocket } = messagesSlice.actions;
+export const { setOffsetTop, setMessages, addMessage, updateDeletedMessage, addMessageSocket, updateReact } =
+    messagesSlice.actions;
 export { getMessages, getReplyMessages, sendMessage };

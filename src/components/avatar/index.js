@@ -11,7 +11,7 @@ const Avatar = ({ size = '36px', src, alt = '', status = statusUser.OFFLINE, cla
                 width: size,
                 height: size,
             }}
-            className={classNames('relative rounded-full', containerClassName)}
+            className={classNames('relative rounded-full flex-shrink-0', containerClassName)}
         >
             <LazyLoadImage
                 className={classNames('w-full h-full object-cover rounded-full', className)}

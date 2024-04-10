@@ -5,7 +5,7 @@ import { ChatTextLineIcon, ChevronDownIcon, MoreFillIcon } from '~/assets';
 import { removePinMessage } from '~/features/chats/chatsSlice';
 import unpinMessage from '~/services/unpinMessage';
 import { classNames } from '~/utils';
-import Message from '../message';
+import ChatMessage from '../chatMessage';
 import Popup from '../popup';
 
 const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }) => {
@@ -49,7 +49,7 @@ const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }
             <ChatTextLineIcon className="w-6 h-6 text-primary-color" />
             <div className="flex-1">
                 <h5 className="text-ss">Message</h5>
-                <Message className="!text-secondary dark:!text-dark-secondary" messages={message.messages} />
+                <ChatMessage className="!text-secondary dark:!text-dark-secondary" messages={message.messages} />
             </div>
             <Popup data={more} placement="bottom-end">
                 <span className="group-hover/pin:opacity-100 opacity-0 transition-all duration-150 flex justify-center items-center w-8 h-8 hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 rounded-full">

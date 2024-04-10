@@ -1,12 +1,25 @@
 import PropTypes from 'prop-types';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import images from '~/assets/images';
+import { useMessage } from '~/context';
 import { classNames } from '~/utils';
 
-const ChatItemReaction = ({ reacts, react, className }) => {
-    const count = reacts.length + (react ? 1 : 0);
-    const reaction = [...new Set([...reacts, react].filter(Boolean))];
+const MessageReaction = ({ className }) => {
+    const { statuses } = useMessage();
+    const { reacts, count } = useMemo(() => {
+        const reacts = [];
+
+        statuses.forEach((item) => item && reacts.push(item.react));
+
+        return {
+            reacts: [...new Set(reacts)],
+            count: reacts.length,
+        };
+    }, [statuses]);
+
+    if (!count) return null;
+
     const width = Math.ceil(count / 10);
 
     return (
@@ -16,7 +29,7 @@ const ChatItemReaction = ({ reacts, react, className }) => {
                 className,
             )}
         >
-            {reaction.map((react) => (
+            {reacts.map((react) => (
                 <div key={react} className="px-[1px]">
                     <LazyLoadImage alt={react} src={images[react]} className="w-4 h-4" />
                 </div>
@@ -35,10 +48,8 @@ const ChatItemReaction = ({ reacts, react, className }) => {
     );
 };
 
-ChatItemReaction.propTypes = {
-    reacts: PropTypes.array.isRequired,
-    react: PropTypes.string,
+MessageReaction.propTypes = {
     className: PropTypes.string,
 };
 
-export default memo(ChatItemReaction);
+export default memo(MessageReaction);

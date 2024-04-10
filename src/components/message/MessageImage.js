@@ -4,7 +4,7 @@ import { DownloadLineIcon } from '~/assets';
 import { useDownloadFile } from '~/hooks';
 import { classNames } from '~/utils';
 
-const ChatImage = ({ imageInList = false, loading = false, src, name }) => {
+const MessageImage = ({ imageInList = false, loading = false, src, name, className }) => {
     const download = useDownloadFile(src, name);
 
     const handleLoadImage = () => URL.revokeObjectURL(src);
@@ -14,6 +14,7 @@ const ChatImage = ({ imageInList = false, loading = false, src, name }) => {
             className={classNames(
                 'relative',
                 imageInList || 'w-[150px] aspect-[3/2] border border-separate dark:border-dark-separate rounded',
+                className,
             )}
         >
             <div className="relative flex justify-center items-center h-full">
@@ -36,11 +37,12 @@ const ChatImage = ({ imageInList = false, loading = false, src, name }) => {
     );
 };
 
-ChatImage.propTypes = {
+MessageImage.propTypes = {
     src: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     loading: PropTypes.bool,
     imageInList: PropTypes.bool,
+    className: PropTypes.string,
 };
 
-export default ChatImage;
+export default MessageImage;

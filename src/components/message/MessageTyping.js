@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
 import Avatar from '~/components/avatar';
 import Typing from '~/components/typing';
 
-const ChatItemTyping = ({ chat }) => {
+const MessageTyping = ({ chat }) => {
     return (
         <div>
             <div className="max-w-[75%] flex">
@@ -18,6 +19,8 @@ const ChatItemTyping = ({ chat }) => {
     );
 };
 
-ChatItemTyping.propTypes = {};
+MessageTyping.propTypes = {
+    chat: PropTypes.object.isRequired,
+};
 
-export default ChatItemTyping;
+export default MessageTyping;

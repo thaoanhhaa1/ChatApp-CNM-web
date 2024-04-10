@@ -17,7 +17,7 @@ import {
     isPinConversation,
 } from '~/utils';
 import Avatar from '../avatar';
-import Message from '../message';
+import ChatMessage from '../chatMessage';
 import Popup from '../popup';
 import Typing from '../typing';
 
@@ -147,7 +147,7 @@ const ChatItem = ({ chat, active }) => {
                                 </span>
                             ) : null}
                             {message?.messages || recalled ? (
-                                <Message
+                                <ChatMessage
                                     status={message?.deleted}
                                     isMe
                                     className="line-clamp-1"

@@ -1,7 +1,7 @@
 import { ImageList, ImageListImageAspectContainer, ImageListItem } from '@rmwc/image-list';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import ChatImage from '../chat/body/ChatImage';
+import MessageImage from '~/components/message/MessageImage';
 
 const MessageImageList = ({ files, loading }) => {
     const data = useMemo(
@@ -19,7 +19,7 @@ const MessageImageList = ({ files, loading }) => {
             {data.map((item) => (
                 <ImageListItem key={item.url}>
                     <ImageListImageAspectContainer>
-                        <ChatImage loading={loading} imageInList src={item.url} name={item.name} />
+                        <MessageImage loading={loading} imageInList src={item.url} name={item.name} />
                     </ImageListImageAspectContainer>
                 </ImageListItem>
             ))}

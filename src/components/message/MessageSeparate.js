@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const ChatItemSeparate = ({ children }) => {
+const MessageSeparate = ({ children }) => {
     return (
         <div className="relative flex items-center justify-center">
             <div className="absolute w-full border-t border-separate dark:border-dark-separate flex-1" />
@@ -11,8 +11,8 @@ const ChatItemSeparate = ({ children }) => {
     );
 };
 
-ChatItemSeparate.propTypes = {
+MessageSeparate.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
-export default ChatItemSeparate;
+export default MessageSeparate;

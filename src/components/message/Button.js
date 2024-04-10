@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 
-const ChatItemButton = forwardRef(({ children, onClick = () => {} }, ref) => {
+const Button = forwardRef(({ children, onClick = () => {} }, ref) => {
     return (
         <span
             ref={ref}
@@ -13,9 +13,9 @@ const ChatItemButton = forwardRef(({ children, onClick = () => {} }, ref) => {
     );
 });
 
-ChatItemButton.propTypes = {
+Button.propTypes = {
     children: PropTypes.node.isRequired,
     onClick: PropTypes.func,
 };
 
-export default ChatItemButton;
+export default Button;

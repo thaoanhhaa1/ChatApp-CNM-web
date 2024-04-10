@@ -175,6 +175,23 @@ const chatsSlice = createSlice({
 
             if (state.active?._id === conversationId) state.active.messages = chat.messages;
         },
+        updateMessageReact: (state, { payload }) => {
+            const { conversationId, messageId, userId, react } = payload;
+
+            const chat = state.chats.find((chat) => chat._id === conversationId);
+
+            if (chat) {
+                const message = chat.messages.find((message) => message._id === messageId);
+
+                if (message) {
+                    const status = message.statuses.find((item) => item.user === userId);
+
+                    if (status) status.react = react;
+                }
+
+                if (state.active?._id === conversationId) state.active.messages = chat.messages;
+            }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -218,5 +235,6 @@ export const {
     addMessageHead,
     addChat,
     addMessageHeadSocket,
+    updateMessageReact,
 } = chatsSlice.actions;
 export { getChats, getConversation };

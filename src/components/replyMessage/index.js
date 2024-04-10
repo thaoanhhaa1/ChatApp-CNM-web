@@ -5,7 +5,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { CloseLineIcon, FileTextFillIcon } from '~/assets';
 import { DeleteMessageStatus } from '~/constants';
 import { classNames, isImageFileByType } from '~/utils';
-import Message from '../message';
+import ChatMessage from '../chatMessage';
 import StickerItem from '../sticker/StickerItem';
 
 const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {}, onClick = () => {} }) => {
@@ -55,7 +55,7 @@ const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {},
                 {subTitle ? <span className="text-secondary dark:text-dark-secondary text-sm">{subTitle}</span> : null}
 
                 {message.messages?.length || recalled ? (
-                    <Message
+                    <ChatMessage
                         status={message.deleted}
                         messages={message.messages || []}
                         isMe={isMe}

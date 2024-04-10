@@ -1,3 +1,7 @@
-const isVideoFile = (type) => /\.(mp4|avi|mkv|mov|wmv|flv|webm)$/.test(type);
+const isVideoFile = (type) => {
+    if (type === 'video/x-matroska') return false;
+
+    return /^video\/.*/.test(type);
+};
 
 export default isVideoFile;

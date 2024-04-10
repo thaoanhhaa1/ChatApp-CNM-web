@@ -85,7 +85,6 @@ const DefaultLayout = ({ children }) => {
         });
 
         socket.on('receivedMessage', (message) => {
-            console.log('🚀 ~ socket.on ~ message:', message);
             dispatch(addMessageHead(message));
 
             if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));

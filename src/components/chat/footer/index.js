@@ -88,7 +88,6 @@ const Footer = () => {
         if (!chat && !files?.length) return;
 
         const messages = splitMessage(chat);
-        const timeSend = Date.now();
         const imageFiles = [];
         const otherFiles = [];
 
@@ -101,6 +100,7 @@ const Footer = () => {
         // Text + 1 image
         if (chat.trim() && imageFiles.length === 1 && !otherFiles.length) {
             const formData = new FormData();
+            const timeSend = Date.now();
 
             formData.append('files', imageFiles[0]);
             formData.append('conversationId', active._id);
@@ -125,6 +125,7 @@ const Footer = () => {
         } else {
             // Text + n images + n other files
             if (messages.length && chat.trim()) {
+                const timeSend = Date.now();
                 dispatch(sendMessage({ messages, conversationId: active._id, reply: reply?._id, timeSend }))
                     .unwrap()
                     .then(({ data }) => setShowToast(data.invalidMessage));
@@ -141,6 +142,7 @@ const Footer = () => {
 
             if (imageFiles.length) {
                 const formData = new FormData();
+                const timeSend = Date.now();
 
                 imageFiles.forEach((file) => formData.append('files', file));
                 formData.append('conversationId', active._id);
@@ -161,6 +163,7 @@ const Footer = () => {
             if (otherFiles.length) {
                 otherFiles.forEach((file) => {
                     const formData = new FormData();
+                    const timeSend = Date.now();
 
                     formData.append('files', file);
                     formData.append('conversationId', active._id);
@@ -191,6 +194,7 @@ const Footer = () => {
     };
 
     const handleFocus = () => {
+        console.log(`Typing: `, Date.now());
         socket.emit('typing', { conversation: active, userId: user._id });
     };
 
