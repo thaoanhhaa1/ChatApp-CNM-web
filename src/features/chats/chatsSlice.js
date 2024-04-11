@@ -187,6 +187,7 @@ const chatsSlice = createSlice({
                     const status = message.statuses.find((item) => item.user === userId);
 
                     if (status) status.react = react;
+                    else message.statuses.push({ user: userId, react });
                 }
 
                 if (state.active?._id === conversationId) state.active.messages = chat.messages;

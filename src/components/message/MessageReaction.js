@@ -10,7 +10,7 @@ const MessageReaction = ({ className }) => {
     const { reacts, count } = useMemo(() => {
         const reacts = [];
 
-        statuses.forEach((item) => item && reacts.push(item.react));
+        statuses.forEach((item) => item.react && reacts.push(item.react));
 
         return {
             reacts: [...new Set(reacts)],

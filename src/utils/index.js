@@ -37,5 +37,6 @@ export { default as location } from './location';
 export { default as nearbySearch } from './nearbySearch';
 export { default as phoneBookFilter } from './phoneBookFilter';
 export { default as reorder } from './reorder';
+export { default as retryPromise } from './retryPromise';
 export { default as splitMessage } from './splitMessage';
 export { default as token } from './token';

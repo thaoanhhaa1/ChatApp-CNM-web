@@ -24,6 +24,7 @@ const api = {
     pinMessage: (messageId) => `/message/pin/${messageId}`,
     unpinMessage: (messageId) => `/message/unpinMessage/${messageId}`,
     forward: () => `/message/forward`,
+    react: () => `/message/react`,
 };
 
 export default api;

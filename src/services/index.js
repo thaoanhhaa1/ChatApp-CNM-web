@@ -10,6 +10,7 @@ export { default as login } from './login';
 export { default as logout } from './logout';
 export { default as openConversation } from './openConversation';
 export { default as pinMessage } from './pinMessage';
+export { default as reactMessage } from './reactMessage';
 export { default as recallMessage } from './recallMessage';
 export { default as register } from './register';
 export { default as searchUsers } from './searchUsers';

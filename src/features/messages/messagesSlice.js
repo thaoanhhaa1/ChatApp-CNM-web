@@ -84,9 +84,8 @@ const messagesSlice = createSlice({
 
             const status = message.statuses.find((item) => item.user === userId);
 
-            if (!status) return state;
-
-            status.react = react;
+            if (!status) message.statuses.push({ user: userId, react });
+            else status.react = react;
         },
     },
     extraReducers: (builder) => {

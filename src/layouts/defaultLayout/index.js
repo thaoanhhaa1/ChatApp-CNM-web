@@ -18,8 +18,9 @@ import {
     removePinMessage,
     setTyping,
     updateMessage,
+    updateMessageReact,
 } from '~/features/chats/chatsSlice';
-import { addMessageSocket, updateDeletedMessage } from '~/features/messages/messagesSlice';
+import { addMessageSocket, updateDeletedMessage, updateReact } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
 import { setLocationError } from '~/features/toastAll/toastAllSlice';
 import { getUserInfo } from '~/features/user/userSlice';
@@ -125,6 +126,18 @@ const DefaultLayout = ({ children }) => {
         });
         socket.on('unpinMessage', ({ message }) => {
             dispatch(removePinMessage({ conversationId: message.conversation._id, message }));
+        });
+
+        socket.on('reactForMessage', ({ conversationId, messageId, userId, react }) => {
+            dispatch(
+                updateMessageReact({
+                    conversationId,
+                    messageId,
+                    userId,
+                    react,
+                }),
+            );
+            dispatch(updateReact({ _id: messageId, userId, react }));
         });
     }, [active?._id, dispatch, socket, user._id]);
 

@@ -3,9 +3,12 @@ import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EmotionHappyLineIcon } from '~/assets';
 import Reaction from '~/components/reaction';
+import { reaction } from '~/constants';
 import { useMessage } from '~/context';
 import { updateMessageReact } from '~/features/chats/chatsSlice';
 import { updateReact } from '~/features/messages/messagesSlice';
+import { reactMessage } from '~/services';
+import { retryPromise } from '~/utils';
 import Button from './Button';
 
 const React = () => {
@@ -13,29 +16,14 @@ const React = () => {
     const { chatId, statuses } = useMessage();
     const { user } = useSelector((state) => state.user);
     const { active } = useSelector((state) => state.chats);
+    const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
-    const { myReact, reacts } = useMemo(() => {
-        const reacts = new Set();
-        let myReact = '';
-
-        statuses.forEach((item) => {
-            if (!item) return;
-
-            if (item.user === user._id) myReact = item.react;
-
-            reacts.add(item.react);
-        });
-
-        return {
-            myReact,
-            reacts: [...reacts],
-        };
-    }, [statuses, user._id]);
+    const myReact = useMemo(() => statuses.find((item) => item.user === user._id)?.react, [statuses, user._id]);
 
     const handleClickReact = (item) => {
         let newReact = '';
 
-        if (item !== myReact) newReact = item;
+        if (item.id !== myReact) newReact = item.id;
 
         dispatch(
             updateMessageReact({
@@ -46,11 +34,16 @@ const React = () => {
             }),
         );
         dispatch(updateReact({ _id: chatId, userId: user._id, react: newReact }));
-        // TODO Socket
+        retryPromise(() => reactMessage({ react: newReact, messageId: chatId }), 5, 200).then();
+        socket.emit('reactForMessage', {
+            users: active.users,
+            conversationId: active._id,
+            messageId: chatId,
+            react: newReact,
+            userId: user._id,
+        });
 
         instance && instance.hide();
-
-        // TODO Update chat in DB
     };
 
     return (
@@ -58,10 +51,10 @@ const React = () => {
             <Tippy
                 content={
                     <Reaction>
-                        {reacts.map((item) => (
+                        {reaction.map((item) => (
                             <Reaction.Button
-                                key={item}
-                                active={myReact === item}
+                                key={item.id}
+                                active={myReact === item.id}
                                 onClick={handleClickReact}
                                 item={item}
                             />
