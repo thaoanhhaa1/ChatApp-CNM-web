@@ -47,6 +47,7 @@ const Navbar = ({ className }) => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);
     const { settings } = useSelector((state) => state.localSetting);
+    const { hasNewReceived } = useSelector((state) => state.friend);
     const [darkMode, setDarkMode] = useState(() => settings.theme === 'dark');
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -77,6 +78,7 @@ const Navbar = ({ className }) => {
             title: 'navbar.contacts',
             icon: ContactIcon,
             to: routes.contacts,
+            badge: hasNewReceived ? 'N' : '',
         },
         {
             title: 'navbar.settings',

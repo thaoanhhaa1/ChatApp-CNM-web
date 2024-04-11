@@ -8,6 +8,7 @@ import Button from '../button';
 const SentFriendRequest = ({ contact }) => {
     const { t } = useTranslation();
     const [isRecall, setRecall] = useState(false);
+    const receiver = contact.receiver_id;
 
     const handleClick = () => {
         setRecall(!isRecall);
@@ -15,11 +16,11 @@ const SentFriendRequest = ({ contact }) => {
 
     return (
         <div className="px-2 ex:px-3 sm:px-4 py-2 flex gap-2 items-center">
-            <Avatar src={contact.avatar} />
+            <Avatar src={receiver.avatar} />
             <div className="flex-1">
-                <div className="text-sm font-medium line-clamp-1">{contact.name}</div>
+                <div className="text-sm font-medium line-clamp-1">{receiver.name}</div>
                 <span className="text-ss text-secondary dark:text-dark-secondary">
-                    {getDate(new Date(contact.date))}
+                    {getDate(new Date(contact.createdAt))}
                 </span>
             </div>
             <Button onClick={handleClick} primary={!isRecall} secondary={isRecall} small rounded>
@@ -31,10 +32,12 @@ const SentFriendRequest = ({ contact }) => {
 
 SentFriendRequest.propTypes = {
     contact: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        avatar: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-        id: PropTypes.string.isRequired,
+        message: PropTypes.string.isRequired,
+        createdAt: PropTypes.string.isRequired,
+        receiver_id: PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            avatar: PropTypes.string.isRequired,
+        }).isRequired,
     }).isRequired,
 };
 

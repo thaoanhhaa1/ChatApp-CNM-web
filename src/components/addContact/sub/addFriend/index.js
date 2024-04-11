@@ -7,6 +7,7 @@ import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { constants } from '~/constants';
 import { addFriend } from '~/features/addContact/addContactSlice';
+import { addRequestFriend } from '~/features/friend/friendSlice';
 import { popSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { setToast } from '~/features/toastAll/toastAllSlice';
 
@@ -14,6 +15,7 @@ const AddFriend = ({ onClose }) => {
     const { t } = useTranslation();
     const { contact, addContactLoading } = useSelector((state) => state.addContact);
     const { user } = useSelector((state) => state.user);
+    const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
     const [data, setData] = useState({
         message: `${t('contacts.modal.greetingMessage1')} ${user.name}. ${t('contacts.modal.greetingMessage2')}`,
@@ -24,9 +26,11 @@ const AddFriend = ({ onClose }) => {
     const handleAddFriend = async () => {
         const { message, blockView } = data;
 
-        await dispatch(addFriend({ friendId: contact._id, message, blockView })).unwrap();
+        const res = await dispatch(addFriend({ friendId: contact._id, message, blockView })).unwrap();
 
         onClose();
+        socket.emit('sendFriendRequest', res.data);
+        dispatch(addRequestFriend(res.data));
         dispatch(setToast(t('contacts.modal.addFriendSuccess')));
     };
 

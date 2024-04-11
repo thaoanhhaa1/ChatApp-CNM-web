@@ -6,6 +6,7 @@ import contactGroupsReducer from '~/features/contactGroups/contactGroupsSlice';
 import contactsReducer from '~/features/contacts/contactsSlice';
 import contactsGroupReducer from '~/features/contactsGroup/contactsGroupSlice';
 import createGroupReducer from '~/features/createGroup/createGroupSlice';
+import friendReducer from '~/features/friend/friendSlice';
 import localSettingReducer from '~/features/localSetting/localSettingSlice';
 import locationReducer from '~/features/location/locationSlice';
 import messagesReducer from '~/features/messages/messagesSlice';
@@ -40,6 +41,7 @@ export const store = configureStore({
         search: searchReducer,
         location: locationReducer,
         toastAll: toastAllReducer,
+        friend: friendReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

@@ -20,6 +20,7 @@ import {
     updateMessage,
     updateMessageReact,
 } from '~/features/chats/chatsSlice';
+import { addResponseFriend, setNewReceived } from '~/features/friend/friendSlice';
 import { addMessageSocket, updateDeletedMessage, updateReact } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
 import { setLocationError, setToast } from '~/features/toastAll/toastAllSlice';
@@ -140,6 +141,11 @@ const DefaultLayout = ({ children }) => {
                 }),
             );
             dispatch(updateReact({ _id: messageId, userId, react }));
+        });
+
+        socket.on('sendFriendRequest', (friendRequest) => {
+            dispatch(addResponseFriend(friendRequest));
+            dispatch(setNewReceived(true));
         });
     }, [active?._id, dispatch, socket, user._id]);
 
