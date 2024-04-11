@@ -71,7 +71,8 @@
             "copy": "Copy",
             "unpin": "Unpin"
         },
-        "share": "Share"
+        "share": "Share",
+        "micro": "Micro"
     },
     "contacts": {
         "title": "Contacts",

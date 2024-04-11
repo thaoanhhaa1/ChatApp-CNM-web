@@ -260,6 +260,8 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                             {chat.sticker && !recalled ? null : (
                                 <MessageReaction className="absolute right-0 bottom-0 translate-y-[calc(100%-7px)]" />
                             )}
+
+                            <MessageLoading loading={loading} />
                         </div>
                         <div
                             className={classNames(
@@ -279,8 +281,6 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                 {chat.sender.name}
                             </div>
                         )}
-
-                        <MessageLoading loading={loading} />
                     </div>
                     {recalled || loading ? null : (
                         <div className={classNames('flex', isMe && 'flex-row-reverse')}>

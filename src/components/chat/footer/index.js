@@ -1,10 +1,11 @@
+import Tippy from '@tippyjs/react';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mention, MentionsInput } from 'react-mentions';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkText } from 'smile2emoji';
-import { ImageFillIcon, LocationIcon, MicIcon, SendPlaneFillIcon } from '~/assets';
+import { AttachmentLineIcon, ImageFillIcon, LocationIcon, MicIcon, SendPlaneFillIcon } from '~/assets';
 import AttachFiles from '~/components/attachFiles';
 import Location from '~/components/location';
 import Modal from '~/components/modal';
@@ -21,8 +22,6 @@ import Emoticon from './Emoticon';
 import MentionItem from './Mention';
 import SendFiles from './SendFiles';
 
-// TODO Chat and Reply
-// Send message: messages, files, conversationId, reply, sticker
 const Footer = () => {
     const { t } = useTranslation();
     const [selectionStart, setSelectionStart] = useState(-1);
@@ -61,28 +60,25 @@ const Footer = () => {
     const handleCloseReply = () => dispatch(setReply());
     // TODO Send file
     const handleSendFiles = async (files) => {
-        const timeSend = Date.now();
+        files.forEach((file) => {
+            const formData = new FormData();
+            const timeSend = Date.now();
 
-        const formData = new FormData();
+            formData.append('files', file);
+            formData.append('conversationId', active._id);
+            formData.append('sender', user);
+            formData.append('timeSend', timeSend);
 
-        files.forEach((file) => formData.append('files', file));
-        formData.append('conversationId', active._id);
-        formData.append('sender', user);
-        reply?._id && formData.append('reply', reply?._id);
-        formData.append('timeSend', timeSend);
-
-        dispatch(sendMessage(formData));
-        dispatch(
-            addMessage({
-                sender: user,
-                reply,
-                files,
-                conversationId: active._id,
-                timeSend,
-            }),
-        );
-        dispatch(setChat(''));
-        dispatch(setReply());
+            dispatch(sendMessage(formData));
+            dispatch(
+                addMessage({
+                    sender: user,
+                    files: [file],
+                    conversationId: active._id,
+                    timeSend,
+                }),
+            );
+        });
     };
     const handleSend = () => {
         if (!chat && !files?.length) return;
@@ -107,7 +103,7 @@ const Footer = () => {
             formData.append('sender', user);
             reply?._id && formData.append('reply', reply?._id);
             formData.append('timeSend', timeSend);
-            formData.append('messages', messages);
+            formData.append('messages', JSON.stringify(messages));
 
             dispatch(sendMessage(formData))
                 .unwrap()
@@ -160,27 +156,7 @@ const Footer = () => {
                 );
             }
 
-            if (otherFiles.length) {
-                otherFiles.forEach((file) => {
-                    const formData = new FormData();
-                    const timeSend = Date.now();
-
-                    formData.append('files', file);
-                    formData.append('conversationId', active._id);
-                    formData.append('sender', user);
-                    formData.append('timeSend', timeSend);
-
-                    dispatch(sendMessage(formData));
-                    dispatch(
-                        addMessage({
-                            sender: user,
-                            files: [file],
-                            conversationId: active._id,
-                            timeSend,
-                        }),
-                    );
-                });
-            }
+            if (otherFiles.length) handleSendFiles(otherFiles);
         }
 
         dispatch(setChat(''));
@@ -237,8 +213,11 @@ const Footer = () => {
     return (
         <div>
             <Toast showToast={showToast} message="Invalid message" />
-            <div className="flex flex-col justify-center gap-2 px-2 h-10 border-t border-separate dark:border-dark-separate">
-                <Button onClick={setShowLocation} icon={LocationIcon} />
+            <div className="flex items-center gap-3 px-2 h-10 border-t border-separate dark:border-dark-separate">
+                <Tippy content={t('chat.location')}>
+                    <Button onClick={setShowLocation} icon={LocationIcon} />
+                </Tippy>
+                <SendFiles onSend={handleSendFiles} Icon={AttachmentLineIcon} tooltip={t('chat.attached-file')} />
             </div>
             <div className="border-t border-separate dark:border-dark-separate p-2 sm:p-3 md:p-4 dl:p-5 focus-within:border-primary-color transition-colors duration-150">
                 {reply ? <ReplyMessage showClose isMe onClose={handleCloseReply} message={reply} /> : null}
@@ -275,14 +254,15 @@ const Footer = () => {
                     </label>
                     <div className="flex">
                         <Emoticon handleEmojiClick={handleEmojiClick} />
-                        {/* <SendFiles onSend={handleSendFiles} Icon={AttachmentLineIcon} tooltip={t('chat.attached-file')} /> */}
                         <SendFiles
                             onSend={handleSendFiles}
                             Icon={ImageFillIcon}
                             tooltip={t('chat.images')}
                             accept="image/*"
                         />
-                        <Button icon={MicIcon} />
+                        <Tippy content={t('chat.micro')}>
+                            <Button icon={MicIcon} />
+                        </Tippy>
                         <Button disabled={activeLoading} onClick={handleSend} icon={SendPlaneFillIcon} type="primary" />
                     </div>
                 </div>

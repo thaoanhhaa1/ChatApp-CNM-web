@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { ChatTextLineIcon, ChevronDownIcon, MoreFillIcon } from '~/assets';
+import { ChatTextLineIcon, ChevronDownIcon, FileTextFillIcon, LocationIcon, MoreFillIcon } from '~/assets';
 import { removePinMessage } from '~/features/chats/chatsSlice';
 import unpinMessage from '~/services/unpinMessage';
-import { classNames } from '~/utils';
+import { classNames, isImageFileByType } from '~/utils';
 import ChatMessage from '../chatMessage';
 import Popup from '../popup';
 
@@ -14,6 +15,24 @@ const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }
     const { user } = useSelector((state) => state.user);
     const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
+    const fileLength = message.files.length;
+    const firstFile = fileLength && message.files[0];
+    const isImage = fileLength && isImageFileByType(firstFile.type);
+    const imageUrl = isImage && (firstFile.link || URL.createObjectURL(firstFile));
+    const locationName = message.location?.name;
+    const isOtherFile = firstFile && !isImage;
+    const showName = firstFile?.name || isOtherFile || locationName;
+    const subTitle = useMemo(() => {
+        if (isImage) return t('chats.photo');
+
+        if (firstFile) return 'File';
+
+        if (locationName) return t('chat.location');
+
+        if (message.sticker) return 'Sticker';
+
+        return '';
+    }, [firstFile, isImage, locationName, message.sticker, t]);
 
     const handleUnpin = () => {
         unpinMessage(message._id).then();
@@ -49,7 +68,31 @@ const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }
             <ChatTextLineIcon className="w-6 h-6 text-primary-color" />
             <div className="flex-1">
                 <h5 className="text-ss">Message</h5>
-                <ChatMessage className="!text-secondary dark:!text-dark-secondary" messages={message.messages} />
+                <div className="line-clamp-1 flex items-center gap-1 text-sm text-secondary dark:text-dark-secondary">
+                    <span className="text-nowrap">{message.sender?.name || user.name}:</span>
+
+                    {isImage ? (
+                        <img
+                            className="flex-shrink-0 w-[18px] aspect-square rounded object-cover"
+                            src={imageUrl}
+                            alt={firstFile.name}
+                        />
+                    ) : null}
+                    {locationName && <LocationIcon className="flex-shrink-0 w-[18px] h-[18px]" />}
+                    {isOtherFile ? <FileTextFillIcon className="flex-shrink-0 w-[18px] h-[18px]" /> : null}
+
+                    {subTitle ? <span>{subTitle}</span> : null}
+
+                    {(showName || message.messages?.length) && subTitle ? <span>•</span> : null}
+
+                    {showName && !message.messages?.length ? (
+                        <span className="line-clamp-1">{firstFile?.name || locationName}</span>
+                    ) : null}
+                    <ChatMessage
+                        className="!text-secondary dark:!text-dark-secondary line-clamp-1"
+                        messages={message.messages}
+                    />
+                </div>
             </div>
             <Popup data={more} placement="bottom-end">
                 <span className="group-hover/pin:opacity-100 opacity-0 transition-all duration-150 flex justify-center items-center w-8 h-8 hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 rounded-full">
@@ -61,7 +104,7 @@ const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }
                     onClick={handleClickMore}
                     className="border border-primary-color rounded-lg flex items-center gap-1 h-6 px-4 text-sm text-primary-color font-medium hover:bg-primary-color hover:bg-opacity-5 transition-all duration-150"
                 >
-                    <span>1</span>
+                    <span>{pinCount - 1}</span>
                     <span>more</span>
                     <ChevronDownIcon className="w-4 h-4" />
                 </div>

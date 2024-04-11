@@ -70,7 +70,8 @@
             "copy": "Copy",
             "unpin": "Bỏ ghim"
         },
-        "share": "Chia sẻ"
+        "share": "Chia sẻ",
+        "micro": "Micro"
     },
     "contacts": {
         "title": "Danh bạ",

@@ -146,6 +146,11 @@ const ChatItem = ({ chat, active }) => {
                                     <LocationIcon className="w-[14px] h-[14px]" />
                                 </span>
                             ) : null}
+                            {subTitle && !recalled && !message?.messages?.length ? (
+                                <span className="text-sm text-secondary dark:text-dark-secondary line-clamp-1">
+                                    {subTitle}
+                                </span>
+                            ) : null}
                             {message?.messages || recalled ? (
                                 <ChatMessage
                                     status={message?.deleted}
@@ -154,11 +159,6 @@ const ChatItem = ({ chat, active }) => {
                                     isReply
                                     messages={message?.messages || []}
                                 />
-                            ) : null}
-                            {subTitle && !recalled ? (
-                                <span className="text-sm text-secondary dark:text-dark-secondary line-clamp-1">
-                                    {subTitle}
-                                </span>
                             ) : null}
                         </div>
                     )}
