@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { searchUsers } from '~/services';
 import friendServices from '~/services/friend.service';
+import userServices from '~/services/user.service';
 
 const initialState = {
     phone: { country: { name: 'Vietnam', dialling_code: '+84', code: 'VN' }, phone: '' },
@@ -11,7 +11,7 @@ const initialState = {
 };
 
 const searchUser = createAsyncThunk('searchUser', async ({ search }) => {
-    const response = await searchUsers(search);
+    const response = await userServices.searchUsers(search);
     return response.data[0];
 });
 

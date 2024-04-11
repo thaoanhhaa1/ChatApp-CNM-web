@@ -18,7 +18,7 @@ import { genders } from '~/constants';
 import { setSetting } from '~/features/localSetting/localSettingSlice';
 import { setUser } from '~/features/user/userSlice';
 import { useBoolean } from '~/hooks';
-import { createOTP, register, verifyOTP } from '~/services';
+import authServices from '~/services/auth.service';
 import { classNames } from '~/utils';
 
 const NUMBER_OF_STEP = 4;
@@ -73,7 +73,7 @@ const Register = () => {
 
     const handleSendOTP = async () => {
         try {
-            await createOTP(formData.contact);
+            await authServices.createOTP({ phone: formData.contact });
             setCountdown(TIME_OTP);
         } finally {
         }
@@ -85,7 +85,7 @@ const Register = () => {
         try {
             if (!otpCode) throw new Error('OTP code is required');
 
-            await verifyOTP({
+            await authServices.verifyOTP({
                 phone: formData.contact,
                 otp: otpCode,
             });
@@ -134,7 +134,7 @@ const Register = () => {
                 validationErrors.phone = t('register.error-email');
             else {
                 try {
-                    await createOTP(phone);
+                    await authServices.createOTP({ phone });
                 } catch (error) {
                     validationErrors.phone = t('register.email-exist');
                 }
@@ -191,7 +191,7 @@ const Register = () => {
         }
 
         try {
-            const res = await register(formData);
+            const res = await authServices.register(formData);
             const { accessToken, user } = res.data;
 
             saveToken(accessToken);

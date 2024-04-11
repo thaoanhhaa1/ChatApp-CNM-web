@@ -29,7 +29,7 @@ import { addPinMessage, setMessages, updateMessage } from '~/features/chats/chat
 import { getReplyMessages, setOffsetTop, updateDeletedMessage } from '~/features/messages/messagesSlice';
 import { setLocationError } from '~/features/toastAll/toastAllSlice';
 import { useLoader, useToast } from '~/hooks';
-import { deleteMessageForMe, pinMessage, recallMessage } from '~/services';
+import messageServices from '~/services/message.service';
 import {
     classNames,
     getMessageNoDelete,
@@ -105,7 +105,7 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
 
     const handleRecall = useCallback(() => {
         if (isCanRecall(chat.createdAt)) {
-            recallMessage(chat._id).then();
+            messageServices.recallMessage(chat._id).then();
             dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.RECALL }));
             dispatch(
                 updateMessage({
@@ -120,7 +120,7 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const handleDeleteForMe = useCallback(() => {
         if (!chat?._id || !chat?.conversation?._id) return;
 
-        deleteMessageForMe(chat._id).then();
+        messageServices.deleteMessageForMe(chat._id).then();
         dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.DELETE_FOR_ME }));
         dispatch(
             updateMessage({ conversationId: chat.conversation._id, message: getMessageNoDelete(messages, chat._id) }),
@@ -130,7 +130,7 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const handlePinMessage = useCallback(() => {
         if (!chat?._id || !chat?.conversation?._id) return;
 
-        pinMessage(chat._id).then();
+        messageServices.pinMessage(chat._id).then();
         dispatch(addPinMessage({ conversationId: chat.conversation._id, message: chat }));
         socket.emit('pinMessage', { message: chat, userId: user._id, users: active.users });
     }, [active.users, chat, dispatch, socket, user._id]);

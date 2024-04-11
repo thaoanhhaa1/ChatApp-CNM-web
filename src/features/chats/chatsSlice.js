@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllConversations, openConversation } from '~/services';
+import conversationServices from '~/services/conversation.service';
 
 const initialState = {
     chats: [],
@@ -9,14 +9,13 @@ const initialState = {
 };
 
 const getChats = createAsyncThunk('getChats', async () => {
-    const response = await getAllConversations();
+    const response = await conversationServices.getAllConversations();
 
     return response.data;
 });
 
 const getConversation = createAsyncThunk('getConversation', async (receiverId) => {
-    console.log('Get conversation....');
-    const response = await openConversation(receiverId);
+    const response = await conversationServices.openConversation(receiverId);
 
     return response.data;
 });

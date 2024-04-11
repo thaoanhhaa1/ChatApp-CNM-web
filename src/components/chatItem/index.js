@@ -6,7 +6,7 @@ import { FileTextFillIcon, ImageFillIcon, LocationIcon, MoreFillIcon, PinFilledI
 import { DeleteMessageStatus } from '~/constants';
 import { useLayout } from '~/context';
 import { setActive, togglePin } from '~/features/chats/chatsSlice';
-import { togglePinConversation as togglePinConversationService } from '~/services';
+import conversationServices from '~/services/conversation.service';
 import {
     classNames,
     getLastMessageNoDeleted,
@@ -36,8 +36,7 @@ const ChatItem = ({ chat, active }) => {
     const conversationName = getNameConversation(chat, user);
 
     const togglePinConversation = useCallback(() => {
-        // TODO Unpin
-        togglePinConversationService(chat._id).then();
+        conversationServices.togglePinConversation(chat._id).then();
         dispatch(togglePin({ conversationId: chat._id, userId: user._id }));
     }, [chat._id, dispatch, user._id]);
 

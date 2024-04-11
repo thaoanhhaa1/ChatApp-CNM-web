@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChatTextLineIcon, ChevronDownIcon, FileTextFillIcon, LocationIcon, MoreFillIcon } from '~/assets';
 import { removePinMessage } from '~/features/chats/chatsSlice';
-import unpinMessage from '~/services/unpinMessage';
+import messageServices from '~/services/message.service';
 import { classNames, isImageFileByType } from '~/utils';
 import ChatMessage from '../chatMessage';
 import Popup from '../popup';
@@ -35,7 +35,7 @@ const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }
     }, [firstFile, isImage, locationName, message.sticker, t]);
 
     const handleUnpin = () => {
-        unpinMessage(message._id).then();
+        messageServices.unpinMessage(message._id).then();
         dispatch(removePinMessage({ conversationId: active._id, message: message }));
         socket.emit('pinMessage', { message, userId: user._id, users: active.users });
     };

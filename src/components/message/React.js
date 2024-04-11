@@ -7,7 +7,7 @@ import { reaction } from '~/constants';
 import { useMessage } from '~/context';
 import { updateMessageReact } from '~/features/chats/chatsSlice';
 import { updateReact } from '~/features/messages/messagesSlice';
-import { reactMessage } from '~/services';
+import messageServices from '~/services/message.service';
 import { retryPromise } from '~/utils';
 import Button from './Button';
 
@@ -34,7 +34,7 @@ const React = () => {
             }),
         );
         dispatch(updateReact({ _id: chatId, userId: user._id, react: newReact }));
-        retryPromise(() => reactMessage({ react: newReact, messageId: chatId }), 5, 200).then();
+        retryPromise(() => messageServices.react({ react: newReact, messageId: chatId }), 5, 200).then();
         socket.emit('reactForMessage', {
             users: active.users,
             conversationId: active._id,

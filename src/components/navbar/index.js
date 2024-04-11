@@ -22,7 +22,7 @@ import images from '~/assets/images';
 import config from '~/config';
 import routes from '~/config/routes';
 import { reset, setSetting } from '~/features/localSetting/localSettingSlice';
-import logout from '~/services/logout';
+import authServices from '~/services/auth.service';
 import { classNames, token } from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
@@ -100,7 +100,7 @@ const Navbar = ({ className }) => {
                 title: 'navbar.logout',
                 icon: LogOutIcon,
                 onClick: () => {
-                    logout().then();
+                    authServices.logout().then();
                     token.set('');
                     html.classList.remove('dark');
                     dispatch(reset());

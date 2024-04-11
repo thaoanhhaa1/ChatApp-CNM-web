@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SearchIcon } from '~/assets';
 import { addMessageHeadSocket } from '~/features/chats/chatsSlice';
 import { addMessageSocket } from '~/features/messages/messagesSlice';
-import { forwardMessage } from '~/services';
+import messageServices from '~/services/message.service';
 import Input from '../input';
 import Modal from '../modal';
 import ContactList from './ContactList';
@@ -43,7 +43,7 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
         setLoading(true);
 
         try {
-            const res = await forwardMessage({
+            const res = await messageServices.forward({
                 messageId,
                 conversationIds: selectedContacts.map((contact) => contact._id),
             });

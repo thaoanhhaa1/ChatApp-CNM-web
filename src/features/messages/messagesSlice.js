@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { v4 } from 'uuid';
 import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
-import {
-    getMessages as getMessagesService,
-    getReplyMessages as getReplyMessagesService,
-    addMessage as sendMessageService,
-} from '~/services';
+import messageServices from '~/services/message.service';
 
 const initialState = {
     messages: [],
@@ -15,20 +11,19 @@ const initialState = {
 };
 
 const getMessages = createAsyncThunk('getMessages', async ({ param, query, signal }) => {
-    console.log('Get messages....');
-    const response = await getMessagesService({ param, query, signal });
+    const response = await messageServices.getMessages({ param, query, signal });
 
     return response.data;
 });
 
 const sendMessage = createAsyncThunk('sendMessage', async (data) => {
-    const response = await sendMessageService(data);
+    const response = await messageServices.addMessage(data);
 
     return { data: response.data, timeSend: data.timeSend || data.get('timeSend') };
 });
 
 const getReplyMessages = createAsyncThunk('getReplyMessages', async (messageId) => {
-    const response = await getReplyMessagesService(messageId);
+    const response = await messageServices.getReplyMessages(messageId);
 
     return response.data;
 });
