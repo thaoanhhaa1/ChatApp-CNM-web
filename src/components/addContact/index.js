@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import validator from 'validator';
 import { UserCircleBrokenIcon } from '~/assets';
-import { reset, setPhone } from '~/features/addContact/addContactSlice';
+import { reset, searchUser, setEmail } from '~/features/addContact/addContactSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
+import { setToast } from '~/features/toastAll/toastAllSlice';
 import Button from '../button';
+import Input from '../input';
 import Modal from '../modal';
-import PhoneInput from '../phoneInput';
 import PopupMultiLevel from '../popupMultiLevel';
 import ScrollbarCustomize from '../scrollbarCustomize';
 import Contact from './Contact';
@@ -35,12 +37,14 @@ const contacts = [
     },
 ];
 
+// TODO
 const AddContact = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
-    const { phone } = useSelector((state) => state.addContact);
+    const { email, searchLoading } = useSelector((state) => state.addContact);
     const { subs } = useSelector((state) => state.popupMultiLevel);
     const [showMore, setShowMore] = useState(false);
+    const isValidContactSearch = useMemo(() => validator.isEmail(email), [email]);
+    const dispatch = useDispatch();
 
     const handleClickContact = (contact) => {
         console.log('handleClickContact');
@@ -54,15 +58,15 @@ const AddContact = ({ show, onClickOutside }) => {
         console.log('handleClickClose');
     };
 
-    const handleClickSearch = () => {
-        console.group('Search');
-        console.log('🚀 ~ handleClickSearch ~ phone:', phone);
-        console.groupEnd();
+    const handleClickSearch = async () => {
+        const res = await dispatch(searchUser({ search: email })).unwrap();
 
-        dispatch(addSub(Profile));
+        if (res) dispatch(addSub(Profile));
+        else dispatch(setToast(t('contacts.alert-search')));
     };
 
-    const handleChangePhone = (phone) => dispatch(setPhone(phone));
+    // const handleChangePhone = (phone) => dispatch(setPhone(phone));
+    const handleChangeEmail = (email) => dispatch(setEmail(email));
 
     const handleClose = () => {
         onClickOutside();
@@ -80,7 +84,15 @@ const AddContact = ({ show, onClickOutside }) => {
             <PopupMultiLevel onClose={handleClose}>
                 <Modal.Header onClose={handleClose}>{t('contacts.add-contact')}</Modal.Header>
 
-                <PhoneInput className="p-2 ex:p-3 sm:p-4" value={phone} setValue={handleChangePhone} />
+                {/* <PhoneInput className="p-2 ex:p-3 sm:p-4" value={phone} setValue={handleChangePhone} /> */}
+                <Input
+                    containerClassName="m-2 ex:m-3 sm:m-4"
+                    type="email"
+                    outline
+                    placeholder={t('contacts.enter-email')}
+                    value={email}
+                    onChangeText={handleChangeEmail}
+                />
 
                 <div className="h-[min(350px,60vh)] overflow-auto">
                     <ScrollbarCustomize>
@@ -130,7 +142,13 @@ const AddContact = ({ show, onClickOutside }) => {
                     <Modal.Button onClick={handleClose} type="text-primary">
                         {t('contacts.modal.close')}
                     </Modal.Button>
-                    <Modal.Button onClick={handleClickSearch}>{t('contacts.modal.search')}</Modal.Button>
+                    <Modal.Button
+                        disabled={!isValidContactSearch || searchLoading}
+                        loading={searchLoading}
+                        onClick={handleClickSearch}
+                    >
+                        {t('contacts.modal.search')}
+                    </Modal.Button>
                 </Modal.Footer>
             </PopupMultiLevel>
         </Modal>

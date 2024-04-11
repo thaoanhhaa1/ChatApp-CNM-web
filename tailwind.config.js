@@ -79,6 +79,7 @@ module.exports = {
             zIndex: {
                 1: 1,
                 51: 51,
+                9999999: 9999999,
             },
             keyframes: {
                 wave: {

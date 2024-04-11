@@ -25,6 +25,16 @@ const api = {
     unpinMessage: (messageId) => `/message/unpinMessage/${messageId}`,
     forward: () => `/message/forward`,
     react: () => `/message/react`,
+
+    // Friend
+    getFriends: () => `/user/listFriend`,
+    addFriend: () => `/user/addfriend`, // friendId
+    requestFriends: () => `/user/listRequestFriend`,
+    responseFriends: () => `/user/listRequestfriendWaitRespone`,
+    acceptFriend: () => `/user/acceptfriend`, // friendId
+    rejectFriend: () => `/user/rejectfriend`, // friendId
+    revocationRequestFriend: () => `/user/revocationRequestFriend`, // friendId
+    deleteFriend: () => `/user/deletefriend`, // friendId
 };
 
 export default api;

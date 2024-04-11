@@ -8,7 +8,7 @@ import Button from '~/components/button';
 import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { personalInformation } from '~/constants';
-import { blockContact, setContact, setPhoneNumber, unblockContact } from '~/features/addContact/addContactSlice';
+import { blockContact, unblockContact } from '~/features/addContact/addContactSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { classNames } from '~/utils';
 import ProfileHeader from '../ProfileHeader';
@@ -47,25 +47,6 @@ const Profile = ({ onClose }) => {
         console.log('🚀 ~ handleClickChat ~ handleClickChat');
     };
     const handleUnblock = () => dispatch(unblockContact());
-
-    useEffect(() => {
-        const getData = () => {
-            // Load data........
-            const fakeData = {
-                background: 'https://res-zalo.zadn.vn/upload/media/2019/9/18/23_1568803270405_25190.jpg',
-                avatar: 'https://zpsocial-f49-org.zadn.vn/7dc8107a5321bc7fe530.jpg',
-                name: 'Nguyễn Thị Thơm',
-                gender: 'Female',
-                birthday: '17/01/2002',
-                blocked: false,
-            };
-
-            dispatch(setContact(fakeData));
-            dispatch(setPhoneNumber(''));
-        };
-
-        if (!contact.name) getData();
-    }, [contact.name, dispatch]);
 
     useEffect(() => {
         updateHeightPopup();

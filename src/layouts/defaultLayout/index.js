@@ -22,8 +22,9 @@ import {
 } from '~/features/chats/chatsSlice';
 import { addMessageSocket, updateDeletedMessage, updateReact } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
-import { setLocationError } from '~/features/toastAll/toastAllSlice';
+import { setLocationError, setToast } from '~/features/toastAll/toastAllSlice';
 import { getUserInfo } from '~/features/user/userSlice';
+import { useToast } from '~/hooks';
 import { classNames } from '~/utils';
 
 // TODO Check user
@@ -39,11 +40,12 @@ let redirect = false;
 const DefaultLayout = ({ children }) => {
     const { t } = useTranslation();
     const [showChat, setShowChat] = useState(false);
+    const [showToast, setShowToast] = useToast(1500);
     const { width } = useWindowSize();
     const { user, loading } = useSelector((state) => state.user);
     const { socket } = useSelector((state) => state.socket);
     const { active } = useSelector((state) => state.chats);
-    const { locationError } = useSelector((state) => state.toastAll);
+    const { locationError, toast } = useSelector((state) => state.toastAll);
     const navigation = useNavigate();
     const dispatch = useDispatch();
     const refSection = useRef(null);
@@ -156,12 +158,21 @@ const DefaultLayout = ({ children }) => {
         }, 1500);
     }, [dispatch, locationError]);
 
+    useEffect(() => {
+        toast && setShowToast(true);
+    }, [setShowToast, toast]);
+
+    useEffect(() => {
+        showToast || setTimeout(() => dispatch(setToast('')), 100);
+    }, [dispatch, showToast]);
+
     if (loading || !user?._id) return <Loading />;
 
     return (
         <LayoutProvider value={{ setShowChat }}>
             <main className="flex flex-col dl:flex-row h-screen">
                 <Toast showToast={locationError} message={t('location.error-api')} />
+                <Toast showToast={!!toast} message={toast} />
                 <Navbar />
                 <section
                     ref={refSection}

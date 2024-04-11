@@ -82,6 +82,7 @@
         "add-contact": "Thêm liên hệ",
         "phone": "Số điện thoại",
         "enter-phone": "Nhập số điện thoại",
+        "enter-email": "Nhập địa chỉ email",
         "message": "Lời chào",
         "enter-message": "Nhập lời chào",
         "close": "Đóng",
@@ -131,7 +132,8 @@
             "zaloName": "Tên Zalo",
             "phoneNumber": "Điện thoại",
             "joinedZalo": "Tham gia Zalo",
-            "undoRequest": "Huỷ kết bạn"
+            "undoRequest": "Huỷ kết bạn",
+            "addFriendSuccess": "Gửi yêu cầu kết bạn thành công"
         },
         "friend": "Bạn bè",
         "group": "Nhóm",
@@ -187,7 +189,8 @@
             "update": "Cập nhật",
             "change-avatar": "Đổi ảnh đại diện",
             "delete-avatar": "Xoá ảnh đại diện"
-        }
+        },
+        "alert-search": "Email chưa đăng ký tài khoản hoặc không cho phép tìm kiếm."
     },
     "profile": {
         "title": "Hồ sơ của tôi",

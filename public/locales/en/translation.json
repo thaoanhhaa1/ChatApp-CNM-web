@@ -83,6 +83,7 @@
         "add-contact": "Add Contact",
         "phone": "Phone",
         "enter-phone": "Enter Phone",
+        "enter-email": "Enter Email",
         "message": "Invitation Message",
         "enter-message": "Enter Message",
         "close": "Close",
@@ -132,7 +133,8 @@
             "zaloName": "Zalo name",
             "phoneNumber": "Phone number",
             "joinedZalo": "Joined Zalo",
-            "undoRequest": "Undo request"
+            "undoRequest": "Undo request",
+            "addFriendSuccess": "Friend request sent"
         },
         "friend": "Friend",
         "group": "Group",
@@ -188,7 +190,8 @@
             "update": "Update",
             "change-avatar": "Update avatar",
             "delete-avatar": "Remove avatar"
-        }
+        },
+        "alert-search": "This email has not been linked to an account does not allow searching."
     },
     "profile": {
         "title": "My Profile",

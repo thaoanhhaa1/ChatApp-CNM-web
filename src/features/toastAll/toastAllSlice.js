@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     locationError: false,
+    toast: '',
 };
 
 const toastAllSlice = createSlice({
@@ -11,8 +12,11 @@ const toastAllSlice = createSlice({
         setLocationError: (state, { payload }) => {
             state.locationError = payload;
         },
+        setToast: (state, { payload }) => {
+            state.toast = payload;
+        },
     },
 });
 
-export const { setLocationError } = toastAllSlice.actions;
+export const { setLocationError, setToast } = toastAllSlice.actions;
 export default toastAllSlice.reducer;

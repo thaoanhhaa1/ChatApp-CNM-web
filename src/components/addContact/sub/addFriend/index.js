@@ -6,11 +6,13 @@ import AddFriendBody from '~/components/addFriend';
 import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { constants } from '~/constants';
+import { addFriend } from '~/features/addContact/addContactSlice';
 import { popSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
+import { setToast } from '~/features/toastAll/toastAllSlice';
 
 const AddFriend = ({ onClose }) => {
     const { t } = useTranslation();
-    const { contact } = useSelector((state) => state.addContact);
+    const { contact, addContactLoading } = useSelector((state) => state.addContact);
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const [data, setData] = useState({
@@ -19,19 +21,13 @@ const AddFriend = ({ onClose }) => {
     });
 
     const handleClickProfile = () => dispatch(popSub());
-    const handleAddFriend = () => {
+    const handleAddFriend = async () => {
         const { message, blockView } = data;
 
-        console.group('Add friend');
-        console.log('From: ', user);
-        console.log('To: ', contact);
-        console.log('Message: ', message);
-        console.log('Block view: ', blockView);
-        console.groupEnd();
+        await dispatch(addFriend({ friendId: contact._id, message, blockView })).unwrap();
 
         onClose();
-
-        // Show message
+        dispatch(setToast(t('contacts.modal.addFriendSuccess')));
     };
 
     if (!contact.name) return;
@@ -57,7 +53,9 @@ const AddFriend = ({ onClose }) => {
                 <Modal.Button onClick={handleClickProfile} type="text-primary">
                     {t('contacts.modal.information')}
                 </Modal.Button>
-                <Modal.Button onClick={handleAddFriend}>{t('contacts.modal.addFriend')}</Modal.Button>
+                <Modal.Button disabled={addContactLoading} loading={addContactLoading} onClick={handleAddFriend}>
+                    {t('contacts.modal.addFriend')}
+                </Modal.Button>
             </Modal.Footer>
         </>
     );
