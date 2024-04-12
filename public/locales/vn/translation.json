@@ -413,5 +413,12 @@
         "default-message-friend-request-1": "Xin chào, mình là",
         "default-message-friend-request-2": "Kết bạn với mình nhé!",
         "notification-friend-removed-successfully": "Xoá bạn thành công"
+    },
+    "group": {
+        "user-more": {
+            "add-admin": "Thêm phó nhóm",
+            "remove-user": "Xoá khỏi nhóm",
+            "leave": "Rời nhóm"
+        }
     }
 }

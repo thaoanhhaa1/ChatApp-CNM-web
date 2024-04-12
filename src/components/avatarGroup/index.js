@@ -19,7 +19,7 @@ const AvatarGroup = ({ avatars, size = '36px' }) => {
                 width: size,
                 height: size,
             }}
-            className="flex-shrink-0 relative"
+            className="flex-shrink-0 relative select-none pointer-events-none"
         >
             {children}
         </div>

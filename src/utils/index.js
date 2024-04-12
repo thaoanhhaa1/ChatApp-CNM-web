@@ -1,9 +1,11 @@
+export { default as addRoleToUser } from './addRoleToUser';
 export { default as calcDimensionCropImage } from './calcDimensionCropImage';
 export { default as calcMinMaxPositionCropImage } from './calcMinMaxPositionCropImage';
 export { default as centerAspectCrop } from './centerAspectCrop';
 export { default as classNames } from './classNames';
 export { default as convertContactsToPhoneBook } from './convertContactsToPhoneBook';
 export { default as convertFileSize } from './convertFileSize';
+export { default as convertToAvatarUrlList } from './convertToAvatarUrlList';
 export { default as convertToDMS } from './convertToDMS';
 export { default as countContactsInPhoneBook } from './countContactsInPhoneBook';
 export { default as crypting } from './crypting';
@@ -38,5 +40,6 @@ export { default as nearbySearch } from './nearbySearch';
 export { default as phoneBookFilter } from './phoneBookFilter';
 export { default as reorder } from './reorder';
 export { default as retryPromise } from './retryPromise';
+export { default as sortMemberByRole } from './sortMemberByRole';
 export { default as splitMessage } from './splitMessage';
 export { default as token } from './token';

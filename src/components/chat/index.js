@@ -1,9 +1,9 @@
 import { useWindowSize } from '@uidotdev/usehooks';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 } from 'uuid';
-import { sentMessageStatus } from '~/constants';
+import { groupRole, sentMessageStatus } from '~/constants';
 import { ChatProvider } from '~/context';
 import { addFiles } from '~/features/chat/chatSlice';
 import { updateMessage } from '~/features/chats/chatsSlice';
@@ -34,6 +34,15 @@ const Chat = () => {
     const { socket } = useSelector((state) => state.socket);
     const { width } = useWindowSize();
     const dispatch = useDispatch();
+    const myRole = useMemo(() => {
+        if (!active?._id) return null;
+
+        if (active.admin === user._id) return groupRole.OWNER_ROLE;
+
+        if (active.deputy.includes(user._id)) return groupRole.ADMIN_ROLE;
+
+        return groupRole.MEMBER_ROLE;
+    }, [active?._id, active?.admin, active?.deputy, user._id]);
 
     const handleDropPreview = useCallback(
         (acceptedFiles) => {
@@ -170,7 +179,7 @@ const Chat = () => {
     }, [dispatch, messages, socket]);
 
     return (
-        <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile }}>
+        <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile, myRole }}>
             <Toast showToast={showToast} message={t('chat.limit-files-send')} />
             <div className="flex h-full shadow-navbar z-1 dark:bg-dark">
                 <div className="w-full flex flex-col flex-1">
