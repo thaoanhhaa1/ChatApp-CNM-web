@@ -202,17 +202,17 @@
         "phone": "Phone Number",
         "note": "Only friends who have saved your number in their phonebook can see this number.",
         "update": "Update",
-        "male":"Male",
-        "female":"Female",
+        "male": "Male",
+        "female": "Female",
         "email": "Email",
-        "updateProfile":"Edit your personal information",
-        "name": "Dispaly name",
-        "cancel":"Cancel",
-        "placeholder":"Enter dispaly name"
+        "updateProfile": "Edit your personal information",
+        "name": "Display name",
+        "cancel": "Cancel",
+        "placeholder": "Enter display name"
     },
     "not-found": {
         "title": "Look like you're lost",
-        "description": "The page you are looking for not avaible!",
+        "description": "The page you are looking for not available!",
         "home": "Go to Home",
         "back": "Back"
     },

@@ -22,12 +22,12 @@ import images from '~/assets/images';
 import config from '~/config';
 import routes from '~/config/routes';
 import { reset, setSetting } from '~/features/localSetting/localSettingSlice';
+import { Profile } from '~/pages';
 import authServices from '~/services/auth.service';
 import { classNames, token } from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
-import { Profile } from '~/pages';
 
 const languages = [
     {

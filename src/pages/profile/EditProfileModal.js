@@ -1,15 +1,15 @@
-import React, { useMemo, useState } from 'react';
-import Modal from '~/components/modal';
 import PropTypes from 'prop-types';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import FormControl from '~/components/formControl';
-import UnderlineInput from '~/components/underlineInput';
-import RadioGroup from '~/components/radioGroup';
-import { genders } from '~/constants';
 import validator from 'validator';
+import FormControl from '~/components/formControl';
+import Modal from '~/components/modal';
+import RadioGroup from '~/components/radioGroup';
+import UnderlineInput from '~/components/underlineInput';
+import { genders } from '~/constants';
 
-const EditProfileModal = ({ onClose }) => {
+const EditProfileModal = ({ onClose = () => {} }) => {
     const { user } = useSelector((state) => state.user);
     const { t } = useTranslation();
     const [errors, setErrors] = useState({});
@@ -22,12 +22,12 @@ const EditProfileModal = ({ onClose }) => {
         const { name, value } = event.target;
         if (name === 'name') {
             setName(value);
-            if (value.length < 2) setErrors({ ...errors, name:  t('register.zalo-name-validate-min-length')});
-            else if (value.length > 40) setErrors({ ...errors, name: t('register.zalo-name-validate-max-length')});
+            if (value.length < 2) setErrors({ ...errors, name: t('register.zalo-name-validate-min-length') });
+            else if (value.length > 40) setErrors({ ...errors, name: t('register.zalo-name-validate-max-length') });
             else if (!validator.matches(value, /^[^!@#$%^&*(),.?":{}|<>]*$/))
-                setErrors({ ...errors, name: t('register.zalo-name-validate-special-character')});
+                setErrors({ ...errors, name: t('register.zalo-name-validate-special-character') });
             else if (!validator.matches(value, /^[^0-9]*$/))
-                setErrors({ ...errors, name: t('register.zalo-name-validate-number-character')});
+                setErrors({ ...errors, name: t('register.zalo-name-validate-number-character') });
             else {
                 setErrors({ ...errors, name: '' });
             }
@@ -40,11 +40,9 @@ const EditProfileModal = ({ onClose }) => {
             const age = currentDate.getFullYear() - dob.getFullYear();
             if (age < 14) {
                 setErrors({ ...errors, dateOfBirth: t('register.dob-validate') });
-            }
-            else if(!value){
+            } else if (!value) {
                 setErrors({ ...errors, dateOfBirth: t('register.dob-validate1') });
-            } 
-            else {
+            } else {
                 setErrors({ ...errors, dateOfBirth: '' });
             }
         }
@@ -52,7 +50,6 @@ const EditProfileModal = ({ onClose }) => {
 
     const handleUpdateProfile = () => {
         if (!errors.name && !errors.dateOfBirth) {
-
             const updatedInfo = { name, gender, dateOfBirth };
             console.log(updatedInfo);
         }
@@ -91,12 +88,13 @@ const EditProfileModal = ({ onClose }) => {
                     <FormControl
                         label={t('register.birthday')}
                         control={
-                            <UnderlineInput 
-                                name={'dateOfBirth'} 
-                                value={dateOfBirth} 
-                                onChange={handleChange} 
-                                type="date" 
-                            />}
+                            <UnderlineInput
+                                name={'dateOfBirth'}
+                                value={dateOfBirth}
+                                onChange={handleChange}
+                                type="date"
+                            />
+                        }
                         error={errors.dateOfBirth}
                     />
                 </div>
@@ -111,5 +109,9 @@ const EditProfileModal = ({ onClose }) => {
         </>
     );
 };
-export default EditProfileModal;
 
+EditProfileModal.propTypes = {
+    onClose: PropTypes.func,
+};
+
+export default EditProfileModal;

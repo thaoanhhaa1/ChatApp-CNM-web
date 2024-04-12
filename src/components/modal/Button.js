@@ -5,8 +5,8 @@ const Button = ({ loading = false, children, type = 'primary', disabled = false,
     const styles = [];
     const passProps = {};
 
-    if (type === 'text-primary') styles.push('text-primary-color hover:underline bg-transparent')
-    else if (type === 'text-secondary') styles.push('bg-separate hover:brightness-90')
+    if (type === 'text-primary') styles.push('text-primary-color hover:underline bg-transparent');
+    else if (type === 'text-secondary') styles.push('bg-separate hover:brightness-90');
     else styles.push('text-white bg-primary-color hover:brightness-90');
 
     if (disabled) Object.keys(props).forEach((key) => key.startsWith('on') || (passProps.key = props[key]));
