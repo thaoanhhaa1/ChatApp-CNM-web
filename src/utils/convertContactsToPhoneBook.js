@@ -1,7 +1,7 @@
 const getNameZalo = (contact) => contact.alias || contact.name;
 
 const convertContactsToPhoneBook = (contacts) => {
-    const contactsSort = contacts.sort((firstContact, secondContact) =>
+    const contactsSort = [...contacts].sort((firstContact, secondContact) =>
         getNameZalo(firstContact).localeCompare(getNameZalo(secondContact)),
     );
 

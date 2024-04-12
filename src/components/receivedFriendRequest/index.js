@@ -1,19 +1,35 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import ReactShowMoreText from 'react-show-more-text';
+import { acceptFriendReceived, rejectFriendReceived } from '~/features/friend/friendSlice';
+import { setToast } from '~/features/toastAll/toastAllSlice';
+import friendServices from '~/services/friend.service';
 import { getDate } from '~/utils';
 import Avatar from '../avatar';
 import Button from '../button';
 
 const ReceivedFriendRequest = ({ contact }) => {
     const { t } = useTranslation();
+    const { socket } = useSelector((state) => state.socket);
+    const { user } = useSelector((state) => state.user);
     const sender = contact.sender_id;
+    const dispatch = useDispatch();
 
-    const handleDecline = () => {
-        console.log('handleDecline');
+    const handleDecline = async () => {
+        await friendServices.rejectFriend(sender._id);
+
+        socket.emit('rejectFriend', { _id: contact._id, senderId: sender._id });
+        dispatch(rejectFriendReceived(contact._id));
+        // FIXME notification
+        dispatch(setToast(t('friend.decline-friend')));
     };
-    const handleAccept = () => {
-        console.log('handleAccept');
+    const handleAccept = async () => {
+        await friendServices.acceptFriend(sender._id);
+
+        socket.emit('acceptFriend', { _id: contact._id, user, senderId: sender._id });
+        dispatch(acceptFriendReceived({ _id: contact._id, user: sender }));
+        dispatch(setToast(t('friend.accept-friend')));
     };
 
     return (

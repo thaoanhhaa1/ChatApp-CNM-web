@@ -365,5 +365,8 @@
         "cancel": "Cancel",
         "send": "Send",
         "error-api": "There were some errors with the Google Maps API, please try again later"
+    },
+    "friend": {
+        "accept-friend": "Friend added successfully"
     }
 }

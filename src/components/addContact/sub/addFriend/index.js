@@ -29,7 +29,11 @@ const AddFriend = ({ onClose }) => {
         const res = await dispatch(addFriend({ friendId: contact._id, message, blockView })).unwrap();
 
         onClose();
-        socket.emit('sendFriendRequest', res.data);
+        socket.emit('sendFriendRequest', {
+            ...res.data,
+            receiver_id: res.data.receiver_id._id,
+            sender_id: user,
+        });
         dispatch(addRequestFriend(res.data));
         dispatch(setToast(t('contacts.modal.addFriendSuccess')));
     };

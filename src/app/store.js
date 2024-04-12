@@ -3,7 +3,6 @@ import addContactReducer from '~/features/addContact/addContactSlice';
 import chatReducer from '~/features/chat/chatSlice';
 import chatsReducer from '~/features/chats/chatsSlice';
 import contactGroupsReducer from '~/features/contactGroups/contactGroupsSlice';
-import contactsReducer from '~/features/contacts/contactsSlice';
 import contactsGroupReducer from '~/features/contactsGroup/contactsGroupSlice';
 import createGroupReducer from '~/features/createGroup/createGroupSlice';
 import friendReducer from '~/features/friend/friendSlice';
@@ -29,7 +28,6 @@ export const store = configureStore({
         chat: chatReducer,
         popupMultiLevel: popupMultiLevelReducer,
         addContact: addContactReducer,
-        contacts: contactsReducer,
         contactGroups: contactGroupsReducer,
         receivedFriendRequests: receivedFriendRequestsReducer,
         sentFriendRequests: sentFriendRequestsReducer,

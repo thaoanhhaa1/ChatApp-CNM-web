@@ -20,7 +20,7 @@ import {
     updateMessage,
     updateMessageReact,
 } from '~/features/chats/chatsSlice';
-import { addResponseFriend, setNewReceived } from '~/features/friend/friendSlice';
+import { acceptFriendSent, addResponseFriend, rejectFriendSent, setNewReceived } from '~/features/friend/friendSlice';
 import { addMessageSocket, updateDeletedMessage, updateReact } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
 import { setLocationError, setToast } from '~/features/toastAll/toastAllSlice';
@@ -147,7 +147,15 @@ const DefaultLayout = ({ children }) => {
             dispatch(addResponseFriend(friendRequest));
             dispatch(setNewReceived(true));
         });
-    }, [active?._id, dispatch, socket, user._id]);
+
+        socket.on('acceptFriend', (data) => {
+            dispatch(acceptFriendSent(data));
+        });
+
+        socket.on('rejectFriend', ({ _id }) => {
+            dispatch(rejectFriendSent(_id));
+        });
+    }, [active?._id, dispatch, socket, user?._id]);
 
     useEffect(() => {
         if (!refSection.current) return;

@@ -364,5 +364,8 @@
         "cancel": "Huỷ",
         "send": "Gửi",
         "error-api": "Có một vài lỗi đối với Google Maps API, vui lòng thử lại sau"
+    },
+    "friend": {
+        "accept-friend": "Đồng ý kết bạn thành công"
     }
 }

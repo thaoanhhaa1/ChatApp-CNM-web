@@ -7,11 +7,14 @@ import Button from '../button';
 
 const SentFriendRequest = ({ contact }) => {
     const { t } = useTranslation();
-    const [isRecall, setRecall] = useState(false);
+    const [isRecall, setRecall] = useState(true);
     const receiver = contact.receiver_id;
 
     const handleClick = () => {
         setRecall(!isRecall);
+
+        // TODO handle recall or add friend
+        console.log('handle recall or add friend');
     };
 
     return (
@@ -19,9 +22,7 @@ const SentFriendRequest = ({ contact }) => {
             <Avatar src={receiver.avatar} />
             <div className="flex-1">
                 <div className="text-sm font-medium line-clamp-1">{receiver.name}</div>
-                <span className="text-ss text-secondary dark:text-dark-secondary">
-                    {getDate(new Date(contact.createdAt))}
-                </span>
+                <span className="text-ss text-secondary dark:text-dark-secondary">{getDate(contact.createdAt)}</span>
             </div>
             <Button onClick={handleClick} primary={!isRecall} secondary={isRecall} small rounded>
                 {t(`contacts.friend-request.${isRecall ? 'recall' : 'add-friend'}`)}

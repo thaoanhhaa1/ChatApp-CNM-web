@@ -17,9 +17,9 @@ import { useBoolean } from '~/hooks';
 
 const Contacts = () => {
     const { t } = useTranslation();
+    const [tab, setTab] = useState('1');
     const { value, setTrue, setFalse } = useBoolean(false);
     const dispatch = useDispatch();
-    const [tab, setTab] = useState('1');
 
     const handleChange = (_, a) => setTab(a);
 
