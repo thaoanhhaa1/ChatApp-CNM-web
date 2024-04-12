@@ -18,3 +18,4 @@ const sortGroup = [
 ];
 
 export default sortGroup;
+export { RECENT_ACTIVITY, GROUP_NAME, ADMIN_GROUP };

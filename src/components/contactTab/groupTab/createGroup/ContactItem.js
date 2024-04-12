@@ -20,7 +20,7 @@ ContactItem.propTypes = {
         name: PropTypes.string.isRequired,
         avatar: PropTypes.string.isRequired,
         alias: PropTypes.string,
-        id: PropTypes.string.isRequired,
+        _id: PropTypes.string.isRequired,
     }).isRequired,
     onClick: PropTypes.func,
 };

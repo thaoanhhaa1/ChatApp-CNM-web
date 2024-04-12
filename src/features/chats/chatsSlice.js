@@ -164,6 +164,14 @@ const chatsSlice = createSlice({
             if (index < 0) state.chats.unshift(payload);
             else state.chats[index] = payload;
         },
+        addChatAndActive: (state, { payload }) => {
+            const index = state.chats.findIndex((chat) => chat._id === payload._id);
+
+            if (index < 0) state.chats.unshift(payload);
+            else state.chats[index] = payload;
+
+            state.active = payload;
+        },
         setMessages: (state, { payload }) => {
             if (!payload?.length) return state;
 
@@ -236,5 +244,6 @@ export const {
     addChat,
     addMessageHeadSocket,
     updateMessageReact,
+    addChatAndActive,
 } = chatsSlice.actions;
 export { getChats, getConversation };

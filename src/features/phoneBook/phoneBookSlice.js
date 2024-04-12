@@ -7,7 +7,7 @@ const initialState = {
 };
 
 // TODO fetch data
-const getPhoneBook = createAsyncThunk('phoneBook/getPhoneBook', () => [
+const getPhoneBook = createAsyncThunk('getPhoneBook', () => [
     {
         name: 'Sean Gerlach',
         avatar: 'https://loremflickr.com/640/480',

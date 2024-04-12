@@ -1,6 +1,6 @@
 import { useDebounce } from '@uidotdev/usehooks';
 import PropTypes from 'prop-types';
-import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import { useCallback, useLayoutEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { CameraFilledIcon, SearchIcon } from '~/assets';
@@ -8,20 +8,30 @@ import Input from '~/components/input';
 import Modal from '~/components/modal';
 import Popup from '~/components/popup';
 import PopupMultiLevel from '~/components/popupMultiLevel';
-import { resetAvatar, setUrlAvatar } from '~/features/createGroup/createGroupSlice';
+import { addChatAndActive } from '~/features/chats/chatsSlice';
+import {
+    addSelectedContact,
+    createGroup,
+    removeSelectedContact,
+    reset,
+    resetAvatar,
+    setName,
+    setUrlAvatar,
+} from '~/features/createGroup/createGroupSlice';
 import { addSub, resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
-import { phoneBookFilter } from '~/utils';
+import { setSearch } from '~/features/search/searchSlice';
+import { convertContactsToPhoneBook, phoneBookFilter } from '~/utils';
 import ContactList from './ContactList';
 import UpdateAvatar from './sub/updateAvatar';
 
 const CreateGroup = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
-    const { phoneBook } = useSelector((state) => state.contactsGroup);
-    const { avatar } = useSelector((state) => state.createGroup);
-    const [selectedContacts, setSelectedContacts] = useState([]);
-    const [groupName, setGroupName] = useState('');
-    const [search, setSearch] = useState('');
-    const searchDebounce = useDebounce(search, 500);
+    const { avatar, selectedContacts, name, searchUser, loading } = useSelector((state) => state.createGroup);
+    const { friendList } = useSelector((state) => state.friend);
+    const { socket } = useSelector((state) => state.socket);
+    const { user } = useSelector((state) => state.user);
+    const phoneBook = useMemo(() => convertContactsToPhoneBook(friendList), [friendList]);
+    const searchDebounce = useDebounce(searchUser, 500);
     const phoneBookFilterResult = useMemo(
         () => phoneBookFilter(phoneBook, searchDebounce, 'name', 'phone'),
         [phoneBook, searchDebounce],
@@ -44,35 +54,28 @@ const CreateGroup = ({ show, onClickOutside }) => {
     );
     const imageUrl = useMemo(() => avatar.file && URL.createObjectURL(avatar.file), [avatar.file]);
 
-    const handleRemoveContact = (contact) => {
-        const index = selectedContacts.findIndex((item) => item.id === contact.id);
-
-        setSelectedContacts((contacts) => {
-            const newContacts = [...contacts];
-
-            newContacts.splice(index, 1);
-
-            return newContacts;
-        });
-    };
+    const handleRemoveContact = (contact) => dispatch(removeSelectedContact({ _id: contact._id }));
 
     const handleClickContact = (contact) => {
-        const index = selectedContacts.findIndex((item) => item.id === contact.id);
-
-        if (index > -1) handleRemoveContact(contact);
-        else setSelectedContacts((contacts) => [...contacts, contact]);
-        setSearch('');
+        dispatch(addSelectedContact(contact));
+        dispatch(setSearch(''));
     };
 
-    const handleChange = (e) => setGroupName(e.target.value);
+    const handleChange = (e) => dispatch(setName(e.target.value));
 
-    const handleCreateGroup = () => {
+    const handleCreateGroup = async () => {
         if (disabled) return;
 
-        console.group('handleCreateGroup');
-        console.log(`groupName::`, groupName);
-        console.log(`selectedContacts::`, selectedContacts);
-        console.groupEnd();
+        const res = await dispatch(
+            createGroup({ avatar, name, selectedContacts: JSON.stringify(selectedContacts.map((u) => u._id)) }),
+        ).unwrap();
+
+        dispatch(addChatAndActive(res));
+        socket.emit('openConversation', {
+            conversation: res,
+            user,
+        });
+        onClickOutside();
     };
 
     const handleLoad = () => URL.revokeObjectURL(imageUrl);
@@ -83,7 +86,9 @@ const CreateGroup = ({ show, onClickOutside }) => {
         dispatch(resetSubs());
     };
 
-    useLayoutEffect(() => setSelectedContacts([]), [show]);
+    useLayoutEffect(() => {
+        dispatch(reset());
+    }, [dispatch, show]);
 
     return (
         <Modal show={show} onClickOutside={handleClickOutside}>
@@ -120,7 +125,7 @@ const CreateGroup = ({ show, onClickOutside }) => {
                             </div>
                             <div className="flex-1 border-b border-[#d6dbe1] dark:border-[#3d3f40] focus-within:border-primary-color dark:focus-within:border-primary-color">
                                 <input
-                                    value={groupName}
+                                    value={name}
                                     onChange={handleChange}
                                     placeholder={t('contacts.create-group-modal.enter-group-name')}
                                     type="text"
@@ -135,7 +140,7 @@ const CreateGroup = ({ show, onClickOutside }) => {
                             Icon={SearchIcon}
                             outline
                             rounded
-                            value={search}
+                            value={searchUser}
                             onChangeText={setSearch}
                         />
 
@@ -154,7 +159,7 @@ const CreateGroup = ({ show, onClickOutside }) => {
                     <Modal.Button onClick={handleClickOutside} type="text-primary">
                         {t('contacts.create-group-modal.cancel')}
                     </Modal.Button>
-                    <Modal.Button onClick={handleCreateGroup} disabled={disabled}>
+                    <Modal.Button onClick={handleCreateGroup} disabled={disabled || loading} loading={loading}>
                         {t('contacts.create-group-modal.create-group')}
                     </Modal.Button>
                 </Modal.Footer>

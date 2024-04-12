@@ -17,14 +17,15 @@ import {
     VideoLineIcon,
 } from '~/assets';
 import Avatar from '~/components/avatar';
+import AvatarGroup from '~/components/avatarGroup';
 import Call from '~/components/call';
 import Input from '~/components/input';
 import Popup from '~/components/popup';
 import { screens } from '~/constants';
 import { useChat, useLayout } from '~/context';
 import { useBoolean } from '~/hooks';
-import Button from './Button';
 import { getNameConversation } from '~/utils';
+import Button from './Button';
 
 const tippyProps = {
     role: 'popup',
@@ -77,6 +78,7 @@ const Header = () => {
             },
         ];
     }, [handleShowProfile, t, width]);
+    const avatars = useMemo(() => active.users.map((user) => user.avatar), [active.users]);
 
     return (
         <div className="flex items-center justify-between p-2 sm:p-3 md:p-4 dl:p-5 border-b border-separate dark:border-dark-separate">
@@ -87,7 +89,11 @@ const Header = () => {
                 >
                     <ChevronDownIcon className="w-4 h-4" />
                 </button>
-                <Avatar containerClassName="flex-shrink-0" src={active.picture} status={receiver.status} />
+                {active.picture ? (
+                    <Avatar containerClassName="flex-shrink-0" src={active.picture} status={receiver.status} />
+                ) : (
+                    <AvatarGroup avatars={avatars} />
+                )}
                 <Link to="/" className="text-base font-semibold line-clamp-1">
                     {conversationName}
                 </Link>

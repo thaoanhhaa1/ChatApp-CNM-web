@@ -32,13 +32,17 @@ const api = {
 
     // Friend
     getFriends: () => `/user/listFriend`,
-    addFriend: () => `/user/addfriend`, // friendId
+    addFriend: () => `/user/addfriend`,
     requestFriends: () => `/user/listRequestFriend`,
     responseFriends: () => `/user/listRequestfriendWaitRespone`,
-    acceptFriend: () => `/user/acceptfriend`, // friendId
-    rejectFriend: () => `/user/rejectfriend`, // friendId
-    revocationRequestFriend: () => `/user/revocationRequestFriend`, // friendId
-    deleteFriend: () => `/user/deletefriend`, // friendId
+    acceptFriend: () => `/user/acceptfriend`,
+    rejectFriend: () => `/user/rejectfriend`,
+    revocationRequestFriend: () => `/user/revocationRequestFriend`,
+    deleteFriend: () => `/user/deletefriend`,
+
+    // Group
+    createGroup: () => `/conversation/group`,
+    getGroups: () => `/conversation/group`,
 };
 
 export default api;

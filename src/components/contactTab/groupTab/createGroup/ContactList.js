@@ -21,7 +21,7 @@ const ContactList = ({ phoneBook, selectedContacts, handleClickContact, handleRe
                                     phoneBook={phoneBook}
                                     render={(contact) => (
                                         <ContactItem
-                                            key={contact.id}
+                                            key={contact._id}
                                             onClick={() => handleClickContact(contact)}
                                             contact={contact}
                                             checked={selectedContacts.includes(contact)}
