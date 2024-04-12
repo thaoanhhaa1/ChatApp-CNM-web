@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { CloseLineIcon, LeftLineIcon } from '~/assets';
 import { popSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 
-const Header = ({ children, showBack, onClose }) => {
+const Header = ({ children, showBack, onClose, className }) => {
     const dispatch = useDispatch();
 
     const handleBack = () => dispatch(popSub());
@@ -35,6 +35,8 @@ Header.propTypes = {
     children: PropTypes.node.isRequired,
     onClose: PropTypes.func.isRequired,
     showBack: PropTypes.bool,
+    className: PropTypes.string,
+
 };
 
 export default Header;

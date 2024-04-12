@@ -22,7 +22,7 @@ import images from '~/assets/images';
 import config from '~/config';
 import routes from '~/config/routes';
 import { reset, setSetting } from '~/features/localSetting/localSettingSlice';
-import { Profile } from '~/pages';
+import { Profile, Setting } from '~/pages';
 import authServices from '~/services/auth.service';
 import { classNames, token } from '~/utils';
 import Avatar from '../avatar';
@@ -53,14 +53,20 @@ const Navbar = ({ className }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [openProfileModal, setOpenProfileModal] = useState(false);
-    const handleClose = () => {
-        setOpenProfileModal(false); // Đảo ngược trạng thái hiển thị của modal
-    };
+    const [openSettingModal, setOpenSettingModal] = useState(false);
     const { chats } = useSelector((state) => state.chats);
     const countMessagesUnseen = useMemo(
         () => chats.reduce((acc, chat) => acc + (chat.unseenMessages || 0), 0),
         [chats],
     );
+
+    const handleCloseProfile = () => {
+        setOpenProfileModal(false);
+    };
+
+    const handleCloseSetting = () => {
+        setOpenSettingModal(false);
+    };
 
     const navBars = [
         {
@@ -105,6 +111,9 @@ const Navbar = ({ className }) => {
                 title: 'navbar.settings',
                 icon: SettingIcon,
                 separate: true,
+                onClick: () => {
+                    setOpenSettingModal(true);
+                },
             },
             {
                 title: 'navbar.logout',
@@ -167,7 +176,9 @@ const Navbar = ({ className }) => {
                         <Avatar src={user.avatar} />
                     </button>
                 </Popup>
-                {openProfileModal && <Profile onClose={handleClose} />}
+                {openProfileModal && <Profile onClose={handleCloseProfile} />}
+
+                {openSettingModal && <Setting onClose={handleCloseSetting} />}
             </div>
         </nav>
     );
