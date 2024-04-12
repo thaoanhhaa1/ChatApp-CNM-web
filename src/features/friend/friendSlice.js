@@ -60,6 +60,19 @@ const friendSlice = createSlice({
 
             if (index !== -1) state.friendReceived.splice(index, 1);
         },
+        updateRequestFriendSent: (state, { payload }) => {
+            const { _id, newRequest } = payload;
+
+            const index = state.friendSent.findIndex((item) => item._id === _id);
+
+            if (index !== -1) state.friendSent[index] = newRequest;
+        },
+        removeFriend: (state, { payload }) => {
+            const { _id } = payload;
+            const index = state.friendList.findIndex((item) => item._id === _id);
+
+            if (index !== -1) state.friendList.splice(index, 1);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -86,5 +99,7 @@ export const {
     acceptFriendSent,
     rejectFriendReceived,
     rejectFriendSent,
+    updateRequestFriendSent,
+    removeFriend,
 } = friendSlice.actions;
 export { getFriends };

@@ -3,7 +3,7 @@ import { Box, Tab } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SettingIcon } from '~/assets';
 import Modal from '~/components/modal';
 import PopupMultiLevel from '~/components/popupMultiLevel';
@@ -22,6 +22,7 @@ const SENT_TAB = '2';
 const FriendRequest = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
     const [tab, setTab] = useState(RECEIVED_TAB);
+    const { hasNewReceived } = useSelector((state) => state.friend);
     const dispatch = useDispatch();
 
     const handleChange = (_, a) => setTab(a);
@@ -55,8 +56,8 @@ const FriendRequest = ({ show, onClickOutside }) => {
     }, [dispatch]);
 
     useEffect(() => {
-        show && dispatch(setNewReceived(false));
-    }, [dispatch, show]);
+        show && tab === RECEIVED_TAB && dispatch(setNewReceived(false));
+    }, [dispatch, show, hasNewReceived, tab]);
 
     return (
         <Modal show={show} onClickOutside={handleClose}>

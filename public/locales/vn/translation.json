@@ -366,6 +366,9 @@
         "error-api": "Có một vài lỗi đối với Google Maps API, vui lòng thử lại sau"
     },
     "friend": {
-        "accept-friend": "Đồng ý kết bạn thành công"
+        "accept-friend": "Đồng ý kết bạn thành công",
+        "default-message-friend-request-1": "Xin chào, mình là",
+        "default-message-friend-request-2": "Kết bạn với mình nhé!",
+        "notification-friend-removed-successfully": "Xoá bạn thành công"
     }
 }

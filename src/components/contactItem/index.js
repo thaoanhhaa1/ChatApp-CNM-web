@@ -1,12 +1,31 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { BlockLineIcon, DeleteBinLineIcon, More2FillIcon, PhoneLineIcon, ShareLineIcon, VideoLineIcon } from '~/assets';
 import Avatar from '~/components/avatar';
 import Popup from '~/components/popup';
+import { removeFriend } from '~/features/friend/friendSlice';
+import { setToast } from '~/features/toastAll/toastAllSlice';
+import friendServices from '~/services/friend.service';
+import { retryPromise } from '~/utils';
 import Button from './Button';
 
 const ContactItem = ({ contact }) => {
     const { t } = useTranslation();
+    const { socket } = useSelector((state) => state.socket);
+    const { user } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
+    const handleRemoveFriend = () => {
+        retryPromise(() => friendServices.deleteFriend(contact._id), 5, 500).then();
+        socket.emit('deleteFriend', {
+            senderId: user._id,
+            receiverId: contact._id,
+        });
+        dispatch(removeFriend({ _id: contact._id }));
+        dispatch(setToast(t('friend.notification-friend-removed-successfully')));
+    };
+
     const more = [
         {
             title: t('contacts.share'),
@@ -20,6 +39,7 @@ const ContactItem = ({ contact }) => {
         {
             title: t('contacts.remove'),
             icon: DeleteBinLineIcon,
+            onClick: handleRemoveFriend,
         },
     ];
 

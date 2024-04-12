@@ -12,9 +12,9 @@ const SentTab = ({ className }) => {
     return (
         <div className={classNames(className)}>
             {friendRequestLoading && <List control={SentFriendRequestSkeleton} length={3} />}
-            {friendSent.map((contact) => (
-                <SentFriendRequest key={contact._id} contact={contact} />
-            ))}
+            {friendSent.map((contact) =>
+                contact.receiver_id ? <SentFriendRequest key={contact._id} contact={contact} /> : null,
+            )}
         </div>
     );
 };

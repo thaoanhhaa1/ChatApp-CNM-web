@@ -20,7 +20,14 @@ import {
     updateMessage,
     updateMessageReact,
 } from '~/features/chats/chatsSlice';
-import { acceptFriendSent, addResponseFriend, rejectFriendSent, setNewReceived } from '~/features/friend/friendSlice';
+import {
+    acceptFriendSent,
+    addResponseFriend,
+    rejectFriendReceived,
+    rejectFriendSent,
+    removeFriend,
+    setNewReceived,
+} from '~/features/friend/friendSlice';
 import { addMessageSocket, updateDeletedMessage, updateReact } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
 import { setLocationError, setToast } from '~/features/toastAll/toastAllSlice';
@@ -155,6 +162,14 @@ const DefaultLayout = ({ children }) => {
         socket.on('rejectFriend', ({ _id }) => {
             dispatch(rejectFriendSent(_id));
         });
+
+        socket.on('revocationRequestFriend', ({ _id }) => {
+            dispatch(rejectFriendReceived(_id));
+        });
+
+        socket.on('deleteFriend', ({ senderId }) => {
+            dispatch(removeFriend({ _id: senderId }));
+        });
     }, [active?._id, dispatch, socket, user?._id]);
 
     useEffect(() => {
@@ -177,7 +192,7 @@ const DefaultLayout = ({ children }) => {
     }, [setShowToast, toast]);
 
     useEffect(() => {
-        showToast || setTimeout(() => dispatch(setToast('')), 100);
+        showToast || setTimeout(() => dispatch(setToast('')), 500);
     }, [dispatch, showToast]);
 
     if (loading || !user?._id) return <Loading />;
