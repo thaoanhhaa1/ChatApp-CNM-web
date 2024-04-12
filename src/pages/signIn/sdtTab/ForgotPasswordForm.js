@@ -6,7 +6,7 @@ import { EmailIcon } from '~/assets';
 import Button from '~/components/button';
 import UnderlineInput from '~/components/underlineInput';
 import { useBoolean } from '~/hooks';
-import { sendOTPForgotPassword } from '~/services';
+import authServices from '~/services/auth.service';
 import UpdatePasswordForm from './UpdatePasswordForm';
 
 const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
@@ -14,7 +14,6 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
     const [showUpdatePass, setShowUpdatePass] = useState(false);
     const [phone, setPhone] = useState(sdt);
     const { value, setFalse, setTrue } = useBoolean();
-    const [loading, setLoading] = useState(false);
 
     const handleContinue = async () => {
         setFalse();
@@ -22,7 +21,7 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
         if (!validator.isEmail(phone)) setTrue();
         else {
             try {
-                const response = await sendOTPForgotPassword(phone);
+                const response = await authServices.sendOTPForgotPassword(phone);
                 console.log(response.data);
                 setShowUpdatePass(true);
             } catch (error) {

@@ -2,15 +2,14 @@ import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import validator from 'validator';
 import FormControl from '~/components/formControl';
 import Modal from '~/components/modal';
 import RadioGroup from '~/components/radioGroup';
 import UnderlineInput from '~/components/underlineInput';
 import { genders } from '~/constants';
-import { updateUser } from '~/services';
+import userServices from '~/services/user.service';
 
 const EditProfileModal = ({ onClose = () => {} }) => {
     const { user } = useSelector((state) => state.user);
@@ -55,7 +54,7 @@ const EditProfileModal = ({ onClose = () => {} }) => {
         if (!errors.name && !errors.dateOfBirth) {
             try {
                 const updatedInfo = { name, gender, dateOfBirth };
-                const response = await updateUser(updatedInfo);
+                const response = await userServices.updateUser(updatedInfo);
                 console.log('Thông tin người dùng đã được cập nhật:', response.data);
                 toast.success(t('profile.updateSuccess'));
 
@@ -120,7 +119,6 @@ const EditProfileModal = ({ onClose = () => {} }) => {
                 </Modal.Button>
                 <Modal.Button onClick={handleUpdateProfile}>{t('profile.update')}</Modal.Button>
             </Modal.Footer>
-            <ToastContainer />
         </>
     );
 };

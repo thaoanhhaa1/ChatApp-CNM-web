@@ -6,6 +6,8 @@ import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -27,6 +29,7 @@ root.render(
         <Suspense fallback={<Loading />}>
             <App />
         </Suspense>
+        <ToastContainer />
     </Provider>,
 );
 

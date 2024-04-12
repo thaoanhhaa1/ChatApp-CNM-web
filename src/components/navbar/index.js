@@ -16,7 +16,6 @@ import {
     ProfileIcon,
     SettingIcon,
     SunIcon,
-    UserIcon,
 } from '~/assets';
 import images from '~/assets/images';
 import config from '~/config';
@@ -44,6 +43,7 @@ const languages = [
 
 const html = document.querySelector('html');
 
+// TODO
 const Navbar = ({ className }) => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);
@@ -69,11 +69,11 @@ const Navbar = ({ className }) => {
     };
 
     const navBars = [
-        {
-            title: 'navbar.profile',
-            icon: UserIcon,
-            to: routes.profile,
-        },
+        // {
+        //     title: 'navbar.profile',
+        //     icon: UserIcon,
+        //     to: routes.profile,
+        // },
         {
             title: 'navbar.chats',
             icon: MessageIcon,
@@ -91,11 +91,11 @@ const Navbar = ({ className }) => {
             to: routes.contacts,
             badge: hasNewReceived ? 'N' : '',
         },
-        {
-            title: 'navbar.settings',
-            icon: SettingIcon,
-            to: routes.settings,
-        },
+        // {
+        //     title: 'navbar.settings',
+        //     icon: SettingIcon,
+        //     to: routes.settings,
+        // },
     ];
 
     const actions = useMemo(
