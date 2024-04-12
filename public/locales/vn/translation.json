@@ -194,7 +194,19 @@
     },
     "profile": {
         "title": "Hồ sơ của tôi",
-        "date-of-birth": "Ngày sinh"
+        "date-of-birth": "Ngày sinh",
+        "information":"Thông tin cá nhân",
+        "gender":"Giới tính",
+        "email": "Email",
+        "phone":"Số điện thoại",
+        "note":"Chỉ bạn bè có lưu số của bạn trong danh bạ máy xem được số này.",
+        "update": "Cập nhật",
+        "male":"Nam",
+        "female":"Nữ",
+        "updateProfile":"Cập nhật thông tin cá nhân",
+        "name": "Tên hiển thị",
+        "cancel":"Huỷ",
+        "placeholder":"Nhập tên hiển thị"
     },
     "not-found": {
         "title": "Có vẻ như bạn đang bị lạc",
@@ -330,6 +342,7 @@
         "password-validate-min-length": "Mật khẩu phải chứa ít nhất 6 ký tự",
         "password-validate-max-length": "Mật khẩu không được quá 30 ký tự",
         "dob-validate": "Bạn phải ít nhất 14 tuổi để sử dụng ứng dụng",
+        "dob-validate1": "Vui lòng nhập ngày sinh của bạn",
         "error-password-01": "Mật khẩu nhập lại không khớp",
         "modal-text-1": "Bạn sẽ nhận được một mã OTP từ Zalo.",
         "modal-text-2": "Nhập mã kích hoạt",

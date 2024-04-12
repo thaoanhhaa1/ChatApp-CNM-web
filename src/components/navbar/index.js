@@ -27,6 +27,7 @@ import { classNames, token } from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
+import { Profile } from '~/pages';
 
 const languages = [
     {
@@ -51,6 +52,10 @@ const Navbar = ({ className }) => {
     const [darkMode, setDarkMode] = useState(() => settings.theme === 'dark');
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [openProfileModal, setOpenProfileModal] = useState(false);
+    const handleClose = () => {
+        setOpenProfileModal(false); // Đảo ngược trạng thái hiển thị của modal
+    };
     const { chats } = useSelector((state) => state.chats);
     const countMessagesUnseen = useMemo(
         () => chats.reduce((acc, chat) => acc + (chat.unseenMessages || 0), 0),
@@ -92,6 +97,9 @@ const Navbar = ({ className }) => {
             {
                 title: 'navbar.profile',
                 icon: ProfileIcon,
+                onClick: () => {
+                    setOpenProfileModal(true);
+                },
             },
             {
                 title: 'navbar.settings',
@@ -130,6 +138,7 @@ const Navbar = ({ className }) => {
             <Link className="hidden dl:flex justify-center items-center w-full h-[70px]">
                 <LogoIcon />
             </Link>
+
             <div className="flex-5 dl:flex-none flex dl:flex-col justify-evenly dl:justify-start items-center ex:gap-2">
                 {navBars.map(({ title, ...navbar }, index) => (
                     <Tippy delay={[200, 0]} offset={[0, 0]} content={t(title)} key={index}>
@@ -158,6 +167,7 @@ const Navbar = ({ className }) => {
                         <Avatar src={user.avatar} />
                     </button>
                 </Popup>
+                {openProfileModal && <Profile onClose={handleClose} />}
             </div>
         </nav>
     );
