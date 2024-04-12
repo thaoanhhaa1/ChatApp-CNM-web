@@ -5,10 +5,13 @@ const api = {
     logout: () => `/auth/logout`,
     createOTP: () => `/auth/createOTP`,
     verifyOTP: () => `/auth/verifyOTP`,
+    sendOTPForgotPassword: () => `/auth/forgotpassword`,
+    verifyOTPForgotPassword: () => `auth/forgot-password`,
 
     // User
     userInfo: () => `/user/info`,
     searchUsers: (value) => `/user?search=${value}`,
+    updateUser: () => `/user`,
 
     // Conversation
     getAllConversations: () => `/conversation`,

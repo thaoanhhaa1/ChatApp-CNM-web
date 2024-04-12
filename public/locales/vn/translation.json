@@ -206,7 +206,9 @@
         "updateProfile":"Cập nhật thông tin cá nhân",
         "name": "Tên hiển thị",
         "cancel":"Huỷ",
-        "placeholder":"Nhập tên hiển thị"
+        "placeholder":"Nhập tên hiển thị",
+        "updateError": "Cập nhật không thành công",
+        "updateSuccess": "Cập nhật thông tin thành công."
     },
     "not-found": {
         "title": "Có vẻ như bạn đang bị lạc",
@@ -319,6 +321,7 @@
         "error-email": "Email không hợp lệ. Vui lòng kiểm tra và thử lại.",
         "email-exist": "Địa chỉ Email này đã tồn tại!",
         "error-otp-code": "Mã OTP không hợp lệ",
+        "error-otp-code1": "Vui lòng nhập mã OTP",
         "phone-checkbox-1": "Tôi đồng ý với các",
         "phone-checkbox-1-1": "điều khoản sử dụng Zalo",
         "phone-checkbox-1-2": "điều khoản Mạng xã hội của Zalo",

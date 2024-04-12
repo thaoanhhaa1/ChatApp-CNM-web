@@ -208,7 +208,9 @@
         "updateProfile": "Edit your personal information",
         "name": "Display name",
         "cancel": "Cancel",
-        "placeholder": "Enter display name"
+        "placeholder": "Enter display name",
+        "updateError": "Update error",
+        "updateSuccess": "Update success"
     },
     "not-found": {
         "title": "Look like you're lost",
@@ -334,6 +336,7 @@
         "error-email": "Invalid email. Please double-check and try again.",
         "email-exist": "This email is already registered!",
         "error-otp-code": "Invalid OTP code",
+        "error-otp-code1": "OTP code is required",
         "error-password": "Password must include letters and numbers",
         "error-datOfBirth": "You must be 14 years old",
         "zalo-name-validate-min-length": "Name is too short. Valid names must contain 2-40 characters. (1000150)",

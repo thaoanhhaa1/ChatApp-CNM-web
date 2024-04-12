@@ -6,6 +6,7 @@ import { EmailIcon } from '~/assets';
 import Button from '~/components/button';
 import UnderlineInput from '~/components/underlineInput';
 import { useBoolean } from '~/hooks';
+import { sendOTPForgotPassword } from '~/services';
 import UpdatePasswordForm from './UpdatePasswordForm';
 
 const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
@@ -13,20 +14,16 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
     const [showUpdatePass, setShowUpdatePass] = useState(false);
     const [phone, setPhone] = useState(sdt);
     const { value, setFalse, setTrue } = useBoolean();
+    const [loading, setLoading] = useState(false);
 
     const handleContinue = async () => {
         setFalse();
-        console.group(`handleSubmit`);
-
-        console.log(`phone`, phone);
-
-        console.groupEnd();
 
         if (!validator.isEmail(phone)) setTrue();
         else {
             try {
-                // const response = await createOTP(phone);
-                // console.log(response.data);
+                const response = await sendOTPForgotPassword(phone);
+                console.log(response.data);
                 setShowUpdatePass(true);
             } catch (error) {
                 console.error('Lỗi khi tạo mã OTP:', error);
