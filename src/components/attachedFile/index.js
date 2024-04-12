@@ -4,7 +4,6 @@ import { useDownloadFile } from '~/hooks';
 import { convertFileSize, isPhotoFile } from '~/utils';
 import Button from './Button';
 
-// TODO Download file
 const getIcon = (fileName) => {
     if (isPhotoFile(fileName)) return ImageFillIcon;
 

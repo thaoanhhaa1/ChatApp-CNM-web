@@ -58,7 +58,6 @@ const Footer = () => {
     const renderUserSuggestion = (mention) => <MentionItem mention={mention} />;
     const displayTransform = (_, display) => `@${display}`;
     const handleCloseReply = () => dispatch(setReply());
-    // TODO Send file
     const handleSendFiles = async (files) => {
         files.forEach((file) => {
             const formData = new FormData();

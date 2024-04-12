@@ -189,14 +189,14 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
 
     useEffect(() => {
         (async () => {
-            if (!places?.PlacesService || !marker?.AdvancedMarkerElement) return;
+            if (!places?.PlacesService || !marker?.AdvancedMarkerElement || !chat.location) return;
             try {
                 googleMaps(location, google, marker, document.querySelector('#map'));
             } catch (error) {
                 dispatch(setLocationError(true));
             }
         })();
-    }, [dispatch, google, marker, places]);
+    }, [chat.location, dispatch, google, marker, places]);
 
     if (!chat.messages?.length && !firstFile && !chat?.location?._id && !chat?.sticker) return null;
 

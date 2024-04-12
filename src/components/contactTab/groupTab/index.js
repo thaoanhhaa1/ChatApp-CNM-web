@@ -20,7 +20,6 @@ const Group = () => {
         [t],
     );
     const sortedGroups = useMemo(() => sorts && groups, [groups, sorts]);
-    // FIXME init value: true
     const { value: show, setFalse: handleHidden, setTrue: handleShow } = useBoolean(false);
 
     return (

@@ -43,7 +43,7 @@ const languages = [
 
 const html = document.querySelector('html');
 
-// TODO
+// TODO Profile, Setting navigation
 const Navbar = ({ className }) => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);

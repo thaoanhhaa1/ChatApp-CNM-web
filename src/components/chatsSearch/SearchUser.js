@@ -4,7 +4,6 @@ import { useLayout } from '~/context';
 import { classNames, isUserInConversation } from '~/utils';
 import Avatar from '../avatar';
 
-// FIXME Active when user show in chat
 const SearchUser = ({ user, control, onClick = () => {} }) => {
     const { active } = useSelector((state) => state.chats);
     const existUser = isUserInConversation(active, user._id);

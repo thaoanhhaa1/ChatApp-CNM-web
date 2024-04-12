@@ -1,6 +1,5 @@
 import Skeleton from '~/components/skeleton';
 
-// TODO Search
 const HeaderSkeleton = () => {
     const ActionSkeleton = () => <Skeleton containerClassName="w-10 h-10" width={20} height={20} />;
 

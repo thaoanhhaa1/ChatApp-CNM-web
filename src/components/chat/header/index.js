@@ -37,7 +37,6 @@ const tippyProps = {
     className: 'border border-[#f0eff5] dark:border-dark-separate shadow-popup py-1 bg-white dark:bg-dark-popup-bg',
 };
 
-// TODO Search
 const Header = () => {
     const { t } = useTranslation();
     const { value: showCall, setTrue: setShowCall, setFalse: setHideCall } = useBoolean(false);
