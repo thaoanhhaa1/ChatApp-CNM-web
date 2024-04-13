@@ -9,6 +9,7 @@ import Modal from '~/components/modal';
 import Popup from '~/components/popup';
 import PopupMultiLevel from '~/components/popupMultiLevel';
 import { addChatAndActive } from '~/features/chats/chatsSlice';
+import { addGroup } from '~/features/contactGroups/contactGroupsSlice';
 import {
     addSelectedContact,
     createGroup,
@@ -71,6 +72,7 @@ const CreateGroup = ({ show, onClickOutside }) => {
         ).unwrap();
 
         dispatch(addChatAndActive(res));
+        dispatch(addGroup(res));
         socket.emit('openConversation', {
             conversation: res,
             user,

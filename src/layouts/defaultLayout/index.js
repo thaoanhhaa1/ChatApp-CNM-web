@@ -15,11 +15,14 @@ import {
     addChat,
     addMessageHead,
     addPinMessage,
+    removeConversation,
     removePinMessage,
+    setActive,
     setTyping,
     updateMessage,
     updateMessageReact,
 } from '~/features/chats/chatsSlice';
+import { addGroup, removeGroup } from '~/features/contactGroups/contactGroupsSlice';
 import {
     acceptFriendSent,
     addResponseFriend,
@@ -101,7 +104,11 @@ const DefaultLayout = ({ children }) => {
             if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));
         });
 
-        socket.on('openConversation', (data) => dispatch(addChat(data)));
+        socket.on('openConversation', (data) => {
+            dispatch(addChat(data));
+
+            if (data?.isGroup) dispatch(addGroup(data));
+        });
 
         socket.on('typing', (data) =>
             dispatch(
@@ -169,6 +176,12 @@ const DefaultLayout = ({ children }) => {
 
         socket.on('deleteFriend', ({ senderId }) => {
             dispatch(removeFriend({ _id: senderId }));
+        });
+
+        socket.on('deleteConversation', ({ _id }) => {
+            dispatch(removeConversation(_id));
+            dispatch(removeGroup(_id));
+            dispatch(setActive(null));
         });
     }, [active?._id, dispatch, socket, user?._id]);
 

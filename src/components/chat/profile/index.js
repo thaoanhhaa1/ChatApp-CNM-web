@@ -11,6 +11,7 @@ import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { useChat } from '~/context';
 import { addRoleToUser, convertToAvatarUrlList, getNameConversation, sortMemberByRole } from '~/utils';
 import About from './About';
+import HeaderActions from './HeaderActions';
 
 const Profile = () => {
     const [active, setActive] = useState(-1);
@@ -19,22 +20,21 @@ const Profile = () => {
     const { user } = useSelector((state) => state.user);
     const { active: activeChat } = useSelector((state) => state.chats);
     const conversationName = getNameConversation(activeChat, user);
-    const avatars = useMemo(() => convertToAvatarUrlList(activeChat.users), [activeChat.users]);
+    const avatars = useMemo(() => convertToAvatarUrlList(activeChat?.users), [activeChat?.users]);
     const sortedMember = useMemo(
         () =>
-            sortMemberByRole(activeChat.users, activeChat.admin, activeChat.deputy).map((user) =>
-                addRoleToUser(user, activeChat.admin, activeChat.deputy),
-            ),
-        [activeChat.users, activeChat.admin, activeChat.deputy],
+            activeChat?.users
+                ? sortMemberByRole(activeChat.users, activeChat.admin, activeChat.deputy).map((user) =>
+                      addRoleToUser(user, activeChat.admin, activeChat.deputy),
+                  )
+                : [],
+        [activeChat?.users, activeChat?.admin, activeChat?.deputy],
     );
 
     const accordions = useMemo(() => {
+        if (activeChat?.isGroup) return [];
+
         const data = [
-            {
-                icon: UserIcon,
-                title: 'chat.about',
-                children: <About />,
-            },
             {
                 icon: AttachmentLineIcon,
                 title: 'chat.attached-files',
@@ -57,7 +57,7 @@ const Profile = () => {
             },
         ];
 
-        if (activeChat.isGroup) {
+        if (activeChat?.isGroup) {
             data.push({
                 icon: GroupIcon,
                 title: 'chat.members',
@@ -69,10 +69,15 @@ const Profile = () => {
                     </div>
                 ),
             });
-        }
+        } else
+            data.unshift({
+                icon: UserIcon,
+                title: 'chat.about',
+                children: <About />,
+            });
 
         return data;
-    }, [activeChat.isGroup, sortedMember]);
+    }, [activeChat?.isGroup, sortedMember]);
 
     if (!activeChat?._id) return null;
 
@@ -98,6 +103,8 @@ const Profile = () => {
                         <p className="text-mm text-secondary dark:text-dark-secondary">{t('chat.active')}</p>
                     </div>
                 </div>
+
+                {activeChat.isGroup ? <HeaderActions className="pt-3" /> : null}
             </div>
             <ScrollbarCustomize>
                 <div className="p-2 ex:p-3 sm:p-4 md:p-5 dl:p-6 pb-0">

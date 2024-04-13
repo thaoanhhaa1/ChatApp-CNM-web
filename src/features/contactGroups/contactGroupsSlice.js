@@ -19,7 +19,12 @@ const contactGroupsSlice = createSlice({
             state.groups = payload;
         },
         addGroup: (state, { payload }) => {
-            state.groups.push(payload);
+            state.groups.unshift(payload);
+        },
+        removeGroup: (state, { payload }) => {
+            const index = state.groups.findIndex((group) => group._id === payload);
+
+            if (index !== -1) state.groups.splice(index, 1);
         },
     },
     extraReducers: (builder) => {
@@ -38,5 +43,5 @@ const contactGroupsSlice = createSlice({
 });
 
 export default contactGroupsSlice.reducer;
-export const { addGroup, setGroups } = contactGroupsSlice.actions;
+export const { addGroup, setGroups, removeGroup } = contactGroupsSlice.actions;
 export { getGroups };

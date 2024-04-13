@@ -48,7 +48,10 @@ const createGroupSlice = createSlice({
             state.selectedContacts = payload;
         },
         addSelectedContact: (state, { payload }) => {
-            state.selectedContacts.push(payload);
+            const index = state.selectedContacts.findIndex((item) => item._id === payload._id);
+
+            if (index >= 0) state.selectedContacts.splice(index, 1);
+            else state.selectedContacts.push(payload);
         },
         removeSelectedContact: (state, { payload }) => {
             const index = state.selectedContacts.findIndex((item) => item._id === payload._id);

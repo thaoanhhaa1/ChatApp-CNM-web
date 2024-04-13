@@ -71,7 +71,13 @@
             "unpin": "Bỏ ghim"
         },
         "share": "Chia sẻ",
-        "micro": "Micro"
+        "micro": "Micro",
+        "add-members": "Thêm thành viên",
+        "manage-group": "Quản lý nhóm",
+        "pin-conversation": "Ghim hội thoại",
+        "unpin-conversation": "Bỏ ghim hội thoại",
+        "mute": "Tắt thông báo",
+        "un-mute": "Bật thông báo"
     },
     "contacts": {
         "title": "Danh bạ",
@@ -419,6 +425,12 @@
             "add-admin": "Thêm phó nhóm",
             "remove-user": "Xoá khỏi nhóm",
             "leave": "Rời nhóm"
+        },
+        "manage": {
+            "title": "Manage group",
+            "delete": "Delete group",
+            "delete-description": "Mời tất cả mọi người rời nhóm và xóa tin nhắn? Nhóm đã giải tán sẽ KHÔNG THỂ khôi phục.",
+            "no": "Không"
         }
     }
 }

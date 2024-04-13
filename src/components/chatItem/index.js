@@ -9,6 +9,7 @@ import { setActive, togglePin } from '~/features/chats/chatsSlice';
 import conversationServices from '~/services/conversation.service';
 import {
     classNames,
+    convertToAvatarUrlList,
     getLastMessageNoDeleted,
     getNameConversation,
     getTimeChat,
@@ -17,6 +18,7 @@ import {
     isPinConversation,
 } from '~/utils';
 import Avatar from '../avatar';
+import AvatarGroup from '../avatarGroup';
 import ChatMessage from '../chatMessage';
 import Popup from '../popup';
 import Typing from '../typing';
@@ -34,6 +36,7 @@ const ChatItem = ({ chat, active }) => {
     const isPin = isPinConversation(chat, user);
     const isTyping = chat.users.some((u) => u.typing);
     const conversationName = getNameConversation(chat, user);
+    const avatars = useMemo(() => convertToAvatarUrlList(chat.users), [chat.users]);
 
     const togglePinConversation = useCallback(() => {
         conversationServices.togglePinConversation(chat._id).then();
@@ -102,7 +105,7 @@ const ChatItem = ({ chat, active }) => {
             )}
             onClick={handleClickChat}
         >
-            <Avatar status={receiver.status} src={chat.picture} />
+            {chat.picture ? <Avatar status={receiver.status} src={chat.picture} /> : <AvatarGroup avatars={avatars} />}
             <div className="flex-1 flex flex-col gap-1">
                 <div className="mb-1 flex gap-1 items-center justify-between">
                     <h5 className="text-mm font-semibold line-clamp-1">{conversationName}</h5>

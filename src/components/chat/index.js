@@ -178,6 +178,10 @@ const Chat = () => {
         );
     }, [dispatch, messages, socket]);
 
+    useEffect(() => {
+        active?._id && handleHideProfile();
+    }, [active?._id, handleHideProfile]);
+
     return (
         <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile, myRole }}>
             <Toast showToast={showToast} message={t('chat.limit-files-send')} />
