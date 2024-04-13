@@ -204,6 +204,7 @@ const chatsSlice = createSlice({
             const index = state.chats.findIndex((chat) => chat._id === payload);
 
             if (index >= 0) state.chats.splice(index, 1);
+            if (state.active?._id === payload) state.active = null;
         },
         addOrUpdateChat: (state, { payload }) => {
             if (!payload?._id) return state;

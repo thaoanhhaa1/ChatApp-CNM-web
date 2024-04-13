@@ -8,7 +8,7 @@ import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { groupRole } from '~/constants';
 import { useChat } from '~/context';
-import { removeConversation, setActive } from '~/features/chats/chatsSlice';
+import { removeConversation } from '~/features/chats/chatsSlice';
 import { removeGroup } from '~/features/contactGroups/contactGroupsSlice';
 import groupServices from '~/services/group.service';
 import { classNames } from '~/utils';
@@ -35,7 +35,6 @@ const ManageGroup = ({ onBack }) => {
                 params: [active._id],
             });
 
-            dispatch(setActive(null));
             dispatch(removeConversation(active._id));
             dispatch(removeGroup(active._id));
             socket.emit('deleteConversation', {

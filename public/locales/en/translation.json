@@ -439,6 +439,13 @@
             "title": "Add members",
             "cancel": "Cancel",
             "confirm": "Confirm"
+        },
+        "remove-member": {
+            "title": "Confirm",
+            "description": "Remove this member from group?",
+            "block-rejoin": "Block this one from rejoining",
+            "close": "Close",
+            "accept": "Accept"
         }
     }
 }

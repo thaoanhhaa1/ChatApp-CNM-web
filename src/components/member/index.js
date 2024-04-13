@@ -5,15 +5,17 @@ import { useSelector } from 'react-redux';
 import { MoreFillIcon } from '~/assets';
 import { groupRole } from '~/constants';
 import { useChat } from '~/context';
+import { useBoolean } from '~/hooks';
 import Avatar from '../avatar';
+import RemoveMember from '../chat/removeMember';
 import Popup from '../popup';
 
-// TODO handle click more item
-// TODO add btn add friend
 const Member = ({ user }) => {
     const { t } = useTranslation();
     const { myRole } = useChat();
     const { user: me } = useSelector((state) => state.user);
+    const { value: showRemoveUser, setTrue: handleShowRemoveUser, setFalse: handleHideRemoveUser } = useBoolean(false);
+
     const more = useMemo(() => {
         const more = [];
 
@@ -21,6 +23,7 @@ const Member = ({ user }) => {
             if (myRole !== groupRole.MEMBER_ROLE)
                 more.unshift({
                     title: t('group.user-more.remove-user'),
+                    onClick: handleShowRemoveUser,
                 });
             if (myRole === groupRole.OWNER_ROLE)
                 more.unshift({
@@ -32,7 +35,7 @@ const Member = ({ user }) => {
             });
 
         return more;
-    }, [me._id, myRole, t, user._id]);
+    }, [handleShowRemoveUser, me._id, myRole, t, user._id]);
 
     return (
         <div className="p-2 flex gap-2 items-center hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-colors cursor-pointer rounded-md">
@@ -50,6 +53,8 @@ const Member = ({ user }) => {
                     <MoreFillIcon className="w-5 h-5" />
                 </span>
             </Popup>
+
+            <RemoveMember show={showRemoveUser} onClickOutside={handleHideRemoveUser} userId={user._id} />
         </div>
     );
 };

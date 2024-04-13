@@ -437,6 +437,13 @@
             "title": "Thêm thành viên",
             "cancel": "Huỷ",
             "confirm": "Xác nhận"
+        },
+        "remove-member": {
+            "title": "Xác nhận",
+            "description": "Xoá thành viên này khỏi nhóm?",
+            "block-rejoin": "Chặn người này tham gia lại",
+            "close": "Đóng",
+            "accept": "Đồng ý"
         }
     }
 }

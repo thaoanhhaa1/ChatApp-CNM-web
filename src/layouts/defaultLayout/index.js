@@ -18,7 +18,6 @@ import {
     addPinMessage,
     removeConversation,
     removePinMessage,
-    setActive,
     setTyping,
     updateMessage,
     updateMessageReact,
@@ -182,12 +181,16 @@ const DefaultLayout = ({ children }) => {
         socket.on('deleteConversation', ({ _id }) => {
             dispatch(removeConversation(_id));
             dispatch(removeGroup(_id));
-            dispatch(setActive(null));
         });
 
         socket.on('addOrUpdateConversation', ({ conversation }) => {
             dispatch(addOrUpdateChat(conversation));
             dispatch(addOrUpdateGroup(conversation));
+        });
+
+        socket.on('removeUserFromConversation', ({ conversationId }) => {
+            dispatch(removeConversation(conversationId));
+            dispatch(removeGroup(conversationId));
         });
     }, [active?._id, dispatch, socket, user?._id]);
 
