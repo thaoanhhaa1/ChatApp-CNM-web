@@ -19,7 +19,7 @@ const AvatarText = ({ text, size = '32px', className }) => {
 };
 
 AvatarText.propTypes = {
-    text: PropTypes.string.isRequired,
+    text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     className: PropTypes.string,
 };

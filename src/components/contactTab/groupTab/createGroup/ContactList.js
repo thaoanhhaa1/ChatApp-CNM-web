@@ -3,11 +3,11 @@ import { useMemo } from 'react';
 import { AppListDetailFillIcon } from '~/assets';
 import PhoneBook from '~/components/phoneBook';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
-import { classNames, countContactsInPhoneBook } from '~/utils';
+import { classNames, countContactsInPhoneBook, isContactInclude } from '~/utils';
 import ContactItem from './ContactItem';
 import SelectedContacts from './SelectedContacts';
 
-const ContactList = ({ phoneBook, selectedContacts, handleClickContact, handleRemoveContact }) => {
+const ContactList = ({ phoneBook, selectedContacts, addedMembers = [], handleClickContact, handleRemoveContact }) => {
     const countContacts = useMemo(() => countContactsInPhoneBook(phoneBook), [phoneBook]);
 
     return (
@@ -25,6 +25,7 @@ const ContactList = ({ phoneBook, selectedContacts, handleClickContact, handleRe
                                             onClick={() => handleClickContact(contact)}
                                             contact={contact}
                                             checked={selectedContacts.includes(contact)}
+                                            added={isContactInclude(addedMembers, contact)}
                                         />
                                     )}
                                 />
@@ -57,6 +58,7 @@ const ContactList = ({ phoneBook, selectedContacts, handleClickContact, handleRe
 ContactList.propTypes = {
     phoneBook: PropTypes.object.isRequired,
     selectedContacts: PropTypes.array.isRequired,
+    addedMembers: PropTypes.array,
     handleClickContact: PropTypes.func.isRequired,
     handleRemoveContact: PropTypes.func.isRequired,
 };

@@ -14,6 +14,7 @@ import { LayoutProvider } from '~/context';
 import {
     addChat,
     addMessageHead,
+    addOrUpdateChat,
     addPinMessage,
     removeConversation,
     removePinMessage,
@@ -22,7 +23,7 @@ import {
     updateMessage,
     updateMessageReact,
 } from '~/features/chats/chatsSlice';
-import { addGroup, removeGroup } from '~/features/contactGroups/contactGroupsSlice';
+import { addGroup, addOrUpdateGroup, removeGroup } from '~/features/contactGroups/contactGroupsSlice';
 import {
     acceptFriendSent,
     addResponseFriend,
@@ -182,6 +183,11 @@ const DefaultLayout = ({ children }) => {
             dispatch(removeConversation(_id));
             dispatch(removeGroup(_id));
             dispatch(setActive(null));
+        });
+
+        socket.on('addOrUpdateConversation', ({ conversation }) => {
+            dispatch(addOrUpdateChat(conversation));
+            dispatch(addOrUpdateGroup(conversation));
         });
     }, [active?._id, dispatch, socket, user?._id]);
 

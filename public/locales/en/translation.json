@@ -432,7 +432,13 @@
             "title": "Manage group",
             "delete": "Delete group",
             "delete-description": "Remove all members and delete the group? This CANNOT be undone.",
-            "no": "No"
+            "no": "No",
+            "warning": "Only Administrators can access these settings"
+        },
+        "add-members": {
+            "title": "Add members",
+            "cancel": "Cancel",
+            "confirm": "Confirm"
         }
     }
 }

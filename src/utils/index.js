@@ -26,6 +26,7 @@ export { default as googleMaps } from './googleMaps';
 export { default as handleScaleImage } from './handleScaleImage';
 export { default as insertEmojiToChat } from './insertEmojiToChat';
 export { default as isCanRecall } from './isCanRecall';
+export { default as isContactInclude } from './isContactInclude';
 export { default as isImageFileByType } from './isImageFileByType';
 export { default as isPhotoFile } from './isPhotoFile';
 export { default as isPinConversation } from './isPinConversation';

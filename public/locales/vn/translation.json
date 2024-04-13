@@ -430,7 +430,13 @@
             "title": "Manage group",
             "delete": "Delete group",
             "delete-description": "Mời tất cả mọi người rời nhóm và xóa tin nhắn? Nhóm đã giải tán sẽ KHÔNG THỂ khôi phục.",
-            "no": "Không"
+            "no": "Không",
+            "warning": "Tính năng chỉ dành cho quản trị viên"
+        },
+        "add-members": {
+            "title": "Thêm thành viên",
+            "cancel": "Huỷ",
+            "confirm": "Xác nhận"
         }
     }
 }

@@ -1,14 +1,18 @@
 import PropTypes from 'prop-types';
 import Avatar from '~/components/avatar';
 import Checkbox from '~/components/checkbox';
+import { classNames } from '~/utils';
 
-const ContactItem = ({ checked, contact, onClick = () => {} }) => {
+const ContactItem = ({ added, checked, contact, onClick = () => {} }) => {
     return (
         <div
             onClick={onClick}
-            className="cursor-pointer px-2 h-[52px] flex items-center gap-2 hover:bg-black hover:bg-opacity-5 rounded-md transition-colors duration-300"
+            className={classNames(
+                'cursor-pointer px-2 h-[52px] flex items-center gap-2 hover:bg-black hover:bg-opacity-5 rounded-md transition-colors duration-300',
+                added && 'pointer-events-none',
+            )}
         >
-            <Checkbox rounded checked={checked} />
+            <Checkbox className={classNames(added && 'opacity-50')} rounded checked={checked || added} />
             <Avatar className="flex-shrink-0" src={contact.avatar} />
             <div className="flex-1 text-sm line-clamp-1">{contact.alias || contact.name}</div>
         </div>
@@ -22,6 +26,8 @@ ContactItem.propTypes = {
         alias: PropTypes.string,
         _id: PropTypes.string.isRequired,
     }).isRequired,
+    added: PropTypes.bool,
+    checked: PropTypes.bool,
     onClick: PropTypes.func,
 };
 

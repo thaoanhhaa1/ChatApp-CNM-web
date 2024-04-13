@@ -44,6 +44,7 @@ const api = {
     createGroup: () => `/conversation/group`,
     getGroups: () => `/conversation/group`,
     deleteGroup: (params) => `/conversation/group/${params[0]}`,
+    addUsers: (params) => `/conversation/group/${params[0]}/users`,
 };
 
 export default api;

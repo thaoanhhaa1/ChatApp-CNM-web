@@ -21,7 +21,7 @@ const MoreThreeAvatars = ({ size, avatars }) => {
 
 MoreThreeAvatars.propTypes = {
     avatars: PropTypes.array.isRequired,
-    size: PropTypes.string,
+    size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default MoreThreeAvatars;

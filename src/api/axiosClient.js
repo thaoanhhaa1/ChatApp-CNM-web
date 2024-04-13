@@ -15,8 +15,8 @@ function destroyToken() {
 
 function refresh() {
     return new Promise((resolve, reject) => {
-        axiosClient
-            .post('/auth/refreshToken')
+        axios
+            .post(`${baseURL}/auth/refreshToken`)
             .then((response) => {
                 saveToken(response.data.accessToken);
                 return resolve(response.data.accessToken);
@@ -31,10 +31,7 @@ function refresh() {
 axiosClient.interceptors.response.use(
     (res) => res,
     async (error) => {
-        console.log('🚀 ~ error:', error);
-        // TODO refreshToken
         const prevRequest = error?.config;
-        console.log('🚀 ~ prevRequest:', prevRequest);
 
         if (error?.response?.status === 401 && !prevRequest?.sent && token.get()) {
             prevRequest.sent = true;

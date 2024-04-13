@@ -26,6 +26,12 @@ const contactGroupsSlice = createSlice({
 
             if (index !== -1) state.groups.splice(index, 1);
         },
+        addOrUpdateGroup: (state, { payload }) => {
+            const index = state.groups.findIndex((group) => group._id === payload._id);
+
+            if (index !== -1) state.groups[index] = payload;
+            else state.groups.unshift(payload);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -43,5 +49,5 @@ const contactGroupsSlice = createSlice({
 });
 
 export default contactGroupsSlice.reducer;
-export const { addGroup, setGroups, removeGroup } = contactGroupsSlice.actions;
+export const { addGroup, setGroups, removeGroup, addOrUpdateGroup } = contactGroupsSlice.actions;
 export { getGroups };

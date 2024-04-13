@@ -205,6 +205,16 @@ const chatsSlice = createSlice({
 
             if (index >= 0) state.chats.splice(index, 1);
         },
+        addOrUpdateChat: (state, { payload }) => {
+            if (!payload?._id) return state;
+
+            const index = state.chats.findIndex((chat) => chat._id === payload._id);
+
+            if (index < 0) state.chats.unshift(payload);
+            else state.chats[index] = payload;
+
+            if (state.active?._id === payload._id) state.active = payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -251,5 +261,6 @@ export const {
     updateMessageReact,
     addChatAndActive,
     removeConversation,
+    addOrUpdateChat,
 } = chatsSlice.actions;
 export { getChats, getConversation };

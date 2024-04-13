@@ -32,7 +32,7 @@ const Profile = () => {
     );
 
     const accordions = useMemo(() => {
-        if (activeChat?.isGroup) return [];
+        if (!activeChat?.isGroup) return [];
 
         const data = [
             {
@@ -57,7 +57,7 @@ const Profile = () => {
             },
         ];
 
-        if (activeChat?.isGroup) {
+        if (activeChat.isGroup) {
             data.push({
                 icon: GroupIcon,
                 title: 'chat.members',

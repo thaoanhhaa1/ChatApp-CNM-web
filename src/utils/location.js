@@ -6,10 +6,12 @@ const getCoords = () => {
             (position) => {
                 coords.lat = position.coords.latitude;
                 coords.lng = position.coords.longitude;
+                coords.role = true;
                 resolve(coords);
             },
             (error) => {
-                reject(error);
+                coords.role = false;
+                resolve(coords);
             },
         );
     });
