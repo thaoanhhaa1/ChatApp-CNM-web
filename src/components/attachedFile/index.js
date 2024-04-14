@@ -14,6 +14,7 @@ const getIcon = (fileName) => {
 
 const AttachedFile = ({ file }) => {
     const Icon = getIcon(file.name);
+    console.log(file);
     const handleDownload = useDownloadFile(file.link, file.name);
 
     return (
