@@ -8,7 +8,7 @@ const friendServices = {
     acceptFriend: (friendId) => axiosClient.post(api.acceptFriend(), { friendId }),
     rejectFriend: (friendId) => axiosClient.post(api.rejectFriend(), { friendId }),
     revocationRequestFriend: (friendId) => axiosClient.post(api.revocationRequestFriend(), { friendId }),
-    deleteFriend: (friendId) => axiosClient.delete(api.deleteFriend(), { friendId }),
+    deleteFriend: (friendId) => axiosClient.delete(api.deleteFriend([friendId])),
 };
 
 export default friendServices;

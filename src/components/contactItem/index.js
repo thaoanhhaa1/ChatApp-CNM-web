@@ -7,7 +7,6 @@ import Popup from '~/components/popup';
 import { removeFriend } from '~/features/friend/friendSlice';
 import { setToast } from '~/features/toastAll/toastAllSlice';
 import friendServices from '~/services/friend.service';
-import { retryPromise } from '~/utils';
 import Button from './Button';
 
 const ContactItem = ({ contact }) => {
@@ -16,14 +15,20 @@ const ContactItem = ({ contact }) => {
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
-    const handleRemoveFriend = () => {
-        retryPromise(() => friendServices.deleteFriend(contact._id), 5, 500).then();
-        socket.emit('deleteFriend', {
-            senderId: user._id,
-            receiverId: contact._id,
-        });
-        dispatch(removeFriend({ _id: contact._id }));
-        dispatch(setToast(t('friend.notification-friend-removed-successfully')));
+    const handleRemoveFriend = async () => {
+        try {
+            await friendServices.deleteFriend(contact._id);
+
+            socket.emit('deleteFriend', {
+                senderId: user._id,
+                receiverId: contact._id,
+            });
+            dispatch(removeFriend({ _id: contact._id }));
+            dispatch(setToast(t('friend.notification-friend-removed-successfully')));
+        } catch (error) {
+            console.error(error);
+            dispatch(setToast(t('friend.notification-friend-removed-failed')));
+        }
     };
 
     const more = [

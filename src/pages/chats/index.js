@@ -126,7 +126,7 @@ const Chats = () => {
             {isShowSearch && (
                 <div
                     style={{ top: `${boundClientRect.top}px` }}
-                    className="flex flex-col bg-sidebar-sub-bg dark:bg-dark-sidebar-sub-bg absolute left-0 right-0 bottom-0 z-1 pb-1 ex:pb-2 sm:pb-3 md:pb-4 dl:pb-5"
+                    className="flex flex-col bg-sidebar-sub-bg dark:bg-dark-sidebar-sub-bg absolute left-0 right-0 bottom-0 z-10 pb-1 ex:pb-2 sm:pb-3 md:pb-4 dl:pb-5"
                 >
                     <ScrollbarCustomize>
                         <ChatsSearch searchValue={searchDebounce} />

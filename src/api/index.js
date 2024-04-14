@@ -38,7 +38,7 @@ const api = {
     acceptFriend: () => `/user/acceptfriend`,
     rejectFriend: () => `/user/rejectfriend`,
     revocationRequestFriend: () => `/user/revocationRequestFriend`,
-    deleteFriend: () => `/user/deletefriend`,
+    deleteFriend: (params) => `/user/deletefriend/${params[0]}`,
 
     // Group
     createGroup: () => `/conversation/group`,

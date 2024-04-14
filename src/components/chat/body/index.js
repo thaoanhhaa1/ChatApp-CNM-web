@@ -18,7 +18,7 @@ const Body = () => {
     const dispatch = useDispatch();
 
     const messagesCanShow = useMemo(
-        () => messages.filter((message) => message.deleted !== DeleteMessageStatus.DELETE_FOR_ME),
+        () => (messages || []).filter((message) => message.deleted !== DeleteMessageStatus.DELETE_FOR_ME),
         [messages],
     );
     const latestMessage = useMemo(() => messagesCanShow.at(-1), [messagesCanShow]);
@@ -57,10 +57,16 @@ const Body = () => {
             }
         };
 
-        if (active?._id && !messages?.length) {
-            if (active.messages && active.messages.at(-1).state !== sentMessageStatus.SENT) {
+        if (!active?._id) {
+        } else {
+            const messages = active.messages;
+            const firstMessage = messages?.at?.(-1);
+
+            if (!messages?.length || firstMessage?.state === sentMessageStatus.SENT) {
+                fetchMessages();
+            } else {
                 dispatch(setMessages(active.messages));
-            } else fetchMessages();
+            }
         }
 
         return () => {
@@ -89,7 +95,7 @@ const Body = () => {
                     <MessageTyping key={user._id} chat={user} />
                 ))}
 
-                {loading || activeLoading || !!messages.length || (
+                {loading || activeLoading || !!messages?.length || (
                     <div className="absolute bottom-0 left-0 right-0 px-2 sm:px-3 md:px-4 dl:px-5">
                         <ChatEmpty className="mb-6 ex:mb-8 sm:mb-10 md:mb-12 dl:mb-14 max-w-[472px] mx-auto" />
                     </div>
