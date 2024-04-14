@@ -6,7 +6,6 @@ import { Mention, MentionsInput } from 'react-mentions';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkText } from 'smile2emoji';
 import { AttachmentLineIcon, ImageFillIcon, LocationIcon, MicIcon, SendPlaneFillIcon } from '~/assets';
-import { AttachmentLineIcon, ImageFillIcon, LocationIcon, MicIcon, SendPlaneFillIcon } from '~/assets';
 import AttachFiles from '~/components/attachFiles';
 import Location from '~/components/location';
 import Modal from '~/components/modal';
