@@ -36,8 +36,8 @@ const Group = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getGroups());
-    }, [dispatch]);
+        groups.length || dispatch(getGroups());
+    }, [dispatch, groups.length]);
 
     return (
         <Wrapper>

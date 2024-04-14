@@ -22,7 +22,7 @@ const SENT_TAB = '2';
 const FriendRequest = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
     const [tab, setTab] = useState(RECEIVED_TAB);
-    const { hasNewReceived } = useSelector((state) => state.friend);
+    const { hasNewReceived, friendReceived, friendSent } = useSelector((state) => state.friend);
     const dispatch = useDispatch();
 
     const handleChange = (_, a) => setTab(a);
@@ -52,8 +52,8 @@ const FriendRequest = ({ show, onClickOutside }) => {
             }
         };
 
-        fetchFriendRequest();
-    }, [dispatch]);
+        if (friendReceived.length + friendSent.length === 0) fetchFriendRequest();
+    }, [dispatch, friendReceived.length, friendSent.length]);
 
     useEffect(() => {
         show && tab === RECEIVED_TAB && dispatch(setNewReceived(false));

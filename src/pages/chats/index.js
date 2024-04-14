@@ -65,8 +65,8 @@ const Chats = () => {
     }, [dispatch, search, searchDebounce]);
 
     useEffect(() => {
-        dispatch(getChats());
-    }, [dispatch]);
+        chats?.length || dispatch(getChats());
+    }, [chats?.length, dispatch]);
 
     useEffect(() => {
         dispatch(setMessages([]));
