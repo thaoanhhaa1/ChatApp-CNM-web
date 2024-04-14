@@ -30,7 +30,6 @@ const CreateGroup = ({ show, onClickOutside }) => {
     const { avatar, selectedContacts, name, searchUser, loading } = useSelector((state) => state.createGroup);
     const { friendList } = useSelector((state) => state.friend);
     const { socket } = useSelector((state) => state.socket);
-    const { user } = useSelector((state) => state.user);
     const phoneBook = useMemo(() => convertContactsToPhoneBook(friendList), [friendList]);
     const searchDebounce = useDebounce(searchUser, 500);
     const phoneBookFilterResult = useMemo(
@@ -74,8 +73,8 @@ const CreateGroup = ({ show, onClickOutside }) => {
         dispatch(addChatAndActive(res));
         dispatch(addGroup(res));
         socket.emit('addOrUpdateConversation', {
-            conversation: res.data,
-            userIds: res.data.users.map((item) => item._id),
+            conversation: res,
+            userIds: res.users.map((item) => item._id),
         });
         onClickOutside();
     };

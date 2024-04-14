@@ -416,6 +416,7 @@
     },
     "friend": {
         "accept-friend": "Đồng ý kết bạn thành công",
+        "decline-friend": "Từ chối kết bạn thành công",
         "default-message-friend-request-1": "Xin chào, mình là",
         "default-message-friend-request-2": "Kết bạn với mình nhé!",
         "notification-friend-removed-successfully": "Xoá bạn thành công"

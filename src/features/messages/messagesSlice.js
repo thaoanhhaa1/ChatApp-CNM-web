@@ -65,8 +65,8 @@ const messagesSlice = createSlice({
         addMessageSocket: (state, { payload }) => {
             if (
                 payload &&
-                payload._id !== state.messages?.[0]._id &&
-                payload.conversation._id === state.messages[0].conversation._id
+                payload._id !== state.messages?.[0]?._id &&
+                payload.conversation._id === state.messages?.[0]?.conversation?._id
             )
                 state.messages.unshift(payload);
         },

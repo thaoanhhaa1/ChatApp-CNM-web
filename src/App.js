@@ -6,11 +6,6 @@ import DefaultLayout from './layouts';
 import routes from './routes';
 import { localSetting } from './utils';
 
-// [ ] Tạo nhóm
-// [ ] Thêm thành viên --> TODO Notify
-// [ ] Xoá thành viên
-// [ ] Giải tán nhóm
-// [ ] Gán quyền
 function App() {
     const dispatch = useDispatch();
     const { settings } = useSelector((state) => state.localSetting);
