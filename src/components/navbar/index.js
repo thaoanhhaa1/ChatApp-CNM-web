@@ -1,10 +1,10 @@
 import Tippy from '@tippyjs/react';
 import i18next from 'i18next';
 import PropTypes from 'prop-types';
-import { useLayoutEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import {useCallback, useLayoutEffect, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {useDispatch, useSelector} from 'react-redux';
+import {Link, useNavigate} from 'react-router-dom';
 import {
     ClockIcon,
     ContactIcon,
@@ -20,10 +20,20 @@ import {
 import images from '~/assets/images';
 import config from '~/config';
 import routes from '~/config/routes';
-import { reset, setSetting } from '~/features/localSetting/localSettingSlice';
-import { Profile, Setting } from '~/pages';
+import {reset as resetChat} from '~/features/chat/chatSlice';
+import {reset as resetChats} from '~/features/chats/chatsSlice';
+import {reset as resetContactGroups} from '~/features/contactGroups/contactGroupsSlice';
+import {reset as resetCreateGroup} from '~/features/createGroup/createGroupSlice';
+import {reset as resetFriend} from '~/features/friend/friendSlice';
+import {reset as resetLocalSettings, setSetting} from '~/features/localSetting/localSettingSlice';
+import {reset as resetLocation} from '~/features/location/locationSlice';
+import {reset as resetMessages} from '~/features/messages/messagesSlice';
+import {reset as resetSearch} from '~/features/search/searchSlice';
+import {disconnect} from '~/features/socket/socketSlice';
+import {remove as resetUser} from '~/features/user/userSlice';
+import {Profile, Setting} from '~/pages';
 import authServices from '~/services/auth.service';
-import { classNames, token } from '~/utils';
+import {classNames, token} from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
@@ -67,6 +77,20 @@ const Navbar = ({ className }) => {
     const handleCloseSetting = () => {
         setOpenSettingModal(false);
     };
+
+    const handleResetRedux = useCallback(() => {
+        dispatch(resetLocalSettings());
+        dispatch(resetChat());
+        dispatch(resetChats());
+        dispatch(resetContactGroups());
+        dispatch(resetCreateGroup());
+        dispatch(resetFriend());
+        dispatch(resetLocation());
+        dispatch(resetMessages());
+        dispatch(resetSearch());
+        dispatch(resetUser());
+        dispatch(disconnect());
+    }, [dispatch]);
 
     const navBars = [
         // {
@@ -122,12 +146,12 @@ const Navbar = ({ className }) => {
                     authServices.logout().then();
                     token.set('');
                     html.classList.remove('dark');
-                    dispatch(reset());
+                    handleResetRedux();
                     navigate(config.routes.signIn);
                 },
             },
         ],
-        [dispatch, navigate],
+        [handleResetRedux, navigate],
     );
 
     const toggleDarkMode = () => setDarkMode(!darkMode);

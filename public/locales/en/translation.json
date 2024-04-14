@@ -425,6 +425,7 @@
     "group": {
         "user-more": {
             "add-admin": "Add admin",
+            "remove-admin": "Revoke admin privilege",
             "remove-user": "Remove from group",
             "leave": "Leave group"
         },

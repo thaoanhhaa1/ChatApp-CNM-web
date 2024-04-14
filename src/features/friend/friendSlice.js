@@ -73,6 +73,7 @@ const friendSlice = createSlice({
 
             if (index !== -1) state.friendList.splice(index, 1);
         },
+        reset: (state) => ({ ...state, ...initialState }),
     },
     extraReducers: (builder) => {
         builder
@@ -101,5 +102,6 @@ export const {
     rejectFriendSent,
     updateRequestFriendSent,
     removeFriend,
+    reset,
 } = friendSlice.actions;
 export { getFriends };

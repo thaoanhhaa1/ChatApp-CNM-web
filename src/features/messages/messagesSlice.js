@@ -82,6 +82,7 @@ const messagesSlice = createSlice({
             if (!status) message.statuses.push({ user: userId, react });
             else status.react = react;
         },
+        reset: (state) => ({ ...state, ...initialState }),
     },
     extraReducers: (builder) => {
         builder
@@ -137,6 +138,6 @@ const messagesSlice = createSlice({
 });
 
 export default messagesSlice.reducer;
-export const { setOffsetTop, setMessages, addMessage, updateDeletedMessage, addMessageSocket, updateReact } =
+export const { reset, setOffsetTop, setMessages, addMessage, updateDeletedMessage, addMessageSocket, updateReact } =
     messagesSlice.actions;
 export { getMessages, getReplyMessages, sendMessage };

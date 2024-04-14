@@ -6,6 +6,8 @@ const groupServices = {
     deleteGroup: ({ params }) => axiosClient.delete(api.deleteGroup(params)),
     addUsers: ({ params, data }) => axiosClient.post(api.addUsers(params), data),
     removeUser: ({ params, data }) => axiosClient.delete(api.removeUser(params), data),
+    addRole: ({ params, data }) => axiosClient.post(api.addRole(params), data),
+    removeRole: ({ params }) => axiosClient.delete(api.removeRole(params)),
 };
 
 export default groupServices;

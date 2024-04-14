@@ -423,6 +423,7 @@
     "group": {
         "user-more": {
             "add-admin": "Thêm phó nhóm",
+            "remove-admin": "Gỡ quyền phó nhóm",
             "remove-user": "Xoá khỏi nhóm",
             "leave": "Rời nhóm"
         },

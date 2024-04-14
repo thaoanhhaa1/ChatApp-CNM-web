@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MoreFillIcon } from '~/assets';
 import { groupRole } from '~/constants';
 import { useChat } from '~/context';
+import { addOrUpdateChat } from '~/features/chats/chatsSlice';
+import { addOrUpdateGroup } from '~/features/contactGroups/contactGroupsSlice';
 import { useBoolean } from '~/hooks';
+import groupServices from '~/services/group.service';
 import Avatar from '../avatar';
 import RemoveMember from '../chat/removeMember';
 import Popup from '../popup';
@@ -14,7 +17,32 @@ const Member = ({ user }) => {
     const { t } = useTranslation();
     const { myRole } = useChat();
     const { user: me } = useSelector((state) => state.user);
+    const { active } = useSelector((state) => state.chats);
+    const { socket } = useSelector((state) => state.socket);
+    const dispatch = useDispatch();
     const { value: showRemoveUser, setTrue: handleShowRemoveUser, setFalse: handleHideRemoveUser } = useBoolean(false);
+    const role = useMemo(() => {
+        if (active.admin === user._id) return groupRole.OWNER_ROLE;
+        if (active.deputy.includes(user._id)) return groupRole.ADMIN_ROLE;
+
+        return groupRole.MEMBER_ROLE;
+    }, [active.admin, active.deputy, user._id]);
+
+    const handleToggleRole = useCallback(async () => {
+        const res = await groupServices[role === groupRole.MEMBER_ROLE ? 'addRole' : 'removeRole']({
+            params: [active._id, user._id],
+            data: {
+                role: 'admin',
+            },
+        });
+
+        socket.emit('addOrUpdateConversation', {
+            conversation: res.data,
+            userIds: res.data.users.map((user) => user._id),
+        });
+        dispatch(addOrUpdateChat(res.data));
+        dispatch(addOrUpdateGroup(res.data));
+    }, [active._id, dispatch, role, socket, user._id]);
 
     const more = useMemo(() => {
         const more = [];
@@ -27,7 +55,8 @@ const Member = ({ user }) => {
                 });
             if (myRole === groupRole.OWNER_ROLE)
                 more.unshift({
-                    title: t('group.user-more.add-admin'),
+                    title: t(`group.user-more.${role === groupRole.ADMIN_ROLE ? 'remove-admin' : 'add-admin'}`),
+                    onClick: handleToggleRole,
                 });
         } else
             more.push({
@@ -35,10 +64,10 @@ const Member = ({ user }) => {
             });
 
         return more;
-    }, [handleShowRemoveUser, me._id, myRole, t, user._id]);
+    }, [handleShowRemoveUser, handleToggleRole, me._id, myRole, role, t, user._id]);
 
     return (
-        <div className="p-2 flex gap-2 items-center hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-colors cursor-pointer rounded-md">
+        <div className="group/member p-2 flex gap-2 items-center hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-colors cursor-pointer rounded-md">
             <Avatar src={user.avatar} containerClassName="flex-shrink-0" />
             <div className="flex-1 flex-shrink-0 flex items-center gap-2">
                 <h5 className="text-sm font-semibold line-clamp-1">{user.name}</h5>
@@ -48,11 +77,13 @@ const Member = ({ user }) => {
                     </span>
                 )}
             </div>
-            <Popup placement="bottom-end" data={more}>
-                <span className="w-8 h-8 flex justify-center items-center hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-colors rounded-md">
-                    <MoreFillIcon className="w-5 h-5" />
-                </span>
-            </Popup>
+            {more.length ? (
+                <Popup placement="bottom-end" data={more}>
+                    <span className="w-8 h-8 flex justify-center items-center hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-colors rounded-md opacity-0 group-hover/member:opacity-100">
+                        <MoreFillIcon className="w-5 h-5" />
+                    </span>
+                </Popup>
+            ) : null}
 
             <RemoveMember show={showRemoveUser} onClickOutside={handleHideRemoveUser} userId={user._id} />
         </div>

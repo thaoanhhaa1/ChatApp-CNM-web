@@ -184,6 +184,7 @@ const DefaultLayout = ({ children }) => {
         });
 
         socket.on('addOrUpdateConversation', ({ conversation }) => {
+            console.log('🚀 ~ socket.on ~ conversation:', conversation);
             dispatch(addOrUpdateChat(conversation));
             dispatch(addOrUpdateGroup(conversation));
         });
@@ -193,13 +194,6 @@ const DefaultLayout = ({ children }) => {
             dispatch(removeGroup(conversationId));
         });
     }, [active?._id, dispatch, socket, user?._id]);
-
-    useEffect(() => {
-        if (!refSection.current) return;
-
-        if (showChat && width < screens.DL) refSection.current.style.zIndex = 20;
-        else refSection.current.style.zIndex = 1;
-    }, [showChat, width]);
 
     useEffect(() => {
         if (!locationError) return;
@@ -228,8 +222,8 @@ const DefaultLayout = ({ children }) => {
                 <section
                     ref={refSection}
                     className={classNames(
-                        'relative flex flex-1 dl:order-2 overflow-hidden transition-[z-index] delay-400 dl:delay-0',
-                        // showChat ? 'z-20' : 'z-1 delay-400 dl:delay-0',
+                        'relative flex flex-1 dl:order-2 overflow-hidden transition-[z-index]',
+                        showChat && width < screens.DL ? 'z-20' : 'z-1',
                     )}
                 >
                     <div className="flex-shrink-0 relative w-full dl:w-sidebar bg-sidebar-sub-bg dark:bg-dark-sidebar-sub-bg transition-width ease-linear duration-400">
@@ -238,7 +232,7 @@ const DefaultLayout = ({ children }) => {
                     <div
                         className={classNames(
                             'z-1 fixed dl:relative inset-0 flex-1 transition-transform ease-linear duration-400 bg-white',
-                            showChat ? 'translate-x-0' : 'translate-x-full dl:translate-x-0',
+                            showChat ? 'translate-x-0 z-10' : 'translate-x-full dl:translate-x-0',
                         )}
                     >
                         <Chat />

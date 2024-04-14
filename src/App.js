@@ -6,9 +6,11 @@ import DefaultLayout from './layouts';
 import routes from './routes';
 import { localSetting } from './utils';
 
-// FIXME Chat video
-// FIXME Google Maps
-// FIXME Render chat
+// [ ] Tạo nhóm
+// [ ] Thêm thành viên --> TODO Notify
+// [ ] Xoá thành viên
+// [ ] Giải tán nhóm
+// [ ] Gán quyền
 function App() {
     const dispatch = useDispatch();
     const { settings } = useSelector((state) => state.localSetting);

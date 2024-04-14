@@ -216,6 +216,7 @@ const chatsSlice = createSlice({
 
             if (state.active?._id === payload._id) state.active = payload;
         },
+        reset: (state) => ({ ...state, ...initialState }),
     },
     extraReducers: (builder) => {
         builder
@@ -263,5 +264,6 @@ export const {
     addChatAndActive,
     removeConversation,
     addOrUpdateChat,
+    reset,
 } = chatsSlice.actions;
 export { getChats, getConversation };

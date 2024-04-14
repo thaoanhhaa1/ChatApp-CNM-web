@@ -73,7 +73,7 @@ const AddMembers = ({ show, handleClickOutside }) => {
 
     return (
         <Modal show={show} onClickOutside={handleClickOutside}>
-            <Modal.Header onClose={handleClickOutside}>{t('contacts.create-group-modal.title')}</Modal.Header>
+            <Modal.Header onClose={handleClickOutside}>{t('group.add-members.title')}</Modal.Header>
 
             <div className="h-[75vh] flex flex-col">
                 <div className="px-2 ex:px-3 smn:px-4 pt-2 ex:pt-3 smn:pt-4">
@@ -101,14 +101,14 @@ const AddMembers = ({ show, handleClickOutside }) => {
 
             <Modal.Footer className="flex justify-end items-center gap-2">
                 <Modal.Button onClick={handleClickOutside} type="text-primary">
-                    {t('contacts.create-group-modal.cancel')}
+                    {t('group.add-members.cancel')}
                 </Modal.Button>
                 <Modal.Button
                     onClick={handleAddMembers}
                     disabled={selectedContacts.length === 0 || loading}
                     loading={loading}
                 >
-                    {t('contacts.create-group-modal.create-group')}
+                    {t('group.add-members.confirm')}
                 </Modal.Button>
             </Modal.Footer>
         </Modal>

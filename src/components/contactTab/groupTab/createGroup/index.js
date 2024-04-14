@@ -73,9 +73,9 @@ const CreateGroup = ({ show, onClickOutside }) => {
 
         dispatch(addChatAndActive(res));
         dispatch(addGroup(res));
-        socket.emit('openConversation', {
-            conversation: res,
-            user,
+        socket.emit('addOrUpdateConversation', {
+            conversation: res.data,
+            userIds: res.data.users.map((item) => item._id),
         });
         onClickOutside();
     };
