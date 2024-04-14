@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactShowMoreText from 'react-show-more-text';
@@ -15,21 +16,38 @@ const ReceivedFriendRequest = ({ contact }) => {
     const { user } = useSelector((state) => state.user);
     const sender = contact.sender_id;
     const dispatch = useDispatch();
+    const [declineLoading, setDeclineLoading] = useState(false);
+    const [acceptLoading, setAcceptLoading] = useState(false);
 
     const handleDecline = async () => {
-        await friendServices.rejectFriend(sender._id);
+        setDeclineLoading(true);
 
-        socket.emit('rejectFriend', { _id: contact._id, senderId: sender._id });
-        dispatch(rejectFriendReceived(contact._id));
-        // FIXME notification
-        dispatch(setToast(t('friend.decline-friend')));
+        try {
+            await friendServices.rejectFriend(sender._id);
+
+            socket.emit('rejectFriend', { _id: contact._id, senderId: sender._id });
+            dispatch(rejectFriendReceived(contact._id));
+            dispatch(setToast(t('friend.decline-friend')));
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setDeclineLoading(false);
+        }
     };
     const handleAccept = async () => {
-        await friendServices.acceptFriend(sender._id);
+        setAcceptLoading(true);
 
-        socket.emit('acceptFriend', { _id: contact._id, user, senderId: sender._id });
-        dispatch(acceptFriendReceived({ _id: contact._id, user: sender }));
-        dispatch(setToast(t('friend.accept-friend')));
+        try {
+            await friendServices.acceptFriend(sender._id);
+
+            socket.emit('acceptFriend', { _id: contact._id, user, senderId: sender._id });
+            dispatch(acceptFriendReceived({ _id: contact._id, user: sender }));
+            dispatch(setToast(t('friend.accept-friend')));
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setAcceptLoading(false);
+        }
     };
 
     return (
@@ -54,10 +72,24 @@ const ReceivedFriendRequest = ({ contact }) => {
                     {contact.message}
                 </ReactShowMoreText>
                 <div className="flex gap-2">
-                    <Button onClick={handleDecline} small rounded secondary>
+                    <Button
+                        disabled={acceptLoading || declineLoading}
+                        loading={declineLoading}
+                        onClick={handleDecline}
+                        small
+                        rounded
+                        secondary
+                    >
                         {t('contacts.friend-request.decline')}
                     </Button>
-                    <Button onClick={handleAccept} small rounded primary>
+                    <Button
+                        disabled={acceptLoading || declineLoading}
+                        loading={acceptLoading}
+                        onClick={handleAccept}
+                        small
+                        rounded
+                        primary
+                    >
                         {t('contacts.friend-request.accept')}
                     </Button>
                 </div>

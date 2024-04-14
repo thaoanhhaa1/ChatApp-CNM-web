@@ -5,13 +5,14 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SearchIcon, UserAddLineIcon } from '~/assets';
 import AddContact from '~/components/addContact';
 import ContactTab from '~/components/contactTab';
 import HeaderPage from '~/components/headerPage';
 import Input from '~/components/input';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
+import { setMessages } from '~/features/messages/messagesSlice';
 import { resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { useBoolean } from '~/hooks';
 
@@ -19,6 +20,7 @@ const Contacts = () => {
     const { t } = useTranslation();
     const [tab, setTab] = useState('1');
     const { value, setTrue, setFalse } = useBoolean(false);
+    const { active } = useSelector((state) => state.chats);
     const dispatch = useDispatch();
 
     const handleChange = (_, a) => setTab(a);
@@ -26,6 +28,10 @@ const Contacts = () => {
     useEffect(() => {
         dispatch(resetSubs());
     }, [dispatch, value]);
+
+    useEffect(() => {
+        dispatch(setMessages([]));
+    }, [active?._id, dispatch]);
 
     return (
         <div className="contacts flex flex-col h-full pb-2 sm:pb-5">

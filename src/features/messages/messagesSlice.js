@@ -65,8 +65,8 @@ const messagesSlice = createSlice({
         addMessageSocket: (state, { payload }) => {
             if (
                 payload &&
-                payload._id !== state.messages?.[0]._id &&
-                payload.conversation._id === state.messages[0].conversation._id
+                payload._id !== state.messages?.[0]?._id &&
+                payload.conversation._id === state.messages?.[0]?.conversation?._id
             )
                 state.messages.unshift(payload);
         },
@@ -82,6 +82,7 @@ const messagesSlice = createSlice({
             if (!status) message.statuses.push({ user: userId, react });
             else status.react = react;
         },
+        reset: (state) => ({ ...state, ...initialState }),
     },
     extraReducers: (builder) => {
         builder
@@ -137,6 +138,6 @@ const messagesSlice = createSlice({
 });
 
 export default messagesSlice.reducer;
-export const { setOffsetTop, setMessages, addMessage, updateDeletedMessage, addMessageSocket, updateReact } =
+export const { reset, setOffsetTop, setMessages, addMessage, updateDeletedMessage, addMessageSocket, updateReact } =
     messagesSlice.actions;
 export { getMessages, getReplyMessages, sendMessage };

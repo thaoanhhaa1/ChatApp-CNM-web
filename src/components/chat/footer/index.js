@@ -16,7 +16,7 @@ import { setChat, setFiles, setReply } from '~/features/chat/chatSlice';
 import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { useBoolean, useToast } from '~/hooks';
-import { getMentions, insertEmojiToChat, isImageFileByType, splitMessage } from '~/utils';
+import { getMentions, insertEmojiToChat, isImageFileByType, location, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
 import MentionItem from './Mention';
@@ -214,7 +214,7 @@ const Footer = () => {
             <Toast showToast={showToast} message="Invalid message" />
             <div className="flex items-center gap-3 px-2 h-10 border-t border-separate dark:border-dark-separate">
                 <Tippy content={t('chat.location')}>
-                    <Button onClick={setShowLocation} icon={LocationIcon} />
+                    <Button disabled={!location.coords.role} onClick={setShowLocation} icon={LocationIcon} />
                 </Tippy>
                 <SendFiles onSend={handleSendFiles} Icon={AttachmentLineIcon} tooltip={t('chat.attached-file')} />
             </div>

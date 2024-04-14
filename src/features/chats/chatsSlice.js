@@ -39,7 +39,7 @@ const chatsSlice = createSlice({
         setActive: (state, { payload }) => {
             state.active = payload;
 
-            const chat = state.chats.find((chat) => chat._id === payload._id);
+            const chat = state.chats.find((chat) => chat._id === payload?._id);
             if (chat) chat.unseenMessages = 0;
         },
         updateMessage: (state, { payload }) => {
@@ -164,6 +164,14 @@ const chatsSlice = createSlice({
             if (index < 0) state.chats.unshift(payload);
             else state.chats[index] = payload;
         },
+        addChatAndActive: (state, { payload }) => {
+            const index = state.chats.findIndex((chat) => chat._id === payload._id);
+
+            if (index < 0) state.chats.unshift(payload);
+            else state.chats[index] = payload;
+
+            state.active = payload;
+        },
         setMessages: (state, { payload }) => {
             if (!payload?.length) return state;
 
@@ -192,6 +200,23 @@ const chatsSlice = createSlice({
                 if (state.active?._id === conversationId) state.active.messages = chat.messages;
             }
         },
+        removeConversation: (state, { payload }) => {
+            const index = state.chats.findIndex((chat) => chat._id === payload);
+
+            if (index >= 0) state.chats.splice(index, 1);
+            if (state.active?._id === payload) state.active = null;
+        },
+        addOrUpdateChat: (state, { payload }) => {
+            if (!payload?._id) return state;
+
+            const index = state.chats.findIndex((chat) => chat._id === payload._id);
+
+            if (index < 0) state.chats.unshift(payload);
+            else state.chats[index] = payload;
+
+            if (state.active?._id === payload._id) state.active = payload;
+        },
+        reset: (state) => ({ ...state, ...initialState }),
     },
     extraReducers: (builder) => {
         builder
@@ -236,5 +261,9 @@ export const {
     addChat,
     addMessageHeadSocket,
     updateMessageReact,
+    addChatAndActive,
+    removeConversation,
+    addOrUpdateChat,
+    reset,
 } = chatsSlice.actions;
 export { getChats, getConversation };

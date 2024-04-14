@@ -3,7 +3,6 @@ import addContactReducer from '~/features/addContact/addContactSlice';
 import chatReducer from '~/features/chat/chatSlice';
 import chatsReducer from '~/features/chats/chatsSlice';
 import contactGroupsReducer from '~/features/contactGroups/contactGroupsSlice';
-import contactsGroupReducer from '~/features/contactsGroup/contactsGroupSlice';
 import createGroupReducer from '~/features/createGroup/createGroupSlice';
 import friendReducer from '~/features/friend/friendSlice';
 import localSettingReducer from '~/features/localSetting/localSettingSlice';
@@ -12,9 +11,7 @@ import messagesReducer from '~/features/messages/messagesSlice';
 import onlineUsersReducer from '~/features/onlineUsers/onlineUsersSlice';
 import phoneBookReducer from '~/features/phoneBook/phoneBookSlice';
 import popupMultiLevelReducer from '~/features/popupMultiLevel/popupMultiLevelSlice';
-import receivedFriendRequestsReducer from '~/features/receivedFriendRequests/receivedFriendRequestsSlice';
 import searchReducer from '~/features/search/searchSlice';
-import sentFriendRequestsReducer from '~/features/sentFriendRequests/sentFriendRequestsSlice';
 import socketReducer from '~/features/socket/socketSlice';
 import toastAllReducer from '~/features/toastAll/toastAllSlice';
 import userReducer from '~/features/user/userSlice';
@@ -29,10 +26,7 @@ export const store = configureStore({
         popupMultiLevel: popupMultiLevelReducer,
         addContact: addContactReducer,
         contactGroups: contactGroupsReducer,
-        receivedFriendRequests: receivedFriendRequestsReducer,
-        sentFriendRequests: sentFriendRequestsReducer,
         phoneBook: phoneBookReducer,
-        contactsGroup: contactsGroupReducer,
         createGroup: createGroupReducer,
         socket: socketReducer,
         localSetting: localSettingReducer,

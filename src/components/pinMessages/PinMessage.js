@@ -37,7 +37,7 @@ const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }
     const handleUnpin = () => {
         messageServices.unpinMessage(message._id).then();
         dispatch(removePinMessage({ conversationId: active._id, message: message }));
-        socket.emit('pinMessage', { message, userId: user._id, users: active.users });
+        socket.emit('unpinMessage', { message, userId: user._id, users: active.users });
     };
 
     const more = [

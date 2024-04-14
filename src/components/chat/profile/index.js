@@ -5,11 +5,13 @@ import { AttachmentLineIcon, CloseLineIcon, GroupIcon, RecordCircleFillIcon, Use
 import Accordion from '~/components/accordion';
 import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
+import AvatarGroup from '~/components/avatarGroup';
 import Member from '~/components/member';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { useChat } from '~/context';
-import { getNameConversation } from '~/utils';
+import { addRoleToUser, convertToAvatarUrlList, getNameConversation, sortMemberByRole } from '~/utils';
 import About from './About';
+import HeaderActions from './HeaderActions';
 
 const Profile = () => {
     const [active, setActive] = useState(-1);
@@ -18,14 +20,21 @@ const Profile = () => {
     const { user } = useSelector((state) => state.user);
     const { active: activeChat } = useSelector((state) => state.chats);
     const conversationName = getNameConversation(activeChat, user);
+    const avatars = useMemo(() => convertToAvatarUrlList(activeChat?.users), [activeChat?.users]);
+    const sortedMember = useMemo(
+        () =>
+            activeChat?.users
+                ? sortMemberByRole(activeChat.users, activeChat.admin, activeChat.deputy).map((user) =>
+                      addRoleToUser(user, activeChat.admin, activeChat.deputy),
+                  )
+                : [],
+        [activeChat?.users, activeChat?.admin, activeChat?.deputy],
+    );
 
     const accordions = useMemo(() => {
+        if (!activeChat?.isGroup) return [];
+
         const data = [
-            {
-                icon: UserIcon,
-                title: 'chat.about',
-                children: <About />,
-            },
             {
                 icon: AttachmentLineIcon,
                 title: 'chat.attached-files',
@@ -54,26 +63,21 @@ const Profile = () => {
                 title: 'chat.members',
                 children: (
                     <div className="flex flex-col gap-2">
-                        <Member
-                            user={{
-                                avatar: 'https://plus.unsplash.com/premium_photo-1703689541382-8945aee7fcf8?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                                name: 'Sera Mullar',
-                                role: 'Admin',
-                            }}
-                        />
-                        <Member
-                            user={{
-                                avatar: 'https://plus.unsplash.com/premium_photo-1703689541382-8945aee7fcf8?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                                name: 'Sera Mullar',
-                            }}
-                        />
+                        {sortedMember.map((user) => (
+                            <Member key={user._id} user={user} />
+                        ))}
                     </div>
                 ),
             });
-        }
+        } else
+            data.unshift({
+                icon: UserIcon,
+                title: 'chat.about',
+                children: <About />,
+            });
 
         return data;
-    }, [activeChat.isGroup]);
+    }, [activeChat?.isGroup, sortedMember]);
 
     if (!activeChat?._id) return null;
 
@@ -88,13 +92,19 @@ const Profile = () => {
                 </button>
 
                 <div className="flex flex-col items-center mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6">
-                    <Avatar size="96px" src={activeChat.picture} />
+                    {activeChat.picture ? (
+                        <Avatar size="96px" src={activeChat.picture} />
+                    ) : (
+                        <AvatarGroup avatars={avatars} size="96px" />
+                    )}
                     <h5 className="mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6 mb-1 font-semibold">{conversationName}</h5>
                     <div className="flex items-center gap-1">
                         <RecordCircleFillIcon className="flex-shrink-0 w-2.5 h-2.5 text-success" />
                         <p className="text-mm text-secondary dark:text-dark-secondary">{t('chat.active')}</p>
                     </div>
                 </div>
+
+                {activeChat.isGroup ? <HeaderActions className="pt-3" /> : null}
             </div>
             <ScrollbarCustomize>
                 <div className="p-2 ex:p-3 sm:p-4 md:p-5 dl:p-6 pb-0">

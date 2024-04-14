@@ -72,7 +72,13 @@
             "unpin": "Unpin"
         },
         "share": "Share",
-        "micro": "Micro"
+        "micro": "Micro",
+        "add-members": "Add members",
+        "manage-group": "Manage group",
+        "pin-conversation": "Pin",
+        "unpin-conversation": "Unpin",
+        "mute": "Mute",
+        "un-mute": "Unmute"
     },
     "contacts": {
         "title": "Contacts",
@@ -412,8 +418,36 @@
     },
     "friend": {
         "accept-friend": "Friend added successfully",
+        "decline-friend": "Friend request declined",
         "default-message-friend-request-1": "Hi, I'm",
         "default-message-friend-request-2": "Let's be friends!",
         "notification-friend-removed-successfully": "Friend removed successfully"
+    },
+    "group": {
+        "user-more": {
+            "add-admin": "Add admin",
+            "remove-admin": "Revoke admin privilege",
+            "remove-user": "Remove from group",
+            "leave": "Leave group"
+        },
+        "manage": {
+            "title": "Manage group",
+            "delete": "Delete group",
+            "delete-description": "Remove all members and delete the group? This CANNOT be undone.",
+            "no": "No",
+            "warning": "Only Administrators can access these settings"
+        },
+        "add-members": {
+            "title": "Add members",
+            "cancel": "Cancel",
+            "confirm": "Confirm"
+        },
+        "remove-member": {
+            "title": "Confirm",
+            "description": "Remove this member from group?",
+            "block-rejoin": "Block this one from rejoining",
+            "close": "Close",
+            "accept": "Accept"
+        }
     }
 }

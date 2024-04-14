@@ -11,8 +11,9 @@ const locationSlice = createSlice({
         setLocation: (state, { payload }) => {
             state.location = payload;
         },
+        reset: (state) => ({ ...state, ...initialState }),
     },
 });
 
-export const { setLocation } = locationSlice.actions;
+export const { setLocation, reset } = locationSlice.actions;
 export default locationSlice.reducer;

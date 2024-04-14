@@ -14,6 +14,7 @@ export { default as sortGroup } from './sortGroup';
 export { default as statusUser } from './statusUser';
 export { default as sentMessageStatus } from './sentMessageStatus';
 export { default as DeleteMessageStatus } from './DeleteMessageStatus';
+export * as groupRole from './roleMemberInGroup';
 
 export const constants = {
     MAX_LENGTH_OF_GREETING_MESSAGE: 150,

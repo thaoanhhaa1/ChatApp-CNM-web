@@ -21,7 +21,7 @@ import { searchUsers, setSearch } from '~/features/search/searchSlice';
 import { useBoolean } from '~/hooks';
 import { location } from '~/utils';
 
-location.getCoords().then();
+location.getCoords().then().catch();
 
 // TODO Search
 // TODO Click online user

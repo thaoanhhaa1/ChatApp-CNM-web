@@ -247,11 +247,11 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                                 ? chat.files.map((file, index) => <AttachedFile key={index} file={file} />)
                                 : null}
 
-                            {url ? <LinkPreview url={url} /> : null}
+                            {url && !recalled ? <LinkPreview url={url} /> : null}
 
-                            <MessageLocation isMe={isMe} location={chat.location} />
+                            {recalled ? null : <MessageLocation isMe={isMe} location={chat.location} />}
 
-                            {chat.sticker ? (
+                            {chat.sticker && !recalled ? (
                                 <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} />
                             ) : null}
 

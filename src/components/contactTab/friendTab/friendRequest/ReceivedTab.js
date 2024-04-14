@@ -6,7 +6,6 @@ import ReceivedFriendRequestSkeleton from '~/components/receivedFriendRequest/Re
 import { classNames } from '~/utils';
 
 const ReceivedTab = ({ className }) => {
-    // const { receivedFriendRequests } = useSelector((state) => state.receivedFriendRequests);
     const { friendRequestLoading, friendReceived } = useSelector((state) => state.friend);
 
     return (
