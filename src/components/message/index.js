@@ -28,7 +28,7 @@ import { setReply } from '~/features/chat/chatSlice';
 import { addPinMessage, setMessages, updateMessage } from '~/features/chats/chatsSlice';
 import { getReplyMessages, setOffsetTop, updateDeletedMessage } from '~/features/messages/messagesSlice';
 import { setLocationError } from '~/features/toastAll/toastAllSlice';
-import { useLoader, useToast } from '~/hooks';
+import { useBoolean, useLoader, useToast } from '~/hooks';
 import messageServices from '~/services/message.service';
 import {
     classNames,
@@ -42,6 +42,8 @@ import {
     isVideoFile,
     location,
 } from '~/utils';
+import officeCanView from '~/utils/officeCanView';
+import OfficeViewer from '../officeViewer';
 import Button from './Button';
 import MessageImage from './MessageImage';
 import MessageLoading from './MessageLoading';
@@ -82,6 +84,10 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const isVideo = firstFile && isVideoFile(firstFile.type);
     const loading = chat.state === sentMessageStatus.SENDING;
     const recalled = chat.deleted === DeleteMessageStatus.RECALL;
+    const fileCanView = useMemo(() => {
+        return firstFile && officeCanView(firstFile);
+    }, [firstFile]);
+    const { value: viewFile, setTrue: setShowViewFile, setFalse: setHideViewFile } = useBoolean(false);
 
     const handleClickReply = (message) => {
         if (!message._id) return;
@@ -244,7 +250,9 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                             {isVideo && !recalled ? <MessageVideo loading={loading} file={firstFile} /> : null}
 
                             {firstFile && !isImageList && !recalled && !isVideo
-                                ? chat.files.map((file, index) => <AttachedFile key={index} file={file} />)
+                                ? chat.files.map((file, index) => (
+                                      <AttachedFile onClick={setShowViewFile} key={index} file={file} />
+                                  ))
                                 : null}
 
                             {url && !recalled ? <LinkPreview url={url} /> : null}
@@ -302,6 +310,16 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
                 </div>
                 {showSeparate && <MessageSeparate>{getTimeChatSeparate(prevDate)}</MessageSeparate>}
                 <ForwardMessage messageId={chat?._id} show={showForward} handleClickOutside={handleCloseForward} />
+
+                {fileCanView && viewFile && firstFile?.link ? (
+                    <OfficeViewer
+                        viewer={fileCanView}
+                        file={firstFile}
+                        user={chat.sender}
+                        date={chat.updatedAt}
+                        onClose={setHideViewFile}
+                    />
+                ) : null}
             </div>
         </MessageProvider>
     );
