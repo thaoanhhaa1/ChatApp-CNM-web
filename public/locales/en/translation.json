@@ -78,7 +78,8 @@
         "pin-conversation": "Pin",
         "unpin-conversation": "Unpin",
         "mute": "Mute",
-        "un-mute": "Unmute"
+        "un-mute": "Unmute",
+        "at": "at"
     },
     "contacts": {
         "title": "Contacts",

@@ -29,6 +29,7 @@
         "react-animate-height": "^3.2.3",
         "react-app-rewired": "^2.2.1",
         "react-beautiful-dnd": "^13.1.1",
+        "react-documents": "^1.2.1",
         "react-dom": "^18.2.0",
         "react-dropzone": "^14.2.3",
         "react-error-boundary": "^4.0.13",
