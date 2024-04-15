@@ -140,7 +140,8 @@
             "phoneNumber": "Phone number",
             "joinedZalo": "Joined Zalo",
             "undoRequest": "Undo request",
-            "addFriendSuccess": "Friend request sent"
+            "addFriendSuccess": "Friend request sent",
+            "accept": "Accept"
         },
         "friend": "Friend",
         "group": "Group",

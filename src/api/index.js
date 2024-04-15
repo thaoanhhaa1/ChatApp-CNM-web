@@ -46,6 +46,7 @@ const api = {
     deleteGroup: (params) => `/conversation/group/${params[0]}`,
     addUsers: (params) => `/conversation/group/${params[0]}/users`,
     removeUser: (params) => `/conversation/group/${params[0]}/users/${params[1]}`,
+    leaveGroup: (params) => `/conversation/group/${params[0]}/users/leave`,
     addRole: (params) => `/conversation/group/${params[0]}/users/${params[1]}/role`,
     removeRole: (params) => `/conversation/group/${params[0]}/users/${params[1]}/role`,
 };

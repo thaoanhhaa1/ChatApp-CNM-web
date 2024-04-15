@@ -58,7 +58,7 @@ const Body = () => {
         };
 
         if (!active?._id) {
-        } else {
+        } else if (!messages?.length) {
             const messages = active.messages;
             const firstMessage = messages?.at?.(-1);
 

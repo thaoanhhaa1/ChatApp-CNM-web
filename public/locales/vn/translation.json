@@ -139,7 +139,8 @@
             "phoneNumber": "Điện thoại",
             "joinedZalo": "Tham gia Zalo",
             "undoRequest": "Huỷ kết bạn",
-            "addFriendSuccess": "Gửi yêu cầu kết bạn thành công"
+            "addFriendSuccess": "Gửi yêu cầu kết bạn thành công",
+            "accept": "Đồng ý"
         },
         "friend": "Bạn bè",
         "group": "Nhóm",

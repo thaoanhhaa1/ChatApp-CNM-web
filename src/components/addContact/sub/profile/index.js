@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { BlockIcon, ContactCardIcon, UserGroupIcon, WarningIcon } from '~/assets';
@@ -8,9 +8,11 @@ import Button from '~/components/button';
 import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { personalInformation } from '~/constants';
-import { blockContact, unblockContact } from '~/features/addContact/addContactSlice';
+import { blockContact, setContact, unblockContact } from '~/features/addContact/addContactSlice';
+import { getConversation, setActive } from '~/features/chats/chatsSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
-import { classNames } from '~/utils';
+import friendServices from '~/services/friend.service';
+import { classNames, getChatIndividual } from '~/utils';
 import ProfileHeader from '../ProfileHeader';
 import AddFriend from '../addFriend';
 import Report from '../report';
@@ -20,32 +22,70 @@ import PersonalInformation from './PersonalInformation';
 const Profile = ({ onClose }) => {
     const { t } = useTranslation();
     const { contact } = useSelector((state) => state.addContact);
+    const { chats } = useSelector((state) => state.chats);
     const { updateHeightPopup } = useSelector((state) => state.popupMultiLevel);
     const dispatch = useDispatch();
     const information = useMemo(() => personalInformation[contact?.blocked ? 'block' : 'noBlock'], [contact?.blocked]);
+    const [chatLoading, setChatLoading] = useState(false);
+    const [otherLoading, setOtherLoading] = useState(false);
 
+    // TODO
     const handleShareContact = () => {
         console.log('🚀 ~ handleShareContact ~ handleShareContact');
     };
+
+    // TODO
     const handleShowGroupMutual = () => {
         console.log('🚀 ~ handleShowGroupMutual ~ handleShowGroupMutual');
     };
+
+    // TODO
     const handleBlock = () => {
         dispatch(blockContact());
 
         // Show notification
     };
+
+    // TODO
     const handleReport = () => dispatch(addSub(Report));
 
-    const handleToggleFriend = () => {
-        if (contact?.isFriend) {
-            // Handle unfriend
-        } else dispatch(addSub(AddFriend));
+    // TODO Realtime
+    const handleUndo = async () => {
+        setOtherLoading(true);
+
+        try {
+            await friendServices.revocationRequestFriend(contact._id);
+
+            dispatch(setContact({ ...contact, status: 0 }));
+        } catch (error) {
+        } finally {
+            setOtherLoading(false);
+        }
     };
 
-    const handleClickChat = () => {
-        console.log('🚀 ~ handleClickChat ~ handleClickChat');
+    // TODO Realtime
+    const handleAddFriend = () => dispatch(addSub(AddFriend));
+
+    // TODO
+    const handleAcceptFriend = () => {};
+
+    const handleClickChat = async () => {
+        setChatLoading(true);
+
+        try {
+            const chat = getChatIndividual(chats, contact._id);
+
+            if (chat) dispatch(setActive(chat));
+            else await dispatch(getConversation(contact._id)).unwrap();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setChatLoading(false);
+            onClose();
+        }
     };
+
+    // TODO
     const handleUnblock = () => dispatch(unblockContact());
 
     useEffect(() => {
@@ -88,10 +128,46 @@ const Profile = ({ onClose }) => {
                                     </>
                                 )) || (
                                     <>
-                                        <Button onClick={handleToggleFriend} className="flex-1" outline>
-                                            {t(`contacts.modal.${contact.isFriend ? 'undoRequest' : 'addFriend'}`)}
-                                        </Button>
-                                        <Button onClick={handleClickChat} className="flex-1" primary>
+                                        {contact.status === 2 && (
+                                            <Button
+                                                loading={otherLoading}
+                                                disabled={otherLoading}
+                                                onClick={handleUndo}
+                                                className="flex-1"
+                                                outline
+                                            >
+                                                {t(`contacts.modal.undoRequest`)}
+                                            </Button>
+                                        )}
+                                        {contact.status === 0 && (
+                                            <Button
+                                                loading={otherLoading}
+                                                disabled={otherLoading}
+                                                onClick={handleAddFriend}
+                                                className="flex-1"
+                                                outline
+                                            >
+                                                {t(`contacts.modal.addFriend`)}
+                                            </Button>
+                                        )}
+                                        {contact.status === 3 && (
+                                            <Button
+                                                loading={otherLoading}
+                                                disabled={otherLoading}
+                                                onClick={handleAcceptFriend}
+                                                className="flex-1"
+                                                outline
+                                            >
+                                                {t(`contacts.modal.accept`)}
+                                            </Button>
+                                        )}
+                                        <Button
+                                            loading={chatLoading}
+                                            disabled={chatLoading}
+                                            onClick={handleClickChat}
+                                            className="flex-1"
+                                            primary
+                                        >
                                             {t('contacts.modal.chat')}
                                         </Button>
                                     </>

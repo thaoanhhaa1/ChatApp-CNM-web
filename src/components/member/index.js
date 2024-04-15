@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MoreFillIcon } from '~/assets';
 import { groupRole } from '~/constants';
 import { useChat } from '~/context';
-import { addOrUpdateChat } from '~/features/chats/chatsSlice';
-import { addOrUpdateGroup } from '~/features/contactGroups/contactGroupsSlice';
+import { addOrUpdateChat, removeConversation } from '~/features/chats/chatsSlice';
+import { addOrUpdateGroup, removeGroup } from '~/features/contactGroups/contactGroupsSlice';
 import { useBoolean } from '~/hooks';
 import groupServices from '~/services/group.service';
 import Avatar from '../avatar';
@@ -28,6 +28,23 @@ const Member = ({ user }) => {
         return groupRole.MEMBER_ROLE;
     }, [active.admin, active.deputy, user._id]);
 
+    // TODO leave group --> Model
+    const handleLeave = useCallback(async () => {
+        if (!active?._id || !me?._id) return;
+
+        const res = await groupServices.leaveGroup({
+            params: [active._id, me._id],
+        });
+
+        socket.emit('addOrUpdateConversation', {
+            conversation: res.data,
+            userIds: res.data.users.map((user) => user._id),
+        });
+
+        dispatch(removeConversation(active._id));
+        dispatch(removeGroup(active._id));
+    }, [active?._id, dispatch, me?._id, socket]);
+
     const handleToggleRole = useCallback(async () => {
         const res = await groupServices[role === groupRole.MEMBER_ROLE ? 'addRole' : 'removeRole']({
             params: [active._id, user._id],
@@ -45,6 +62,8 @@ const Member = ({ user }) => {
     }, [active._id, dispatch, role, socket, user._id]);
 
     const more = useMemo(() => {
+        if (!me?._id || !user?._id) return [];
+
         const more = [];
 
         if (user._id !== me._id) {
@@ -61,10 +80,11 @@ const Member = ({ user }) => {
         } else
             more.push({
                 title: t('group.user-more.leave'),
+                onClick: handleLeave,
             });
 
         return more;
-    }, [handleShowRemoveUser, handleToggleRole, me._id, myRole, role, t, user._id]);
+    }, [handleLeave, handleShowRemoveUser, handleToggleRole, me?._id, myRole, role, t, user?._id]);
 
     return (
         <div className="group/member p-2 flex gap-2 items-center hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-colors cursor-pointer rounded-md">
