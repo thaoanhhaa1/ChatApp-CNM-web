@@ -1,5 +1,5 @@
 import config from '~/config';
-import { Chats, Contacts, Profile, Register, NotFound, SignIn } from '~/pages';
+import { Chats, Contacts, NotFound, Register, SignIn } from '~/pages';
 
 const routes = [
     {
@@ -9,10 +9,6 @@ const routes = [
     {
         path: config.routes.contacts,
         component: Contacts,
-    },
-    {
-        path: config.routes.profile,
-        component: Profile,
     },
     {
         path: config.routes.register,

@@ -24,8 +24,9 @@ const chatSlice = createSlice({
         addFiles: (state, { payload }) => {
             state.files.push(...payload);
         },
+        reset: (state) => ({ ...state, ...initialState }),
     },
 });
 
 export default chatSlice.reducer;
-export const { setChat, setReply, setFiles, removeFile, addFiles } = chatSlice.actions;
+export const { setChat, setReply, setFiles, removeFile, addFiles, reset } = chatSlice.actions;

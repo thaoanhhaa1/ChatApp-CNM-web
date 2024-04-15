@@ -1,14 +1,16 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SettingIcon } from '~/assets';
 import Modal from '~/components/modal';
 import PopupMultiLevel from '~/components/popupMultiLevel';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
+import { setFriendRequest, setNewReceived } from '~/features/friend/friendSlice';
 import { addSub, resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
+import friendServices from '~/services/friend.service';
 import Manage from './Manage';
 import ReceivedTab from './ReceivedTab';
 import SentTab from './SentTab';
@@ -16,9 +18,11 @@ import SentTab from './SentTab';
 const RECEIVED_TAB = '1';
 const SENT_TAB = '2';
 
+// TODO Empty friend request
 const FriendRequest = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
     const [tab, setTab] = useState(RECEIVED_TAB);
+    const { hasNewReceived, friendReceived, friendSent } = useSelector((state) => state.friend);
     const dispatch = useDispatch();
 
     const handleChange = (_, a) => setTab(a);
@@ -29,6 +33,31 @@ const FriendRequest = ({ show, onClickOutside }) => {
     };
 
     const handleClickSetting = () => dispatch(addSub(Manage));
+
+    useEffect(() => {
+        const fetchFriendRequest = async () => {
+            const request = [];
+
+            request.push(friendServices.requestFriends());
+            request.push(friendServices.responseFriends());
+
+            try {
+                const res = await Promise.all(request);
+
+                const [requestFriends, responseFriends] = res.map((item) => item.data);
+
+                dispatch(setFriendRequest({ requestFriends, responseFriends }));
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        if (friendReceived.length + friendSent.length === 0) fetchFriendRequest();
+    }, [dispatch, friendReceived.length, friendSent.length]);
+
+    useEffect(() => {
+        show && tab === RECEIVED_TAB && dispatch(setNewReceived(false));
+    }, [dispatch, show, hasNewReceived, tab]);
 
     return (
         <Modal show={show} onClickOutside={handleClose}>

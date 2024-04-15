@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import api, { axiosClient } from '~/api';
+import userServices from '~/services/user.service';
 
 const initialState = {
     contacts: [],
@@ -12,7 +12,7 @@ const initialState = {
 };
 
 const searchUsers = createAsyncThunk('searchUsers', async (search) => {
-    const response = await axiosClient.get(api.searchUsers(search));
+    const response = await userServices.searchUsers(search);
 
     return response.data;
 });
@@ -24,6 +24,7 @@ const searchSlice = createSlice({
         setSearch: (state, { payload }) => {
             state.search = payload;
         },
+        reset: (state) => ({ ...state, ...initialState }),
     },
     extraReducers: (builder) => {
         builder
@@ -40,6 +41,6 @@ const searchSlice = createSlice({
     },
 });
 
-export const { setSearch } = searchSlice.actions;
+export const { setSearch, reset } = searchSlice.actions;
 export { searchUsers };
 export default searchSlice.reducer;

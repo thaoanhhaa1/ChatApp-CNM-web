@@ -15,8 +15,8 @@ function destroyToken() {
 
 function refresh() {
     return new Promise((resolve, reject) => {
-        axiosClient
-            .post('/auth/refreshToken')
+        axios
+            .post(`${baseURL}/auth/refreshToken`)
             .then((response) => {
                 saveToken(response.data.accessToken);
                 return resolve(response.data.accessToken);
@@ -30,24 +30,33 @@ function refresh() {
 
 axiosClient.interceptors.response.use(
     (res) => res,
-    (error) => {
-        const status = error.response ? error.response.status : null;
-        if (status === 401) {
-            token.set('');
-        }
-        // status might be undefined
-        if (!status) {
-            refresh();
+    async (error) => {
+        const prevRequest = error?.config;
+
+        if (error?.response?.status === 401 && !prevRequest?.sent && token.get()) {
+            prevRequest.sent = true;
+
+            try {
+                const newAccessToken = await refresh();
+                prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                token.set(newAccessToken);
+                return axiosClient(prevRequest);
+            } catch (error) {
+                console.error(error);
+            }
         }
         return Promise.reject(error);
     },
 );
 
-axiosClient.interceptors.request.use((config) => {
-    const access_token = token.get();
-    config.headers.Authorization = `Bearer ${access_token}`;
-    return config;
-});
+axiosClient.interceptors.request.use(
+    (config) => {
+        const access_token = token.get();
+        config.headers.Authorization = `Bearer ${access_token}`;
+        return config;
+    },
+    (error) => Promise.reject(error),
+);
 
 export default axiosClient;
 export { destroyToken, saveToken };

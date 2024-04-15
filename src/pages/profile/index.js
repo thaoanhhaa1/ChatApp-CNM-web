@@ -1,100 +1,112 @@
-import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { AttachmentLineIcon, More2FillIcon, RecordCircleFillIcon, UserIcon } from '~/assets';
-import Accordion from '~/components/accordion';
-import AttachedFile from '~/components/attachedFile';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { useDispatch, useSelector } from 'react-redux';
+import { CameraIcon, PencilLineIcon } from '~/assets';
+import PersonalInformation from '~/components/addContact/sub/profile/PersonalInformation';
 import Avatar from '~/components/avatar';
-import About from '~/components/chat/profile/About';
-import HeaderPage from '~/components/headerPage';
-import ScrollbarCustomize from '~/components/scrollbarCustomize';
+import Button from '~/components/button';
+import Modal from '~/components/modal';
+import PopupMultiLevel from '~/components/popupMultiLevel';
+import { reset } from '~/features/addContact/addContactSlice';
+import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
+import EditProfileModal from './EditProfileModal';
 
-const Profile = () => {
-    const [active, setActive] = useState(-1);
-    const { t } = useTranslation();
+const Profile = ({ onClose }) => {
     const { user } = useSelector((state) => state.user);
-    console.log('🚀 ~ Profile ~ user:', user);
+    const dispatch = useDispatch();
+    const { t } = useTranslation();
+    const { subs } = useSelector((state) => state.popupMultiLevel);
 
-    const more = [
-        {
-            title: 'Edit',
-        },
-        {
-            title: 'Action',
-            separate: true,
-        },
-        {
-            title: 'Another action',
-        },
-    ];
+    const handleShowUpdateProfile = () => {
+        dispatch(addSub(EditProfileModal));
+    };
+    const handleClose = () => {
+        onClose();
+        dispatch(reset());
+    };
 
-    const accordions = [
-        {
-            icon: UserIcon,
-            title: 'chat.about',
-            children: <About />,
-        },
-        {
-            icon: AttachmentLineIcon,
-            title: 'chat.attached-files',
-            children: (
-                <div className="flex flex-col gap-2">
-                    <AttachedFile
-                        file={{
-                            name: 'Admin-A.zip',
-                            size: 2777,
-                        }}
-                    />
-                    <AttachedFile
-                        file={{
-                            name: 'Admin-A.png',
-                            size: 95,
-                        }}
-                    />
-                </div>
-            ),
-        },
-    ];
+    useEffect(() => {
+        subs.length || dispatch(reset());
+    }, [dispatch, subs.length]);
+
+    const handleImageChange = (event) => {
+        const selectedImage = event.target.files[0];
+        console.log(selectedImage);
+    };
 
     return (
-        <div className="h-full flex flex-col">
-            <HeaderPage title={t('profile.title')} rightIcon={More2FillIcon} data={more} />
-            <div className="p-2 ex:p-3 sm:p-4 md:p-5 dl:p-6 border-b border-separate dark:border-dark-separate">
-                <div className="flex flex-col items-center mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6">
-                    <Avatar size="96px" src={user.avatar} />
-                    <h5 className="mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6 mb-1 font-semibold">{user.name}</h5>
-                    <div className="flex items-center gap-1">
-                        <RecordCircleFillIcon className="flex-shrink-0 w-2.5 h-2.5 text-success" />
-                        <p className="text-mm text-secondary dark:text-dark-secondary">{t('chat.active')}</p>
+        <>
+            <Modal show={true} onClickOutside={handleClose}>
+                <PopupMultiLevel onClose={handleClose}>
+                    <Modal.Header onClose={handleClose}>{t('contacts.modal.profile')}</Modal.Header>
+
+                    {/* <div className="text-center flex flex-col items-center gap-2 justify-center"> */}
+                    <LazyLoadImage className="w-full aspect-[400/171] object-cover" src={user.background} alt="" />
+
+                    <div className="h-[calc(min(380px,80vh)-45px)]">
+                        <div className="px-2 ex:px-3 sm:px-4 -mt-4">
+                            <div className="flex gap-2 ex:gap-3 sm:gap-4">
+                                <div className="relative">
+                                    <Avatar src={user.avatar} size="60px" />
+                                    <span className="absolute bottom-0 right-0 bg-gray-300 hover:bg-gray-500 rounded-full">
+                                        <label htmlFor="avatarInput">
+                                            <CameraIcon className="w-[24px] h-[24px] p-[3px]" />
+                                            <input
+                                                type="file"
+                                                id="avatarInput"
+                                                className="hidden"
+                                                onChange={handleImageChange}
+                                                accept="image/*"
+                                            />
+                                        </label>
+                                    </span>
+                                </div>
+                                <div className="flex items-center">
+                                    <h3 className="text-lg leading-normal font-medium line-clamp-1">{user.name}</h3>
+                                    <span
+                                        onClick={handleShowUpdateProfile}
+                                        className="p-1 ml-2 cursor-pointer rounded-lg hover:bg-[#dfe2e7] dark:hover:bg-white dark:hover:bg-opacity-5 transition-all"
+                                    >
+                                        <PencilLineIcon className="w-4 h-4" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border-b-4 border-gray-200 w-full mt-4"></div>
+
+                        <div className="px-2 ex:px-3 sm:px-4 py-2 ex:py-2.5 sm:py-3 bg-white dark:bg-[#242526]">
+                            <h4 className="text-base leading-normal font-medium">
+                                {t('contacts.modal.personalInformation')}
+                            </h4>
+                            <div className="pt-3 flex flex-col gap-2">
+                                <PersonalInformation
+                                    label={t('profile.gender')}
+                                    value={user.gender === 'male' ? t('profile.male') : t('profile.female')}
+                                />
+                                <PersonalInformation label={t('profile.date-of-birth')} value={user.dateOfBirth} />
+                                <PersonalInformation label={t('profile.email')} value={user._id} />
+                            </div>
+                            <p className="text-[15px] text-gray-500 mt-4">{t('profile.note')}</p>
+                        </div>
+                        <div class="border border-gray-300 w-full mt-3 mb-2"></div>
+
+                        <div className="flex items-center justify-center">
+                            <Button className="w-full" RightIcon={PencilLineIcon} onClick={handleShowUpdateProfile}>
+                                {t('profile.update')}
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <ScrollbarCustomize>
-                <div className="p-2 ex:p-3 sm:p-4 md:p-5 dl:p-6 pb-0">
-                    <p className="text-mm text-secondary dark:text-dark-secondary mb-2 ex:mb-3 sm:mb-4 md:mb-5 dl:mb-6 leading-normal">
-                        "If several languages coalesce, the grammar of the resulting language is more simple and regular
-                        than that of the individual."
-                    </p>
-                    <div className="flex flex-col gap-2">
-                        {accordions.map((accordion, index) => (
-                            <Accordion
-                                toggleActive={() => {
-                                    if (index === active) setActive(-1);
-                                    else setActive(index);
-                                }}
-                                active={index === active}
-                                key={index}
-                                {...accordion}
-                                title={t(accordion.title)}
-                            />
-                        ))}
-                    </div>
-                </div>
-            </ScrollbarCustomize>
-        </div>
+                </PopupMultiLevel>
+            </Modal>
+        </>
     );
 };
 
-Profile.propTypes = {};
+Profile.propTypes = {
+    onClose: PropTypes.func,
+    user: PropTypes.object.isRequired,
+};
 
 export default Profile;

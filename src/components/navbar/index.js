@@ -1,10 +1,10 @@
 import Tippy from '@tippyjs/react';
 import i18next from 'i18next';
 import PropTypes from 'prop-types';
-import { useLayoutEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import {useCallback, useLayoutEffect, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {useDispatch, useSelector} from 'react-redux';
+import {Link, useNavigate} from 'react-router-dom';
 import {
     ClockIcon,
     ContactIcon,
@@ -16,45 +16,27 @@ import {
     ProfileIcon,
     SettingIcon,
     SunIcon,
-    UserIcon,
 } from '~/assets';
 import images from '~/assets/images';
 import config from '~/config';
 import routes from '~/config/routes';
-import { reset, setSetting } from '~/features/localSetting/localSettingSlice';
-import logout from '~/services/logout';
-import { classNames, token } from '~/utils';
+import {reset as resetChat} from '~/features/chat/chatSlice';
+import {reset as resetChats} from '~/features/chats/chatsSlice';
+import {reset as resetContactGroups} from '~/features/contactGroups/contactGroupsSlice';
+import {reset as resetCreateGroup} from '~/features/createGroup/createGroupSlice';
+import {reset as resetFriend} from '~/features/friend/friendSlice';
+import {reset as resetLocalSettings, setSetting} from '~/features/localSetting/localSettingSlice';
+import {reset as resetLocation} from '~/features/location/locationSlice';
+import {reset as resetMessages} from '~/features/messages/messagesSlice';
+import {reset as resetSearch} from '~/features/search/searchSlice';
+import {disconnect} from '~/features/socket/socketSlice';
+import {remove as resetUser} from '~/features/user/userSlice';
+import {Profile, Setting} from '~/pages';
+import authServices from '~/services/auth.service';
+import {classNames, token} from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
-
-const navBars = [
-    {
-        title: 'navbar.profile',
-        icon: UserIcon,
-        to: routes.profile,
-    },
-    {
-        title: 'navbar.chats',
-        icon: MessageIcon,
-        to: routes.chats,
-    },
-    {
-        title: 'navbar.groups',
-        icon: ClockIcon,
-        to: routes.feed,
-    },
-    {
-        title: 'navbar.contacts',
-        icon: ContactIcon,
-        to: routes.contacts,
-    },
-    {
-        title: 'navbar.settings',
-        icon: SettingIcon,
-        to: routes.settings,
-    },
-];
 
 const languages = [
     {
@@ -71,38 +53,105 @@ const languages = [
 
 const html = document.querySelector('html');
 
+// TODO Profile, Setting navigation
 const Navbar = ({ className }) => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);
     const { settings } = useSelector((state) => state.localSetting);
+    const { hasNewReceived } = useSelector((state) => state.friend);
     const [darkMode, setDarkMode] = useState(() => settings.theme === 'dark');
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [openProfileModal, setOpenProfileModal] = useState(false);
+    const [openSettingModal, setOpenSettingModal] = useState(false);
+    const { chats } = useSelector((state) => state.chats);
+    const countMessagesUnseen = useMemo(
+        () => chats.reduce((acc, chat) => acc + (chat.unseenMessages || 0), 0),
+        [chats],
+    );
+
+    const handleCloseProfile = () => {
+        setOpenProfileModal(false);
+    };
+
+    const handleCloseSetting = () => {
+        setOpenSettingModal(false);
+    };
+
+    const handleResetRedux = useCallback(() => {
+        dispatch(resetLocalSettings());
+        dispatch(resetChat());
+        dispatch(resetChats());
+        dispatch(resetContactGroups());
+        dispatch(resetCreateGroup());
+        dispatch(resetFriend());
+        dispatch(resetLocation());
+        dispatch(resetMessages());
+        dispatch(resetSearch());
+        dispatch(resetUser());
+        dispatch(disconnect());
+    }, [dispatch]);
+
+    const navBars = [
+        // {
+        //     title: 'navbar.profile',
+        //     icon: UserIcon,
+        //     to: routes.profile,
+        // },
+        {
+            title: 'navbar.chats',
+            icon: MessageIcon,
+            to: routes.chats,
+            badge: countMessagesUnseen,
+        },
+        {
+            title: 'navbar.groups',
+            icon: ClockIcon,
+            to: routes.feed,
+        },
+        {
+            title: 'navbar.contacts',
+            icon: ContactIcon,
+            to: routes.contacts,
+            badge: hasNewReceived ? 'N' : '',
+        },
+        // {
+        //     title: 'navbar.settings',
+        //     icon: SettingIcon,
+        //     to: routes.settings,
+        // },
+    ];
 
     const actions = useMemo(
         () => [
             {
                 title: 'navbar.profile',
                 icon: ProfileIcon,
+                onClick: () => {
+                    setOpenProfileModal(true);
+                },
             },
             {
                 title: 'navbar.settings',
                 icon: SettingIcon,
                 separate: true,
+                onClick: () => {
+                    setOpenSettingModal(true);
+                },
             },
             {
                 title: 'navbar.logout',
                 icon: LogOutIcon,
                 onClick: () => {
-                    logout().then();
+                    authServices.logout().then();
                     token.set('');
                     html.classList.remove('dark');
-                    dispatch(reset());
+                    handleResetRedux();
                     navigate(config.routes.signIn);
                 },
             },
         ],
-        [dispatch, navigate],
+        [handleResetRedux, navigate],
     );
 
     const toggleDarkMode = () => setDarkMode(!darkMode);
@@ -122,10 +171,18 @@ const Navbar = ({ className }) => {
             <Link className="hidden dl:flex justify-center items-center w-full h-[70px]">
                 <LogoIcon />
             </Link>
+
             <div className="flex-5 dl:flex-none flex dl:flex-col justify-evenly dl:justify-start items-center ex:gap-2">
                 {navBars.map(({ title, ...navbar }, index) => (
                     <Tippy delay={[200, 0]} offset={[0, 0]} content={t(title)} key={index}>
-                        <Button {...navbar}>{t(title)}</Button>
+                        <div className="relative">
+                            <Button {...navbar}>{t(title)}</Button>
+                            {navbar.badge ? (
+                                <span className="absolute min-w-4 text-center bg-danger top-2 right-2 rounded-full px-1 text-xs text-white">
+                                    {navbar.badge}
+                                </span>
+                            ) : null}
+                        </div>
                     </Tippy>
                 ))}
             </div>
@@ -143,6 +200,9 @@ const Navbar = ({ className }) => {
                         <Avatar src={user.avatar} />
                     </button>
                 </Popup>
+                {openProfileModal && <Profile onClose={handleCloseProfile} />}
+
+                {openSettingModal && <Setting onClose={handleCloseSetting} />}
             </div>
         </nav>
     );

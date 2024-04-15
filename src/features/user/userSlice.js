@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getUserInfo as getUserInfoService } from '~/services';
+import userServices from '~/services/user.service';
 
 const initialState = {
     user: {},
@@ -7,7 +7,7 @@ const initialState = {
 };
 
 const getUserInfo = createAsyncThunk('getUserInfo', async () => {
-    const res = await getUserInfoService();
+    const res = await userServices.getUserInfo();
 
     return res.data;
 });

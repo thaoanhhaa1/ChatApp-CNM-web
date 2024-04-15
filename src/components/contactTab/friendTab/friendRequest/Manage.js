@@ -36,8 +36,9 @@ const Manage = ({ onClose }) => {
                     <div>
                         <div className="text-sm">{t('contacts.friend-request.add-by-phone-number')}</div>
                         <span className="text-ss text-secondary dark:text-dark-secondary">
-                            {user.dialling_code}
-                            {user.phone.length === 10 ? user.phone.substring(1) : user.phone}
+                            {user._id}
+                            {/* {user.dialling_code} */}
+                            {/* {user.phone.length === 10 ? user.phone.substring(1) : user.phone} */}
                         </span>
                     </div>
                     <Switch className="flex-shrink-0" checked={allowAddByPhone} onChange={setAllowAddByPhone} />

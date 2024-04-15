@@ -1,10 +1,14 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { PeopleAddIcon, SortArrowIcon } from '~/assets';
 import ContactGroupItem from '~/components/contactGroupItem';
+import ContactGroupItemSkeleton from '~/components/contactGroupItem/ContactGroupItemSkeleton';
+import List from '~/components/list';
 import Popup from '~/components/popup';
 import { sortGroup } from '~/constants';
+import { GROUP_NAME, RECENT_ACTIVITY } from '~/constants/sortGroup';
+import { getGroups } from '~/features/contactGroups/contactGroupsSlice';
 import { useBoolean } from '~/hooks';
 import Button from '../Button';
 import Seperate from '../Seperate';
@@ -13,15 +17,27 @@ import CreateGroup from './createGroup';
 
 const Group = () => {
     const { t } = useTranslation();
-    const { groups } = useSelector((state) => state.contactGroups);
+    const { groups, loading } = useSelector((state) => state.contactGroups);
     const [sort, setSort] = useState(sortGroup[0]);
     const sorts = useMemo(
         () => sortGroup.map((sort) => ({ ...sort, title: t(sort.title), onClick: () => setSort(sort) })),
         [t],
     );
-    const sortedGroups = useMemo(() => sorts && groups, [groups, sorts]);
-    // FIXME init value: true
+    const sortedGroups = useMemo(() => {
+        const newGroup = [...groups];
+
+        if (sort.id === RECENT_ACTIVITY) return newGroup.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
+        if (sort.id === GROUP_NAME) return newGroup.sort((a, b) => a.name.localeCompare(b.name));
+
+        return newGroup.filter((group) => group.admin);
+    }, [groups, sort.id]);
     const { value: show, setFalse: handleHidden, setTrue: handleShow } = useBoolean(false);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        groups.length || dispatch(getGroups());
+    }, [dispatch, groups.length]);
 
     return (
         <Wrapper>
@@ -41,9 +57,11 @@ const Group = () => {
                         </div>
                     </Popup>
                 </div>
-                {sortedGroups.map((group) => (
-                    <ContactGroupItem group={group} key={group.id} />
-                ))}
+                {loading ? (
+                    <List control={ContactGroupItemSkeleton} length={3} />
+                ) : (
+                    sortedGroups.map((group) => <ContactGroupItem group={group} key={group._id} />)
+                )}
             </div>
 
             <CreateGroup show={show} onClickOutside={handleHidden} />

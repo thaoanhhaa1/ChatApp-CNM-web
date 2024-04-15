@@ -91,7 +91,7 @@ h1 {
 }
 
 // Scrollbar customize
-.scrollbar::-webkit-scrollbar {
+::-webkit-scrollbar {
     @apply hidden;
 }
 

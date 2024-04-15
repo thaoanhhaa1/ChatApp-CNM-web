@@ -10,7 +10,7 @@ import config from '~/config';
 import { setSetting } from '~/features/localSetting/localSettingSlice';
 import { setUser } from '~/features/user/userSlice';
 import { useBoolean } from '~/hooks';
-import { login } from '~/services';
+import authServices from '~/services/auth.service';
 import { token } from '~/utils';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import MobileLoginForm from './MobileLoginForm';
@@ -48,9 +48,9 @@ const SdtTab = () => {
 
         try {
             // TODO Validate
-            if (!validator.matches(phone, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) throw new Error('Invalid email');
+            if (!validator.isEmail(phone)) throw new Error('Invalid email');
 
-            const res = await login({ phone, password });
+            const res = await authServices.login({ contact: phone, password });
             const { accessToken, user } = res.data;
 
             token.set(accessToken);

@@ -4,11 +4,11 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useDispatch } from 'react-redux';
 import { CloseFilledIcon } from '~/assets';
 import { removeFile } from '~/features/chat/chatSlice';
-import { classNames, getBgByTypeFile } from '~/utils';
+import { classNames, getBgByTypeFile, isImageFileByType } from '~/utils';
 
 const AttachFile = ({ file }) => {
     const dispatch = useDispatch();
-    const isRenderImage = /\.jpeg|png|webp|gif|jpg$/.test(file.name);
+    const isRenderImage = isImageFileByType(file.type || file.contentType);
     const bgImage = useMemo(
         () => (isRenderImage ? URL.createObjectURL(file) : getBgByTypeFile(file.name)),
         [file, isRenderImage],

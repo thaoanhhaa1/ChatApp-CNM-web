@@ -1,22 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import ContactItem from '~/components/contactItem';
+import ContactItemSkeleton from '~/components/contactItem/ContactItemSkeleton';
+import List from '~/components/list';
 import PhoneBook from '~/components/phoneBook';
+import PhoneBookSkeleton from '~/components/phoneBook/PhoneBookSkeleton';
 import { friendContactTab, friendContactTabConst } from '~/constants';
+import { getFriends } from '~/features/friend/friendSlice';
+import { convertContactsToPhoneBook } from '~/utils';
 import Button from '../Button';
 import Seperate from '../Seperate';
 import Wrapper from '../Wrapper';
-import ContactItem from './ContactItem';
 import FriendRequest from './friendRequest';
 import PhoneBookSub from './phoneBook';
 
+// TODO Empty contact
 const Friend = () => {
     const { t } = useTranslation();
-    const { contacts } = useSelector((state) => state.contacts);
+    const { friendList, friendListLoading } = useSelector((state) => state.friend);
+    const phoneBook = useMemo(() => convertContactsToPhoneBook(friendList), [friendList]);
     const [modalActive, setModalActive] = useState();
+    const dispatch = useDispatch();
 
     const handleClickAction = (action) => setModalActive(action.id);
     const handleCloseModal = () => setModalActive();
+
+    useEffect(() => {
+        friendList?.length || dispatch(getFriends());
+    }, [dispatch, friendList?.length]);
 
     return (
         <Wrapper>
@@ -34,7 +46,14 @@ const Friend = () => {
             </div>
             <Seperate />
 
-            <PhoneBook phoneBook={contacts} render={(contact) => <ContactItem contact={contact} key={contact.id} />} />
+            {friendListLoading ? (
+                <List control={() => <PhoneBookSkeleton render={ContactItemSkeleton} />} length={3} />
+            ) : (
+                <PhoneBook
+                    phoneBook={phoneBook}
+                    render={(contact) => <ContactItem contact={contact} key={contact._id} />}
+                />
+            )}
 
             <FriendRequest
                 show={modalActive === friendContactTabConst.FRIEND_REQUEST}

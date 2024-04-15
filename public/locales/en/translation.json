@@ -16,7 +16,17 @@
         "emptyDescription": "Explore the best features to support your work and allow you to chat with your friends and family. All are optimized for your computer!",
         "no-conversations": "You have no conversations",
         "no-conversations-description": "Zalo only display messages from the first login on this browser",
-        "no-conversations-description-1": "on"
+        "no-conversations-description-1": "on",
+        "photo": "Photo",
+        "sticker": "Sticker",
+        "more": {
+            "pin": "Pin this conversation",
+            "unpin": "Unpin this conversation",
+            "mark-as-unread": "Mark as unread",
+            "add-to-group": "Add to group",
+            "delete-conversation": "Delete conversation",
+            "report": "Report"
+        }
     },
     "chat": {
         "search": "Search",
@@ -39,7 +49,10 @@
             "copy": "Copy",
             "save": "Save",
             "forward": "Forward",
-            "delete": "Delete"
+            "delete": "Delete",
+            "delete-for-me": "Delete for me only",
+            "recall": "Recall",
+            "pin": "Pin message"
         },
         "emoji": "Emoji",
         "attached-file": "Attached File",
@@ -50,7 +63,23 @@
         "empty-chat-download": "Download Zalo PC",
         "sending": "Sending",
         "sent": "Sent",
-        "received": "Received"
+        "received": "Received",
+        "limit-files-send": "You should only send up to 50 files/photos each times",
+        "message-recalled": "Message recalled",
+        "recall-notify": "You cannot recall message after 24 hours",
+        "pin-more": {
+            "copy": "Copy",
+            "unpin": "Unpin"
+        },
+        "share": "Share",
+        "micro": "Micro",
+        "add-members": "Add members",
+        "manage-group": "Manage group",
+        "pin-conversation": "Pin",
+        "unpin-conversation": "Unpin",
+        "mute": "Mute",
+        "un-mute": "Unmute",
+        "at": "at"
     },
     "contacts": {
         "title": "Contacts",
@@ -61,6 +90,7 @@
         "add-contact": "Add Contact",
         "phone": "Phone",
         "enter-phone": "Enter Phone",
+        "enter-email": "Enter Email",
         "message": "Invitation Message",
         "enter-message": "Enter Message",
         "close": "Close",
@@ -110,7 +140,9 @@
             "zaloName": "Zalo name",
             "phoneNumber": "Phone number",
             "joinedZalo": "Joined Zalo",
-            "undoRequest": "Undo request"
+            "undoRequest": "Undo request",
+            "addFriendSuccess": "Friend request sent",
+            "accept": "Accept"
         },
         "friend": "Friend",
         "group": "Group",
@@ -166,15 +198,31 @@
             "update": "Update",
             "change-avatar": "Update avatar",
             "delete-avatar": "Remove avatar"
-        }
+        },
+        "alert-search": "This email has not been linked to an account does not allow searching."
     },
     "profile": {
         "title": "My Profile",
-        "date-of-birth": "Birthday"
+        "date-of-birth": "Birthday",
+        "information": "Personal Information",
+        "gender": "Gender",
+        "contact": "Email",
+        "phone": "Phone Number",
+        "note": "Only friends who have saved your number in their phonebook can see this number.",
+        "update": "Update",
+        "male": "Male",
+        "female": "Female",
+        "email": "Email",
+        "updateProfile": "Edit your personal information",
+        "name": "Display name",
+        "cancel": "Cancel",
+        "placeholder": "Enter display name",
+        "updateError": "Update error",
+        "updateSuccess": "Update success"
     },
     "not-found": {
         "title": "Look like you're lost",
-        "description": "The page you are looking for not avaible!",
+        "description": "The page you are looking for not available!",
         "home": "Go to Home",
         "back": "Back"
     },
@@ -257,7 +305,7 @@
         "error-forget-password": "Please enter a valid email",
         "continue": "Continue",
         "back": "Back",
-        "forget-password-enter-password": "Please input password",
+        "forget-password-enter-password": "Enter password",
         "forget-password-reenter-password": "Confirm password",
         "send-message-to-get-code": "Check email to receive the OTP code.",
         "enter-activation-code": "Enter OTP code",
@@ -296,6 +344,7 @@
         "error-email": "Invalid email. Please double-check and try again.",
         "email-exist": "This email is already registered!",
         "error-otp-code": "Invalid OTP code",
+        "error-otp-code1": "OTP code is required",
         "error-password": "Password must include letters and numbers",
         "error-datOfBirth": "You must be 14 years old",
         "zalo-name-validate-min-length": "Name is too short. Valid names must contain 2-40 characters. (1000150)",
@@ -306,6 +355,7 @@
         "password-validate-min-length": "Password must contain at least 6 characters",
         "password-validate-max-length": "Password not exceed 30 characters",
         "dob-validate": "You must be at least 14 years old to use app",
+        "dob-validate1": "Please enter your date of birth",
         "error-password-01": "Passwords do not match",
         "modal-text-1": "You will receive an encrypted OTP from Zalo.",
         "modal-text-2": "Enter activation code",
@@ -332,5 +382,75 @@
         "search-empty-title": "No result found",
         "search-empty-description": "Please try different keywords or use the Zalo app on your phone to find messages before ",
         "search-description": "Use the Zalo app on your phone to find messages before "
+    },
+    "settings": {
+        "title": "Settings",
+        "general": "General settings",
+        "privacy_security": "Privacy & security",
+        "sync_messages": "Sync messages",
+        "resource_management": "Resource management",
+        "theme": "Theme",
+        "notification": "Notification",
+        "message": "Message",
+        "call_settings": "Call settings",
+        "utililties": "Utililties",
+        "proxy": "Proxy",
+        "login_password": "Login password",
+        "change_password": "Change password",
+        "zalo_lock": "Zalo lock",
+        "lock_screen": "Lock screen with Ctrl + L, when you are not using a computer",
+        "passcode": "Set new Zalo passcode",
+        "authentication": "2-Factor Authentication",
+        "text": "once this features is turned on, you will be prompted to either enter an OTP verification code or confirm on mobile after logging in on unrecognized devices",
+        "note": "Password includes letters and numbers, not includes your date of birth, username or Zalo name, minumum 6 characters & 32 characters",
+        "current_password": "Current password",
+        "current_password1": "Enter current password",
+        "new_password": "New password",
+        "new_password1": "Enter new password",
+        "confirm_password": "Confirm password",
+        "check_password": "Incorrect password. Please try again."
+    },
+    "location": {
+        "title": "Location",
+        "description": "Send specific location",
+        "send-to": "Send this location to",
+        "cancel": "Cancel",
+        "send": "Send",
+        "error-api": "There were some errors with the Google Maps API, please try again later"
+    },
+    "friend": {
+        "accept-friend": "Friend added successfully",
+        "decline-friend": "Friend request declined",
+        "default-message-friend-request-1": "Hi, I'm",
+        "default-message-friend-request-2": "Let's be friends!",
+        "notification-friend-removed-successfully": "Friend removed successfully",
+        "notification-friend-removed-fail": "Failed to remove friend"
+    },
+    "group": {
+        "user-more": {
+            "add-admin": "Add admin",
+            "remove-admin": "Revoke admin privilege",
+            "remove-user": "Remove from group",
+            "leave": "Leave group"
+        },
+        "manage": {
+            "title": "Manage group",
+            "delete": "Delete group",
+            "delete-description": "Remove all members and delete the group? This CANNOT be undone.",
+            "no": "No",
+            "warning": "Only Administrators can access these settings"
+        },
+        "add-members": {
+            "title": "Add members",
+            "cancel": "Cancel",
+            "confirm": "Confirm"
+        },
+        "remove-member": {
+            "title": "Confirm",
+            "description": "Remove this member from group?",
+            "block-rejoin": "Block this one from rejoining",
+            "close": "Close",
+            "accept": "Accept"
+        }
     }
 }

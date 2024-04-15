@@ -1,12 +1,30 @@
 import PropTypes from 'prop-types';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { CloseLineIcon } from '~/assets';
-import { classNames } from '~/utils';
-import Message from '../message';
+import { CloseLineIcon, FileTextFillIcon } from '~/assets';
+import { DeleteMessageStatus } from '~/constants';
+import { classNames, isImageFileByType } from '~/utils';
+import ChatMessage from '../chatMessage';
 import StickerItem from '../sticker/StickerItem';
 
 const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {}, onClick = () => {} }) => {
-    const image = message.images?.[0];
+    const { t } = useTranslation();
+    const isHasFiles = message.files?.length;
+    const image = isHasFiles && isImageFileByType(message.files[0].type) && message.files[0].link;
+    const otherFileName = !image && isHasFiles && message.files[0].name;
+    const recalled = message.deleted === DeleteMessageStatus.RECALL;
+    const subTitle = useMemo(() => {
+        if (message.sticker) return '[Sticker]';
+
+        if (otherFileName) return otherFileName;
+
+        if (!message.messages?.length && image) return message.files[0].name;
+
+        if (message.location) return `[${t('chat.location')}] ${message.location.name}`;
+
+        return '';
+    }, [image, message.files, message.location, message.messages?.length, message.sticker, otherFileName, t]);
 
     const handleClick = () => onClick(message);
     const handleClose = (e) => {
@@ -25,15 +43,26 @@ const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {},
             )}
         >
             <div className="w-0.5 h-10 bg-primary-color" />
-            {image && <LazyLoadImage alt="" src={image} className="w-9 h-9 object-cover" />}
+            {image ? <LazyLoadImage alt="" src={image} className="w-9 h-9 object-cover" /> : null}
+            {otherFileName ? (
+                <div className="w-9 h-9 flex justify-center items-center text-primary-color bg-[#e3e1fc] dark:bg-[rgba(114,105,239,.15)] rounded">
+                    <FileTextFillIcon className="w-4 h-4" />
+                </div>
+            ) : null}
             {message.sticker ? <StickerItem url={message.sticker} className="w-9 h-9" /> : null}
             <div className="flex-1">
-                <div className="text-ss font-medium line-clamp-1">{message.sender.name}</div>
-                {message.sticker ? (
-                    <span className="text-secondary dark:text-dark-secondary text-sm">[Sticker]</span>
-                ) : (
-                    <Message messages={message.messages} isMe={isMe} className="line-clamp-1" isReply />
-                )}
+                <div className="text-ss font-medium line-clamp-1">{message.sender?.name}</div>
+                {subTitle ? <span className="text-secondary dark:text-dark-secondary text-sm">{subTitle}</span> : null}
+
+                {message.messages?.length || recalled ? (
+                    <ChatMessage
+                        status={message.deleted}
+                        messages={message.messages || []}
+                        isMe={isMe}
+                        className="line-clamp-1"
+                        isReply
+                    />
+                ) : null}
             </div>
 
             {showClose ? (

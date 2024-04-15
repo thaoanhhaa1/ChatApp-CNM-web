@@ -16,7 +16,17 @@
         "emptyDescription": "Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người thân, bạn bè được tối ưu hoá cho máy tính của bạn.",
         "no-conversations": "Chưa có hội thoại",
         "no-conversations-description": "Zalo chỉ hiển thị tin nhắn từ sau lần đăng nhập đầu tiên trên trình duyệt này",
-        "no-conversations-description-1": "ngày"
+        "no-conversations-description-1": "ngày",
+        "photo": "Hình ảnh",
+        "sticker": "Sticker",
+        "more": {
+            "pin": "Ghim hội thoại",
+            "unpin": "Bỏ ghim hội thoại",
+            "mark-as-unread": "Đánh dấu chưa đọc",
+            "add-to-group": "Thêm vào nhóm",
+            "delete-conversation": "Xoá hội thoại",
+            "report": "Báo xấu"
+        }
     },
     "chat": {
         "search": "Tìm tin nhắn",
@@ -39,7 +49,9 @@
             "copy": "Sao chép",
             "save": "Lưu",
             "forward": "Chuyển tiếp",
-            "delete": "Xoá"
+            "delete-for-me": "Xoá chỉ ở phía tôi",
+            "recall": "Thu hồi",
+            "pin": "Ghim tin nhắn"
         },
         "emoji": "Biểu cảm",
         "attached-file": "Đính kèm file",
@@ -50,7 +62,22 @@
         "empty-chat-download": "Tải Zalo PC",
         "sending": "Đang gửi",
         "sent": "Đã gửi",
-        "received": "Đã nhận"
+        "received": "Đã nhận",
+        "limit-files-send": "Bạn chỉ nên chia sẻ tối đa 50 tập tin/ảnh mỗi lần",
+        "message-recalled": "Tin nhắn đã được thu hồi",
+        "recall-notify": "Bạn chỉ có thể thu hồi tin nhắn trong vòng 24h",
+        "pin-more": {
+            "copy": "Copy",
+            "unpin": "Bỏ ghim"
+        },
+        "share": "Chia sẻ",
+        "micro": "Micro",
+        "add-members": "Thêm thành viên",
+        "manage-group": "Quản lý nhóm",
+        "pin-conversation": "Ghim hội thoại",
+        "unpin-conversation": "Bỏ ghim hội thoại",
+        "mute": "Tắt thông báo",
+        "un-mute": "Bật thông báo"
     },
     "contacts": {
         "title": "Danh bạ",
@@ -61,6 +88,7 @@
         "add-contact": "Thêm liên hệ",
         "phone": "Số điện thoại",
         "enter-phone": "Nhập số điện thoại",
+        "enter-email": "Nhập địa chỉ email",
         "message": "Lời chào",
         "enter-message": "Nhập lời chào",
         "close": "Đóng",
@@ -110,7 +138,10 @@
             "zaloName": "Tên Zalo",
             "phoneNumber": "Điện thoại",
             "joinedZalo": "Tham gia Zalo",
-            "undoRequest": "Huỷ kết bạn"
+            "undoRequest": "Huỷ kết bạn",
+            "addFriendSuccess": "Gửi yêu cầu kết bạn thành công",
+            "accept": "Đồng ý",
+            "at": "lúc"
         },
         "friend": "Bạn bè",
         "group": "Nhóm",
@@ -166,11 +197,26 @@
             "update": "Cập nhật",
             "change-avatar": "Đổi ảnh đại diện",
             "delete-avatar": "Xoá ảnh đại diện"
-        }
+        },
+        "alert-search": "Email chưa đăng ký tài khoản hoặc không cho phép tìm kiếm."
     },
     "profile": {
         "title": "Hồ sơ của tôi",
-        "date-of-birth": "Ngày sinh"
+        "date-of-birth": "Ngày sinh",
+        "information": "Thông tin cá nhân",
+        "gender": "Giới tính",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "note": "Chỉ bạn bè có lưu số của bạn trong danh bạ máy xem được số này.",
+        "update": "Cập nhật",
+        "male": "Nam",
+        "female": "Nữ",
+        "updateProfile": "Cập nhật thông tin cá nhân",
+        "name": "Tên hiển thị",
+        "cancel": "Huỷ",
+        "placeholder": "Nhập tên hiển thị",
+        "updateError": "Cập nhật không thành công",
+        "updateSuccess": "Cập nhật thông tin thành công."
     },
     "not-found": {
         "title": "Có vẻ như bạn đang bị lạc",
@@ -257,7 +303,7 @@
         "error-forget-password": "Vui lòng nhập email hợp lệ",
         "continue": "Tiếp tục",
         "back": "Quay lại",
-        "forget-password-enter-password": "Vui lòng nhập mật khẩu",
+        "forget-password-enter-password": "Nhập mật khẩu",
         "forget-password-reenter-password": "Nhập lại mật khẩu",
         "send-message-to-get-code": "Kiểm tra email để nhận mã xác thực",
         "enter-activation-code": "Nhập mã kích hoạt",
@@ -283,6 +329,7 @@
         "error-email": "Email không hợp lệ. Vui lòng kiểm tra và thử lại.",
         "email-exist": "Địa chỉ Email này đã tồn tại!",
         "error-otp-code": "Mã OTP không hợp lệ",
+        "error-otp-code1": "Mã OTP không được để trống",
         "phone-checkbox-1": "Tôi đồng ý với các",
         "phone-checkbox-1-1": "điều khoản sử dụng Zalo",
         "phone-checkbox-1-2": "điều khoản Mạng xã hội của Zalo",
@@ -306,6 +353,7 @@
         "password-validate-min-length": "Mật khẩu phải chứa ít nhất 6 ký tự",
         "password-validate-max-length": "Mật khẩu không được quá 30 ký tự",
         "dob-validate": "Bạn phải ít nhất 14 tuổi để sử dụng ứng dụng",
+        "dob-validate1": "Vui lòng nhập ngày sinh của bạn",
         "error-password-01": "Mật khẩu nhập lại không khớp",
         "modal-text-1": "Bạn sẽ nhận được một mã OTP từ Zalo.",
         "modal-text-2": "Nhập mã kích hoạt",
@@ -332,5 +380,75 @@
         "search-empty-title": "Không tìm thấy kết quả",
         "search-empty-description": "Vui lòng thử lại từ khoá khác hoặc sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày ",
         "search-description": "Sử dụng ứng dụng Zalo trên điện thoại để tìm tin nhắn trước ngày "
+    },
+    "settings": {
+        "title": "Cài đặt",
+        "general": "Cài đặt chung",
+        "privacy_security": "Riêng tư và bảo mật",
+        "sync_messages": "Đồng bộ tin nhắn",
+        "resource_management": "Quản lý dữ liệu",
+        "theme": "Giao diện",
+        "notification": "Thông báo",
+        "message": "Tin nhắn",
+        "call_settings": "Cài đặt cuộc gọi",
+        "utililties": "Tiện ích",
+        "proxy": "Cấu hình proxy",
+        "login_password": "Mật khẩu đăng nhập",
+        "change_password": "Đổi mật khẩu",
+        "zalo_lock": "Khóa màn hình Zalo",
+        "lock_screen": "Khóa màn hình Zalo của bạn bằng Ctrl + L, khi bạn không sử dụng máy tính",
+        "passcode": "Tạo mã khóa màn hình",
+        "authentication": "Bảo mật 2 lớp",
+        "text": "Sau khi bật, bạn sẽ được yêu cầu nhập mã OTP hoặc xác thực từ thiết bị di động sau khi đăng nhập trên thiết bị lạ",
+        "note": "Mật khẩu bao gồm chữ kèm theo số hoặc kí tự đặc biệt, tối thiểu 6 ký tự trở lên và tối đa 32 ký tự",
+        "current_password": "Mật khẩu hiện tại",
+        "current_password1": "Nhập mật khẩu hiện tại",
+        "new_password": "Mật khẩu mới",
+        "new_password1": "Nhập mật khẩu mới",
+        "confirm_password": "Nhập lại mật khẩu mới",
+        "check_password": "Mật khẩu không đúng. Vui lòng nhập lại."
+    },
+    "location": {
+        "title": "Vị trí",
+        "description": "Gửi địa điểm cụ thể",
+        "send-to": "Gửi vị trí này cho",
+        "cancel": "Huỷ",
+        "send": "Gửi",
+        "error-api": "Có một vài lỗi đối với Google Maps API, vui lòng thử lại sau"
+    },
+    "friend": {
+        "accept-friend": "Đồng ý kết bạn thành công",
+        "decline-friend": "Từ chối kết bạn thành công",
+        "default-message-friend-request-1": "Xin chào, mình là",
+        "default-message-friend-request-2": "Kết bạn với mình nhé!",
+        "notification-friend-removed-successfully": "Xoá bạn thành công",
+        "notification-friend-removed-fail": "Xoá bạn không thành công"
+    },
+    "group": {
+        "user-more": {
+            "add-admin": "Thêm phó nhóm",
+            "remove-admin": "Gỡ quyền phó nhóm",
+            "remove-user": "Xoá khỏi nhóm",
+            "leave": "Rời nhóm"
+        },
+        "manage": {
+            "title": "Manage group",
+            "delete": "Delete group",
+            "delete-description": "Mời tất cả mọi người rời nhóm và xóa tin nhắn? Nhóm đã giải tán sẽ KHÔNG THỂ khôi phục.",
+            "no": "Không",
+            "warning": "Tính năng chỉ dành cho quản trị viên"
+        },
+        "add-members": {
+            "title": "Thêm thành viên",
+            "cancel": "Huỷ",
+            "confirm": "Xác nhận"
+        },
+        "remove-member": {
+            "title": "Xác nhận",
+            "description": "Xoá thành viên này khỏi nhóm?",
+            "block-rejoin": "Chặn người này tham gia lại",
+            "close": "Đóng",
+            "accept": "Đồng ý"
+        }
     }
 }

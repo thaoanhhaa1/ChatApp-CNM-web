@@ -1,19 +1,24 @@
 import { useWindowSize } from '@uidotdev/usehooks';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 } from 'uuid';
+import { groupRole, sentMessageStatus } from '~/constants';
 import { ChatProvider } from '~/context';
 import { addFiles } from '~/features/chat/chatSlice';
-import { useBoolean } from '~/hooks';
+import { updateMessage } from '~/features/chats/chatsSlice';
+import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
+import { useBoolean, useToast } from '~/hooks';
+import { isImageFileByType } from '~/utils';
 import DropZone from '../dropZone';
+import PinMessages from '../pinMessages';
+import Toast from '../toast';
 import Body from './body';
 import ChatEmpty from './chatEmpty';
 import Footer from './footer';
 import Header from './header';
-import Profile from './profile';
 import HeaderSkeleton from './header/HeaderSkeleton';
-import { setMessages } from '~/features/messages/messagesSlice';
+import Profile from './profile';
 
 const Chat = () => {
     const { t } = useTranslation();
@@ -21,10 +26,23 @@ const Chat = () => {
     const { value: showDropZone, setFalse: setHiddenDropZone, setTrue: setShowDropZone } = useBoolean(false);
     const dropZoneRef = useRef();
     const [dropZoneHeights, setDropZoneHeights] = useState([0, 0]);
+    const [showToast, setShowToast] = useToast(1000);
     const { files } = useSelector((state) => state.chat);
     const { active, activeLoading } = useSelector((state) => state.chats);
+    const { messages } = useSelector((state) => state.messages);
+    const { user } = useSelector((state) => state.user);
+    const { socket } = useSelector((state) => state.socket);
     const { width } = useWindowSize();
     const dispatch = useDispatch();
+    const myRole = useMemo(() => {
+        if (!active?._id) return null;
+
+        if (active.admin === user._id) return groupRole.OWNER_ROLE;
+
+        if (active.deputy.includes(user._id)) return groupRole.ADMIN_ROLE;
+
+        return groupRole.MEMBER_ROLE;
+    }, [active?._id, active?.admin, active?.deputy, user._id]);
 
     const handleDropPreview = useCallback(
         (acceptedFiles) => {
@@ -37,10 +55,65 @@ const Chat = () => {
 
     const handleDropQuickSend = useCallback(
         (acceptedFiles) => {
-            console.log('Handle send files...', acceptedFiles);
+            if (!active?._id) return;
+
+            if (acceptedFiles.length > 50) setShowToast(true);
+            else {
+                const imageFiles = [];
+                const otherFiles = [];
+
+                (acceptedFiles || []).forEach((file) => {
+                    if (isImageFileByType(file.type)) return imageFiles.push(file);
+
+                    otherFiles.push(file);
+                });
+
+                if (imageFiles.length) {
+                    const formData = new FormData();
+                    const timeSend = Date.now();
+
+                    imageFiles.forEach((file) => formData.append('files', file));
+                    formData.append('conversationId', active._id);
+                    formData.append('sender', user);
+                    formData.append('timeSend', timeSend);
+
+                    dispatch(sendMessage(formData));
+                    dispatch(
+                        addMessage({
+                            sender: user,
+                            files: imageFiles,
+                            conversationId: active._id,
+                            timeSend,
+                        }),
+                    );
+                }
+
+                if (otherFiles.length) {
+                    otherFiles.forEach((file) => {
+                        const formData = new FormData();
+                        const timeSend = Date.now();
+
+                        formData.append('files', file);
+                        formData.append('conversationId', active._id);
+                        formData.append('sender', user);
+                        formData.append('timeSend', timeSend);
+
+                        dispatch(sendMessage(formData));
+                        dispatch(
+                            addMessage({
+                                sender: user,
+                                files: [file],
+                                conversationId: active._id,
+                                timeSend,
+                            }),
+                        );
+                    });
+                }
+            }
+
             setHiddenDropZone();
         },
-        [setHiddenDropZone],
+        [active?._id, dispatch, setHiddenDropZone, setShowToast, user],
     );
 
     useEffect(() => {
@@ -88,18 +161,40 @@ const Chat = () => {
     }, [files, width, active]);
 
     useEffect(() => {
-        dispatch(setMessages([]));
-    }, [dispatch]);
+        const lastMessage = messages?.[0];
+
+        if (!lastMessage) return;
+
+        if (lastMessage.state === sentMessageStatus.SENT) {
+            console.log(`lastMessage`, lastMessage);
+            socket.emit('sendMessage', lastMessage);
+        }
+
+        dispatch(
+            updateMessage({
+                conversationId: lastMessage.conversation?._id || lastMessage?.conversationId,
+                message: lastMessage,
+            }),
+        );
+    }, [dispatch, messages, socket]);
+
+    useEffect(() => {
+        active?._id && handleHideProfile();
+    }, [active?._id, handleHideProfile]);
 
     return (
-        <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile }}>
+        <ChatProvider value={{ showProfile, handleHideProfile, handleShowProfile, myRole }}>
+            <Toast showToast={showToast} message={t('chat.limit-files-send')} />
             <div className="flex h-full shadow-navbar z-1 dark:bg-dark">
                 <div className="w-full flex flex-col flex-1">
                     {active || activeLoading ? (
                         <>
                             {activeLoading ? <HeaderSkeleton /> : <Header />}
                             <div ref={dropZoneRef} className="relative flex-1 flex flex-col">
-                                <Body />
+                                <div className="relative flex-1 flex flex-col">
+                                    {active?.pinnedMessages ? <PinMessages messages={active.pinnedMessages} /> : null}
+                                    <Body />
+                                </div>
                                 <Footer />
 
                                 {showDropZone && (

@@ -1,36 +1,33 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { EmailIcon, MobileIcon } from '~/assets';
+import validator from 'validator';
+import { EmailIcon } from '~/assets';
 import Button from '~/components/button';
-import PhoneSelect from '~/components/phoneSelect';
 import UnderlineInput from '~/components/underlineInput';
 import { useBoolean } from '~/hooks';
+import authServices from '~/services/auth.service';
 import UpdatePasswordForm from './UpdatePasswordForm';
-import validator from 'validator';
 
-const ForgotPasswordForm = ({sdt, onBack = () => {} }) => {
+const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
     const { t } = useTranslation();
     const [showUpdatePass, setShowUpdatePass] = useState(false);
     const [phone, setPhone] = useState(sdt);
-    const [country, setCountry] = useState();
     const { value, setFalse, setTrue } = useBoolean();
 
-    const handleContinue = () => {
+    const handleContinue = async () => {
         setFalse();
-        console.group(`handleSubmit`);
 
-        console.log(`country`, country);
-        console.log(`phone`, phone);
-
-        console.groupEnd();
-
-        if (!validator.matches(phone, /^[a-zA-Z][\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
-            setTrue();
+        if (!validator.isEmail(phone)) setTrue();
         else {
-            setShowUpdatePass(true);
+            try {
+                const response = await authServices.sendOTPForgotPassword(phone);
+                console.log(response.data);
+                setShowUpdatePass(true);
+            } catch (error) {
+                console.error('Lỗi khi tạo mã OTP:', error);
+            }
         }
-        
     };
 
     return (
@@ -76,7 +73,7 @@ const ForgotPasswordForm = ({sdt, onBack = () => {} }) => {
                 </>
             ) : (
                 <div>
-                    <UpdatePasswordForm sdt={phone} country={country} />
+                    <UpdatePasswordForm sdt={phone} />
                 </div>
             )}
         </div>

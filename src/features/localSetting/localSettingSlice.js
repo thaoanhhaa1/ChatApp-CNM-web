@@ -21,7 +21,10 @@ const localSettingSlice = createSlice({
         addRecentSearch: (state, { payload }) => {
             const recentSearch = state.settings.recentSearch;
 
-            if (recentSearch.length >= 10) recentSearch.pop();
+            const index = recentSearch.findIndex((user) => user._id === payload._id);
+            if (index !== -1) {
+                recentSearch.splice(index, 1);
+            } else if (recentSearch.length >= 10) recentSearch.pop();
 
             recentSearch.unshift(payload);
         },

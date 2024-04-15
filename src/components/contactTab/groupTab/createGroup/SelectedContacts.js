@@ -21,7 +21,7 @@ const SelectedContacts = ({ selectedContacts, handleRemoveContact = () => {} }) 
                             <SelectedContact
                                 onClose={() => handleRemoveContact(contact)}
                                 contact={contact}
-                                key={contact.id}
+                                key={contact._id}
                             />
                         ))}
                     </div>

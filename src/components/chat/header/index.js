@@ -17,12 +17,14 @@ import {
     VideoLineIcon,
 } from '~/assets';
 import Avatar from '~/components/avatar';
+import AvatarGroup from '~/components/avatarGroup';
 import Call from '~/components/call';
 import Input from '~/components/input';
 import Popup from '~/components/popup';
 import { screens } from '~/constants';
 import { useChat, useLayout } from '~/context';
 import { useBoolean } from '~/hooks';
+import { getNameConversation } from '~/utils';
 import Button from './Button';
 
 const tippyProps = {
@@ -36,7 +38,6 @@ const tippyProps = {
     className: 'border border-[#f0eff5] dark:border-dark-separate shadow-popup py-1 bg-white dark:bg-dark-popup-bg',
 };
 
-// TODO Search
 const Header = () => {
     const { t } = useTranslation();
     const { value: showCall, setTrue: setShowCall, setFalse: setHideCall } = useBoolean(false);
@@ -46,6 +47,7 @@ const Header = () => {
     const { active } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const { width } = useWindowSize();
+    const conversationName = getNameConversation(active, user);
     const receiver = useMemo(
         () => (active.isGroup ? {} : active.users.find((u) => u._id !== user._id)),
         [active, user],
@@ -76,6 +78,7 @@ const Header = () => {
             },
         ];
     }, [handleShowProfile, t, width]);
+    const avatars = useMemo(() => active.users.map((user) => user.avatar), [active.users]);
 
     return (
         <div className="flex items-center justify-between p-2 sm:p-3 md:p-4 dl:p-5 border-b border-separate dark:border-dark-separate">
@@ -86,9 +89,13 @@ const Header = () => {
                 >
                     <ChevronDownIcon className="w-4 h-4" />
                 </button>
-                <Avatar containerClassName="flex-shrink-0" src={active.picture} status={receiver.status} />
+                {active.picture ? (
+                    <Avatar containerClassName="flex-shrink-0" src={active.picture} status={receiver.status} />
+                ) : (
+                    <AvatarGroup avatars={avatars} />
+                )}
                 <Link to="/" className="text-base font-semibold line-clamp-1">
-                    {active.name}
+                    {conversationName}
                 </Link>
                 <RecordCircleFillIcon className="flex-shrink-0 -ml-1 sm:-ml-2 w-2.5 h-2.5 text-success" />
             </div>

@@ -1,25 +1,26 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import AboutItem from '~/components/aboutItem';
-import { getDate } from '~/utils';
 
 const About = () => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);
+    const { active } = useSelector((state) => state.chats);
+    const otherUser = active.users.find((u) => u._id !== user._id);
 
     const data = [
         {
             title: 'chat.name',
-            value: user.name,
+            value: otherUser.name,
         },
         {
             title: 'chat.email',
-            value: user.phone,
+            value: otherUser._id,
         },
-        {
-            title: 'profile.date-of-birth',
-            value: getDate(user.dateOfBirth),
-        },
+        // {
+        //     title: 'profile.date-of-birth',
+        //     value: getDate(otherUser.dateOfBirth),
+        // },
     ];
 
     return (

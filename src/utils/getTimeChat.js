@@ -1,14 +1,14 @@
 import getDate from './getDate';
+import getDateString from './getDateString';
 import getTime from './getTime';
 
 const getTimeChat = (time) => {
-    const timeString = time instanceof Date ? time.toISOString() : time;
-    const now = new Date();
-    const isoNow = now.toISOString();
+    const timeString = getDateString(time);
+    const isoNow = getDateString(new Date());
 
-    if (isoNow.slice(0, 10) !== timeString.slice(0, 10)) return getDate(timeString);
+    if (isoNow.slice(0, 10) !== timeString.slice(0, 10)) return getDate(time);
 
-    return getTime(timeString);
+    return getTime(time);
 };
 
 export default getTimeChat;

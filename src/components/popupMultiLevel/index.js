@@ -32,7 +32,7 @@ const PopupMultiLevel = ({ children, onClose = () => {} }) => {
             <AnimateHeight
                 duration={200}
                 height={height || 'auto'}
-                className="relative bg-white dark:bg-[#242526] cursor-default overflow-hidden"
+                className="relative bg-white dark:bg-[#242526] cursor-default !overflow-hidden"
             >
                 <div
                     className={classNames(
