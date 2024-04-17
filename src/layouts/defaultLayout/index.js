@@ -99,36 +99,46 @@ const DefaultLayout = ({ children }) => {
         });
 
         socket.on('receivedMessage', (message) => {
+            console.log('🚀 ~ socket.on ~ receivedMessage ~ message:', message);
+
             dispatch(addMessageHead(message));
 
             if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));
         });
 
         socket.on('openConversation', (data) => {
+            console.log('🚀 ~ socket.on ~ openConversation ~ data:', data);
+
             dispatch(addChat(data));
 
             if (data?.isGroup) dispatch(addGroup(data));
         });
 
-        socket.on('typing', (data) =>
+        socket.on('typing', (data) => {
+            console.log('🚀 ~ socket.on ~ typing ~ data:', data);
+
             dispatch(
                 setTyping({
                     ...data,
                     typing: true,
                 }),
-            ),
-        );
+            );
+        });
 
-        socket.on('stopTyping', (data) =>
+        socket.on('stopTyping', (data) => {
+            console.log('🚀 ~ socket.on ~ stopTyping ~ data:', data);
+
             dispatch(
                 setTyping({
                     ...data,
                     typing: false,
                 }),
-            ),
-        );
+            );
+        });
 
         socket.on('recallMessage', (message) => {
+            console.log('🚀 ~ socket.on ~ recallMessage ~ message:', message);
+
             dispatch(updateDeletedMessage({ _id: message._id, deleted: DeleteMessageStatus.RECALL }));
             dispatch(
                 updateMessage({
@@ -139,13 +149,24 @@ const DefaultLayout = ({ children }) => {
         });
 
         socket.on('pinMessage', ({ message }) => {
+            console.log('🚀 ~ socket.on ~ pinMessage ~ message:', message);
+
             dispatch(addPinMessage({ conversationId: message.conversation._id, message }));
         });
         socket.on('unpinMessage', ({ message }) => {
+            console.log('🚀 ~ socket.on ~ unpinMessage ~ message:', message);
+
             dispatch(removePinMessage({ conversationId: message.conversation._id, message }));
         });
 
         socket.on('reactForMessage', ({ conversationId, messageId, userId, react }) => {
+            console.group('🚀 ~ socket.on ~ reactForMessage');
+            console.log('react:', react);
+            console.log('userId:', userId);
+            console.log('messageId:', messageId);
+            console.log('conversationId:', conversationId);
+            console.groupEnd();
+
             dispatch(
                 updateMessageReact({
                     conversationId,
@@ -158,38 +179,53 @@ const DefaultLayout = ({ children }) => {
         });
 
         socket.on('sendFriendRequest', (friendRequest) => {
+            console.log('🚀 ~ socket.on ~ sendFriendRequest ~ friendRequest:', friendRequest);
+
             dispatch(addResponseFriend(friendRequest));
             dispatch(setNewReceived(true));
         });
 
         socket.on('acceptFriend', (data) => {
+            console.log('🚀 ~ socket.on ~ acceptFriend ~ data:', data);
+
             dispatch(acceptFriendSent(data));
         });
 
         socket.on('rejectFriend', ({ _id }) => {
+            console.log('🚀 ~ socket.on ~ rejectFriend ~ _id:', _id);
+
             dispatch(rejectFriendSent(_id));
         });
 
         socket.on('revocationRequestFriend', ({ _id }) => {
+            console.log('🚀 ~ socket.on ~ revocationRequestFriend ~ _id:', _id);
+
             dispatch(rejectFriendReceived(_id));
         });
 
         socket.on('deleteFriend', ({ senderId }) => {
+            console.log('🚀 ~ socket.on ~ deleteFriend ~ senderId:', senderId);
+
             dispatch(removeFriend({ _id: senderId }));
         });
 
         socket.on('deleteConversation', ({ _id }) => {
+            console.log('🚀 ~ socket.on ~ deleteConversation ~ _id:', _id);
+
             dispatch(removeConversation(_id));
             dispatch(removeGroup(_id));
         });
 
         socket.on('addOrUpdateConversation', ({ conversation }) => {
-            console.log('🚀 ~ socket.on ~ conversation:', conversation);
+            console.log('🚀 ~ socket.on ~ addOrUpdateConversation ~ conversation:', conversation);
+
             dispatch(addOrUpdateChat(conversation));
             dispatch(addOrUpdateGroup(conversation));
         });
 
         socket.on('removeUserFromConversation', ({ conversationId }) => {
+            console.log('🚀 ~ socket.on ~ removeUserFromConversation ~ conversationId:', conversationId);
+
             dispatch(removeConversation(conversationId));
             dispatch(removeGroup(conversationId));
         });

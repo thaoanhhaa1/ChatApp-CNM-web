@@ -2,6 +2,7 @@ import { useDebounce, useWindowSize } from '@uidotdev/usehooks';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SearchIcon } from '~/assets';
 import Button from '~/components/button';
@@ -65,7 +66,16 @@ const Chats = () => {
     }, [dispatch, search, searchDebounce]);
 
     useEffect(() => {
-        chats?.length || dispatch(getChats());
+        const fetchChats = async () => {
+            try {
+                await dispatch(getChats()).unwrap();
+            } catch (error) {
+                console.error(error);
+                toast.error(error.message);
+            }
+        };
+
+        chats?.length || fetchChats();
     }, [chats?.length, dispatch]);
 
     useEffect(() => {

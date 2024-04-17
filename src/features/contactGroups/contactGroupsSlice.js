@@ -7,7 +7,9 @@ const initialState = {
 };
 
 const getGroups = createAsyncThunk('getGroups', async () => {
+    console.log('🚀 ~ getGroups ~ getGroups', Date.now());
     const response = await groupServices.getGroups();
+    console.log('🚀 ~ getGroups ~ getGroups', Date.now());
     return response.data;
 });
 

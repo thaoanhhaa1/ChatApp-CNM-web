@@ -11,7 +11,9 @@ const initialState = {
 };
 
 const getFriends = createAsyncThunk('getFriends', async () => {
+    console.log('🚀 ~ getFriends ~ getFriends', Date.now());
     const response = await friendServices.getFriends();
+    console.log('🚀 ~ getFriends ~ getFriends', Date.now());
     return response.data;
 });
 
@@ -74,6 +76,9 @@ const friendSlice = createSlice({
             if (index !== -1) state.friendList.splice(index, 1);
         },
         reset: (state) => ({ ...state, ...initialState }),
+        addFriend: (state, { payload }) => {
+            state.friendList.push(payload);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -103,5 +108,6 @@ export const {
     updateRequestFriendSent,
     removeFriend,
     reset,
+    addFriend,
 } = friendSlice.actions;
 export { getFriends };

@@ -47,7 +47,7 @@ const Header = () => {
     const { active } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const { width } = useWindowSize();
-    const conversationName = getNameConversation(active, user);
+    const conversationName = getNameConversation(active, user._id);
     const receiver = useMemo(
         () => (active.isGroup ? {} : active.users.find((u) => u._id !== user._id)),
         [active, user],

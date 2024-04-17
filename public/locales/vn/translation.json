@@ -77,7 +77,15 @@
         "pin-conversation": "Ghim hội thoại",
         "unpin-conversation": "Bỏ ghim hội thoại",
         "mute": "Tắt thông báo",
-        "un-mute": "Bật thông báo"
+        "un-mute": "Bật thông báo",
+        "forward": {
+            "title": "Chia sẻ",
+            "search": "Tìm kiếm hội thoại cần chia sẻ",
+            "recent": "Trò chuyện gần đây",
+            "group": "Nhóm",
+            "cancel": "Huỷ",
+            "share": "Chia sẻ"
+        }
     },
     "contacts": {
         "title": "Danh bạ",

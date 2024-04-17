@@ -35,7 +35,7 @@ const ChatItem = ({ chat, active }) => {
     const isImageList = isHasFiles && isImageFileByType(lastMessage.files[0].type);
     const isPin = isPinConversation(chat, user);
     const isTyping = chat.users.some((u) => u.typing);
-    const conversationName = getNameConversation(chat, user);
+    const conversationName = getNameConversation(chat, user._id);
     const avatars = useMemo(() => convertToAvatarUrlList(chat.users), [chat.users]);
 
     const togglePinConversation = useCallback(() => {

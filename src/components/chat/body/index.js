@@ -104,13 +104,7 @@ const Body = () => {
                 {!activeLoading &&
                     messagesCanShow.length > 0 &&
                     messagesCanShow.map((chat, index, arr) => (
-                        <Message
-                            scrollY={scrollY}
-                            key={chat._id}
-                            isMe={user._id === chat.sender?._id}
-                            chat={chat}
-                            prevChat={arr[index - 1]}
-                        />
+                        <Message scrollY={scrollY} key={chat._id} chat={chat} prevChat={arr[index - 1]} />
                     ))}
 
                 {messagesCanShow.length > 0 && (

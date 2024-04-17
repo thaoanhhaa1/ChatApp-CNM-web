@@ -1,11 +1,42 @@
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppListDetailFillIcon } from '~/assets';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
-import { classNames } from '~/utils';
+import { getGroups } from '~/features/contactGroups/contactGroupsSlice';
+import { getFriends } from '~/features/friend/friendSlice';
+import { classNames, convertContactsToPhoneBook, sortGroupByName } from '~/utils';
+import PhoneBook from '../phoneBook';
+import PhoneBookSkeleton from '../phoneBook/PhoneBookSkeleton';
 import ContactItem from './ContactItem';
+import GroupItem from './GroupItem';
+import ItemSkeleton from './ItemSkeleton';
 import SelectedContacts from './SelectedContacts';
 
 const ContactList = ({ chat, selectedContacts, handleClickContact, handleRemoveContact }) => {
+    const { t } = useTranslation();
+    const { friendList, friendListLoading } = useSelector((state) => state.friend);
+    console.log('🚀 ~ ContactList ~ friendList:', friendList);
+    const { groups, loading } = useSelector((state) => state.contactGroups);
+    console.log('🚀 ~ ContactList ~ groups:', groups);
+    const contacts = convertContactsToPhoneBook(friendList);
+    console.log('🚀 ~ ContactList ~ contacts:', contacts);
+    const groupsSort = sortGroupByName(groups);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        (async () => {
+            const requests = [];
+
+            if (!friendList.length) requests.push(dispatch(getFriends()));
+
+            if (!groups.length) requests.push(dispatch(getGroups()));
+
+            await Promise.all(requests);
+        })();
+    }, [dispatch, friendList.length, groups.length]);
+
     return (
         <div className="flex-1 px-2 ex:px-3 sm:px-4">
             <div className={classNames('flex h-full overflow-hidden gap-2 ex:gap-3')}>
@@ -13,14 +44,32 @@ const ContactList = ({ chat, selectedContacts, handleClickContact, handleRemoveC
                     <>
                         <div className="flex-1">
                             <ScrollbarCustomize>
-                                {chat.map((item) => (
-                                    <ContactItem
-                                        key={item._id}
-                                        contact={item.user}
-                                        checked={selectedContacts.some((i) => i._id === item._id)}
-                                        onClick={() => handleClickContact(item)}
-                                    />
-                                ))}
+                                {friendListLoading && <PhoneBookSkeleton render={ItemSkeleton} />}
+                                <PhoneBook
+                                    phoneBook={contacts}
+                                    render={(item) => (
+                                        <ContactItem
+                                            key={item._id}
+                                            contact={item}
+                                            checked={selectedContacts.some((i) => i._id === item._id)}
+                                            onClick={() => handleClickContact(item)}
+                                        />
+                                    )}
+                                />
+                                {loading && <PhoneBookSkeleton render={ItemSkeleton} />}
+                                <PhoneBook
+                                    phoneBook={{
+                                        [t('chat.forward.group')]: groupsSort,
+                                    }}
+                                    render={(item) => (
+                                        <GroupItem
+                                            key={item._id}
+                                            group={item}
+                                            checked={selectedContacts.some((i) => i._id === item._id)}
+                                            onClick={() => handleClickContact(item)}
+                                        />
+                                    )}
+                                />
                             </ScrollbarCustomize>
                         </div>
                         <div

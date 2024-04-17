@@ -19,7 +19,7 @@ const Profile = () => {
     const { handleHideProfile } = useChat();
     const { user } = useSelector((state) => state.user);
     const { active: activeChat } = useSelector((state) => state.chats);
-    const conversationName = getNameConversation(activeChat, user);
+    const conversationName = getNameConversation(activeChat, user._id);
     const avatars = useMemo(() => convertToAvatarUrlList(activeChat?.users), [activeChat?.users]);
     const sortedMember = useMemo(
         () =>

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { DownloadLineIcon, FileTextFillIcon, ImageFillIcon } from '~/assets';
 import { useDownloadFile } from '~/hooks';
-import { convertFileSize, isPhotoFile } from '~/utils';
+import { classNames, convertFileSize, isPhotoFile } from '~/utils';
 import Button from './Button';
 
 const getIcon = (fileName) => {
@@ -12,7 +12,7 @@ const getIcon = (fileName) => {
     return FileTextFillIcon;
 };
 
-const AttachedFile = ({ file, onClick = () => {} }) => {
+const AttachedFile = ({ file, canView, onClick = () => {} }) => {
     const Icon = getIcon(file.name);
     const download = useDownloadFile(file.link, file.name);
 
@@ -24,7 +24,10 @@ const AttachedFile = ({ file, onClick = () => {} }) => {
     return (
         <div
             onClick={onClick}
-            className="cursor-pointer flex gap-2 sm:gap-4 items-center p-2 border border-separate dark:border-[#39414b] rounded bg-white dark:bg-dark"
+            className={classNames(
+                'flex gap-2 sm:gap-4 items-center p-2 border border-separate dark:border-[#39414b] rounded bg-white dark:bg-dark',
+                canView && 'cursor-pointer',
+            )}
         >
             <div className="text-primary-color bg-[#e3e1fc] dark:bg-[rgba(114,105,239,.15)] w-12 h-12 rounded flex justify-center items-center">
                 <Icon className="w-5 h-5" />

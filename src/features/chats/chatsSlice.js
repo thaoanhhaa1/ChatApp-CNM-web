@@ -9,7 +9,9 @@ const initialState = {
 };
 
 const getChats = createAsyncThunk('getChats', async () => {
+    console.log('🚀 ~ getChats ~ getChats', Date.now());
     const response = await conversationServices.getAllConversations();
+    console.log('🚀 ~ getChats ~ getChats', Date.now());
 
     return response.data;
 });
@@ -123,7 +125,7 @@ const chatsSlice = createSlice({
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
 
-            if (chat && chat.messages?.[0]._id !== payload._id) {
+            if (chat && chat?.messages?.[0]._id !== payload._id) {
                 console.log(chat.messages?.length);
 
                 if (chat.messages?.length) chat.messages = [payload, ...chat.messages];
@@ -184,12 +186,16 @@ const chatsSlice = createSlice({
         },
         updateMessageReact: (state, { payload }) => {
             const { conversationId, messageId, userId, react } = payload;
+            console.log('🚀 ~ messageId:', messageId);
+            console.log('🚀 ~ conversationId:', conversationId);
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
 
             if (chat) {
-                const message = chat.messages.find((message) => message._id === messageId);
-
+                const message = (chat?.messages || []).find((message) => {
+                    return message._id === messageId;
+                });
+                console.log('🚀 ~ message:', message);
                 if (message) {
                     const status = message.statuses.find((item) => item.user === userId);
 
@@ -217,6 +223,16 @@ const chatsSlice = createSlice({
             if (state.active?._id === payload._id) state.active = payload;
         },
         reset: (state) => ({ ...state, ...initialState }),
+        addChats: (state, { payload }) => {
+            if (!payload?.length) return state;
+
+            payload.forEach((chat) => {
+                const index = state.chats.findIndex((item) => item._id === chat._id);
+
+                if (index < 0) state.chats.unshift(chat);
+                else state.chats[index] = chat;
+            });
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -265,5 +281,6 @@ export const {
     removeConversation,
     addOrUpdateChat,
     reset,
+    addChats,
 } = chatsSlice.actions;
 export { getChats, getConversation };

@@ -54,7 +54,7 @@ import MessageTime from './MessageTime';
 import MessageVideo from './MessageVideo';
 import React from './React';
 
-const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
+const Message = ({ chat, prevChat, scrollY = () => {} }) => {
     const [, startTransition] = useTransition();
     const { t } = useTranslation();
     const [showForward, setShowForward] = useState(false);
@@ -66,6 +66,7 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
     const { socket } = useSelector((state) => state.socket);
     const [toastRecall, setToastRecall] = useToast(1500);
     const { google, places, marker } = useLoader();
+    const isMe = chat.sender?._id === user._id;
 
     const url = useMemo(() => {
         const message = (chat?.messages || []).find(
@@ -251,7 +252,12 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
 
                             {firstFile && !isImageList && !recalled && !isVideo
                                 ? chat.files.map((file, index) => (
-                                      <AttachedFile onClick={setShowViewFile} key={index} file={file} />
+                                      <AttachedFile
+                                          canView={fileCanView}
+                                          onClick={setShowViewFile}
+                                          key={index}
+                                          file={file}
+                                      />
                                   ))
                                 : null}
 
@@ -326,7 +332,6 @@ const Message = ({ isMe, chat, prevChat, scrollY = () => {} }) => {
 };
 
 Message.propTypes = {
-    isMe: PropTypes.bool.isRequired,
     chat: PropTypes.object.isRequired,
     nextChat: PropTypes.object,
     scrollY: PropTypes.func,

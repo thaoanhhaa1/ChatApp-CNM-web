@@ -14,7 +14,7 @@ const MessageVideo = ({ file }) => {
     return (
         <div
             onClick={setShowViewImage}
-            className="relative flex justify-center items-center rounded-md overflow-hidden"
+            className="cursor-pointer relative flex justify-center items-center rounded-md overflow-hidden"
         >
             <video width="320" height="240" controls>
                 <source src={src} type={file.type} />

@@ -7,6 +7,7 @@ import { SearchIcon } from '~/assets';
 import { addMessageHeadSocket } from '~/features/chats/chatsSlice';
 import { addMessageSocket } from '~/features/messages/messagesSlice';
 import messageServices from '~/services/message.service';
+import { getOtherUserInIndividual } from '~/utils';
 import Input from '../input';
 import Modal from '../modal';
 import ContactList from './ContactList';
@@ -43,10 +44,36 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
         setLoading(true);
 
         try {
+            console.log('🚀 ~ handleForward ~ selectedContacts:', selectedContacts);
+
+            const selectedUserIds = [];
+            const selectedGroupIds = [];
+
+            selectedContacts.forEach((selected) => {
+                if (selected.isGroup) selectedGroupIds.push(selected._id);
+                else selectedUserIds.push(selected._id);
+            });
+            console.log('🚀 ~ handleForward ~ selectedUserIds:', selectedUserIds);
+
+            const conversationIndividualIds = [];
+
+            chats.forEach((chat) => {
+                const index = selectedUserIds.findIndex(
+                    (userId) => getOtherUserInIndividual(chat.users, user._id)?._id === userId,
+                );
+
+                if (index === -1) return;
+
+                selectedUserIds.splice(index, 1);
+                conversationIndividualIds.push(chat._id);
+            });
+
             const res = await messageServices.forward({
                 messageId,
-                conversationIds: selectedContacts.map((contact) => contact._id),
+                conversationIds: [...selectedGroupIds, ...conversationIndividualIds],
             });
+
+            console.log('🚀 ~ handleForward ~ conversationIndividualIds:', conversationIndividualIds);
 
             socket.emit('forward', res.data);
             res.data.forEach((message) => {
@@ -57,7 +84,7 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
                 dispatch(addMessageHeadSocket(message));
             });
         } catch (error) {
-            alert(error.message);
+            console.error(error);
         } finally {
             setLoading(false);
             handleClickOutside();

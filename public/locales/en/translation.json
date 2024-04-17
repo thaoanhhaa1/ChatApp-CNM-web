@@ -79,7 +79,15 @@
         "unpin-conversation": "Unpin",
         "mute": "Mute",
         "un-mute": "Unmute",
-        "at": "at"
+        "at": "at",
+        "forward": {
+            "title": "Share",
+            "search": "Search conversation for sharing message",
+            "recent": "Recent",
+            "group": "Group",
+            "cancel": "Cancel",
+            "share": "Share"
+        }
     },
     "contacts": {
         "title": "Contacts",

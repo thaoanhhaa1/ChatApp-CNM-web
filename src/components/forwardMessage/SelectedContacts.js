@@ -20,7 +20,7 @@ const SelectedContacts = ({ selectedContacts, handleRemoveContact = () => {} }) 
                         {selectedContacts.map((contact) => (
                             <SelectedContact
                                 onClose={() => handleRemoveContact(contact)}
-                                contact={contact.user}
+                                contact={contact}
                                 key={contact._id}
                             />
                         ))}
