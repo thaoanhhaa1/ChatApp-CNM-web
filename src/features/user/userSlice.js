@@ -24,6 +24,9 @@ const userSlice = createSlice({
             state.user = {};
             state.loading = false;
         },
+        updateAvatar: (state, { payload }) => {
+            state.user.avatar = payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -41,5 +44,5 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { remove, setUser } = userSlice.actions;
+export const { remove, setUser, updateAvatar } = userSlice.actions;
 export { getUserInfo };

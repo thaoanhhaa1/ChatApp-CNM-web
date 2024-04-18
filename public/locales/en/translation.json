@@ -231,7 +231,8 @@
         "cancel": "Cancel",
         "placeholder": "Enter display name",
         "updateError": "Update error",
-        "updateSuccess": "Update success"
+        "updateSuccess": "Update success",
+        "update-avatar-fail": "Update avatar fail"
     },
     "not-found": {
         "title": "Look like you're lost",

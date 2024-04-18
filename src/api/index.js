@@ -13,6 +13,7 @@ const api = {
     userInfo: () => `/user/info`,
     searchUsers: (value) => `/user?search=${value}`,
     updateUser: () => `/user`,
+    updateAvatar: () => `/user/updateAvatar`,
 
     // Conversation
     getAllConversations: () => `/conversation`,

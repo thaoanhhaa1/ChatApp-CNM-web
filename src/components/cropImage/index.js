@@ -5,6 +5,7 @@ import { constants } from '~/constants';
 import { useCropImage } from '~/hooks';
 import ControlScale from './ControlScale';
 
+// FIXME ReactCrop__crop-mask
 const CropImage = forwardRef(({ imageUrl }, forwardRef) => {
     const {
         width,

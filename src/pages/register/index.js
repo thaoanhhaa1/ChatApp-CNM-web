@@ -30,6 +30,7 @@ const Register = () => {
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
+        email: '',
         password: '',
         gender: 'male',
         dateOfBirth: '',
@@ -43,11 +44,11 @@ const Register = () => {
     const gendersTranslation = useMemo(() => genders.map((gender) => ({ ...gender, label: t(gender.label) })), [t]);
     const { value: terms, toggle: toggleTerms } = useBoolean();
     const disabled = useMemo(() => {
-        const { name, phone, password } = formData;
+        const { name, email, password } = formData;
 
         if (currentStep === 1) return name.length < 2;
         if (currentStep === 2)
-            return phone.length < 1 || !termRef?.current?.checked || !socialTermRef?.current?.checked;
+            return email.length < 1 || !termRef?.current?.checked || !socialTermRef?.current?.checked;
         if (currentStep === 3) return password.length < 2;
 
         return false;
@@ -73,7 +74,7 @@ const Register = () => {
 
     const handleSendOTP = async () => {
         try {
-            await authServices.createOTP({ phone: formData.contact });
+            await authServices.createOTP({ contact: formData.email });
             setCountdown(TIME_OTP);
         } finally {
         }
@@ -86,7 +87,7 @@ const Register = () => {
             if (!otpCode) throw new Error('OTP code is required');
 
             await authServices.verifyOTP({
-                phone: formData.contact,
+                contact: formData.email,
                 otp: otpCode,
             });
 
@@ -118,7 +119,7 @@ const Register = () => {
 
     const validateFormFields = async (step) => {
         const validationErrors = {};
-        const { name, phone, password } = formData;
+        const { name, email, password } = formData;
 
         if (step === 1) {
             if (name?.length < 2) validationErrors.name = t('register.zalo-name-validate-min-length');
@@ -130,13 +131,13 @@ const Register = () => {
         }
 
         if (step === 2) {
-            if (!validator.matches(phone, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
-                validationErrors.phone = t('register.error-email');
+            if (!validator.matches(email, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+                validationErrors.email = t('register.error-email');
             else {
                 try {
-                    await authServices.createOTP({ phone });
+                    await authServices.createOTP({ contact: email });
                 } catch (error) {
-                    validationErrors.phone = t('register.email-exist');
+                    validationErrors.email = t('register.email-exist');
                 }
             }
         }
@@ -191,7 +192,10 @@ const Register = () => {
         }
 
         try {
-            const res = await authServices.register(formData);
+            const res = await authServices.register({
+                ...formData,
+                contact: formData.email,
+            });
             const { accessToken, user } = res.data;
 
             saveToken(accessToken);
@@ -283,11 +287,11 @@ const Register = () => {
                                     type="email"
                                     placeholder={t('register.email-placeholder')}
                                     onChange={handleChange}
-                                    value={formData.contact}
-                                    name="phone"
+                                    value={formData.email}
+                                    name="email"
                                 />
                             }
-                            error={errors.phone}
+                            error={errors.email}
                         />
                         <div className="flex items-center mb-4 mt-4 text-mm text-secondary dark:text-gray-300">
                             <input

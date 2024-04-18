@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import validator from 'validator';
 import FormControl from '~/components/formControl';
@@ -9,6 +9,7 @@ import Modal from '~/components/modal';
 import RadioGroup from '~/components/radioGroup';
 import UnderlineInput from '~/components/underlineInput';
 import { genders } from '~/constants';
+import { setUser } from '~/features/user/userSlice';
 import userServices from '~/services/user.service';
 
 const EditProfileModal = ({ onClose = () => {} }) => {
@@ -19,6 +20,7 @@ const EditProfileModal = ({ onClose = () => {} }) => {
     const [gender, setGender] = useState(user.gender);
     const [dateOfBirth, setDateOfBirth] = useState(user.dateOfBirth);
     const gendersTranslation = useMemo(() => genders.map((gender) => ({ ...gender, label: t(gender.label) })), [t]);
+    const dispatch = useDispatch();
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -55,12 +57,9 @@ const EditProfileModal = ({ onClose = () => {} }) => {
             try {
                 const updatedInfo = { name, gender, dateOfBirth };
                 const response = await userServices.updateUser(updatedInfo);
-                console.log('Thông tin người dùng đã được cập nhật:', response.data);
-                toast.success(t('profile.updateSuccess'));
 
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                dispatch(setUser(response.data));
+                toast.success(t('profile.updateSuccess'));
             } catch (error) {
                 console.error('Đã xảy ra lỗi khi cập nhật thông tin người dùng:', error);
                 toast.error(t('profile.updateError'));

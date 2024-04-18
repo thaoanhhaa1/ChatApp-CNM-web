@@ -10,6 +10,7 @@ export { default as convertToAvatarUrlList } from './convertToAvatarUrlList';
 export { default as convertToDMS } from './convertToDMS';
 export { default as countContactsInPhoneBook } from './countContactsInPhoneBook';
 export { default as crypting } from './crypting';
+export { default as formatDate } from './formatDate';
 export { default as getBgByTypeFile } from './getBgByTypeFile';
 export { default as getChatIndividual } from './getChatIndividual';
 export { default as getDate } from './getDate';

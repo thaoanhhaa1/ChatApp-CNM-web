@@ -234,10 +234,6 @@ const DefaultLayout = ({ children }) => {
             dispatch(removeConversation(conversationId));
             dispatch(removeGroup(conversationId));
         });
-
-        return () => {
-            dispatch(disconnect());
-        };
     }, [active?._id, dispatch, socket, user?._id]);
 
     useEffect(() => {

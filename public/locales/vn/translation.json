@@ -229,7 +229,8 @@
         "cancel": "Huỷ",
         "placeholder": "Nhập tên hiển thị",
         "updateError": "Cập nhật không thành công",
-        "updateSuccess": "Cập nhật thông tin thành công."
+        "updateSuccess": "Cập nhật thông tin thành công.",
+        "update-avatar-fail": "Cập nhật ảnh đại diện không thành công"
     },
     "not-found": {
         "title": "Có vẻ như bạn đang bị lạc",

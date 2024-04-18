@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getConversation, setActive } from '~/features/chats/chatsSlice';
 import { addRecentSearch } from '~/features/localSetting/localSettingSlice';
 import { getDate } from '~/utils';
@@ -28,8 +29,10 @@ const ChatsSearch = ({ searchValue }) => {
         handleClickUser(user);
     };
 
-    const handleClickUser = (user) => {
-        const chat = chats.find((chat) => chat.users.length === 2 && chat.users.find((u) => u._id === user._id));
+    const handleClickUser = async (user) => {
+        const chat = chats.find((chat) => !chat.isGroup && chat.users.find((u) => u._id === user._id));
+
+        console.log('handleClickUser:: ', chat);
 
         if (chat) {
             // conversation loaded
@@ -40,9 +43,20 @@ const ChatsSearch = ({ searchValue }) => {
             });
         } else {
             // conversation not load
-            dispatch(getConversation(user._id))
-                .unwrap()
-                .then((data) => socket.emit('openConversation', { conversation: data, user: me }));
+            try {
+                const data = await dispatch(getConversation(user._id)).unwrap();
+
+                console.log(data);
+
+                socket.emit('openConversation', {
+                    conversation: data,
+                    user: me,
+                });
+            } catch (error) {
+                console.error(error);
+
+                toast.error(t('request-error'));
+            }
         }
     };
 

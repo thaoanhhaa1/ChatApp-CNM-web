@@ -49,7 +49,7 @@ const chatsSlice = createSlice({
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
 
-            if (!chat.messages?.length) return state;
+            if (!chat?.messages?.length) return state;
 
             chat.messages.forEach((item, index) => {
                 if (item._id === message._id) chat.messages[index] = message;
@@ -265,6 +265,7 @@ const chatsSlice = createSlice({
                 state.activeLoading = true;
             })
             .addCase(getConversation.fulfilled, (state, { payload }) => {
+                console.log('🚀 ~ .addCase ~ payload:', payload);
                 state.active = payload;
                 state.activeLoading = false;
 
