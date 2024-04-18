@@ -466,6 +466,21 @@
             "block-rejoin": "Block this one from rejoining",
             "close": "Close",
             "accept": "Accept"
+        },
+        "owner-leave": {
+            "title": "Select a new group owner before leaving",
+            "search-placeholder": "Search",
+            "cancel": "Cancel",
+            "select-and-continue": "Select and continue"
+        },
+        "leave": {
+            "title": "Leave and delete this conversation?",
+            "description": "You won't be able to see messages in this group after leaving.",
+            "leave-in-silence": "Leave group silently",
+            "leave-in-silence-description": "Only group owner/admins will know that you left.",
+            "cancel": "Cancel",
+            "leave": "Leave group",
+            "notification-successfully": "Leave group successfully"
         }
     },
     "request-error": "Some errors occurred, please try again"

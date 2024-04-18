@@ -1,15 +1,17 @@
 import PropTypes from 'prop-types';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { MoreFillIcon } from '~/assets';
 import { groupRole } from '~/constants';
 import { useChat } from '~/context';
-import { addOrUpdateChat, removeConversation } from '~/features/chats/chatsSlice';
-import { addOrUpdateGroup, removeGroup } from '~/features/contactGroups/contactGroupsSlice';
+import { addOrUpdateChat } from '~/features/chats/chatsSlice';
+import { addOrUpdateGroup } from '~/features/contactGroups/contactGroupsSlice';
 import { useBoolean } from '~/hooks';
 import groupServices from '~/services/group.service';
 import Avatar from '../avatar';
+import ChangeOwnerRole from '../chat/changeOwnerRole';
+import LeaveGroup from '../chat/leaveGroup';
 import RemoveMember from '../chat/removeMember';
 import Popup from '../popup';
 
@@ -18,9 +20,16 @@ const Member = ({ user }) => {
     const { myRole } = useChat();
     const { user: me } = useSelector((state) => state.user);
     const { active } = useSelector((state) => state.chats);
+    const [checked, setChecked] = useState(() => (active?.users || []).find((user) => user._id !== me._id)?._id);
     const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
     const { value: showRemoveUser, setTrue: handleShowRemoveUser, setFalse: handleHideRemoveUser } = useBoolean(false);
+    const { value: showLeave, setTrue: handleShowLeave, setFalse: handleHideLeave } = useBoolean(false);
+    const {
+        value: showChangeOwner,
+        setTrue: handleShowChangeOwner,
+        setFalse: handleHideChangeOwner,
+    } = useBoolean(false);
     const role = useMemo(() => {
         if (active.admin === user._id) return groupRole.OWNER_ROLE;
         if (active.deputy.includes(user._id)) return groupRole.ADMIN_ROLE;
@@ -28,22 +37,10 @@ const Member = ({ user }) => {
         return groupRole.MEMBER_ROLE;
     }, [active.admin, active.deputy, user._id]);
 
-    // TODO leave group --> Model
-    const handleLeave = useCallback(async () => {
-        if (!active?._id || !me?._id) return;
-
-        const res = await groupServices.leaveGroup({
-            params: [active._id, me._id],
-        });
-
-        socket.emit('addOrUpdateConversation', {
-            conversation: res.data,
-            userIds: res.data.users.map((user) => user._id),
-        });
-
-        dispatch(removeConversation(active._id));
-        dispatch(removeGroup(active._id));
-    }, [active?._id, dispatch, me?._id, socket]);
+    const handleClickLeave = useCallback(() => {
+        if (role === groupRole.OWNER_ROLE) return handleShowChangeOwner();
+        handleShowLeave();
+    }, [handleShowChangeOwner, handleShowLeave, role]);
 
     const handleToggleRole = useCallback(async () => {
         const res = await groupServices[role === groupRole.MEMBER_ROLE ? 'addRole' : 'removeRole']({
@@ -60,6 +57,11 @@ const Member = ({ user }) => {
         dispatch(addOrUpdateChat(res.data));
         dispatch(addOrUpdateGroup(res.data));
     }, [active._id, dispatch, role, socket, user._id]);
+
+    const handleContinueChangeOwnerRole = useCallback(() => {
+        handleHideChangeOwner();
+        handleShowLeave();
+    }, [handleHideChangeOwner, handleShowLeave]);
 
     const more = useMemo(() => {
         if (!me?._id || !user?._id) return [];
@@ -80,11 +82,11 @@ const Member = ({ user }) => {
         } else
             more.push({
                 title: t('group.user-more.leave'),
-                onClick: handleLeave,
+                onClick: handleClickLeave,
             });
 
         return more;
-    }, [handleLeave, handleShowRemoveUser, handleToggleRole, me?._id, myRole, role, t, user?._id]);
+    }, [handleClickLeave, handleShowRemoveUser, handleToggleRole, me?._id, myRole, role, t, user?._id]);
 
     return (
         <div className="group/member p-2 flex gap-2 items-center hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-colors cursor-pointer rounded-md">
@@ -106,6 +108,16 @@ const Member = ({ user }) => {
             ) : null}
 
             <RemoveMember show={showRemoveUser} onClickOutside={handleHideRemoveUser} userId={user._id} />
+            {active?._id ? <LeaveGroup newOwnerId={checked} show={showLeave} onClickOutside={handleHideLeave} /> : null}
+            {active?._id ? (
+                <ChangeOwnerRole
+                    checked={checked}
+                    setChecked={setChecked}
+                    onClickOutside={handleHideChangeOwner}
+                    show={showChangeOwner}
+                    onContinue={handleContinueChangeOwnerRole}
+                />
+            ) : null}
         </div>
     );
 };

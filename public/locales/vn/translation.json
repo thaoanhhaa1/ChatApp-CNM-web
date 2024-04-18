@@ -465,6 +465,21 @@
             "close": "Đóng",
             "accept": "Đồng ý"
         },
-        "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"
-    }
+        "owner-leave": {
+            "title": "Chọn trưởng nhóm mới trước khi rời",
+            "search-placeholder": "Tìm kiếm",
+            "cancel": "Huỷ",
+            "select-and-continue": "Chọn và tiếp tục"
+        },
+        "leave": {
+            "title": "Rời nhóm và xóa trò chuyện",
+            "description": "Bạn sẽ không thể xem lại tin nhắn trong nhóm này sau khi rời nhóm. ",
+            "leave-in-silence": "Rời nhóm trong im lặng",
+            "leave-in-silence-description": "Chỉ trưởng/phó nhóm biết bạn rời nhóm. ",
+            "cancel": "Huỷ",
+            "leave": "Rời nhóm",
+            "notification-successfully": "Rời nhóm thành công"
+        }
+    },
+    "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"
 }

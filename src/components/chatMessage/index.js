@@ -13,6 +13,7 @@ const ChatMessage = ({ status = DeleteMessageStatus.NO_DELETE, large, messages, 
     return (
         <p
             className={classNames(
+                'flex gap-1',
                 isMe
                     ? isReply || status === DeleteMessageStatus.RECALL
                         ? 'text-secondary dark:text-dark-secondary'
