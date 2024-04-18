@@ -87,7 +87,12 @@
             "group": "Group",
             "cancel": "Cancel",
             "share": "Share"
-        }
+        },
+        "error-send-files": "An error occurred while sending files",
+        "error-send-files-1": "Please try again",
+        "error-policy-files": "do not comply with our policies and therefore will not be sent",
+        "error-policy-message": "The message does not comply with our policies and therefore will not be sent",
+        "error-file-size": "Maximum allowed size for uploaded files is 10MB"
     },
     "contacts": {
         "title": "Contacts",
@@ -460,5 +465,6 @@
             "close": "Close",
             "accept": "Accept"
         }
-    }
+    },
+    "request-error": "Some errors occurred, please try again"
 }

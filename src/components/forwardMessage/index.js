@@ -58,6 +58,8 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
             const conversationIndividualIds = [];
 
             chats.forEach((chat) => {
+                if (chat.isGroup) return;
+
                 const index = selectedUserIds.findIndex(
                     (userId) => getOtherUserInIndividual(chat.users, user._id)?._id === userId,
                 );
@@ -81,7 +83,12 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
                 if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));
 
                 // Chats Slice
-                dispatch(addMessageHeadSocket(message));
+                dispatch(
+                    addMessageHeadSocket({
+                        ...message,
+                        myId: user._id,
+                    }),
+                );
             });
         } catch (error) {
             console.error(error);

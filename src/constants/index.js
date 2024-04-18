@@ -19,6 +19,7 @@ export * as groupRole from './roleMemberInGroup';
 export const constants = {
     MAX_LENGTH_OF_GREETING_MESSAGE: 150,
     MAX_LENGTH_OF_REASON_REPORT: 1000,
+    MAX_FILE_SIZE: 10,
     AVATAR_GROUP_SAMPLE: [
         'https://res.zaloapp.com/pc/avt_group/1_family.jpg',
         'https://res.zaloapp.com/pc/avt_group/2_family.jpg',

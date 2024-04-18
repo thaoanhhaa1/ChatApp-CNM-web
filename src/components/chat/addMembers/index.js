@@ -5,10 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchIcon } from '~/assets';
 import ContactList from '~/components/contactTab/groupTab/createGroup/ContactList';
+import ItemSkeleton from '~/components/forwardMessage/ItemSkeleton';
 import Input from '~/components/input';
 import Modal from '~/components/modal';
+import PhoneBookSkeleton from '~/components/phoneBook/PhoneBookSkeleton';
 import { addOrUpdateChat } from '~/features/chats/chatsSlice';
 import { addOrUpdateGroup } from '~/features/contactGroups/contactGroupsSlice';
+import { getFriends } from '~/features/friend/friendSlice';
 import groupServices from '~/services/group.service';
 import { convertContactsToPhoneBook, phoneBookFilter } from '~/utils';
 
@@ -18,12 +21,18 @@ const AddMembers = ({ show, handleClickOutside }) => {
     const [selectedContacts, setSelectedContacts] = useState([]);
     const [loading, setLoading] = useState(false);
     const { active } = useSelector((state) => state.chats);
-    const { friendList } = useSelector((state) => state.friend);
+    const { friendList, friendListLoading } = useSelector((state) => state.friend);
     const { socket } = useSelector((state) => state.socket);
-    const phoneBook = useMemo(() => convertContactsToPhoneBook(friendList), [friendList]);
+    const phoneBook = useMemo(
+        () =>
+            convertContactsToPhoneBook(
+                friendList.filter((friend) => !active.users.some((user) => user._id === friend._id)),
+            ),
+        [active.users, friendList],
+    );
     const searchDebounce = useDebounce(searchUser, 500);
     const phoneBookFilterResult = useMemo(
-        () => phoneBookFilter(phoneBook, searchDebounce, 'name', 'phone'),
+        () => phoneBookFilter(phoneBook, searchDebounce, 'name'),
         [phoneBook, searchDebounce],
     );
     const dispatch = useDispatch();
@@ -69,6 +78,10 @@ const AddMembers = ({ show, handleClickOutside }) => {
         setSelectedContacts([]);
     }, [show]);
 
+    useEffect(() => {
+        friendList.length || dispatch(getFriends());
+    }, [dispatch, friendList.length]);
+
     if (!active?._id) return null;
 
     return (
@@ -90,6 +103,7 @@ const AddMembers = ({ show, handleClickOutside }) => {
                     <div className="mt-2.5 ex:mt-3.5 sm:mt-5 h-[1px] bg-separate dark:bg-dark-separate" />
                 </div>
 
+                {friendListLoading && <PhoneBookSkeleton render={ItemSkeleton} />}
                 <ContactList
                     handleClickContact={handleClickContact}
                     handleRemoveContact={handleRemoveContact}

@@ -11,12 +11,11 @@ import Location from '~/components/location';
 import Modal from '~/components/modal';
 import PopupMultiLevel from '~/components/popupMultiLevel';
 import ReplyMessage from '~/components/replyMessage';
-import Toast from '~/components/toast';
 import { setChat, setFiles, setReply } from '~/features/chat/chatSlice';
-import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
-import { useBoolean, useToast } from '~/hooks';
-import { getMentions, insertEmojiToChat, isImageFileByType, location, splitMessage } from '~/utils';
+import { useBoolean } from '~/hooks';
+import useSendMessage from '~/hooks/useSendMessage';
+import { getMentions, insertEmojiToChat, location, splitMessage } from '~/utils';
 import Button from './Button';
 import Emoticon from './Emoticon';
 import MentionItem from './Mention';
@@ -34,7 +33,7 @@ const Footer = () => {
     const ref = useRef();
     const { width } = useWindowSize();
     const dispatch = useDispatch();
-    const [showToast, setShowToast] = useToast(1000);
+    const { getFilesByType, handleSendImages, handleSendOtherFiles, handleSendTextMessage } = useSendMessage();
 
     const handleChange = (e) => dispatch(setChat(checkText(e.target.value)));
     const handleEmojiClick = useCallback(
@@ -59,103 +58,37 @@ const Footer = () => {
     const displayTransform = (_, display) => `@${display}`;
     const handleCloseReply = () => dispatch(setReply());
     const handleSendFiles = async (files) => {
-        files.forEach((file) => {
-            const formData = new FormData();
-            const timeSend = Date.now();
+        const { imageFiles, otherFiles } = getFilesByType(files);
 
-            formData.append('files', file);
-            formData.append('conversationId', active._id);
-            formData.append('sender', user);
-            formData.append('timeSend', timeSend);
-
-            dispatch(sendMessage(formData));
-            dispatch(
-                addMessage({
-                    sender: user,
-                    files: [file],
-                    conversationId: active._id,
-                    timeSend,
-                }),
-            );
-        });
+        if (imageFiles.length) handleSendImages({ imageFiles, conversationId: active._id });
+        if (otherFiles.length) handleSendOtherFiles({ files: otherFiles, conversationId: active._id });
     };
     const handleSend = () => {
         if (!chat && !files?.length) return;
 
+        const { imageFiles, otherFiles } = getFilesByType(files);
         const messages = splitMessage(chat);
-        const imageFiles = [];
-        const otherFiles = [];
-
-        (files || []).forEach((file) => {
-            if (isImageFileByType(file.type)) return imageFiles.push(file);
-
-            otherFiles.push(file);
-        });
 
         // Text + 1 image
         if (chat.trim() && imageFiles.length === 1 && !otherFiles.length) {
-            const formData = new FormData();
-            const timeSend = Date.now();
-
-            formData.append('files', imageFiles[0]);
-            formData.append('conversationId', active._id);
-            formData.append('sender', user);
-            reply?._id && formData.append('reply', reply?._id);
-            formData.append('timeSend', timeSend);
-            formData.append('messages', JSON.stringify(messages));
-
-            dispatch(sendMessage(formData))
-                .unwrap()
-                .then(({ data }) => setShowToast(data.invalidMessage));
-            dispatch(
-                addMessage({
-                    sender: user,
-                    reply,
-                    files: imageFiles,
-                    conversationId: active._id,
-                    timeSend,
-                    messages,
-                }),
-            );
+            handleSendTextMessage({
+                messages,
+                conversationId: active._id,
+                reply: reply?._id,
+            });
         } else {
             // Text + n images + n other files
-            if (messages.length && chat.trim()) {
-                const timeSend = Date.now();
-                dispatch(sendMessage({ messages, conversationId: active._id, reply: reply?._id, timeSend }))
-                    .unwrap()
-                    .then(({ data }) => setShowToast(data.invalidMessage));
-                dispatch(
-                    addMessage({
-                        messages,
-                        sender: user,
-                        conversationId: active._id,
-                        reply,
-                        timeSend,
-                    }),
-                );
+            if (chat.trim()) {
+                handleSendTextMessage({
+                    messages,
+                    conversationId: active._id,
+                    reply: reply?._id,
+                });
             }
 
-            if (imageFiles.length) {
-                const formData = new FormData();
-                const timeSend = Date.now();
+            if (imageFiles.length) handleSendImages({ imageFiles, conversationId: active._id });
 
-                imageFiles.forEach((file) => formData.append('files', file));
-                formData.append('conversationId', active._id);
-                formData.append('sender', user);
-                formData.append('timeSend', timeSend);
-
-                dispatch(sendMessage(formData));
-                dispatch(
-                    addMessage({
-                        sender: user,
-                        files: imageFiles,
-                        conversationId: active._id,
-                        timeSend,
-                    }),
-                );
-            }
-
-            if (otherFiles.length) handleSendFiles(otherFiles);
+            if (otherFiles.length) handleSendOtherFiles({ files: otherFiles, conversationId: active._id });
         }
 
         dispatch(setChat(''));
@@ -211,7 +144,6 @@ const Footer = () => {
 
     return (
         <div>
-            <Toast showToast={showToast} message="Invalid message" />
             <div className="flex items-center gap-3 px-2 h-10 border-t border-separate dark:border-dark-separate">
                 <Tippy content={t('chat.location')}>
                     <Button disabled={!location.coords.role} onClick={setShowLocation} icon={LocationIcon} />

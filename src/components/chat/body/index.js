@@ -84,9 +84,14 @@ const Body = () => {
         if (!message) return;
 
         if (message.state === sentMessageStatus.SENT) {
-            dispatch(addMessageHead(message));
+            dispatch(
+                addMessageHead({
+                    myId: user._id,
+                    ...message,
+                }),
+            );
         }
-    }, [dispatch, messages]);
+    }, [dispatch, messages, user._id]);
 
     return (
         <ScrollbarCustomize containerClassName="overflow-hidden" ref={ref} onScroll={handleScroll}>

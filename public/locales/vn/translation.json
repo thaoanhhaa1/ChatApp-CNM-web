@@ -85,7 +85,12 @@
             "group": "Nhóm",
             "cancel": "Huỷ",
             "share": "Chia sẻ"
-        }
+        },
+        "error-send-files": "Có lỗi xảy ra trong quá trình gửi file",
+        "error-send-files-1": "Xin vui lòng thử lại",
+        "error-policy-files": "không tuân thủ chính sách của chúng tôi và do đó sẽ không được gửi",
+        "error-policy-message": "Tin nhắn không tuân thủ chính sách của chúng tôi và do đó sẽ không được gửi",
+        "error-file-size": "Zalo hỗ trợ gửi file tối đa 10MB"
     },
     "contacts": {
         "title": "Danh bạ",
@@ -457,6 +462,7 @@
             "block-rejoin": "Chặn người này tham gia lại",
             "close": "Đóng",
             "accept": "Đồng ý"
-        }
+        },
+        "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"
     }
 }

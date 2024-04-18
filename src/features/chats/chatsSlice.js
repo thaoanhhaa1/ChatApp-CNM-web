@@ -121,13 +121,13 @@ const chatsSlice = createSlice({
             }
         },
         addMessageHead: (state, { payload }) => {
+            console.log('🚀 ~ payload:', payload);
             const conversationId = payload.conversationId || payload.conversation._id;
 
-            const chat = state.chats.find((chat) => chat._id === conversationId);
+            const chatIndex = state.chats.findIndex((chat) => chat._id === conversationId);
+            const chat = state.chats[chatIndex];
 
             if (chat && chat?.messages?.[0]._id !== payload._id) {
-                console.log(chat.messages?.length);
-
                 if (chat.messages?.length) chat.messages = [payload, ...chat.messages];
                 else chat.messages = [payload];
 
@@ -139,24 +139,39 @@ const chatsSlice = createSlice({
                     state.active.messages = chat.messages;
                     chat.unseenMessages = 0;
                 }
+
+                state.chats.splice(chatIndex, 1);
+
+                if (!chat.pinBy.includes(payload.myId)) {
+                    const index = state.chats.findIndex((item) => !item.pinBy.includes(payload.myId));
+
+                    if (index >= 0) state.chats.splice(index, 0, chat);
+                }
             }
         },
         addMessageHeadSocket: (state, { payload }) => {
+            console.log('🚀 ~ payload:', payload);
             const conversationId = payload.conversationId || payload.conversation._id;
 
-            const chat = state.chats.find((chat) => chat._id === conversationId);
+            const chatIndex = state.chats.findIndex((chat) => chat._id === conversationId);
+            const chat = state.chats[chatIndex];
 
-            if (chat && chat.messages?.[0]._id !== payload._id) {
-                console.log(chat.messages?.length);
-
+            if (chat && chat?.messages?.[0]._id !== payload._id) {
                 if (chat.messages?.length) chat.messages = [payload, ...chat.messages];
                 else chat.messages = [payload];
 
                 chat.lastMessage = payload;
-                // FIXME
                 if (state.active?._id === conversationId) {
                     state.active.lastMessage = payload;
                     state.active.messages = chat.messages;
+                }
+
+                state.chats.splice(chatIndex, 1);
+
+                if (!chat.pinBy.includes(payload.myId)) {
+                    const index = state.chats.findIndex((item) => !item.pinBy.includes(payload.myId));
+
+                    if (index >= 0) state.chats.splice(index, 0, chat);
                 }
             }
         },

@@ -7,9 +7,8 @@ import { groupRole, sentMessageStatus } from '~/constants';
 import { ChatProvider } from '~/context';
 import { addFiles } from '~/features/chat/chatSlice';
 import { updateMessage } from '~/features/chats/chatsSlice';
-import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { useBoolean, useToast } from '~/hooks';
-import { isImageFileByType } from '~/utils';
+import useSendMessage from '~/hooks/useSendMessage';
 import DropZone from '../dropZone';
 import PinMessages from '../pinMessages';
 import Toast from '../toast';
@@ -33,6 +32,7 @@ const Chat = () => {
     const { user } = useSelector((state) => state.user);
     const { socket } = useSelector((state) => state.socket);
     const { width } = useWindowSize();
+    const { getFilesByType, handleSendImages, handleSendOtherFiles } = useSendMessage();
     const dispatch = useDispatch();
     const myRole = useMemo(() => {
         if (!active?._id) return null;
@@ -59,61 +59,16 @@ const Chat = () => {
 
             if (acceptedFiles.length > 50) setShowToast(true);
             else {
-                const imageFiles = [];
-                const otherFiles = [];
+                const { imageFiles, otherFiles } = getFilesByType(acceptedFiles);
 
-                (acceptedFiles || []).forEach((file) => {
-                    if (isImageFileByType(file.type)) return imageFiles.push(file);
+                if (imageFiles.length) handleSendImages({ imageFiles, conversationId: active._id });
 
-                    otherFiles.push(file);
-                });
-
-                if (imageFiles.length) {
-                    const formData = new FormData();
-                    const timeSend = Date.now();
-
-                    imageFiles.forEach((file) => formData.append('files', file));
-                    formData.append('conversationId', active._id);
-                    formData.append('sender', user);
-                    formData.append('timeSend', timeSend);
-
-                    dispatch(sendMessage(formData));
-                    dispatch(
-                        addMessage({
-                            sender: user,
-                            files: imageFiles,
-                            conversationId: active._id,
-                            timeSend,
-                        }),
-                    );
-                }
-
-                if (otherFiles.length) {
-                    otherFiles.forEach((file) => {
-                        const formData = new FormData();
-                        const timeSend = Date.now();
-
-                        formData.append('files', file);
-                        formData.append('conversationId', active._id);
-                        formData.append('sender', user);
-                        formData.append('timeSend', timeSend);
-
-                        dispatch(sendMessage(formData));
-                        dispatch(
-                            addMessage({
-                                sender: user,
-                                files: [file],
-                                conversationId: active._id,
-                                timeSend,
-                            }),
-                        );
-                    });
-                }
+                if (otherFiles.length) handleSendOtherFiles({ files: otherFiles, conversationId: active._id });
             }
 
             setHiddenDropZone();
         },
-        [active?._id, dispatch, setHiddenDropZone, setShowToast, user],
+        [active?._id, getFilesByType, handleSendImages, handleSendOtherFiles, setHiddenDropZone, setShowToast],
     );
 
     useEffect(() => {

@@ -11,7 +11,8 @@ const TwoAvatars = ({ avatars, size }) => {
 };
 
 TwoAvatars.propTypes = {
-    avatar: PropTypes.string.isRequired,
+    size: PropTypes.string,
+    avatars: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default TwoAvatars;

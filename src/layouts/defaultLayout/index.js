@@ -32,7 +32,7 @@ import {
     setNewReceived,
 } from '~/features/friend/friendSlice';
 import { addMessageSocket, updateDeletedMessage, updateReact } from '~/features/messages/messagesSlice';
-import { connect } from '~/features/socket/socketSlice';
+import { connect, disconnect } from '~/features/socket/socketSlice';
 import { setLocationError, setToast } from '~/features/toastAll/toastAllSlice';
 import { getUserInfo } from '~/features/user/userSlice';
 import { useToast } from '~/hooks';
@@ -101,7 +101,12 @@ const DefaultLayout = ({ children }) => {
         socket.on('receivedMessage', (message) => {
             console.log('🚀 ~ socket.on ~ receivedMessage ~ message:', message);
 
-            dispatch(addMessageHead(message));
+            dispatch(
+                addMessageHead({
+                    myId: user._id,
+                    ...message,
+                }),
+            );
 
             if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));
         });
@@ -229,6 +234,10 @@ const DefaultLayout = ({ children }) => {
             dispatch(removeConversation(conversationId));
             dispatch(removeGroup(conversationId));
         });
+
+        return () => {
+            dispatch(disconnect());
+        };
     }, [active?._id, dispatch, socket, user?._id]);
 
     useEffect(() => {
