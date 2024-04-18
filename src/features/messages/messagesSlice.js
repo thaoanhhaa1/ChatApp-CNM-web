@@ -45,6 +45,7 @@ const messagesSlice = createSlice({
             state.maxPage = 1;
         },
         addMessage: (state, { payload }) => {
+            console.log('🚀 ~ messages ~ addMessage');
             const message = { ...payload, _id: v4() };
 
             message.state = sentMessageStatus.SENDING;
@@ -56,13 +57,17 @@ const messagesSlice = createSlice({
             const { _id, deleted } = payload;
 
             const message = state.messages.find((message) => message._id === _id);
-            if (message) message.deleted = deleted;
+            if (message && message.deleted === DeleteMessageStatus.NO_DELETE) message.deleted = deleted;
 
-            state.messages.forEach((message) => {
-                if (message.reply?._id === _id) message.reply.deleted = deleted;
+            state.messages.find((message) => {
+                if (message.reply?._id === _id && message.reply.deleted === DeleteMessageStatus.NO_DELETE)
+                    message.reply.deleted = deleted;
+
+                return message.reply?._id === _id;
             });
         },
         addMessageSocket: (state, { payload }) => {
+            console.log('🚀 ~ messages ~ addMessageSocket');
             if (
                 payload &&
                 payload._id !== state.messages?.[0]?._id &&

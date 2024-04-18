@@ -114,12 +114,13 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
         if (isCanRecall(chat.createdAt)) {
             messageServices.recallMessage(chat._id).then();
             dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.RECALL }));
-            dispatch(
-                updateMessage({
-                    conversationId: chat.conversation?._id,
-                    message: { ...chat, deleted: DeleteMessageStatus.RECALL },
-                }),
-            );
+            if (chat.deleted === DeleteMessageStatus.NO_DELETE)
+                dispatch(
+                    updateMessage({
+                        conversationId: chat.conversation?._id,
+                        message: { ...chat, deleted: DeleteMessageStatus.RECALL },
+                    }),
+                );
             socket.emit('recallMessage', { ...chat, conversation: active });
         } else setToastRecall(true);
     }, [active, chat, dispatch, setToastRecall, socket]);
@@ -271,7 +272,7 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
 
                             <MessageTime time={chat.updatedAt || new Date(chat.timeSend)} />
 
-                            {chat.sticker && !recalled ? null : (
+                            {chat.sticker || recalled ? null : (
                                 <MessageReaction className="absolute right-0 bottom-0 translate-y-[calc(100%-7px)]" />
                             )}
 

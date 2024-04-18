@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactShowMoreText from 'react-show-more-text';
+import { toast } from 'react-toastify';
 import { acceptFriendReceived, rejectFriendReceived } from '~/features/friend/friendSlice';
 import { setToast } from '~/features/toastAll/toastAllSlice';
 import friendServices from '~/services/friend.service';
@@ -35,6 +36,7 @@ const ReceivedFriendRequest = ({ contact }) => {
         }
     };
     const handleAccept = async () => {
+        console.log('handleAccept');
         setAcceptLoading(true);
 
         try {
@@ -45,6 +47,7 @@ const ReceivedFriendRequest = ({ contact }) => {
             dispatch(setToast(t('friend.accept-friend')));
         } catch (error) {
             console.error(error);
+            toast.error(t('request-error'));
         } finally {
             setAcceptLoading(false);
         }

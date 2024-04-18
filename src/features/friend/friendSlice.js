@@ -28,23 +28,30 @@ const friendSlice = createSlice({
             state.friendSent = requestFriends;
         },
         addRequestFriend: (state, { payload }) => {
+            console.log('🚀 ~ friend ~ addRequestFriend');
             state.friendSent.unshift(payload);
         },
         addResponseFriend: (state, { payload }) => {
+            console.log('🚀 ~ friend ~ addResponseFriend');
             state.friendReceived.unshift(payload);
         },
         setNewReceived: (state, { payload }) => {
             state.hasNewReceived = payload;
         },
         acceptFriendSent: (state, { payload }) => {
+            console.log('🚀 ~ friend ~ acceptFriendSent');
             const { _id, user } = payload;
 
             const index = state.friendSent.findIndex((item) => item._id === _id);
 
             if (index !== -1) state.friendSent.splice(index, 1);
-            state.friendList.push(user);
+
+            const userIndex = state.friendList.findIndex((item) => item._id === user._id);
+
+            if (userIndex === -1) state.friendList.push(user);
         },
         acceptFriendReceived: (state, { payload }) => {
+            console.log('🚀 ~ friend ~ acceptFriendReceived');
             const { _id, user } = payload;
 
             const index = state.friendReceived.findIndex((item) => item._id === _id);
@@ -77,6 +84,7 @@ const friendSlice = createSlice({
         },
         reset: (state) => ({ ...state, ...initialState }),
         addFriend: (state, { payload }) => {
+            console.log('🚀 ~ friend ~ addFriend');
             state.friendList.push(payload);
         },
     },

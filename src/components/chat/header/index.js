@@ -24,7 +24,7 @@ import Popup from '~/components/popup';
 import { screens } from '~/constants';
 import { useChat, useLayout } from '~/context';
 import { useBoolean } from '~/hooks';
-import { getNameConversation } from '~/utils';
+import { getNameConversation, getOtherUserInIndividual } from '~/utils';
 import Button from './Button';
 
 const tippyProps = {
@@ -48,6 +48,7 @@ const Header = () => {
     const { user } = useSelector((state) => state.user);
     const { width } = useWindowSize();
     const conversationName = getNameConversation(active, user._id);
+    const conversationAvatar = getOtherUserInIndividual(active?.users, user._id)?.avatar;
     const receiver = useMemo(
         () => (active.isGroup ? {} : active.users.find((u) => u._id !== user._id)),
         [active, user],
@@ -90,7 +91,11 @@ const Header = () => {
                     <ChevronDownIcon className="w-4 h-4" />
                 </button>
                 {active.picture ? (
-                    <Avatar containerClassName="flex-shrink-0" src={active.picture} status={receiver.status} />
+                    <Avatar
+                        containerClassName="flex-shrink-0"
+                        src={active.isGroup ? active.picture : conversationAvatar}
+                        status={receiver.status}
+                    />
                 ) : (
                     <AvatarGroup avatars={avatars} />
                 )}

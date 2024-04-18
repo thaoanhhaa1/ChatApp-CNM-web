@@ -21,6 +21,7 @@ const contactGroupsSlice = createSlice({
             state.groups = payload;
         },
         addGroup: (state, { payload }) => {
+            console.log('🚀 ~ contactGroups ~ addGroup');
             state.groups.unshift(payload);
         },
         removeGroup: (state, { payload }) => {

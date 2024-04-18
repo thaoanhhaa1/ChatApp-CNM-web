@@ -6,6 +6,7 @@ const initialState = {
     loading: false,
     active: null,
     activeLoading: false,
+    firstFetch: false,
 };
 
 const getChats = createAsyncThunk('getChats', async () => {
@@ -107,6 +108,8 @@ const chatsSlice = createSlice({
             }
         },
         addMessages: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ addMessages');
+
             if (!payload?.length) return state;
 
             const conversationId = payload[0].conversationId || payload[0].conversation._id;
@@ -114,13 +117,14 @@ const chatsSlice = createSlice({
             const chat = state.chats.find((chat) => chat._id === conversationId);
 
             if (chat) {
-                if (chat.messages?.length) chat.messages = [...chat.messages, ...payload];
-                else chat.messages = payload;
+                if (chat.messages?.length) {
+                } else chat.messages = payload;
 
                 if (state.active?._id === conversationId) state.active.messages = chat.messages;
             }
         },
         addMessageHead: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ addMessageHead');
             console.log('🚀 ~ payload:', payload);
             const conversationId = payload.conversationId || payload.conversation._id;
 
@@ -146,10 +150,12 @@ const chatsSlice = createSlice({
                     const index = state.chats.findIndex((item) => !item.pinBy.includes(payload.myId));
 
                     if (index >= 0) state.chats.splice(index, 0, chat);
+                    else state.chats.unshift(chat);
                 }
             }
         },
         addMessageHeadSocket: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ addMessageHeadSocket');
             console.log('🚀 ~ payload:', payload);
             const conversationId = payload.conversationId || payload.conversation._id;
 
@@ -176,12 +182,14 @@ const chatsSlice = createSlice({
             }
         },
         addChat: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ addChat');
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
 
             if (index < 0) state.chats.unshift(payload);
             else state.chats[index] = payload;
         },
         addChatAndActive: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ addChatAndActive');
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
 
             if (index < 0) state.chats.unshift(payload);
@@ -190,6 +198,7 @@ const chatsSlice = createSlice({
             state.active = payload;
         },
         setMessages: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ setMessages');
             if (!payload?.length) return state;
 
             const conversationId = payload[0].conversationId || payload[0].conversation._id;
@@ -239,6 +248,7 @@ const chatsSlice = createSlice({
         },
         reset: (state) => ({ ...state, ...initialState }),
         addChats: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ addChats');
             if (!payload?.length) return state;
 
             payload.forEach((chat) => {
@@ -256,6 +266,7 @@ const chatsSlice = createSlice({
             })
             .addCase(getChats.fulfilled, (state, { payload }) => {
                 state.chats = payload;
+                state.firstFetch = true;
                 state.loading = false;
             })
             .addCase(getChats.rejected, (state) => {

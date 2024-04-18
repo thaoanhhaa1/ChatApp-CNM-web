@@ -30,7 +30,7 @@ const Chats = () => {
     const { t } = useTranslation();
     const { width, height } = useWindowSize();
     const { users: onlineUsers } = useSelector((state) => state.onlineUsers);
-    const { chats, active, loading } = useSelector((state) => state.chats);
+    const { chats, active, loading, firstFetch } = useSelector((state) => state.chats);
     const { search } = useSelector((state) => state.search);
     const [searchValue, setSearchValue] = useState('');
     const inputWrapRef = useRef();
@@ -75,8 +75,8 @@ const Chats = () => {
             }
         };
 
-        chats?.length || fetchChats();
-    }, [chats?.length, dispatch]);
+        firstFetch || fetchChats();
+    }, [dispatch, firstFetch]);
 
     useEffect(() => {
         dispatch(setMessages([]));

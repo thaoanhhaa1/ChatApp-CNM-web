@@ -43,16 +43,18 @@ const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {},
             )}
         >
             <div className="w-0.5 h-10 bg-primary-color" />
-            {image ? <LazyLoadImage alt="" src={image} className="w-9 h-9 object-cover" /> : null}
-            {otherFileName ? (
+            {image && !recalled ? <LazyLoadImage alt="" src={image} className="w-9 h-9 object-cover" /> : null}
+            {otherFileName && !recalled ? (
                 <div className="w-9 h-9 flex justify-center items-center text-primary-color bg-[#e3e1fc] dark:bg-[rgba(114,105,239,.15)] rounded">
                     <FileTextFillIcon className="w-4 h-4" />
                 </div>
             ) : null}
-            {message.sticker ? <StickerItem url={message.sticker} className="w-9 h-9" /> : null}
+            {message.sticker && !recalled ? <StickerItem url={message.sticker} className="w-9 h-9" /> : null}
             <div className="flex-1">
                 <div className="text-ss font-medium line-clamp-1">{message.sender?.name}</div>
-                {subTitle ? <span className="text-secondary dark:text-dark-secondary text-sm">{subTitle}</span> : null}
+                {subTitle && !recalled ? (
+                    <span className="text-secondary dark:text-dark-secondary text-sm">{subTitle}</span>
+                ) : null}
 
                 {message.messages?.length || recalled ? (
                     <ChatMessage

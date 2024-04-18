@@ -74,7 +74,7 @@ const Footer = () => {
             handleSendTextMessage({
                 messages,
                 conversationId: active._id,
-                reply: reply?._id,
+                reply,
             });
         } else {
             // Text + n images + n other files
@@ -82,7 +82,7 @@ const Footer = () => {
                 handleSendTextMessage({
                     messages,
                     conversationId: active._id,
-                    reply: reply?._id,
+                    reply,
                 });
             }
 
