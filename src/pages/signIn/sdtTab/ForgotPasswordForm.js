@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import validator from 'validator';
 import { EmailIcon } from '~/assets';
 import Button from '~/components/button';
@@ -14,20 +15,30 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
     const [showUpdatePass, setShowUpdatePass] = useState(false);
     const [phone, setPhone] = useState(sdt);
     const { value, setFalse, setTrue } = useBoolean();
+    const [loading, setLoading] = useState(false);
 
     const handleContinue = async () => {
         setFalse();
+        setLoading(true);
 
-        if (!validator.isEmail(phone)) setTrue();
-        else {
-            try {
-                const response = await authServices.sendOTPForgotPassword(phone);
-                console.log(response.data);
-                setShowUpdatePass(true);
-            } catch (error) {
-                console.error('Lỗi khi tạo mã OTP:', error);
-            }
+        if (!validator.isEmail(phone)) return setTrue();
+
+        try {
+            const response = await authServices.sendOTPForgotPassword(phone);
+            console.log(response.data);
+            setShowUpdatePass(true);
+        } catch (error) {
+            console.error('Lỗi khi tạo mã OTP:', error);
+
+            toast.error(t('request-error'));
         }
+
+        setLoading(false);
+    };
+
+    const handleBack = () => {
+        onBack();
+        setShowUpdatePass(false);
     };
 
     return (
@@ -54,7 +65,8 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
                     )}
 
                     <Button
-                        disabled={phone.length < 6}
+                        loading={loading}
+                        disabled={phone.length < 6 || loading}
                         className="w-full hover:bg-hoverPurple"
                         primary
                         onClick={handleContinue}
@@ -73,7 +85,7 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
                 </>
             ) : (
                 <div>
-                    <UpdatePasswordForm sdt={phone} />
+                    <UpdatePasswordForm sdt={phone} onBack={handleBack} />
                 </div>
             )}
         </div>

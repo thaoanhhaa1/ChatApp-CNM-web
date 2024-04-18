@@ -14,7 +14,8 @@ import { setUser } from '~/features/user/userSlice';
 import authServices from '~/services/auth.service';
 import { token } from '~/utils';
 
-const UpdatePasswordForm = ({ sdt }) => {
+// TODO Update error message
+const UpdatePasswordForm = ({ sdt, onBack }) => {
     const { t } = useTranslation();
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
@@ -22,33 +23,43 @@ const UpdatePasswordForm = ({ sdt }) => {
     const [otpCode, setOtpCode] = useState('');
     const navigation = useNavigate();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         if (name === 'otpCode') {
             setOtpCode(value);
-            if (!value) setErrors({ ...errors, otpCode: t('register.error-otp-code1') });
-            else {
-                setErrors({ ...errors, otpCode: '' });
-            }
         } else if (name === 'password') {
             setPassword(value);
-            if (!validator.matches(password, /^(?=.*\d)(?=.*[a-zA-Z]).{6,32}$/)) {
-                setErrors({ ...errors, password: t('register.error-password') });
+        } else if (name === 'confirmPassword') setConfirmPassword(value);
+    };
+
+    const validate = () => {
+        if (!otpCode) setErrors({ ...errors, otpCode: t('register.error-otp-code1') });
+        else setErrors({ ...errors, otpCode: '' });
+
+        if (!validator.matches(password, /^(?=.*\d)(?=.*[a-zA-Z]).{6,32}$/)) {
+            setErrors({ ...errors, password: t('register.error-password') });
+        } else {
+            setErrors({ ...errors, password: '' });
+
+            if (password !== confirmPassword) {
+                setErrors({ ...errors, confirmPassword: t('register.error-password-01') });
             } else {
-                setErrors({ ...errors, password: '' });
+                setErrors({ ...errors, confirmPassword: '' });
             }
-        } else if (name === 'confirmPassword') {
-            setConfirmPassword(value);
         }
     };
 
     const handleConfirm = async () => {
+        validate();
+
         if (!errors.password && !errors.otpCode) {
             if (password !== confirmPassword) {
                 setErrors({ ...errors, confirmPassword: t('register.error-password-01') });
             } else {
                 try {
+                    setLoading(true);
                     setErrors('');
                     console.log(sdt, otpCode, password);
                     await authServices.verifyOTPForgotPassword({ contact: sdt, otp: otpCode, password: password });
@@ -61,6 +72,8 @@ const UpdatePasswordForm = ({ sdt }) => {
                     navigation(config.routes.chats);
                 } catch (error) {
                     setErrors({ ...errors, otpCode: t('register.error-otp-code') });
+                } finally {
+                    setLoading(false);
                 }
             }
         }
@@ -127,14 +140,26 @@ const UpdatePasswordForm = ({ sdt }) => {
                 className="hover:bg-hoverPurple w-full"
                 primary
                 onClick={handleConfirm}
-                disabled={password.length < 6}
+                disabled={password.length < 6 || loading}
+                loading={loading}
             >
                 {t('login.confirm')}
             </Button>
+
+            <div className="mt-3 w-full">
+                <span
+                    onClick={onBack}
+                    className="text-ss cursor-pointer transition-colors hover:underline hover:text-primary-color"
+                >
+                    &#171; &nbsp;
+                    {t('login.back')}
+                </span>
+            </div>
         </div>
     );
 };
 UpdatePasswordForm.propTypes = {
     sdt: PropTypes.string.isRequired,
+    onBack: PropTypes.func.isRequired,
 };
 export default UpdatePasswordForm;

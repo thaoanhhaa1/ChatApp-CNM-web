@@ -232,7 +232,8 @@
         "placeholder": "Enter display name",
         "updateError": "Update error",
         "updateSuccess": "Update success",
-        "update-avatar-fail": "Update avatar fail"
+        "update-avatar-fail": "Update avatar fail",
+        "error-incorrect-old-password": "Incorrect old password"
     },
     "not-found": {
         "title": "Look like you're lost",
