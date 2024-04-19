@@ -2,24 +2,21 @@ import PropTypes from 'prop-types';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { FileTextFillIcon, ImageFillIcon, LocationIcon, MoreFillIcon, PinFilledIcon, StickerSmileIcon } from '~/assets';
-import { DeleteMessageStatus } from '~/constants';
+import { MoreFillIcon, PinFilledIcon } from '~/assets';
 import { useLayout } from '~/context';
 import { setActive, togglePin } from '~/features/chats/chatsSlice';
 import conversationServices from '~/services/conversation.service';
 import {
     classNames,
     convertToAvatarUrlList,
-    getLastMessageNoDeleted,
     getNameConversation,
     getTimeChat,
     getUnseenMessageNumber,
-    isImageFileByType,
     isPinConversation,
 } from '~/utils';
 import Avatar from '../avatar';
 import AvatarGroup from '../avatarGroup';
-import ChatMessage from '../chatMessage';
+import ChatItemMessage from '../chatItemMessage';
 import Popup from '../popup';
 import Typing from '../typing';
 
@@ -30,9 +27,6 @@ const ChatItem = ({ chat, active }) => {
     const { active: activeChat } = useSelector((state) => state.chats);
     const dispatch = useDispatch();
     const receiver = useMemo(() => (chat.isGroup ? {} : chat.users.find((u) => u._id !== user._id)), [chat, user]);
-    const lastMessage = getLastMessageNoDeleted(chat.messages) || chat.lastMessage;
-    const isHasFiles = lastMessage?.files?.length;
-    const isImageList = isHasFiles && isImageFileByType(lastMessage.files[0].type);
     const isPin = isPinConversation(chat, user);
     const isTyping = chat.users.some((u) => u.typing);
     const conversationName = getNameConversation(chat, user._id);
@@ -43,17 +37,6 @@ const ChatItem = ({ chat, active }) => {
         dispatch(togglePin({ conversationId: chat._id, userId: user._id }));
     }, [chat._id, dispatch, user._id]);
 
-    const subTitle = useMemo(() => {
-        if (lastMessage?.sticker) return t('chats.sticker');
-
-        if (isImageList) return t('chats.photo');
-
-        if (isHasFiles) return lastMessage?.files[0].name;
-
-        if (lastMessage.location) return lastMessage.location.vicinity;
-
-        return '';
-    }, [lastMessage?.sticker, lastMessage?.files, lastMessage.location, t, isImageList, isHasFiles]);
     const more = useMemo(() => {
         const more = [
             {
@@ -90,7 +73,6 @@ const ChatItem = ({ chat, active }) => {
     }, [isPin, t, togglePinConversation]);
 
     const message = chat.lastMessage;
-    const recalled = message?.deleted === DeleteMessageStatus.RECALL;
 
     const handleClickChat = () => {
         setShowChat(true);
@@ -126,44 +108,7 @@ const ChatItem = ({ chat, active }) => {
                     </div>
                 </div>
                 <div className="flex gap-1 items-center justify-between">
-                    {(isTyping && <Typing />) || (
-                        <div className="flex gap-1 items-center">
-                            {!recalled && isImageList ? (
-                                <span className="text-secondary dark:text-dark-secondary">
-                                    <ImageFillIcon className="w-[14px] h-[14px]" />
-                                </span>
-                            ) : null}
-                            {!recalled && message?.sticker ? (
-                                <span className="text-secondary dark:text-dark-secondary">
-                                    <StickerSmileIcon className="w-[14px] h-[14px]" />
-                                </span>
-                            ) : null}
-                            {!recalled && isHasFiles && !isImageList ? (
-                                <span className="text-secondary dark:text-dark-secondary">
-                                    <FileTextFillIcon className="w-[14px] h-[14px]" />
-                                </span>
-                            ) : null}
-                            {!recalled && lastMessage.location ? (
-                                <span className="text-secondary dark:text-dark-secondary">
-                                    <LocationIcon className="w-[14px] h-[14px]" />
-                                </span>
-                            ) : null}
-                            {subTitle && !recalled && !message?.messages?.length ? (
-                                <span className="text-sm text-secondary dark:text-dark-secondary line-clamp-1">
-                                    {subTitle}
-                                </span>
-                            ) : null}
-                            {message?.messages || recalled ? (
-                                <ChatMessage
-                                    status={message?.deleted}
-                                    isMe
-                                    className="line-clamp-1"
-                                    isReply
-                                    messages={message?.messages || []}
-                                />
-                            ) : null}
-                        </div>
-                    )}
+                    {(isTyping && <Typing />) || <ChatItemMessage chat={chat} />}
                     {chat.unseenMessages && chat._id !== activeChat?._id ? (
                         <div className="ml-auto w-fit px-1.5 py-0.5 rounded-full text-[10px] font-semibold leading-[1.6] text-danger bg-danger bg-opacity-20">
                             {getUnseenMessageNumber(chat.unseenMessages)}

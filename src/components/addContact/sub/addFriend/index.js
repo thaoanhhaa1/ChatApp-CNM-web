@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import AddFriendBody from '~/components/addFriend';
 import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
@@ -28,24 +29,28 @@ const AddFriend = ({ onClose }) => {
     const handleAddFriend = async () => {
         const { message, blockView } = data;
 
-        const [res, conversation] = await Promise.all([
-            dispatch(addFriend({ friendId: contact._id, message, blockView })).unwrap(),
-            conversationServices.openConversation(contact._id),
-        ]);
+        try {
+            const [res, conversation] = await Promise.all([
+                dispatch(addFriend({ friendId: contact._id, message, blockView })).unwrap(),
+                conversationServices.openConversation(contact._id),
+            ]);
 
-        onClose();
-        socket.emit('sendFriendRequest', {
-            ...res.data,
-            receiver_id: res.data.receiver_id._id,
-            sender_id: user,
-        });
-        socket.emit('openConversation', {
-            conversation: conversation.data,
-            user,
-        });
-        dispatch(addChat(conversation.data));
-        dispatch(addRequestFriend(res.data));
-        dispatch(setToast(t('contacts.modal.addFriendSuccess')));
+            onClose();
+            socket.emit('sendFriendRequest', {
+                ...res.data,
+                receiver_id: res.data.receiver_id._id,
+                sender_id: user,
+            });
+            socket.emit('openConversation', {
+                conversation: conversation.data,
+                user,
+            });
+            dispatch(addChat(conversation.data));
+            dispatch(addRequestFriend(res.data));
+            dispatch(setToast(t('contacts.modal.addFriendSuccess')));
+        } catch (error) {
+            toast.error(t('request-error'));
+        }
     };
 
     if (!contact.name) return;

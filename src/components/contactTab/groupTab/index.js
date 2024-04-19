@@ -8,7 +8,7 @@ import List from '~/components/list';
 import Popup from '~/components/popup';
 import { sortGroup } from '~/constants';
 import { GROUP_NAME, RECENT_ACTIVITY } from '~/constants/sortGroup';
-import { getGroups } from '~/features/contactGroups/contactGroupsSlice';
+import { getChats } from '~/features/chats/chatsSlice';
 import { useBoolean } from '~/hooks';
 import Button from '../Button';
 import Seperate from '../Seperate';
@@ -17,7 +17,8 @@ import CreateGroup from './createGroup';
 
 const Group = () => {
     const { t } = useTranslation();
-    const { groups, loading, firstFetch } = useSelector((state) => state.contactGroups);
+    const { chats, loading, firstFetch } = useSelector((state) => state.chats);
+    const groups = useMemo(() => chats.filter((chat) => chat.isGroup), [chats]);
     const [sort, setSort] = useState(sortGroup[0]);
     const sorts = useMemo(
         () => sortGroup.map((sort) => ({ ...sort, title: t(sort.title), onClick: () => setSort(sort) })),
@@ -36,7 +37,7 @@ const Group = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        firstFetch || dispatch(getGroups());
+        firstFetch || dispatch(getChats());
     }, [dispatch, firstFetch]);
 
     return (

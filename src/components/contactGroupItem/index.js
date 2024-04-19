@@ -5,6 +5,7 @@ import { addChatAndActive } from '~/features/chats/chatsSlice';
 import { getDateTimeContactGroup } from '~/utils';
 import Avatar from '../avatar';
 import AvatarGroup from '../avatarGroup';
+import ChatItemMessage from '../chatItemMessage';
 
 const ContactGroupItem = ({ group }) => {
     const avatars = useMemo(() => group.users.map((user) => user.avatar), [group.users]);
@@ -30,13 +31,9 @@ const ContactGroupItem = ({ group }) => {
             <div className="flex-1">
                 <div className="flex items-center justify-between gap-2">
                     <div className="text-sm font-medium line-clamp-1">{group.name}</div>
-                    <span className="text-xs font-medium">{getDateTimeContactGroup(group.createdAt)}</span>
+                    <span className="text-xs font-medium">{getDateTimeContactGroup(group.updatedAt)}</span>
                 </div>
-                <p className="line-clamp-1 text-ss text-secondary dark:text-dark-secondary">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident odio aperiam facilis maiores
-                    ullam dicta iusto veniam sunt assumenda minima, fugit molestiae magnam numquam accusantium quia,
-                    voluptate tenetur omnis pariatur!
-                </p>
+                {group.lastMessage ? <ChatItemMessage chat={group} /> : null}
             </div>
         </div>
     );

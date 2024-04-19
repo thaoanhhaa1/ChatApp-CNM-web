@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DeleteMessageStatus } from '~/constants';
+import { DeleteMessageStatus, FriendStatus } from '~/constants';
 import {
     addChat,
     addMessageHead,
@@ -25,6 +25,7 @@ import {
 import { addMessageSocket, updateDeletedMessage, updateReact } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
 import sound from '~/assets/sounds/message-sound.mp3';
+import { setContact } from '~/features/addContact/addContactSlice';
 
 const messageSound = new Audio(sound);
 
@@ -32,6 +33,7 @@ const SocketListener = ({ children }) => {
     const { active } = useSelector((state) => state.chats);
     const { socket } = useSelector((state) => state.socket);
     const { user } = useSelector((state) => state.user);
+    const { contact } = useSelector((state) => state.addContact);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -141,12 +143,17 @@ const SocketListener = ({ children }) => {
 
             dispatch(addResponseFriend(friendRequest));
             dispatch(setNewReceived(true));
+
+            if (contact?._id === friendRequest.sender_id._id)
+                dispatch(setContact({ ...contact, status: FriendStatus.RECEIVED }));
         });
 
         socket.on('acceptFriend', (data) => {
             console.log('🚀 ~ socket.on ~ acceptFriend ~ data:', data);
 
             dispatch(acceptFriendSent(data));
+
+            if (contact?._id === data.user._id) dispatch(setContact({ ...contact, status: FriendStatus.FRIEND }));
         });
 
         socket.on('rejectFriend', ({ _id }) => {
@@ -155,10 +162,12 @@ const SocketListener = ({ children }) => {
             dispatch(rejectFriendSent(_id));
         });
 
-        socket.on('revocationRequestFriend', ({ _id }) => {
+        socket.on('revocationRequestFriend', ({ _id, receivedId }) => {
             console.log('🚀 ~ socket.on ~ revocationRequestFriend ~ _id:', _id);
 
             dispatch(rejectFriendReceived(_id));
+
+            if (contact?._id === receivedId) dispatch(setContact({ ...contact, status: FriendStatus.NOT_FRIEND }));
         });
 
         socket.on('deleteFriend', ({ senderId }) => {
@@ -187,7 +196,7 @@ const SocketListener = ({ children }) => {
             dispatch(removeConversation(conversationId));
             dispatch(removeGroup(conversationId));
         });
-    }, [active?._id, dispatch, socket, user?._id]);
+    }, [active?._id, contact, dispatch, socket, user?._id]);
 
     return children;
 };

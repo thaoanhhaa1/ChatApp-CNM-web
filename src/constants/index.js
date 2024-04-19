@@ -14,6 +14,7 @@ export { default as sortGroup } from './sortGroup';
 export { default as statusUser } from './statusUser';
 export { default as sentMessageStatus } from './sentMessageStatus';
 export { default as DeleteMessageStatus } from './DeleteMessageStatus';
+export { default as FriendStatus } from './FriendStatus';
 export * as groupRole from './roleMemberInGroup';
 
 export const constants = {

@@ -1,5 +1,5 @@
 import { useDebounce, useWindowSize } from '@uidotdev/usehooks';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -24,8 +24,8 @@ import { location } from '~/utils';
 
 location.getCoords().then().catch();
 
-// TODO Search
 // TODO Click online user
+// TODO Delete conversation
 const Chats = () => {
     const { t } = useTranslation();
     const { width, height } = useWindowSize();
@@ -40,10 +40,10 @@ const Chats = () => {
     const chatsCanShow = useMemo(() => chats.filter((chat) => chat.lastMessage), [chats]);
     const dispatch = useDispatch();
 
-    const handleCloseSearch = () => {
+    const handleCloseSearch = useCallback(() => {
         hideSearch();
         setSearchValue('');
-    };
+    }, [hideSearch]);
 
     useLayoutEffect(() => {
         const element = inputWrapRef.current;
@@ -83,8 +83,8 @@ const Chats = () => {
     }, [active?._id, dispatch]);
 
     useEffect(() => {
-        active?.lastMessage && hideSearch();
-    }, [active?.lastMessage, hideSearch]);
+        active?.lastMessage && handleCloseSearch();
+    }, [active?.lastMessage, handleCloseSearch]);
 
     return (
         <div className="relative h-full flex flex-col">

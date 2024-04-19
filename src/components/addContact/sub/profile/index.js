@@ -2,14 +2,16 @@ import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { BlockIcon, ContactCardIcon, UserGroupIcon, WarningIcon } from '~/assets';
+import { toast } from 'react-toastify';
+import { BlockIcon, UserGroupIcon, WarningIcon } from '~/assets';
 import Alert from '~/components/alert';
 import Button from '~/components/button';
 import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
-import { personalInformation } from '~/constants';
+import { FriendStatus, personalInformation } from '~/constants';
 import { blockContact, setContact, unblockContact } from '~/features/addContact/addContactSlice';
 import { getConversation, setActive } from '~/features/chats/chatsSlice';
+import { acceptFriendReceived } from '~/features/friend/friendSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import friendServices from '~/services/friend.service';
 import { classNames, getChatIndividual } from '~/utils';
@@ -24,15 +26,18 @@ const Profile = ({ onClose }) => {
     const { contact } = useSelector((state) => state.addContact);
     const { chats } = useSelector((state) => state.chats);
     const { updateHeightPopup } = useSelector((state) => state.popupMultiLevel);
+    const { socket } = useSelector((state) => state.socket);
+    const { user } = useSelector((state) => state.user);
+    const { friendSent, friendReceived } = useSelector((state) => state.friend);
     const dispatch = useDispatch();
     const information = useMemo(() => personalInformation[contact?.blocked ? 'block' : 'noBlock'], [contact?.blocked]);
     const [chatLoading, setChatLoading] = useState(false);
     const [otherLoading, setOtherLoading] = useState(false);
 
     // TODO
-    const handleShareContact = () => {
-        console.log('🚀 ~ handleShareContact ~ handleShareContact');
-    };
+    // const handleShareContact = () => {
+    //     console.log('🚀 ~ handleShareContact ~ handleShareContact');
+    // };
 
     // TODO
     const handleShowGroupMutual = () => {
@@ -44,30 +49,55 @@ const Profile = ({ onClose }) => {
         dispatch(blockContact());
 
         // Show notification
+        // Update in db
     };
 
     // TODO
+    const handleUnblock = () => dispatch(unblockContact());
+
+    // TODO Send report to server
     const handleReport = () => dispatch(addSub(Report));
 
-    // TODO Realtime
     const handleUndo = async () => {
         setOtherLoading(true);
 
         try {
+            const friendRequest = friendSent.find((item) => item.receiver_id._id === contact._id);
             await friendServices.revocationRequestFriend(contact._id);
 
-            dispatch(setContact({ ...contact, status: 0 }));
+            dispatch(setContact({ ...contact, status: FriendStatus.NOT_FRIEND }));
+            socket.emit('revocationRequestFriend', {
+                _id: friendRequest._id,
+                senderId: friendRequest.receiver_id._id,
+                receivedId: friendRequest.sender_id,
+            });
         } catch (error) {
+            toast.error(t('request-error'));
         } finally {
             setOtherLoading(false);
         }
     };
 
-    // TODO Realtime
     const handleAddFriend = () => dispatch(addSub(AddFriend));
 
-    // TODO
-    const handleAcceptFriend = () => {};
+    const handleAcceptFriend = async () => {
+        setOtherLoading(true);
+
+        try {
+            const friendResponse = friendReceived.find((item) => item.sender_id._id === contact._id);
+            const sender_id = friendResponse.sender_id;
+            await friendServices.acceptFriend(sender_id._id);
+
+            socket.emit('acceptFriend', { _id: contact._id, user, senderId: sender_id._id });
+            dispatch(acceptFriendReceived({ _id: contact._id, user: sender_id }));
+            dispatch(setContact({ ...contact, status: FriendStatus.FRIEND }));
+        } catch (error) {
+            console.error(error);
+            toast.error(t('request-error'));
+        } finally {
+            setOtherLoading(false);
+        }
+    };
 
     const handleClickChat = async () => {
         setChatLoading(true);
@@ -77,16 +107,14 @@ const Profile = ({ onClose }) => {
 
             if (chat) dispatch(setActive(chat));
             else await dispatch(getConversation(contact._id)).unwrap();
+            onClose();
         } catch (error) {
             console.error(error);
+            toast.error(t('request-error'));
         } finally {
             setChatLoading(false);
-            onClose();
         }
     };
-
-    // TODO
-    const handleUnblock = () => dispatch(unblockContact());
 
     useEffect(() => {
         updateHeightPopup();
@@ -128,7 +156,7 @@ const Profile = ({ onClose }) => {
                                     </>
                                 )) || (
                                     <>
-                                        {contact.status === 2 && (
+                                        {contact.status === FriendStatus.REQUESTED && (
                                             <Button
                                                 loading={otherLoading}
                                                 disabled={otherLoading}
@@ -139,7 +167,7 @@ const Profile = ({ onClose }) => {
                                                 {t(`contacts.modal.undoRequest`)}
                                             </Button>
                                         )}
-                                        {contact.status === 0 && (
+                                        {contact.status === FriendStatus.NOT_FRIEND && (
                                             <Button
                                                 loading={otherLoading}
                                                 disabled={otherLoading}
@@ -150,7 +178,7 @@ const Profile = ({ onClose }) => {
                                                 {t(`contacts.modal.addFriend`)}
                                             </Button>
                                         )}
-                                        {contact.status === 3 && (
+                                        {contact.status === FriendStatus.RECEIVED && (
                                             <Button
                                                 loading={otherLoading}
                                                 disabled={otherLoading}
@@ -193,12 +221,16 @@ const Profile = ({ onClose }) => {
                         <div className="py-2 ex:py-2.5 sm:py-3 bg-white dark:bg-[#242526]">
                             {contact?.blocked || (
                                 <>
-                                    <Action onClick={handleShowGroupMutual} disabled Icon={UserGroupIcon}>
-                                        {t('contacts.modal.mutualGroup')}&nbsp;({0})
+                                    <Action
+                                        onClick={handleShowGroupMutual}
+                                        disabled={!contact?.commonGroupCount}
+                                        Icon={UserGroupIcon}
+                                    >
+                                        {t('contacts.modal.mutualGroup')}&nbsp;({contact?.commonGroupCount || 0})
                                     </Action>
-                                    <Action onClick={handleShareContact} disabled Icon={ContactCardIcon}>
+                                    {/* <Action onClick={handleShareContact} disabled Icon={ContactCardIcon}>
                                         {t('contacts.modal.shareContact')}
-                                    </Action>
+                                    </Action> */}
                                     <Action onClick={handleBlock} Icon={BlockIcon}>
                                         {t('contacts.modal.blockMessagesAndCalls')}
                                     </Action>
