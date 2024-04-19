@@ -35,7 +35,10 @@ const friendSlice = createSlice({
         },
         addResponseFriend: (state, { payload }) => {
             console.log('🚀 ~ friend ~ addResponseFriend');
-            state.friendReceived.unshift(payload);
+
+            const index = state.friendReceived.findIndex((item) => item._id === payload._id);
+
+            if (index === -1) state.friendReceived.unshift(payload);
         },
         setNewReceived: (state, { payload }) => {
             state.hasNewReceived = payload;
@@ -45,11 +48,9 @@ const friendSlice = createSlice({
             const { _id, user } = payload;
 
             const index = state.friendSent.findIndex((item) => item._id === _id);
-
             if (index !== -1) state.friendSent.splice(index, 1);
 
             const userIndex = state.friendList.findIndex((item) => item._id === user._id);
-
             if (userIndex === -1) state.friendList.push(user);
         },
         acceptFriendReceived: (state, { payload }) => {
@@ -57,9 +58,10 @@ const friendSlice = createSlice({
             const { _id, user } = payload;
 
             const index = state.friendReceived.findIndex((item) => item._id === _id);
-
             if (index !== -1) state.friendReceived.splice(index, 1);
-            state.friendList.push(user);
+
+            const userIndex = state.friendList.findIndex((item) => item._id === user._id);
+            if (userIndex === -1) state.friendList.push(user);
         },
         rejectFriendSent: (state, { payload }) => {
             const index = state.friendSent.findIndex((item) => item._id === payload);

@@ -11,7 +11,7 @@ import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { FriendStatus, personalInformation } from '~/constants';
 import { blockContact, setContact, unblockContact } from '~/features/addContact/addContactSlice';
 import { getConversation, setActive } from '~/features/chats/chatsSlice';
-import { acceptFriendReceived } from '~/features/friend/friendSlice';
+import { acceptFriendReceived, rejectFriendSent } from '~/features/friend/friendSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import friendServices from '~/services/friend.service';
 import { classNames, getChatIndividual } from '~/utils';
@@ -66,6 +66,7 @@ const Profile = ({ onClose }) => {
             await friendServices.revocationRequestFriend(contact._id);
 
             dispatch(setContact({ ...contact, status: FriendStatus.NOT_FRIEND }));
+            dispatch(rejectFriendSent(friendRequest._id));
             socket.emit('revocationRequestFriend', {
                 _id: friendRequest._id,
                 senderId: friendRequest.receiver_id._id,
@@ -88,8 +89,8 @@ const Profile = ({ onClose }) => {
             const sender_id = friendResponse.sender_id;
             await friendServices.acceptFriend(sender_id._id);
 
-            socket.emit('acceptFriend', { _id: contact._id, user, senderId: sender_id._id });
-            dispatch(acceptFriendReceived({ _id: contact._id, user: sender_id }));
+            socket.emit('acceptFriend', { _id: friendResponse._id, user, senderId: sender_id._id });
+            dispatch(acceptFriendReceived({ _id: friendResponse._id, user: sender_id }));
             dispatch(setContact({ ...contact, status: FriendStatus.FRIEND }));
         } catch (error) {
             console.error(error);

@@ -131,8 +131,7 @@ const Register = () => {
         }
 
         if (step === 2) {
-            if (!validator.matches(email, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
-                validationErrors.email = t('register.error-email');
+            if (!validator.isEmail(email)) validationErrors.email = t('register.error-email');
             else {
                 try {
                     await authServices.createOTP({ contact: email });
@@ -185,7 +184,6 @@ const Register = () => {
         const validationErrors = validateFormFields(currentStep);
 
         if (Object.keys(validationErrors).length) {
-            // TODO Handle validate
             setErrors(validationErrors);
             setLoading(false);
             return;

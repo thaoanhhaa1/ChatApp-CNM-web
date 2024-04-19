@@ -63,7 +63,7 @@ const ContactItem = ({ contact }) => {
         e.stopPropagation();
         console.log('handleCallVideo');
     };
-    // FIXME
+
     const handleClickItem = () => {
         console.log('handleClickItem');
         const chat = getChatIndividual(chats, contact._id);

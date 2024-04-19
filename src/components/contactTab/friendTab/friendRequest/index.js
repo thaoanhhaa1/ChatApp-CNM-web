@@ -18,7 +18,6 @@ import SentTab from './SentTab';
 const RECEIVED_TAB = '1';
 const SENT_TAB = '2';
 
-// TODO Empty friend request
 const FriendRequest = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
     const [tab, setTab] = useState(RECEIVED_TAB);

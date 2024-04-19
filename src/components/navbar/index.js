@@ -1,10 +1,10 @@
 import Tippy from '@tippyjs/react';
 import i18next from 'i18next';
 import PropTypes from 'prop-types';
-import {useCallback, useLayoutEffect, useMemo, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {useDispatch, useSelector} from 'react-redux';
-import {Link, useNavigate} from 'react-router-dom';
+import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     ClockIcon,
     ContactIcon,
@@ -16,24 +16,25 @@ import {
     ProfileIcon,
     SettingIcon,
     SunIcon,
+    UserIcon,
 } from '~/assets';
 import images from '~/assets/images';
 import config from '~/config';
 import routes from '~/config/routes';
-import {reset as resetChat} from '~/features/chat/chatSlice';
-import {reset as resetChats} from '~/features/chats/chatsSlice';
-import {reset as resetContactGroups} from '~/features/contactGroups/contactGroupsSlice';
-import {reset as resetCreateGroup} from '~/features/createGroup/createGroupSlice';
-import {reset as resetFriend} from '~/features/friend/friendSlice';
-import {reset as resetLocalSettings, setSetting} from '~/features/localSetting/localSettingSlice';
-import {reset as resetLocation} from '~/features/location/locationSlice';
-import {reset as resetMessages} from '~/features/messages/messagesSlice';
-import {reset as resetSearch} from '~/features/search/searchSlice';
-import {disconnect} from '~/features/socket/socketSlice';
-import {remove as resetUser} from '~/features/user/userSlice';
-import {Profile, Setting} from '~/pages';
+import { reset as resetChat } from '~/features/chat/chatSlice';
+import { reset as resetChats } from '~/features/chats/chatsSlice';
+import { reset as resetContactGroups } from '~/features/contactGroups/contactGroupsSlice';
+import { reset as resetCreateGroup } from '~/features/createGroup/createGroupSlice';
+import { reset as resetFriend } from '~/features/friend/friendSlice';
+import { reset as resetLocalSettings, setSetting } from '~/features/localSetting/localSettingSlice';
+import { reset as resetLocation } from '~/features/location/locationSlice';
+import { reset as resetMessages } from '~/features/messages/messagesSlice';
+import { reset as resetSearch } from '~/features/search/searchSlice';
+import { disconnect } from '~/features/socket/socketSlice';
+import { remove as resetUser } from '~/features/user/userSlice';
+import { Profile, Setting } from '~/pages';
 import authServices from '~/services/auth.service';
-import {classNames, token} from '~/utils';
+import { classNames, token } from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
@@ -53,7 +54,6 @@ const languages = [
 
 const html = document.querySelector('html');
 
-// TODO Profile, Setting navigation
 const Navbar = ({ className }) => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);
@@ -93,11 +93,11 @@ const Navbar = ({ className }) => {
     }, [dispatch]);
 
     const navBars = [
-        // {
-        //     title: 'navbar.profile',
-        //     icon: UserIcon,
-        //     to: routes.profile,
-        // },
+        {
+            title: 'navbar.profile',
+            icon: UserIcon,
+            onClick: () => setOpenProfileModal(true),
+        },
         {
             title: 'navbar.chats',
             icon: MessageIcon,
@@ -115,11 +115,11 @@ const Navbar = ({ className }) => {
             to: routes.contacts,
             badge: hasNewReceived ? 'N' : '',
         },
-        // {
-        //     title: 'navbar.settings',
-        //     icon: SettingIcon,
-        //     to: routes.settings,
-        // },
+        {
+            title: 'navbar.settings',
+            icon: SettingIcon,
+            onClick: () => setOpenSettingModal(true),
+        },
     ];
 
     const actions = useMemo(
@@ -200,9 +200,9 @@ const Navbar = ({ className }) => {
                         <Avatar src={user.avatar} />
                     </button>
                 </Popup>
-                {openProfileModal && <Profile onClose={handleCloseProfile} />}
 
-                {openSettingModal && <Setting onClose={handleCloseSetting} />}
+                <Profile show={openProfileModal} onClose={handleCloseProfile} />
+                <Setting show={openSettingModal} onClose={handleCloseSetting} />
             </div>
         </nav>
     );

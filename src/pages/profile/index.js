@@ -16,7 +16,7 @@ import { formatDate } from '~/utils';
 import EditProfileModal from './EditProfileModal';
 import ZoomAvatar from './ZoomAvatar';
 
-const Profile = ({ onClose }) => {
+const Profile = ({ show, onClose }) => {
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -38,7 +38,7 @@ const Profile = ({ onClose }) => {
 
     return (
         <ProfileProvider value={{ avatar }}>
-            <Modal show={true} onClickOutside={handleClose}>
+            <Modal show={show} onClickOutside={handleClose}>
                 <PopupMultiLevel onClose={handleClose}>
                     <Modal.Header onClose={handleClose}>{t('contacts.modal.profile')}</Modal.Header>
 
@@ -112,7 +112,8 @@ const Profile = ({ onClose }) => {
 };
 
 Profile.propTypes = {
-    onClose: PropTypes.func,
+    show: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
 };
 
 export default Profile;

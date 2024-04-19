@@ -15,7 +15,6 @@ import Wrapper from '../Wrapper';
 import FriendRequest from './friendRequest';
 import PhoneBookSub from './phoneBook';
 
-// TODO Empty contact
 const Friend = () => {
     const { t } = useTranslation();
     const { friendList, friendListLoading, friendListFirstFetch } = useSelector((state) => state.friend);

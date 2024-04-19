@@ -183,7 +183,9 @@
             "allow-stranger-desc": "Allow unknown people to add friend by follow sources",
             "my-qr": "My QR code",
             "common-group": "Common group",
-            "suggest": "Suggest \"May be you known\""
+            "suggest": "Suggest \"May be you known\"",
+            "empty-friend-received": "Not received any friend invitation yet",
+            "empty-friend-sent": "Not sent any friend invitation yet"
         },
         "phone-book": {
             "last-update": "Latest update",

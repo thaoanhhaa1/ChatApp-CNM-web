@@ -11,7 +11,7 @@ import GeneralSettings from './generalSettings';
 import Privacy from './privacySecurity';
 import UpdatePassword from './privacySecurity/updatePassword';
 
-const Setting = ({ onClose }) => {
+const Setting = ({ show, onClose }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { subs } = useSelector((state) => state.popupMultiLevel);
@@ -49,7 +49,7 @@ const Setting = ({ onClose }) => {
     };
 
     return (
-        <Modal show={true} onClickOutside={handleClose}>
+        <Modal show={show} onClickOutside={handleClose}>
             <PopupMultiLevel onClose={handleClose}>
                 <Modal.Header onClose={handleClose}>{t('settings.title')}</Modal.Header>
                 <div className="relative">
@@ -92,6 +92,7 @@ const Setting = ({ onClose }) => {
 };
 
 Setting.propTypes = {
+    show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
 };
 

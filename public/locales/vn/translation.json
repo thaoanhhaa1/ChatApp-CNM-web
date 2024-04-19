@@ -182,7 +182,9 @@
             "allow-stranger-desc": "Người lạ có thể gửi lời mời kết bạn qua những nguồn này",
             "my-qr": "Mã QR của tôi",
             "common-group": "Nhóm chung",
-            "suggest": "Gợi ý \"Có thể bạn quen\""
+            "suggest": "Gợi ý \"Có thể bạn quen\"",
+            "empty-friend-received": "Chưa có lời mời kết bạn nào",
+            "empty-friend-sent": "Chưa gửi lời mời kết bạn nào"
         },
         "phone-book": {
             "last-update": "Lần cập nhật danh bạ gần nhất",
