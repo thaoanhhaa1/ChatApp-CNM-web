@@ -21,7 +21,7 @@ const AddMembers = ({ show, handleClickOutside }) => {
     const [selectedContacts, setSelectedContacts] = useState([]);
     const [loading, setLoading] = useState(false);
     const { active } = useSelector((state) => state.chats);
-    const { friendList, friendListLoading } = useSelector((state) => state.friend);
+    const { friendList, friendListLoading, friendListFirstFetch } = useSelector((state) => state.friend);
     const { socket } = useSelector((state) => state.socket);
     const phoneBook = useMemo(
         () =>
@@ -79,8 +79,8 @@ const AddMembers = ({ show, handleClickOutside }) => {
     }, [show]);
 
     useEffect(() => {
-        friendList.length || dispatch(getFriends());
-    }, [dispatch, friendList.length]);
+        friendListFirstFetch || dispatch(getFriends());
+    }, [dispatch, friendListFirstFetch]);
 
     if (!active?._id) return null;
 

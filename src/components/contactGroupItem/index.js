@@ -1,16 +1,25 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addChatAndActive } from '~/features/chats/chatsSlice';
 import { getDateTimeContactGroup } from '~/utils';
 import Avatar from '../avatar';
 import AvatarGroup from '../avatarGroup';
-import { useDispatch } from 'react-redux';
-import { addChatAndActive } from '~/features/chats/chatsSlice';
 
 const ContactGroupItem = ({ group }) => {
     const avatars = useMemo(() => group.users.map((user) => user.avatar), [group.users]);
+    const { user } = useSelector((state) => state.user);
+    const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
 
-    const handleClickGroup = () => dispatch(addChatAndActive(group));
+    const handleClickGroup = () => {
+        dispatch(addChatAndActive(group));
+
+        socket.emit('openConversation', {
+            conversation: group,
+            user,
+        });
+    };
 
     return (
         <div

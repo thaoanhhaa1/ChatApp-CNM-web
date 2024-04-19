@@ -4,9 +4,11 @@ import friendServices from '~/services/friend.service';
 const initialState = {
     friendList: [],
     friendListLoading: false,
+    friendListFirstFetch: false,
     friendReceived: [],
     friendSent: [],
     friendRequestLoading: false,
+    friendRequestFirstFetch: false,
     hasNewReceived: false,
 };
 
@@ -87,6 +89,9 @@ const friendSlice = createSlice({
             console.log('🚀 ~ friend ~ addFriend');
             state.friendList.push(payload);
         },
+        setFriendRequestFirstFetch: (state) => {
+            state.friendRequestFirstFetch = true;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -96,6 +101,7 @@ const friendSlice = createSlice({
             .addCase(getFriends.fulfilled, (state, { payload }) => {
                 state.friendList = payload?.friends || [];
                 state.friendListLoading = false;
+                state.friendListFirstFetch = true;
             })
             .addCase(getFriends.rejected, (state) => {
                 state.friendListLoading = false;
@@ -117,5 +123,6 @@ export const {
     removeFriend,
     reset,
     addFriend,
+    setFriendRequestFirstFetch,
 } = friendSlice.actions;
 export { getFriends };

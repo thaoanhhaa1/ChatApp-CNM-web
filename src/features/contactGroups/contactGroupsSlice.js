@@ -4,6 +4,7 @@ import groupServices from '~/services/group.service';
 const initialState = {
     groups: [],
     loading: false,
+    firstFetch: false,
 };
 
 const getGroups = createAsyncThunk('getGroups', async () => {
@@ -22,7 +23,10 @@ const contactGroupsSlice = createSlice({
         },
         addGroup: (state, { payload }) => {
             console.log('🚀 ~ contactGroups ~ addGroup');
-            state.groups.unshift(payload);
+            const index = state.groups.findIndex((group) => group._id === payload._id);
+
+            if (index !== -1) state.groups[index] = payload;
+            else state.groups.unshift(payload);
         },
         removeGroup: (state, { payload }) => {
             const index = state.groups.findIndex((group) => group._id === payload);
@@ -45,6 +49,7 @@ const contactGroupsSlice = createSlice({
             .addCase(getGroups.fulfilled, (state, { payload }) => {
                 state.groups = payload;
                 state.loading = false;
+                state.firstFetch = true;
             })
             .addCase(getGroups.rejected, (state) => {
                 state.loading = false;

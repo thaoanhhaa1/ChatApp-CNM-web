@@ -23,7 +23,7 @@ const api = {
     // Message
     getMessages: (conversationId) => `/message/${conversationId}`,
     addMessage: () => `/message`,
-    getReplyMessages: (messageId) => `/message/reply/${messageId}`,
+    getReplyMessages: (params) => `/message/${params[0]}/reply/${params[1]}`,
     deleteMessageForMe: () => `/message/deleteForMe`,
     recallMessage: () => `/message/deleteForAll`,
     pinMessage: (messageId) => `/message/pin/${messageId}`,

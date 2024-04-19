@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { convertToDMS } from '~/utils';
 
 const MessageLocation = ({ location }) => {
-    if (!location?._id) return null;
+    if (!location) return null;
 
     return (
         <div className="relative w-fit flex flex-col">

@@ -22,8 +22,8 @@ const sendMessage = createAsyncThunk('sendMessage', async (data) => {
     return { data: response.data, timeSend: data.timeSend || data.get('timeSend') };
 });
 
-const getReplyMessages = createAsyncThunk('getReplyMessages', async (messageId) => {
-    const response = await messageServices.getReplyMessages(messageId);
+const getReplyMessages = createAsyncThunk('getReplyMessages', async ({ messageId, conversationId }) => {
+    const response = await messageServices.getReplyMessages({ params: [conversationId, messageId] });
 
     return response.data;
 });
@@ -88,6 +88,9 @@ const messagesSlice = createSlice({
             else status.react = react;
         },
         reset: (state) => ({ ...state, ...initialState }),
+        setLoading: (state, { payload }) => {
+            state.loading = payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -143,6 +146,14 @@ const messagesSlice = createSlice({
 });
 
 export default messagesSlice.reducer;
-export const { reset, setOffsetTop, setMessages, addMessage, updateDeletedMessage, addMessageSocket, updateReact } =
-    messagesSlice.actions;
+export const {
+    setLoading,
+    reset,
+    setOffsetTop,
+    setMessages,
+    addMessage,
+    updateDeletedMessage,
+    addMessageSocket,
+    updateReact,
+} = messagesSlice.actions;
 export { getMessages, getReplyMessages, sendMessage };

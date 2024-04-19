@@ -6,7 +6,7 @@ import MessageTyping from '~/components/message/MessageTyping';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
 import { addMessageHead, addMessages } from '~/features/chats/chatsSlice';
-import { getMessages, setMessages } from '~/features/messages/messagesSlice';
+import { getMessages, setLoading, setMessages } from '~/features/messages/messagesSlice';
 import { getTimeChatSeparate } from '~/utils';
 import ChatEmpty from './ChatEmpty';
 
@@ -32,7 +32,7 @@ const Body = () => {
 
     const handleScroll = async (e) => {
         const scrollTop = e.target.scrollTop;
-        if (scrollTop <= 200 && !loading && page < maxPage && active?._id) {
+        if (scrollTop > 0 && scrollTop <= 200 && !loading && page < maxPage && active?._id) {
             await dispatch(getMessages({ param: [active._id], query: { messageId: messages?.at(-1)?._id } })).unwrap();
             ref.current.scrollY(205);
         }
@@ -54,28 +54,23 @@ const Body = () => {
                 dispatch(addMessages(messages));
             } catch (error) {
                 console.log(error);
+
+                if (error?.code === 'ERR_CANCELED') dispatch(setLoading(true));
             }
         };
 
-        if (!active?._id) {
-        } else if (!messages?.length) {
-            const messages = active.messages;
-            const firstMessage = messages?.at?.(-1);
-
-            if (!messages?.length || firstMessage?.state === sentMessageStatus.SENT) {
-                fetchMessages();
-            } else {
-                dispatch(setMessages(active.messages));
-            }
+        if (active?._id && !messages?.length) {
+            if (active?.firstFetchMessages) dispatch(setMessages(active.messages));
+            else fetchMessages();
         }
 
         return () => {
             controller && controller.abort();
         };
-    }, [active?._id, active?.messages, dispatch, messages?.length]);
+    }, [active?._id, active?.firstFetchMessages, active?.messages, dispatch, messages?.length]);
 
     useEffect(() => {
-        if (ref.current && page === 1) ref.current.scrollBottom();
+        ref.current.scrollBottom();
     }, [messages, page]);
 
     useEffect(() => {

@@ -60,7 +60,7 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
     const [showForward, setShowForward] = useState(false);
     const ref = useRef();
     const dispatch = useDispatch();
-    const { messages } = useSelector((state) => state.messages);
+    const { messages, loading: messagesLoading } = useSelector((state) => state.messages);
     const { active } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const { socket } = useSelector((state) => state.socket);
@@ -85,10 +85,9 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
     const isVideo = firstFile && isVideoFile(firstFile.type);
     const loading = chat.state === sentMessageStatus.SENDING;
     const recalled = chat.deleted === DeleteMessageStatus.RECALL;
-    const fileCanView = useMemo(() => {
-        return firstFile && officeCanView(firstFile);
-    }, [firstFile]);
+    const fileCanView = useMemo(() => firstFile && officeCanView(firstFile), [firstFile]);
     const { value: viewFile, setTrue: setShowViewFile, setFalse: setHideViewFile } = useBoolean(false);
+    const [isScrollToReply, setIsScrollToReply] = useState();
 
     const handleClickReply = (message) => {
         if (!message._id) return;
@@ -100,11 +99,15 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
             scrollY(0);
 
             startTransition(async () => {
-                const messages = await dispatch(getReplyMessages(message._id)).unwrap();
+                const messages = await dispatch(
+                    getReplyMessages({
+                        messageId: message._id,
+                        conversationId: chat.conversation?._id,
+                    }),
+                ).unwrap();
 
                 dispatch(setMessages(messages));
-
-                scrollY(0);
+                setIsScrollToReply(message._id);
             });
         }
     };
@@ -185,15 +188,15 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
     }, [handleClickForward, handleDeleteForMe, handlePinMessage, handleRecall, isMe, t]);
 
     useEffect(() => {
-        if (!chat?._id) return;
+        if (!chat?._id || typeof ref.current?.offsetTop === 'undefined') return;
 
         dispatch(
             setOffsetTop({
                 _id: chat._id,
-                offsetTop: ref.current?.offsetTop || 0,
+                offsetTop: ref.current.offsetTop,
             }),
         );
-    }, [chat?._id, dispatch]);
+    }, [chat?._id, messages?.length, dispatch]);
 
     useEffect(() => {
         (async () => {
@@ -206,8 +209,23 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
         })();
     }, [chat.location, dispatch, google, marker, places]);
 
-    if (!chat.messages?.length && !firstFile && !chat?.location?._id && !chat?.sticker) return null;
+    useEffect(() => {
+        if (!isScrollToReply || messagesLoading) return;
 
+        const mess = messages.find((mess) => mess._id === isScrollToReply);
+        console.log(mess);
+
+        if (mess?.offsetTop) {
+            scrollY(0);
+            setIsScrollToReply();
+        }
+    }, [isScrollToReply, messages, messagesLoading, scrollY]);
+
+    if (!chat.messages?.length && !firstFile && !chat?.location && !chat?.sticker) {
+        console.log(chat);
+
+        return null;
+    }
     return (
         <MessageProvider value={{ isMe, chatId: chat._id, statuses: chat.statuses }}>
             <div ref={ref} className="flex flex-col gap-2 ex:gap-3 sm:gap-4">
@@ -222,61 +240,85 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
                         containerClassName={classNames('self-end', !showSeparate && isYourPrev && 'opacity-0')}
                         src={chat.sender.avatar}
                     />
-                    <div className={classNames('relative', isMe ? 'ml-1 mr-2 sm:mr-4' : 'ml-2 sm:ml-4 mr-1')}>
-                        <div
-                            className={classNames(
-                                'relative w-fit flex flex-col gap-1 px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
-                                isMe
-                                    ? 'rounded-l-lg bg-sidebar-sub-bg dark:bg-dark-sidebar-bg'
-                                    : 'rounded-r-lg bg-primary-color bg-opacity-40',
+                    <div
+                        className={classNames(
+                            'relative',
+                            isMe ? 'ml-1 mr-2 sm:mr-4 flex flex-col items-end' : 'ml-2 sm:ml-4 mr-1',
+                        )}
+                    >
+                        <div className={classNames('flex gap-1', isMe ? 'flex-row-reverse' : '')}>
+                            <div
+                                className={classNames(
+                                    'relative w-fit flex flex-col gap-1 px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
+                                    isMe
+                                        ? 'rounded-l-lg bg-sidebar-sub-bg dark:bg-dark-sidebar-bg'
+                                        : 'rounded-r-lg bg-primary-color bg-opacity-40',
+                                )}
+                            >
+                                {chat.reply && !recalled ? (
+                                    <ReplyMessage isMe={isMe} onClick={handleClickReply} message={chat.reply} />
+                                ) : null}
+
+                                <ChatMessage status={chat.deleted} messages={chat.messages || []} isMe={isMe} />
+
+                                {lengthFiles === 1 && isImageList && !recalled ? (
+                                    <MessageImage
+                                        loading={loading}
+                                        src={firstFile.link || URL.createObjectURL(firstFile)}
+                                        name={firstFile.name}
+                                    />
+                                ) : null}
+
+                                {isImageList && lengthFiles > 1 && !recalled ? (
+                                    <MessageImageList loading={loading} files={chat.files} />
+                                ) : null}
+
+                                {isVideo && !recalled ? <MessageVideo loading={loading} file={firstFile} /> : null}
+
+                                {firstFile && !isImageList && !recalled && !isVideo
+                                    ? chat.files.map((file, index) => (
+                                          <AttachedFile
+                                              canView={fileCanView}
+                                              onClick={setShowViewFile}
+                                              key={index}
+                                              file={file}
+                                          />
+                                      ))
+                                    : null}
+
+                                {url && !recalled ? <LinkPreview url={url} /> : null}
+
+                                {recalled ? null : <MessageLocation isMe={isMe} location={chat.location} />}
+
+                                {chat.sticker && !recalled ? (
+                                    <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} />
+                                ) : null}
+
+                                <MessageTime time={chat.updatedAt || new Date(chat.timeSend)} />
+
+                                {chat.sticker || recalled ? null : (
+                                    <MessageReaction className="absolute right-0 bottom-0 translate-y-[calc(100%-7px)]" />
+                                )}
+
+                                <MessageLoading loading={loading} />
+                            </div>
+                            {recalled || loading ? null : (
+                                <div className={classNames('flex', isMe && 'flex-row-reverse')}>
+                                    <Button onClick={handleReply}>
+                                        <QuoteRightIcon className="w-[14px] h-[14px]" />
+                                    </Button>
+                                    {chat.sticker || chat.location ? null : <React />}
+                                    <Popup
+                                        data={mores}
+                                        animation="shift-toward"
+                                        placement={isMe ? 'bottom-end' : 'bottom-start'}
+                                    >
+                                        <Button>
+                                            <MoreFillIcon className="w-[15px] h-[15px] rotate-90" />
+                                        </Button>
+                                    </Popup>
+                                </div>
                             )}
-                        >
-                            {chat.reply && !recalled ? (
-                                <ReplyMessage isMe={isMe} onClick={handleClickReply} message={chat.reply} />
-                            ) : null}
-
-                            <ChatMessage status={chat.deleted} messages={chat.messages || []} isMe={isMe} />
-
-                            {lengthFiles === 1 && isImageList && !recalled ? (
-                                <MessageImage
-                                    loading={loading}
-                                    src={firstFile.link || URL.createObjectURL(firstFile)}
-                                    name={firstFile.name}
-                                />
-                            ) : null}
-
-                            {isImageList && lengthFiles > 1 && !recalled ? (
-                                <MessageImageList loading={loading} files={chat.files} />
-                            ) : null}
-
-                            {isVideo && !recalled ? <MessageVideo loading={loading} file={firstFile} /> : null}
-
-                            {firstFile && !isImageList && !recalled && !isVideo
-                                ? chat.files.map((file, index) => (
-                                      <AttachedFile
-                                          canView={fileCanView}
-                                          onClick={setShowViewFile}
-                                          key={index}
-                                          file={file}
-                                      />
-                                  ))
-                                : null}
-
-                            {url && !recalled ? <LinkPreview url={url} /> : null}
-
-                            {recalled ? null : <MessageLocation isMe={isMe} location={chat.location} />}
-
-                            {chat.sticker && !recalled ? (
-                                <StickerItem className="w-[130px] h-[130px]" count={5} url={chat.sticker} />
-                            ) : null}
-
-                            <MessageTime time={chat.updatedAt || new Date(chat.timeSend)} />
-
-                            {chat.sticker || recalled ? null : (
-                                <MessageReaction className="absolute right-0 bottom-0 translate-y-[calc(100%-7px)]" />
-                            )}
-
-                            <MessageLoading loading={loading} />
                         </div>
                         <div
                             className={classNames(
@@ -286,7 +328,7 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
                                     : 'border-primary-color border-opacity-40 border-r-transparent border-b-transparent',
                             )}
                         />
-                        {isYourPrev || (
+                        {(!isYourPrev || showSeparate) && (
                             <div
                                 className={classNames(
                                     'text-sm font-medium dark:text-[rgb(166,176,207)]',
@@ -297,23 +339,6 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
                             </div>
                         )}
                     </div>
-                    {recalled || loading ? null : (
-                        <div className={classNames('flex', isMe && 'flex-row-reverse')}>
-                            <Button onClick={handleReply}>
-                                <QuoteRightIcon className="w-[14px] h-[14px]" />
-                            </Button>
-                            {chat.sticker || chat.location ? null : <React />}
-                            <Popup
-                                data={mores}
-                                animation="shift-toward"
-                                placement={isMe ? 'bottom-end' : 'bottom-start'}
-                            >
-                                <Button>
-                                    <MoreFillIcon className="w-[15px] h-[15px] rotate-90" />
-                                </Button>
-                            </Popup>
-                        </div>
-                    )}
                 </div>
                 {showSeparate && <MessageSeparate>{getTimeChatSeparate(prevDate)}</MessageSeparate>}
                 <ForwardMessage messageId={chat?._id} show={showForward} handleClickOutside={handleCloseForward} />

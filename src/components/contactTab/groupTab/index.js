@@ -17,7 +17,7 @@ import CreateGroup from './createGroup';
 
 const Group = () => {
     const { t } = useTranslation();
-    const { groups, loading } = useSelector((state) => state.contactGroups);
+    const { groups, loading, firstFetch } = useSelector((state) => state.contactGroups);
     const [sort, setSort] = useState(sortGroup[0]);
     const sorts = useMemo(
         () => sortGroup.map((sort) => ({ ...sort, title: t(sort.title), onClick: () => setSort(sort) })),
@@ -36,8 +36,8 @@ const Group = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        groups.length || dispatch(getGroups());
-    }, [dispatch, groups.length]);
+        firstFetch || dispatch(getGroups());
+    }, [dispatch, firstFetch]);
 
     return (
         <Wrapper>

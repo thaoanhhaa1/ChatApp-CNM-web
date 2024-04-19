@@ -16,7 +16,7 @@ import SelectedContacts from './SelectedContacts';
 
 const ContactList = ({ chat, selectedContacts, handleClickContact, handleRemoveContact }) => {
     const { t } = useTranslation();
-    const { friendList, friendListLoading } = useSelector((state) => state.friend);
+    const { friendList, friendListLoading, friendListFirstFetch } = useSelector((state) => state.friend);
     console.log('🚀 ~ ContactList ~ friendList:', friendList);
     const { groups, loading } = useSelector((state) => state.contactGroups);
     console.log('🚀 ~ ContactList ~ groups:', groups);
@@ -29,13 +29,13 @@ const ContactList = ({ chat, selectedContacts, handleClickContact, handleRemoveC
         (async () => {
             const requests = [];
 
-            if (!friendList.length) requests.push(dispatch(getFriends()));
+            if (!friendListFirstFetch) requests.push(dispatch(getFriends()));
 
             if (!groups.length) requests.push(dispatch(getGroups()));
 
             await Promise.all(requests);
         })();
-    }, [dispatch, friendList.length, groups.length]);
+    }, [dispatch, friendListFirstFetch, groups.length]);
 
     return (
         <div className="flex-1 px-2 ex:px-3 sm:px-4">

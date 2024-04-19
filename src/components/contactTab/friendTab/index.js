@@ -18,7 +18,7 @@ import PhoneBookSub from './phoneBook';
 // TODO Empty contact
 const Friend = () => {
     const { t } = useTranslation();
-    const { friendList, friendListLoading } = useSelector((state) => state.friend);
+    const { friendList, friendListLoading, friendListFirstFetch } = useSelector((state) => state.friend);
     const phoneBook = useMemo(() => convertContactsToPhoneBook(friendList), [friendList]);
     const [modalActive, setModalActive] = useState();
     const dispatch = useDispatch();
@@ -27,8 +27,8 @@ const Friend = () => {
     const handleCloseModal = () => setModalActive();
 
     useEffect(() => {
-        friendList?.length || dispatch(getFriends());
-    }, [dispatch, friendList?.length]);
+        friendListFirstFetch || dispatch(getFriends());
+    }, [dispatch, friendListFirstFetch]);
 
     return (
         <Wrapper>

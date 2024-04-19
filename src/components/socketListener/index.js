@@ -24,6 +24,9 @@ import {
 } from '~/features/friend/friendSlice';
 import { addMessageSocket, updateDeletedMessage, updateReact } from '~/features/messages/messagesSlice';
 import { connect } from '~/features/socket/socketSlice';
+import sound from '~/assets/sounds/message-sound.mp3';
+
+const messageSound = new Audio(sound);
 
 const SocketListener = ({ children }) => {
     const { active } = useSelector((state) => state.chats);
@@ -57,6 +60,8 @@ const SocketListener = ({ children }) => {
             );
 
             if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));
+
+            messageSound.play();
         });
 
         socket.on('openConversation', (data) => {

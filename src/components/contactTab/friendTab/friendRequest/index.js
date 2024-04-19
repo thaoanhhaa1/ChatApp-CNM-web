@@ -8,7 +8,7 @@ import { SettingIcon } from '~/assets';
 import Modal from '~/components/modal';
 import PopupMultiLevel from '~/components/popupMultiLevel';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
-import { setFriendRequest, setNewReceived } from '~/features/friend/friendSlice';
+import { setFriendRequest, setFriendRequestFirstFetch, setNewReceived } from '~/features/friend/friendSlice';
 import { addSub, resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import friendServices from '~/services/friend.service';
 import Manage from './Manage';
@@ -22,7 +22,7 @@ const SENT_TAB = '2';
 const FriendRequest = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
     const [tab, setTab] = useState(RECEIVED_TAB);
-    const { hasNewReceived, friendReceived, friendSent } = useSelector((state) => state.friend);
+    const { hasNewReceived, friendRequestFirstFetch } = useSelector((state) => state.friend);
     const dispatch = useDispatch();
 
     const handleChange = (_, a) => setTab(a);
@@ -47,13 +47,14 @@ const FriendRequest = ({ show, onClickOutside }) => {
                 const [requestFriends, responseFriends] = res.map((item) => item.data);
 
                 dispatch(setFriendRequest({ requestFriends, responseFriends }));
+                dispatch(setFriendRequestFirstFetch());
             } catch (error) {
                 console.error(error);
             }
         };
 
-        if (friendReceived.length + friendSent.length === 0) fetchFriendRequest();
-    }, [dispatch, friendReceived.length, friendSent.length]);
+        friendRequestFirstFetch || fetchFriendRequest();
+    }, [dispatch, friendRequestFirstFetch]);
 
     useEffect(() => {
         show && tab === RECEIVED_TAB && dispatch(setNewReceived(false));

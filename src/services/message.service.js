@@ -7,7 +7,7 @@ const messageServices = {
             signal,
         }),
     addMessage: (data) => axiosClient.post(api.addMessage(), data),
-    getReplyMessages: (messageId) => axiosClient.get(api.getReplyMessages(messageId)),
+    getReplyMessages: ({ params }) => axiosClient.get(api.getReplyMessages(params)),
     deleteMessageForMe: (messageId) => axiosClient.post(api.deleteMessageForMe(), { messageId }),
     recallMessage: (messageId) => axiosClient.post(api.recallMessage(), { messageId }),
     pinMessage: (messageId) => axiosClient.post(api.pinMessage(messageId)),

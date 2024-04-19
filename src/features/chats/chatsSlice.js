@@ -10,9 +10,7 @@ const initialState = {
 };
 
 const getChats = createAsyncThunk('getChats', async () => {
-    console.log('🚀 ~ getChats ~ getChats', Date.now());
     const response = await conversationServices.getAllConversations();
-    console.log('🚀 ~ getChats ~ getChats', Date.now());
 
     return response.data;
 });
@@ -119,6 +117,8 @@ const chatsSlice = createSlice({
             if (chat) {
                 if (chat.messages?.length) {
                 } else chat.messages = payload;
+
+                chat.firstFetchMessages = true;
 
                 if (state.active?._id === conversationId) state.active.messages = chat.messages;
             }
