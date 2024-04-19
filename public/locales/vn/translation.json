@@ -443,8 +443,14 @@
         "user-more": {
             "add-admin": "Thêm phó nhóm",
             "remove-admin": "Gỡ quyền phó nhóm",
+            "change-group-owner": "Chuyển quyền trưởng nhóm",
             "remove-user": "Xoá khỏi nhóm",
-            "leave": "Rời nhóm"
+            "leave": "Rời nhóm",
+            "toggle-role-pending": "Đang cập nhật quyền...",
+            "add-role-successfully": "Thêm quyền thành công",
+            "remove-role-successfully": "Gỡ quyền thành công",
+            "toggle-role-reject": "Không thể thực hiện thao tác này",
+            "change-role-successfully": "Chuyển quyền trưởng nhóm thành công"
         },
         "manage": {
             "title": "Manage group",
@@ -479,6 +485,12 @@
             "cancel": "Huỷ",
             "leave": "Rời nhóm",
             "notification-successfully": "Rời nhóm thành công"
+        },
+        "delete-group": {
+            "title": "Giải tán nhóm",
+            "description": "Mời tất cả mọi người rời nhóm và xóa tin nhắn? Nhóm đã giải tán sẽ KHÔNG THỂ khôi phục.",
+            "no": "Không",
+            "delete-group": "Giải tán nhóm"
         }
     },
     "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"

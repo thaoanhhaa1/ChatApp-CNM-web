@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { MoreFillIcon } from '~/assets';
 import { groupRole } from '~/constants';
 import { useChat } from '~/context';
@@ -43,12 +44,23 @@ const Member = ({ user }) => {
     }, [handleShowChangeOwner, handleShowLeave, role]);
 
     const handleToggleRole = useCallback(async () => {
-        const res = await groupServices[role === groupRole.MEMBER_ROLE ? 'addRole' : 'removeRole']({
-            params: [active._id, user._id],
-            data: {
-                role: 'admin',
+        const res = await toast.promise(
+            groupServices[role === groupRole.MEMBER_ROLE ? 'addRole' : 'removeRole']({
+                params: [active._id, user._id],
+                data: {
+                    role: 'admin',
+                },
+            }),
+            {
+                pending: t('group.user-more.toggle-role-pending'),
+                success: t(
+                    role === groupRole.MEMBER_ROLE
+                        ? 'group.user-more.add-role-successfully'
+                        : 'group.user-more.remove-role-successfully',
+                ),
+                error: t('group.user-more.toggle-role-reject'),
             },
-        });
+        );
 
         socket.emit('addOrUpdateConversation', {
             conversation: res.data,
@@ -56,12 +68,35 @@ const Member = ({ user }) => {
         });
         dispatch(addOrUpdateChat(res.data));
         dispatch(addOrUpdateGroup(res.data));
-    }, [active._id, dispatch, role, socket, user._id]);
+    }, [active?._id, dispatch, role, socket, t, user?._id]);
 
     const handleContinueChangeOwnerRole = useCallback(() => {
         handleHideChangeOwner();
         handleShowLeave();
     }, [handleHideChangeOwner, handleShowLeave]);
+
+    const handleChangeOwner = useCallback(async () => {
+        const res = await toast.promise(
+            groupServices.addRole({
+                params: [active._id, user._id],
+                data: {
+                    role: groupRole.OWNER_ROLE,
+                },
+            }),
+            {
+                pending: t('group.user-more.toggle-role-pending'),
+                success: t('group.user-more.change-role-successfully'),
+                error: t('group.user-more.toggle-role-reject'),
+            },
+        );
+
+        socket.emit('addOrUpdateConversation', {
+            conversation: res.data,
+            userIds: res.data.users.map((user) => user._id),
+        });
+
+        dispatch(addOrUpdateChat(res.data));
+    }, [active._id, dispatch, socket, t, user._id]);
 
     const more = useMemo(() => {
         if (!me?._id || !user?._id) return [];
@@ -79,6 +114,10 @@ const Member = ({ user }) => {
                     title: t(`group.user-more.${role === groupRole.ADMIN_ROLE ? 'remove-admin' : 'add-admin'}`),
                     onClick: handleToggleRole,
                 });
+            more.unshift({
+                title: t('group.user-more.change-group-owner'),
+                onClick: handleChangeOwner,
+            });
         } else
             more.push({
                 title: t('group.user-more.leave'),
@@ -86,7 +125,17 @@ const Member = ({ user }) => {
             });
 
         return more;
-    }, [handleClickLeave, handleShowRemoveUser, handleToggleRole, me?._id, myRole, role, t, user?._id]);
+    }, [
+        handleChangeOwner,
+        handleClickLeave,
+        handleShowRemoveUser,
+        handleToggleRole,
+        me?._id,
+        myRole,
+        role,
+        t,
+        user?._id,
+    ]);
 
     return (
         <div className="group/member p-2 flex gap-2 items-center hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-colors cursor-pointer rounded-md">

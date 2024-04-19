@@ -445,8 +445,14 @@
         "user-more": {
             "add-admin": "Add admin",
             "remove-admin": "Revoke admin privilege",
+            "change-group-owner": "Change group owner",
             "remove-user": "Remove from group",
-            "leave": "Leave group"
+            "leave": "Leave group",
+            "toggle-role-pending": "Updating role...",
+            "add-role-successfully": "Add role successfully",
+            "remove-role-successfully": "Role revoked successfully",
+            "toggle-role-reject": "This operation cannot be performed",
+            "change-role-successfully": "Change group owner successfully"
         },
         "manage": {
             "title": "Manage group",
@@ -481,6 +487,12 @@
             "cancel": "Cancel",
             "leave": "Leave group",
             "notification-successfully": "Leave group successfully"
+        },
+        "delete-group": {
+            "title": "Delete group",
+            "description": "Remove all members and delete the group? This CANNOT be undone.",
+            "no": "No",
+            "delete-group": "Delete group"
         }
     },
     "request-error": "Some errors occurred, please try again"
