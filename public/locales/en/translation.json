@@ -441,7 +441,8 @@
         "default-message-friend-request-1": "Hi, I'm",
         "default-message-friend-request-2": "Let's be friends!",
         "notification-friend-removed-successfully": "Friend removed successfully",
-        "notification-friend-removed-fail": "Failed to remove friend"
+        "notification-friend-removed-fail": "Failed to remove friend",
+        "notification-friend-removing": "Removing friend..."
     },
     "group": {
         "user-more": {

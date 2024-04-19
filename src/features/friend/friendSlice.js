@@ -10,12 +10,20 @@ const initialState = {
     friendRequestLoading: false,
     friendRequestFirstFetch: false,
     hasNewReceived: false,
+    suggestFriends: [],
+    loadingSuggestFriends: false,
+    suggestFriendsFirstFetch: false,
 };
 
 const getFriends = createAsyncThunk('getFriends', async () => {
     console.log('🚀 ~ getFriends ~ getFriends', Date.now());
     const response = await friendServices.getFriends();
     console.log('🚀 ~ getFriends ~ getFriends', Date.now());
+    return response.data;
+});
+
+const getSuggestFriends = createAsyncThunk('suggestFriends', async () => {
+    const response = await friendServices.suggestFriends();
     return response.data;
 });
 
@@ -107,6 +115,17 @@ const friendSlice = createSlice({
             })
             .addCase(getFriends.rejected, (state) => {
                 state.friendListLoading = false;
+            })
+            .addCase(getSuggestFriends.pending, (state) => {
+                state.loadingSuggestFriends = true;
+            })
+            .addCase(getSuggestFriends.fulfilled, (state, { payload }) => {
+                state.suggestFriends = payload;
+                state.loadingSuggestFriends = false;
+                state.suggestFriendsFirstFetch = true;
+            })
+            .addCase(getSuggestFriends.rejected, (state) => {
+                state.loadingSuggestFriends = false;
             });
     },
 });
@@ -127,4 +146,4 @@ export const {
     addFriend,
     setFriendRequestFirstFetch,
 } = friendSlice.actions;
-export { getFriends };
+export { getFriends, getSuggestFriends };

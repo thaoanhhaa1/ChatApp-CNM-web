@@ -5,6 +5,7 @@ const initialState = {
         theme: 'light',
         loginAt: '',
         recentSearch: [],
+        ignoreSuggestFriends: [],
     },
 };
 
@@ -33,8 +34,12 @@ const localSettingSlice = createSlice({
 
             state.settings.recentSearch = recentSearch.filter((user) => user._id !== payload);
         },
+        addIgnoreSuggestFriends: (state, { payload }) => {
+            state.settings.ignoreSuggestFriends.push(payload);
+        },
     },
 });
 
-export const { setSetting, reset, addRecentSearch, removeRecentSearch } = localSettingSlice.actions;
+export const { setSetting, reset, addRecentSearch, removeRecentSearch, addIgnoreSuggestFriends } =
+    localSettingSlice.actions;
 export default localSettingSlice.reducer;

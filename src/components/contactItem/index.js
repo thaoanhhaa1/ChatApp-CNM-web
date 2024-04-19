@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { BlockLineIcon, DeleteBinLineIcon, More2FillIcon, PhoneLineIcon, ShareLineIcon, VideoLineIcon } from '~/assets';
 import Avatar from '~/components/avatar';
 import Popup from '~/components/popup';
 import { getConversation, setActive } from '~/features/chats/chatsSlice';
 import { removeFriend } from '~/features/friend/friendSlice';
-import { setToast } from '~/features/toastAll/toastAllSlice';
 import friendServices from '~/services/friend.service';
 import { getChatIndividual } from '~/utils';
 import Button from './Button';
@@ -21,17 +21,19 @@ const ContactItem = ({ contact }) => {
     const handleRemoveFriend = async (e) => {
         e.stopPropagation();
         try {
-            await friendServices.deleteFriend(contact._id);
+            await toast.promise(friendServices.deleteFriend(contact._id), {
+                pending: t('friend.notification-friend-removing'),
+                success: t('friend.notification-friend-removed-successfully'),
+                error: t('friend.notification-friend-removed-failed'),
+            });
 
             socket.emit('deleteFriend', {
                 senderId: user._id,
                 receiverId: contact._id,
             });
             dispatch(removeFriend({ _id: contact._id }));
-            dispatch(setToast(t('friend.notification-friend-removed-successfully')));
         } catch (error) {
             console.error(error);
-            dispatch(setToast(t('friend.notification-friend-removed-failed')));
         }
     };
 

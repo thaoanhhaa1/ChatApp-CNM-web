@@ -439,7 +439,8 @@
         "default-message-friend-request-1": "Xin chào, mình là",
         "default-message-friend-request-2": "Kết bạn với mình nhé!",
         "notification-friend-removed-successfully": "Xoá bạn thành công",
-        "notification-friend-removed-fail": "Xoá bạn không thành công"
+        "notification-friend-removed-fail": "Xoá bạn không thành công",
+        "notification-friend-removing": "Đang huỷ kết bạn..."
     },
     "group": {
         "user-more": {

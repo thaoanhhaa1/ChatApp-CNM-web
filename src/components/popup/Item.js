@@ -14,9 +14,9 @@ const Item = ({
 }) => {
     const Icon = icon;
 
-    const handleClick = () => {
+    const handleClick = (e) => {
         handleHiddenPopup();
-        onClick();
+        onClick(e);
     };
 
     return (

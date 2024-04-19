@@ -40,6 +40,7 @@ const api = {
     rejectFriend: () => `/user/rejectfriend`,
     revocationRequestFriend: () => `/user/revocationRequestFriend`,
     deleteFriend: (params) => `/user/deletefriend/${params[0]}`,
+    suggestFriends: () => `/user/suggestFriends`,
 
     // Group
     createGroup: () => `/conversation/group`,

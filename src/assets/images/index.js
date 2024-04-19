@@ -20,7 +20,7 @@ const images = {
     searchEmpty: require('./search-empty.png'),
     mentionAll: require('./mention-all.png'),
     imageVerify: require('./image_vetify.png'),
-    invitationEmpty: require('./invitation-emptystate.png'),
+    invitationEmpty: require('./addInvitationEmptyListImage.png'),
 };
 
 export default images;

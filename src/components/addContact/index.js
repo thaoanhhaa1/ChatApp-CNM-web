@@ -3,16 +3,26 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import validator from 'validator';
+import { UserCircleBrokenIcon } from '~/assets';
 import { reset, searchUser, setContact, setEmail } from '~/features/addContact/addContactSlice';
-import { addRecentSearch, removeRecentSearch } from '~/features/localSetting/localSettingSlice';
+import { getSuggestFriends } from '~/features/friend/friendSlice';
+import {
+    addIgnoreSuggestFriends,
+    addRecentSearch,
+    removeRecentSearch,
+} from '~/features/localSetting/localSettingSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { setToast } from '~/features/toastAll/toastAllSlice';
+import Button from '../button';
 import Input from '../input';
+import List from '../list';
 import Modal from '../modal';
 import PopupMultiLevel from '../popupMultiLevel';
 import ScrollbarCustomize from '../scrollbarCustomize';
+import Skeleton from '../skeleton';
 import Contact from './Contact';
 import ContactList from './ContactList';
+import ContactSkeleton from './ContactSkeleton';
 import { Profile } from './sub';
 import AddFriend from './sub/addFriend';
 
@@ -22,9 +32,18 @@ const AddContact = ({ show, onClickOutside }) => {
     const { email, searchLoading } = useSelector((state) => state.addContact);
     const { subs } = useSelector((state) => state.popupMultiLevel);
     const { settings } = useSelector((state) => state.localSetting);
+    const { suggestFriends, loadingSuggestFriends, suggestFriendsFirstFetch } = useSelector((state) => state.friend);
     const [showMore, setShowMore] = useState(false);
     const isValidContactSearch = useMemo(() => validator.isEmail(email), [email]);
     const dispatch = useDispatch();
+    const suggestShow = useMemo(() => {
+        const ignoreSuggestFriends = settings?.ignoreSuggestFriends || [];
+
+        const ignoredFriends = suggestFriends.filter((friend) => !ignoreSuggestFriends.includes(friend._id));
+
+        if (showMore) return ignoredFriends;
+        return ignoredFriends.slice(0, 3);
+    }, [settings?.ignoreSuggestFriends, showMore, suggestFriends]);
 
     const handleClickContact = (contact) => {
         dispatch(setContact(contact));
@@ -42,6 +61,7 @@ const AddContact = ({ show, onClickOutside }) => {
         e.stopPropagation();
 
         dispatch(removeRecentSearch(contact._id));
+        dispatch(addIgnoreSuggestFriends(contact._id));
     };
 
     const handleClickSearch = async () => {
@@ -66,6 +86,12 @@ const AddContact = ({ show, onClickOutside }) => {
     useEffect(() => {
         subs.length || dispatch(reset());
     }, [dispatch, subs.length]);
+
+    useEffect(() => {
+        if (!show) return;
+
+        suggestFriendsFirstFetch || dispatch(getSuggestFriends());
+    }, [dispatch, show, suggestFriendsFirstFetch]);
 
     return (
         <Modal show={show} onClickOutside={handleClose}>
@@ -98,32 +124,51 @@ const AddContact = ({ show, onClickOutside }) => {
                                 ))}
                             </ContactList>
                         ) : null}
-                        {/* <ContactList Icon={UserCircleBrokenIcon} title={t('contacts.modal.youMayKnow')}>
-                            {contacts.map((contact) => (
-                                <Contact
-                                    key={contact.id}
-                                    onClick={(e) => handleClickContact(contact, e)}
-                                    avatar={contact.avatar}
-                                    name={contact.name}
-                                    description={contact.phone}
-                                    onClose={(e) => handleClickClose(contact, e)}
-                                    right={
-                                        <Button onClick={(e) => handleClickAddFriend(contact, e)} outline primary small>
-                                            {t('contacts.modal.addFriend')}
-                                        </Button>
-                                    }
+                        {(loadingSuggestFriends && (
+                            <>
+                                <Skeleton
+                                    width="60%"
+                                    height={14}
+                                    containerClassName="flex items-center h-[30px] pl-2 ex:pl-3 sm:pl-4"
                                 />
-                            ))}
-                        </ContactList> */}
-                        {showMore || (
-                            <div className="h-[30px] flex items-center">
-                                <div
-                                    onClick={handleClickViewMore}
-                                    className="cursor-pointer pl-2 ex:pl-3 sm:pl-4 text-ss leading-normal text-primary-color"
-                                >
-                                    View more
-                                </div>
-                            </div>
+                                <List length={3} control={ContactSkeleton} />
+                            </>
+                        )) || (
+                            <>
+                                <ContactList Icon={UserCircleBrokenIcon} title={t('contacts.modal.youMayKnow')}>
+                                    {suggestShow.map((contact) => (
+                                        <Contact
+                                            key={contact._id}
+                                            onClick={(e) => handleClickContact(contact, e)}
+                                            avatar={contact.avatar}
+                                            name={contact.name}
+                                            description={contact._id}
+                                            onClose={(e) => handleClickClose(contact, e)}
+                                            right={
+                                                <Button
+                                                    onClick={(e) => handleClickAddFriend(contact, e)}
+                                                    outline
+                                                    primary
+                                                    small
+                                                >
+                                                    {t('contacts.modal.addFriend')}
+                                                </Button>
+                                            }
+                                        />
+                                    ))}
+                                </ContactList>
+                                {showMore ||
+                                    (suggestFriends.length > 3 && (
+                                        <div className="h-[30px] flex items-center">
+                                            <div
+                                                onClick={handleClickViewMore}
+                                                className="cursor-pointer pl-2 ex:pl-3 sm:pl-4 text-ss leading-normal text-primary-color"
+                                            >
+                                                View more
+                                            </div>
+                                        </div>
+                                    ))}
+                            </>
                         )}
                     </ScrollbarCustomize>
                 </div>
