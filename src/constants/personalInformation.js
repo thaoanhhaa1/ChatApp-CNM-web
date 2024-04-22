@@ -5,11 +5,11 @@ export const block = [
     },
     {
         label: 'phoneNumber',
-        key: 'phoneNumber',
+        key: '_id',
     },
     {
         label: 'joinedZalo',
-        key: 'joinedZalo',
+        key: 'createdAt',
     },
 ];
 
@@ -20,6 +20,6 @@ export const noBlock = [
     },
     {
         label: 'birthday',
-        key: 'birthday',
+        key: 'dateOfBirth',
     },
 ];

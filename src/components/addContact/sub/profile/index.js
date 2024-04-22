@@ -14,7 +14,7 @@ import { getConversation, setActive } from '~/features/chats/chatsSlice';
 import { acceptFriendReceived, rejectFriendSent } from '~/features/friend/friendSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import friendServices from '~/services/friend.service';
-import { classNames, getChatIndividual } from '~/utils';
+import { classNames, getChatIndividual, getDate } from '~/utils';
 import ProfileHeader from '../ProfileHeader';
 import AddFriend from '../addFriend';
 import Report from '../report';
@@ -117,6 +117,12 @@ const Profile = ({ onClose }) => {
         }
     };
 
+    const getPersonalInformation = (key) => {
+        if (['createdAt', 'dateOfBirth'].includes(key)) return getDate(new Date(contact[key]));
+
+        return contact[key] || '';
+    };
+
     useEffect(() => {
         updateHeightPopup();
     }, [updateHeightPopup]);
@@ -213,7 +219,7 @@ const Profile = ({ onClose }) => {
                                     <PersonalInformation
                                         key={info.key}
                                         label={t(`contacts.modal.${info.label}`)}
-                                        value={contact[info.key] || ''}
+                                        value={getPersonalInformation(info.key)}
                                     />
                                 ))}
                             </div>

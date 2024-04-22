@@ -63,7 +63,7 @@ const SocketListener = ({ children }) => {
 
             if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));
 
-            messageSound.play();
+            messageSound.play().catch((error) => console.error('🚀 ~ error:', error));
         });
 
         socket.on('openConversation', (data) => {

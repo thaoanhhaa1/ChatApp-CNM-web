@@ -4,7 +4,7 @@ const PersonalInformation = ({ label, value }) => {
     return (
         <div className="flex text-sm leading-normal">
             <span className="w-[100px] flex-shrink-0 text-secondary">{label}</span>
-            <span className="flex-1">{value}</span>
+            <span className="flex-1 capitalize">{value}</span>
         </div>
     );
 };

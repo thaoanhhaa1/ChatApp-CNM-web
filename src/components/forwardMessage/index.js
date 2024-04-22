@@ -4,8 +4,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchIcon } from '~/assets';
-import { addMessageHeadSocket } from '~/features/chats/chatsSlice';
+import { addChat, addMessageHeadSocket } from '~/features/chats/chatsSlice';
 import { addMessageSocket } from '~/features/messages/messagesSlice';
+import conversationServices from '~/services/conversation.service';
 import messageServices from '~/services/message.service';
 import { getOtherUserInIndividual } from '~/utils';
 import Input from '../input';
@@ -70,12 +71,25 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
                 conversationIndividualIds.push(chat._id);
             });
 
+            if (selectedUserIds.length) {
+                const conversations = (
+                    await Promise.all(selectedUserIds.map((userId) => conversationServices.openConversation(userId)))
+                ).map((res) => res.data);
+
+                conversations.forEach((conversation) => {
+                    conversationIndividualIds.push(conversation._id);
+                    dispatch(addChat(conversation));
+                    socket.emit('openConversation', {
+                        conversation,
+                        user,
+                    });
+                });
+            }
+
             const res = await messageServices.forward({
                 messageId,
                 conversationIds: [...selectedGroupIds, ...conversationIndividualIds],
             });
-
-            console.log('🚀 ~ handleForward ~ conversationIndividualIds:', conversationIndividualIds);
 
             socket.emit('forward', res.data);
             res.data.forEach((message) => {

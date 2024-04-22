@@ -93,6 +93,10 @@ const AddContact = ({ show, onClickOutside }) => {
         suggestFriendsFirstFetch || dispatch(getSuggestFriends());
     }, [dispatch, show, suggestFriendsFirstFetch]);
 
+    useEffect(() => {
+        setShowMore(false);
+    }, [show]);
+
     return (
         <Modal show={show} onClickOutside={handleClose}>
             <PopupMultiLevel onClose={handleClose}>
