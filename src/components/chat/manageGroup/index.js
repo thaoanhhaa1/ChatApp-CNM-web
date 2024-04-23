@@ -23,7 +23,7 @@ const ManageGroup = ({ onBack }) => {
     if (!active) return null;
 
     return (
-        <div className="absolute inset-0 bg-white z-10 flex flex-col">
+        <div className="absolute inset-0 bg-white dark:bg-dark z-10 flex flex-col">
             <div className="relative h-[68px] flex justify-center items-center border-b border-separate dark:border-dark-separate">
                 <h2 className="text-lg font-medium text-center">{t('group.manage.title')}</h2>
                 {onBack ? (
@@ -37,12 +37,12 @@ const ManageGroup = ({ onBack }) => {
             </div>
             <ScrollbarCustomize>
                 {myRole === groupRole.MEMBER_ROLE ? (
-                    <div className="h-10 bg-[#f9fafb] flex items-center gap-1.5 justify-center">
+                    <div className="h-10 bg-[#f9fafb] dark:bg-dark flex items-center gap-1.5 justify-center">
                         <LockIcon className="w-[14px] h-[14px]" />
                         <span className="text-ss">{t('group.manage.warning')}</span>
                     </div>
                 ) : null}
-                <div className="flex flex-col gap-2 bg-[#eef0f1]">
+                <div className="flex flex-col gap-2 bg-[#eef0f1] dark:bg-dark-separate">
                     {/* TODO Settings */}
                     <div
                         className={classNames(
@@ -52,7 +52,7 @@ const ManageGroup = ({ onBack }) => {
                     ></div>
 
                     {myRole === groupRole.OWNER_ROLE ? (
-                        <div className="p-4 bg-white">
+                        <div className="p-4 bg-white dark:bg-dark">
                             <Button onClick={handleShowDeleteGroup} className="w-full h-8" danger>
                                 {t('group.manage.delete')}
                             </Button>

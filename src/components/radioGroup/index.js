@@ -5,7 +5,7 @@ const RadioGroup = ({ label, data, name, value, onChange }) => {
     return (
         <div>
             {label && (
-                <label htmlFor={name} className="block text-primary text-mm leading-5 font-medium mb-2">
+                <label htmlFor={name} className="block text-mm leading-5 font-medium mb-2">
                     {label}
                 </label>
             )}

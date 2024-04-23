@@ -352,3 +352,8 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
     -moz-appearance: textfield;
 }
+
+// Input
+.dark input {
+    color-scheme: dark;
+}

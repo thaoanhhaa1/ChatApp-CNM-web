@@ -28,7 +28,7 @@ const UnderlineInput = ({
                 onChange={handleChange}
                 placeholder={placeholder}
                 className={classNames(
-                    'text-sm flex-1 outline-none py-1.5 text-primary placeholder:text-secondary',
+                    'text-sm flex-1 outline-none py-1.5 text-primary placeholder:text-secondary dark:bg-[#242526] dark:text-white',
                     align === 'center' && 'text-center',
                 )}
                 type={type}

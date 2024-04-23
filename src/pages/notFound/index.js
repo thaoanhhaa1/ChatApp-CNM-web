@@ -19,13 +19,15 @@ const NotFound = () => {
                         }}
                         className="h-[400px] bg-center"
                     >
-                        <h1 className="text-[80px] z-1">404</h1>
+                        <h1 className="text-[80px] z-1 text-primary">404</h1>
                     </div>
 
                     <div className="-mt-[50px] px-8 z-1">
-                        <h3 className="text-4xl xs:text-[80px] xs:leading-tight">{t('not-found.title')}</h3>
+                        <h3 className="text-4xl xs:text-[80px] xs:leading-tight text-primary">
+                            {t('not-found.title')}
+                        </h3>
 
-                        <p>{t('not-found.description')}</p>
+                        <p className="text-primary">{t('not-found.description')}</p>
 
                         <div className="flex items-center justify-center gap-4">
                             <Link

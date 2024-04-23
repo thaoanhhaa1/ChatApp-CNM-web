@@ -53,8 +53,8 @@ const Profile = ({ show, onClose }) => {
                                 <div className="flex gap-2 ex:gap-3 sm:gap-4">
                                     <div className="relative">
                                         <Avatar src={user.avatar} size="60px" />
-                                        <span className="absolute bottom-0 right-0 bg-gray-300 hover:bg-gray-500 rounded-full">
-                                            <label htmlFor="avatarInput">
+                                        <span className="absolute bottom-0 right-0 bg-gray-300 hover:bg-opacity-80 transition-all rounded-full">
+                                            <label htmlFor="avatarInput" className="cursor-pointer dark:text-primary">
                                                 <CameraIcon className="w-[24px] h-[24px] p-[3px]" />
                                                 <input
                                                     type="file"

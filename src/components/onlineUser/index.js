@@ -1,9 +1,24 @@
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { statusUser } from '~/constants';
+import { setActive } from '~/features/chats/chatsSlice';
 import Avatar from '../avatar';
 
 const OnlineUser = ({ data }) => {
-    const handleClick = () => console.log(data);
+    const { chats } = useSelector((state) => state.chats);
+    const dispatch = useDispatch();
+
+    const handleClick = () => {
+        const chat = chats.find((chat) => {
+            if (chat.isGroup) return false;
+
+            const index = chat.users.findIndex((user) => user._id === data._id);
+
+            return index !== -1;
+        });
+
+        if (chat) dispatch(setActive(chat));
+    };
 
     return (
         <div

@@ -8,7 +8,7 @@ const Avatar = ({ src, size = '32px', className }) => {
                 width: size,
                 height: size,
             }}
-            className={classNames('rounded-full border border-white', className)}
+            className={classNames('rounded-full border border-white dark:border-[#232526]', className)}
             src={src}
             alt=""
         />

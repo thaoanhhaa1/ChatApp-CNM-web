@@ -35,6 +35,7 @@ const DefaultLayout = ({ children }) => {
     const { width } = useWindowSize();
     const { user, loading } = useSelector((state) => state.user);
     const { locationError, toast } = useSelector((state) => state.toastAll);
+    const { friendList } = useSelector((state) => state.friend);
     const { socket } = useSelector((state) => state.socket);
     const navigation = useNavigate();
     const dispatch = useDispatch();
@@ -81,15 +82,14 @@ const DefaultLayout = ({ children }) => {
     useEffect(() => {
         if (!user?._id || !socket) return;
 
-        dispatch(getFriends())
-            .unwrap()
-            .then((data) => {
-                if (!data?.friends?.length) return;
-
-                socket.emit('online', { userId: user._id, friendIds: data.friends.map((friend) => friend._id) });
-            })
-            .catch(console.error);
+        dispatch(getFriends()).unwrap().then().catch(console.error);
     }, [dispatch, socket, user?._id]);
+
+    useEffect(() => {
+        if (!user?._id || !friendList.length) return;
+
+        socket.emit('online', { userId: user._id, friendIds: friendList.map((friend) => friend._id) });
+    }, [friendList, socket, user?._id]);
 
     if (loading || !user?._id) return <Loading />;
 

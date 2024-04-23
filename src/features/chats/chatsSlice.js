@@ -26,6 +26,7 @@ const chatsSlice = createSlice({
     initialState,
     reducers: {
         setTyping: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ setTyping');
             const { conversationId, userId, typing } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
@@ -38,12 +39,14 @@ const chatsSlice = createSlice({
             if (state.active?._id === conversationId) state.active.users = chat.users;
         },
         setActive: (state, { payload }) => {
-            state.active = payload;
+            console.log('🚀 ~ chats ~ setActive');
+            if (state.active?._id !== payload?._id) state.active = payload;
 
             const chat = state.chats.find((chat) => chat._id === payload?._id);
             if (chat) chat.unreadMessageCount = 0;
         },
         updateMessage: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ updateMessage');
             const { conversationId, message } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
@@ -63,6 +66,7 @@ const chatsSlice = createSlice({
             }
         },
         togglePin: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ togglePin');
             const { conversationId, userId } = payload;
 
             const chatIndex = state.chats.findIndex((chat) => chat._id === conversationId);
@@ -82,6 +86,7 @@ const chatsSlice = createSlice({
             }
         },
         addPinMessage: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ addPinMessage');
             const { conversationId, message } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
@@ -94,6 +99,7 @@ const chatsSlice = createSlice({
             if (state.active?._id === conversationId) state.active.pinnedMessages = chat.pinnedMessages;
         },
         removePinMessage: (state, { payload }) => {
+            console.log('🚀 ~ chats ~ removePinMessage');
             const { conversationId, message } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
@@ -120,7 +126,10 @@ const chatsSlice = createSlice({
 
                 chat.firstFetchMessages = true;
 
-                if (state.active?._id === conversationId) state.active.messages = chat.messages;
+                if (state.active?._id === conversationId) {
+                    state.active.messages = chat.messages;
+                    state.active.firstFetchMessages = true;
+                }
             }
         },
         addMessageHead: (state, { payload }) => {
@@ -209,6 +218,7 @@ const chatsSlice = createSlice({
             if (state.active?._id === conversationId) state.active.messages = chat.messages;
         },
         updateMessageReact: (state, { payload }) => {
+            console.log('🚀 ~ updateMessageReact');
             const { conversationId, messageId, userId, react } = payload;
             console.log('🚀 ~ messageId:', messageId);
             console.log('🚀 ~ conversationId:', conversationId);
@@ -231,12 +241,15 @@ const chatsSlice = createSlice({
             }
         },
         removeConversation: (state, { payload }) => {
+            console.log('removeConversation', payload);
             const index = state.chats.findIndex((chat) => chat._id === payload);
 
             if (index >= 0) state.chats.splice(index, 1);
             if (state.active?._id === payload) state.active = null;
         },
         addOrUpdateChat: (state, { payload }) => {
+            console.log('addOrUpdateChat', payload);
+
             if (!payload?._id) return state;
 
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
@@ -266,6 +279,7 @@ const chatsSlice = createSlice({
             });
         },
         changeLastMessage: (state, { payload }) => {
+            console.log('Change last message', payload);
             const { conversationId, message, prevMessage } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
@@ -276,6 +290,7 @@ const chatsSlice = createSlice({
             if (state.active?._id === conversationId) state.active.lastMessage = message;
         },
         deleteChat: (state, { payload }) => {
+            console.log('Delete chat', payload);
             const chat = state.chats.find((chat) => chat._id === payload);
 
             if (chat) {

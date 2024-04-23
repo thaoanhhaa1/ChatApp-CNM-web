@@ -123,14 +123,13 @@ const Chat = () => {
         if (lastMessage.state === sentMessageStatus.SENT) {
             console.log(`lastMessage`, lastMessage);
             socket.emit('sendMessage', lastMessage);
+            dispatch(
+                updateMessage({
+                    conversationId: lastMessage.conversation?._id || lastMessage?.conversationId,
+                    message: lastMessage,
+                }),
+            );
         }
-
-        dispatch(
-            updateMessage({
-                conversationId: lastMessage.conversation?._id || lastMessage?.conversationId,
-                message: lastMessage,
-            }),
-        );
     }, [dispatch, messages, socket]);
 
     useEffect(() => {

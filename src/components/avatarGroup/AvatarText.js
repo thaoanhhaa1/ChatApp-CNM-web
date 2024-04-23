@@ -9,7 +9,7 @@ const AvatarText = ({ text, size = '32px', className }) => {
                 height: size,
             }}
             className={classNames(
-                'rounded-full border border-white flex items-center justify-center text-[11px] text-[#7589a3] bg-[#e6e8ea]',
+                'rounded-full border border-white dark:border-[#232526] flex items-center justify-center text-[11px] text-[#7589a3] bg-[#e6e8ea]',
                 className,
             )}
         >

@@ -14,7 +14,7 @@ const HeaderAction = ({ action, active }) => {
                         'w-8 h-8 flex justify-center items-center rounded-lg transition-colors',
                         active
                             ? 'text-primary-color bg-primary-color bg-opacity-20'
-                            : 'text-primary bg-[#eaedf0] hover:bg-[#dfe2e7]',
+                            : 'text-primary dark:text-dark-primary bg-[#eaedf0] hover:bg-[#dfe2e7] dark:bg-dark-sidebar-item-active-bg',
                     )}
                 >
                     <Icon className="w-5 h-5" />

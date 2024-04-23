@@ -6,7 +6,7 @@ const Button = ({ loading = false, children, type = 'primary', disabled = false,
     const passProps = {};
 
     if (type === 'text-primary') styles.push('text-primary-color hover:underline bg-transparent');
-    else if (type === 'text-secondary') styles.push('bg-separate hover:brightness-90');
+    else if (type === 'text-secondary') styles.push('bg-separate hover:brightness-90 dark:bg-[#242526]');
     else if (type === 'danger') styles.push('bg-danger bg-opacity-20 hover:bg-danger hover:bg-opacity-25 text-danger');
     else styles.push('text-white bg-primary-color hover:brightness-90');
 

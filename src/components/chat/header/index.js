@@ -1,6 +1,6 @@
 import Tippy from '@tippyjs/react';
 import { useWindowSize } from '@uidotdev/usehooks';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -46,7 +46,7 @@ const Header = () => {
     const { active } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const { width } = useWindowSize();
-    const conversationName = getNameConversation(active, user._id);
+    const conversationName = useMemo(() => getNameConversation(active, user._id), [active, user._id]);
     const more = useMemo(() => {
         const more = [];
 
@@ -121,4 +121,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default memo(Header);
