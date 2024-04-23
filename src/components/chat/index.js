@@ -7,6 +7,7 @@ import { groupRole, sentMessageStatus } from '~/constants';
 import { ChatProvider } from '~/context';
 import { addFiles } from '~/features/chat/chatSlice';
 import { updateMessage } from '~/features/chats/chatsSlice';
+import { updateState } from '~/features/messages/messagesSlice';
 import { useBoolean, useToast } from '~/hooks';
 import useSendMessage from '~/hooks/useSendMessage';
 import DropZone from '../dropZone';
@@ -126,9 +127,13 @@ const Chat = () => {
             dispatch(
                 updateMessage({
                     conversationId: lastMessage.conversation?._id || lastMessage?.conversationId,
-                    message: lastMessage,
+                    message: {
+                        ...lastMessage,
+                        state: null,
+                    },
                 }),
             );
+            dispatch(updateState({ _id: lastMessage._id }));
         }
     }, [dispatch, messages, socket]);
 

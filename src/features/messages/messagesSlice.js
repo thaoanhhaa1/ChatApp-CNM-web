@@ -91,6 +91,13 @@ const messagesSlice = createSlice({
         setLoading: (state, { payload }) => {
             state.loading = payload;
         },
+        updateState: (state, { payload }) => {
+            const { _id } = payload;
+
+            const message = state.messages.find((message) => message._id === _id);
+
+            if (message) message.state = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -155,5 +162,6 @@ export const {
     updateDeletedMessage,
     addMessageSocket,
     updateReact,
+    updateState,
 } = messagesSlice.actions;
 export { getMessages, getReplyMessages, sendMessage };

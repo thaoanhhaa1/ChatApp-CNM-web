@@ -64,10 +64,11 @@ const Navbar = ({ className }) => {
     const dispatch = useDispatch();
     const [openProfileModal, setOpenProfileModal] = useState(false);
     const [openSettingModal, setOpenSettingModal] = useState(false);
-    const { chats } = useSelector((state) => state.chats);
+    const { chats, unreadMessageCount } = useSelector((state) => state.chats);
     const countMessagesUnseen = useMemo(
-        () => chats.reduce((acc, chat) => acc + (chat.unreadMessageCount || 0), 0),
-        [chats],
+        () =>
+            chats.length ? chats.reduce((acc, chat) => acc + (chat.unreadMessageCount || 0), 0) : unreadMessageCount,
+        [chats, unreadMessageCount],
     );
 
     const handleCloseProfile = () => {

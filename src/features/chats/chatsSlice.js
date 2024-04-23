@@ -7,6 +7,8 @@ const initialState = {
     active: null,
     activeLoading: false,
     firstFetch: false,
+    unreadMessageCount: 0,
+    messageIds: [],
 };
 
 const getChats = createAsyncThunk('getChats', async () => {
@@ -161,6 +163,11 @@ const chatsSlice = createSlice({
                     if (index >= 0) state.chats.splice(index, 0, chat);
                     else state.chats.unshift(chat);
                 }
+            } else {
+                if (!state.messageIds.includes(payload._id)) {
+                    state.messageIds.push(payload._id);
+                    state.unreadMessageCount += 1;
+                }
             }
         },
         addMessageHeadSocket: (state, { payload }) => {
@@ -309,6 +316,8 @@ const chatsSlice = createSlice({
                 state.chats = payload;
                 state.firstFetch = true;
                 state.loading = false;
+                state.unreadMessageCount = 0;
+                state.messageIds = [];
             })
             .addCase(getChats.rejected, (state) => {
                 state.loading = false;
