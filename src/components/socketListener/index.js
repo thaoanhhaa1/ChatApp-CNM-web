@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import sound from '~/assets/sounds/message-sound.mp3';
 import { DeleteMessageStatus, FriendStatus } from '~/constants';
+import { setContact } from '~/features/addContact/addContactSlice';
 import {
     addChat,
     addMessageHead,
@@ -23,9 +25,8 @@ import {
     setNewReceived,
 } from '~/features/friend/friendSlice';
 import { addMessageSocket, updateDeletedMessage, updateReact } from '~/features/messages/messagesSlice';
+import { addOnlineUser, addOnlineUsers, removeOnlineUser } from '~/features/onlineUsers/onlineUsersSlice';
 import { connect } from '~/features/socket/socketSlice';
-import sound from '~/assets/sounds/message-sound.mp3';
-import { setContact } from '~/features/addContact/addContactSlice';
 
 const messageSound = new Audio(sound);
 
@@ -44,11 +45,25 @@ const SocketListener = ({ children }) => {
             return;
         }
 
-        socket.emit('online', user._id);
+        // Nhận khi user khác online
+        socket.on('userOnline', (userId) => {
+            console.log('🚀 ~ socket.on ~ userOnline ~ userId:', userId);
 
-        socket.on('usersOnline', (data) => {
-            // TODO
-            // console.log(data);
+            dispatch(addOnlineUser(userId));
+        });
+
+        // Nhận khi chính mình online
+        socket.on('usersOnline', (userIds) => {
+            console.log('🚀 ~ socket.on ~ usersOnline ~ userIds:', userIds);
+
+            dispatch(addOnlineUsers(userIds));
+        });
+
+        // Nhận khi user khác offline
+        socket.on('userOffline', (userId) => {
+            console.log('🚀 ~ socket.on ~ userOffline ~ userId:', userId);
+
+            dispatch(removeOnlineUser(userId));
         });
 
         socket.on('receivedMessage', (message) => {

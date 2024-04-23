@@ -26,8 +26,8 @@ const Friend = () => {
     const handleCloseModal = () => setModalActive();
 
     useEffect(() => {
-        friendListFirstFetch || dispatch(getFriends());
-    }, [dispatch, friendListFirstFetch]);
+        friendListFirstFetch || friendListLoading || dispatch(getFriends());
+    }, [dispatch, friendListFirstFetch, friendListLoading]);
 
     return (
         <Wrapper>

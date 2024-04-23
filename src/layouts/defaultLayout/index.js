@@ -12,6 +12,7 @@ import Toast from '~/components/toast';
 import config from '~/config';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
+import { getFriends } from '~/features/friend/friendSlice';
 import { setLocationError, setToast } from '~/features/toastAll/toastAllSlice';
 import { getUserInfo } from '~/features/user/userSlice';
 import { useToast } from '~/hooks';
@@ -34,6 +35,7 @@ const DefaultLayout = ({ children }) => {
     const { width } = useWindowSize();
     const { user, loading } = useSelector((state) => state.user);
     const { locationError, toast } = useSelector((state) => state.toastAll);
+    const { socket } = useSelector((state) => state.socket);
     const navigation = useNavigate();
     const dispatch = useDispatch();
     const refSection = useRef(null);
@@ -75,6 +77,19 @@ const DefaultLayout = ({ children }) => {
     useEffect(() => {
         showToast || setTimeout(() => dispatch(setToast('')), 500);
     }, [dispatch, showToast]);
+
+    useEffect(() => {
+        if (!user?._id || !socket) return;
+
+        dispatch(getFriends())
+            .unwrap()
+            .then((data) => {
+                if (!data?.friends?.length) return;
+
+                socket.emit('online', { userId: user._id, friendIds: data.friends.map((friend) => friend._id) });
+            })
+            .catch(console.error);
+    }, [dispatch, socket, user?._id]);
 
     if (loading || !user?._id) return <Loading />;
 

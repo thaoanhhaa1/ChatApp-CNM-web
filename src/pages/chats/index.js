@@ -29,15 +29,20 @@ location.getCoords().then().catch();
 const Chats = () => {
     const { t } = useTranslation();
     const { width, height } = useWindowSize();
-    const { users: onlineUsers } = useSelector((state) => state.onlineUsers);
+    const { users: onlineUserIds } = useSelector((state) => state.onlineUsers);
     const { chats, active, loading, firstFetch } = useSelector((state) => state.chats);
     const { search } = useSelector((state) => state.search);
+    const { friendList } = useSelector((state) => state.friend);
     const [searchValue, setSearchValue] = useState('');
     const inputWrapRef = useRef();
     const [boundClientRect, setBoundingClientRect] = useState({ top: 0 });
     const { value: isShowSearch, setFalse: hideSearch, setTrue: showSearch } = useBoolean(false);
     const searchDebounce = useDebounce(searchValue, 300);
     const chatsCanShow = useMemo(() => chats.filter((chat) => chat.lastMessage), [chats]);
+    const onlineUsers = useMemo(
+        () => friendList.filter((friend) => onlineUserIds.includes(friend._id)),
+        [friendList, onlineUserIds],
+    );
     const dispatch = useDispatch();
 
     const handleCloseSearch = useCallback(() => {
@@ -107,7 +112,7 @@ const Chats = () => {
                     </div>
                     <Swiper spaceBetween={width < screens.SM ? 8 : 16} slidesPerView="auto" className="mt-2 sm:mt-4">
                         {onlineUsers.map((item) => (
-                            <SwiperSlide className="!w-fit" key={item.id}>
+                            <SwiperSlide className="!w-fit" key={item._id}>
                                 <OnlineUser data={item} />
                             </SwiperSlide>
                         ))}
