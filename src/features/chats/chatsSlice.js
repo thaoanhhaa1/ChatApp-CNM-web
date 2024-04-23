@@ -240,9 +240,16 @@ const chatsSlice = createSlice({
             if (!payload?._id) return state;
 
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
+            const chat = state.chats[index];
 
             if (index < 0) state.chats.unshift(payload);
-            else state.chats[index] = payload;
+            else
+                state.chats[index] = {
+                    ...payload,
+                    unreadMessageCount: chat.unreadMessageCount,
+                    lastMessage: chat.lastMessage,
+                    messages: chat.messages,
+                };
 
             if (state.active?._id === payload._id) state.active = payload;
         },

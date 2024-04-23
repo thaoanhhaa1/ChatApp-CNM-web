@@ -2,16 +2,25 @@ import PropTypes from 'prop-types';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { MoreFillIcon, PinFilledIcon } from '~/assets';
 import { useLayout } from '~/context';
 import { setActive, togglePin } from '~/features/chats/chatsSlice';
 import { useBoolean } from '~/hooks';
 import conversationServices from '~/services/conversation.service';
-import { classNames, getNameConversation, getTimeChat, getUnseenMessageNumber, isPinConversation } from '~/utils';
+import {
+    classNames,
+    getNameConversation,
+    getOtherUserInIndividual,
+    getTimeChat,
+    getUnseenMessageNumber,
+    isPinConversation,
+} from '~/utils';
 import ChatItemMessage from '../chatItemMessage';
 import ConversationAvatar from '../conversationAvatar';
 import Popup from '../popup';
 import Typing from '../typing';
+import AddToGroups from './AddToGroups';
 import DeleteChatItem from './DeleteChatItem';
 
 const ChatItem = ({ chat, active }) => {
@@ -28,11 +37,24 @@ const ChatItem = ({ chat, active }) => {
         setFalse: handleHideDeleteConversation,
         setTrue: handleShowDeleteConversation,
     } = useBoolean(false);
+    const {
+        value: showAddToGroups,
+        setFalse: handleHideAddToGroups,
+        setTrue: handleShowAddToGroups,
+    } = useBoolean(false);
+    const otherUser = !chat.isGroup && getOtherUserInIndividual(chat.users, user._id);
 
-    const togglePinConversation = useCallback(() => {
-        conversationServices.togglePinConversation(chat._id).then();
+    const togglePinConversation = useCallback(async () => {
+        const index = chat.pinBy.findIndex((item) => item === user._id);
+
+        await toast.promise(conversationServices.togglePinConversation(chat._id), {
+            pending: t(`conversation.${index >= 0 ? 'unpinConversation' : 'pinConversation'}.pending`),
+            success: t(`conversation.${index >= 0 ? 'unpinConversation' : 'pinConversation'}.success`),
+            error: t(`conversation.${index >= 0 ? 'unpinConversation' : 'pinConversation'}.error`),
+        });
+
         dispatch(togglePin({ conversationId: chat._id, userId: user._id }));
-    }, [chat._id, dispatch, user._id]);
+    }, [chat._id, chat.pinBy, dispatch, t, user._id]);
 
     const handleClickDeleteConversation = useCallback(
         (e) => {
@@ -45,39 +67,44 @@ const ChatItem = ({ chat, active }) => {
 
     const more = useMemo(() => {
         const more = [
-            {
-                title: t('chats.more.mark-as-unread'),
-                separate: true,
-            },
-            {
-                title: t('chats.more.add-to-group'),
-                separate: true,
-            },
+            // TODO
+            // {
+            //     title: t('chats.more.mark-as-unread'),
+            //     separate: true,
+            // },
             {
                 title: t('chats.more.delete-conversation'),
-                separate: true,
+                // separate: true,
                 onClick: handleClickDeleteConversation,
+                type: 'danger',
             },
-            {
-                title: t('chats.more.report'),
-            },
+            // {
+            //     title: t('chats.more.report'),
+            // },
         ];
+
+        if (!chat.isGroup)
+            more.unshift({
+                title: t('chats.more.add-to-group'),
+                onClick: handleShowAddToGroups,
+                separate: true,
+            });
 
         if (isPin)
             more.unshift({
                 title: t('chats.more.unpin'),
-                separate: true,
+                separate: chat.isGroup,
                 onClick: togglePinConversation,
             });
         else
             more.unshift({
                 title: t('chats.more.pin'),
-                separate: true,
+                separate: chat.isGroup,
                 onClick: togglePinConversation,
             });
 
         return more;
-    }, [handleClickDeleteConversation, isPin, t, togglePinConversation]);
+    }, [chat.isGroup, handleClickDeleteConversation, handleShowAddToGroups, isPin, t, togglePinConversation]);
 
     const message = chat.lastMessage;
 
@@ -131,6 +158,9 @@ const ChatItem = ({ chat, active }) => {
                 show={showDeleteConversation}
                 onClickOutside={handleHideDeleteConversation}
             />
+            {otherUser && (
+                <AddToGroups userId={otherUser._id} show={showAddToGroups} onClickOutside={handleHideAddToGroups} />
+            )}
         </div>
     );
 };

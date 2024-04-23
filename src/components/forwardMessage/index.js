@@ -141,13 +141,13 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
 
     return (
         <Modal show={show} onClickOutside={handleClickOutside}>
-            <Modal.Header onClose={handleClickOutside}>{t('contacts.create-group-modal.title')}</Modal.Header>
+            <Modal.Header onClose={handleClickOutside}>{t('chat.share')}</Modal.Header>
 
             <div className="h-[75vh] flex flex-col">
-                <div className="px-2 ex:px-3 smn:px-4 pt-2 ex:pt-3 smn:pt-4">
+                <div className="px-2 ex:px-3 smn:px-4 pt-2 ex:pt-3">
                     <Input
                         placeholder={t('contacts.create-group-modal.search-placeholder')}
-                        containerClassName="mt-2 ex:mt-3 sm:mt-4 focus-within:border-primary-color dark:focus-within:border-primary-color"
+                        containerClassName="focus-within:border-primary-color dark:focus-within:border-primary-color"
                         Icon={SearchIcon}
                         outline
                         rounded
@@ -155,7 +155,7 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
                         onChangeText={setName}
                     />
 
-                    <div className="mt-2.5 ex:mt-3.5 sm:mt-5 h-[1px] bg-separate dark:bg-dark-separate" />
+                    <div className="mt-2 ex:mt-3 h-[1px] bg-separate dark:bg-dark-separate" />
                 </div>
 
                 <ContactList

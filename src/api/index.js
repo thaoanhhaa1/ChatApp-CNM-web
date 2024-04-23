@@ -20,6 +20,7 @@ const api = {
     openConversation: () => `/conversation`,
     togglePinConversation: (conversationId) => `/conversation/pin/${conversationId}`,
     deleteConversation: (params) => `/conversation/${params[0]}`,
+    addToGroups: () => `/conversation/addToGroups`,
 
     // Message
     getMessages: (conversationId) => `/message/${conversationId}`,

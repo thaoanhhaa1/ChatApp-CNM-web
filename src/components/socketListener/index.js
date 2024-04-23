@@ -196,6 +196,14 @@ const SocketListener = ({ children }) => {
             dispatch(removeConversation(conversationId));
             dispatch(removeGroup(conversationId));
         });
+
+        socket.on('addToGroups', ({ conversations }) => {
+            console.log('🚀 ~ socket.on ~ addToGroups ~ conversations:', conversations);
+
+            conversations.forEach((conversation) => {
+                dispatch(addOrUpdateChat(conversation));
+            });
+        });
     }, [active?._id, contact, dispatch, socket, user?._id]);
 
     return children;

@@ -497,6 +497,12 @@
             "description": "Mời tất cả mọi người rời nhóm và xóa tin nhắn? Nhóm đã giải tán sẽ KHÔNG THỂ khôi phục.",
             "no": "Không",
             "delete-group": "Giải tán nhóm"
+        },
+        "invite-to-group": {
+            "title": "Mời tham gia nhóm",
+            "search-placeholder": "Tìm nhóm theo tên",
+            "cancel": "Huỷ",
+            "invite": "Mời"
         }
     },
     "conversation": {
@@ -506,6 +512,16 @@
             "description-2": "Bạn có chắc chắn muốn xóa?",
             "no": "Không",
             "delete": "Xoá"
+        },
+        "pinConversation": {
+            "pending": "Đang ghim...",
+            "success": "Ghim thành công",
+            "error": "Ghim không thành công"
+        },
+        "unpinConversation": {
+            "pending": "Đang bỏ ghim...",
+            "success": "Bỏ ghim thành công",
+            "error": "Bỏ ghim không thành công"
         }
     },
     "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"

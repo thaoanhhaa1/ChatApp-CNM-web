@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppListDetailFillIcon } from '~/assets';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
-import { getGroups } from '~/features/contactGroups/contactGroupsSlice';
 import { getFriends } from '~/features/friend/friendSlice';
 import { classNames, convertContactsToPhoneBook, sortGroupByName } from '~/utils';
 import PhoneBook from '../phoneBook';
@@ -18,10 +17,9 @@ const ContactList = ({ chat, selectedContacts, handleClickContact, handleRemoveC
     const { t } = useTranslation();
     const { friendList, friendListLoading, friendListFirstFetch } = useSelector((state) => state.friend);
     console.log('🚀 ~ ContactList ~ friendList:', friendList);
-    const { groups, loading } = useSelector((state) => state.contactGroups);
-    console.log('🚀 ~ ContactList ~ groups:', groups);
+    const { chats } = useSelector((state) => state.chats);
+    const groups = useMemo(() => chats.filter((chat) => chat.isGroup), [chats]);
     const contacts = convertContactsToPhoneBook(friendList);
-    console.log('🚀 ~ ContactList ~ contacts:', contacts);
     const groupsSort = sortGroupByName(groups);
     const dispatch = useDispatch();
 
@@ -31,7 +29,7 @@ const ContactList = ({ chat, selectedContacts, handleClickContact, handleRemoveC
 
             if (!friendListFirstFetch) requests.push(dispatch(getFriends()));
 
-            if (!groups.length) requests.push(dispatch(getGroups()));
+            // if (!groups.length) requests.push(dispatch(getGroups()));
 
             await Promise.all(requests);
         })();
@@ -56,20 +54,21 @@ const ContactList = ({ chat, selectedContacts, handleClickContact, handleRemoveC
                                         />
                                     )}
                                 />
-                                {loading && <PhoneBookSkeleton render={ItemSkeleton} />}
-                                <PhoneBook
-                                    phoneBook={{
-                                        [t('chat.forward.group')]: groupsSort,
-                                    }}
-                                    render={(item) => (
-                                        <GroupItem
-                                            key={item._id}
-                                            group={item}
-                                            checked={selectedContacts.some((i) => i._id === item._id)}
-                                            onClick={() => handleClickContact(item)}
-                                        />
-                                    )}
-                                />
+                                {(friendListLoading && <PhoneBookSkeleton render={ItemSkeleton} />) || (
+                                    <PhoneBook
+                                        phoneBook={{
+                                            [t('chat.forward.group')]: groupsSort,
+                                        }}
+                                        render={(item) => (
+                                            <GroupItem
+                                                key={item._id}
+                                                group={item}
+                                                checked={selectedContacts.some((i) => i._id === item._id)}
+                                                onClick={() => handleClickContact(item)}
+                                            />
+                                        )}
+                                    />
+                                )}
                             </ScrollbarCustomize>
                         </div>
                         <div

@@ -3,6 +3,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { classNames } from '~/utils';
 
 const Item = ({
+    type = '',
     url,
     icon,
     children,
@@ -31,7 +32,14 @@ const Item = ({
             >
                 <div className="flex gap-2 items-center">
                     {url && <LazyLoadImage className="h-3 object-cover" src={url} alt={children} />}
-                    <span className="text-mm leading-5">{children}</span>
+                    <span
+                        className={classNames(
+                            'text-mm leading-5',
+                            type === 'danger' ? 'text-danger dark:text-danger' : '',
+                        )}
+                    >
+                        {children}
+                    </span>
                 </div>
                 {icon && <Icon className="w-[15px] h-[15px]" />}
             </div>
@@ -41,6 +49,7 @@ const Item = ({
 };
 
 Item.propTypes = {
+    type: PropTypes.string,
     url: PropTypes.string,
     icon: PropTypes.func,
     children: PropTypes.string.isRequired,

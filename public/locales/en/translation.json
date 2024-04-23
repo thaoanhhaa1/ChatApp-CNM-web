@@ -499,6 +499,12 @@
             "description": "Remove all members and delete the group? This CANNOT be undone.",
             "no": "No",
             "delete-group": "Delete group"
+        },
+        "invite-to-group": {
+            "title": "Invite to group",
+            "search-placeholder": "Search group by name",
+            "cancel": "Cancel",
+            "invite": "Invite"
         }
     },
     "conversation": {
@@ -508,6 +514,16 @@
             "description-2": "Are you sure you want to delete?",
             "no": "No",
             "delete": "Delete"
+        },
+        "pinConversation": {
+            "pending": "Pinning...",
+            "success": "Pinned successfully",
+            "error": "Failed to pin"
+        },
+        "unpinConversation": {
+            "pending": "Unpinning...",
+            "success": "Unpinned successfully",
+            "error": "Failed to unpin"
         }
     },
     "request-error": "Some errors occurred, please try again"
