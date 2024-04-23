@@ -19,6 +19,7 @@ const api = {
     getAllConversations: () => `/conversation`,
     openConversation: () => `/conversation`,
     togglePinConversation: (conversationId) => `/conversation/pin/${conversationId}`,
+    deleteConversation: (params) => `/conversation/${params[0]}`,
 
     // Message
     getMessages: (conversationId) => `/message/${conversationId}`,

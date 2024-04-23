@@ -90,7 +90,10 @@
         "error-send-files-1": "Xin vui lòng thử lại",
         "error-policy-files": "không tuân thủ chính sách của chúng tôi và do đó sẽ không được gửi",
         "error-policy-message": "Tin nhắn không tuân thủ chính sách của chúng tôi và do đó sẽ không được gửi",
-        "error-file-size": "Zalo hỗ trợ gửi file tối đa 10MB"
+        "error-file-size": "Zalo hỗ trợ gửi file tối đa 10MB",
+        "delete-for-me-pending": "Đang xoá...",
+        "delete-for-me-success": "Xoá tin nhắn thành công",
+        "delete-for-me-error": "Xoá tin nhắn không thành công"
     },
     "contacts": {
         "title": "Danh bạ",
@@ -494,6 +497,15 @@
             "description": "Mời tất cả mọi người rời nhóm và xóa tin nhắn? Nhóm đã giải tán sẽ KHÔNG THỂ khôi phục.",
             "no": "Không",
             "delete-group": "Giải tán nhóm"
+        }
+    },
+    "conversation": {
+        "delete": {
+            "title": "Xác nhận",
+            "description-1": "Toàn bộ nội dung trò chuyện sẽ bị xóa vĩnh viễn.",
+            "description-2": "Bạn có chắc chắn muốn xóa?",
+            "no": "Không",
+            "delete": "Xoá"
         }
     },
     "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"

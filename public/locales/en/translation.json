@@ -92,7 +92,10 @@
         "error-send-files-1": "Please try again",
         "error-policy-files": "do not comply with our policies and therefore will not be sent",
         "error-policy-message": "The message does not comply with our policies and therefore will not be sent",
-        "error-file-size": "Maximum allowed size for uploaded files is 10MB"
+        "error-file-size": "Maximum allowed size for uploaded files is 10MB",
+        "delete-for-me-pending": "Deleting...",
+        "delete-for-me-success": "Deleted successfully",
+        "delete-for-me-error": "Failed to delete"
     },
     "contacts": {
         "title": "Contacts",
@@ -496,6 +499,15 @@
             "description": "Remove all members and delete the group? This CANNOT be undone.",
             "no": "No",
             "delete-group": "Delete group"
+        }
+    },
+    "conversation": {
+        "delete": {
+            "title": "Confirm",
+            "description-1": "Whole conversation history will permanently delete.",
+            "description-2": "Are you sure you want to delete?",
+            "no": "No",
+            "delete": "Delete"
         }
     },
     "request-error": "Some errors occurred, please try again"

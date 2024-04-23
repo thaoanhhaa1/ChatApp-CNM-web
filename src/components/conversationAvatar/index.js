@@ -11,6 +11,8 @@ const ConversationAvatar = ({ conversation, size }) => {
     if (!conversation?._id) return null;
 
     if (conversation.isGroup) {
+        if (conversation.picture) return <Avatar src={conversation.picture} size={size} alt={conversation.name} />;
+
         const avatars = getAvatarsGroup(conversation.users);
 
         return <AvatarGroup avatars={avatars} size={size} />;

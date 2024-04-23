@@ -41,7 +41,7 @@ const chatsSlice = createSlice({
             state.active = payload;
 
             const chat = state.chats.find((chat) => chat._id === payload?._id);
-            if (chat) chat.unseenMessages = 0;
+            if (chat) chat.unreadMessageCount = 0;
         },
         updateMessage: (state, { payload }) => {
             const { conversationId, message } = payload;
@@ -131,17 +131,17 @@ const chatsSlice = createSlice({
             const chatIndex = state.chats.findIndex((chat) => chat._id === conversationId);
             const chat = state.chats[chatIndex];
 
-            if (chat && chat?.messages?.[0]._id !== payload._id) {
+            if (chat && chat?.messages?.[0]?._id !== payload._id) {
                 if (chat.messages?.length) chat.messages = [payload, ...chat.messages];
                 else chat.messages = [payload];
 
                 chat.lastMessage = payload;
                 // FIXME
-                chat.unseenMessages = chat.unseenMessages ? chat.unseenMessages + 1 : 1;
+                chat.unreadMessageCount = chat.unreadMessageCount ? chat.unreadMessageCount + 1 : 1;
                 if (state.active?._id === conversationId) {
                     state.active.lastMessage = payload;
                     state.active.messages = chat.messages;
-                    chat.unseenMessages = 0;
+                    chat.unreadMessageCount = 0;
                 }
 
                 state.chats.splice(chatIndex, 1);
@@ -258,6 +258,25 @@ const chatsSlice = createSlice({
                 else state.chats[index] = chat;
             });
         },
+        changeLastMessage: (state, { payload }) => {
+            const { conversationId, message, prevMessage } = payload;
+
+            const chat = state.chats.find((chat) => chat._id === conversationId);
+
+            if (!chat) return state;
+
+            if (chat.lastMessage?._id === prevMessage._id) chat.lastMessage = message;
+            if (state.active?._id === conversationId) state.active.lastMessage = message;
+        },
+        deleteChat: (state, { payload }) => {
+            const chat = state.chats.find((chat) => chat._id === payload);
+
+            if (chat) {
+                chat.messages = [];
+                chat.lastMessage = null;
+            }
+            if (chat.active?._id === payload) chat.active = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -309,5 +328,7 @@ export const {
     addOrUpdateChat,
     reset,
     addChats,
+    changeLastMessage,
+    deleteChat,
 } = chatsSlice.actions;
 export { getChats, getConversation };

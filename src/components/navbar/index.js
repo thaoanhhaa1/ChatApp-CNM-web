@@ -66,7 +66,7 @@ const Navbar = ({ className }) => {
     const [openSettingModal, setOpenSettingModal] = useState(false);
     const { chats } = useSelector((state) => state.chats);
     const countMessagesUnseen = useMemo(
-        () => chats.reduce((acc, chat) => acc + (chat.unseenMessages || 0), 0),
+        () => chats.reduce((acc, chat) => acc + (chat.unreadMessageCount || 0), 0),
         [chats],
     );
 

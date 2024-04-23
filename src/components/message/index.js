@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import {
     ChatForwardIcon,
     DeleteBinLineIcon,
@@ -25,14 +26,13 @@ import Toast from '~/components/toast';
 import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
 import { MessageProvider } from '~/context';
 import { setReply } from '~/features/chat/chatSlice';
-import { addPinMessage, setMessages, updateMessage } from '~/features/chats/chatsSlice';
+import { addPinMessage, changeLastMessage, setMessages, updateMessage } from '~/features/chats/chatsSlice';
 import { getReplyMessages, setOffsetTop, updateDeletedMessage } from '~/features/messages/messagesSlice';
 import { setLocationError } from '~/features/toastAll/toastAllSlice';
 import { useBoolean, useLoader, useToast } from '~/hooks';
 import messageServices from '~/services/message.service';
 import {
     classNames,
-    getMessageNoDelete,
     getTimeChatSeparate,
     googleMaps,
     isCanRecall,
@@ -128,15 +128,33 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
         } else setToastRecall(true);
     }, [active, chat, dispatch, setToastRecall, socket]);
 
-    const handleDeleteForMe = useCallback(() => {
+    const handleDeleteForMe = useCallback(async () => {
         if (!chat?._id || !chat?.conversation?._id) return;
 
-        messageServices.deleteMessageForMe(chat._id).then();
+        const res = await toast.promise(messageServices.deleteMessageForMe(chat._id), {
+            pending: t('chat.delete-for-me-pending'),
+            success: t('chat.delete-for-me-success'),
+            error: t('chat.delete-for-me-error'),
+        });
+
         dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.DELETE_FOR_ME }));
         dispatch(
-            updateMessage({ conversationId: chat.conversation._id, message: getMessageNoDelete(messages, chat._id) }),
+            updateMessage({
+                conversationId: chat.conversation._id,
+                message: {
+                    ...chat,
+                    deleted: DeleteMessageStatus.DELETE_FOR_ME,
+                },
+            }),
         );
-    }, [chat?._id, chat?.conversation?._id, dispatch, messages]);
+        dispatch(
+            changeLastMessage({
+                conversationId: chat.conversation._id,
+                message: res.data.lastMessage,
+                prevMessage: chat,
+            }),
+        );
+    }, [chat, dispatch, t]);
 
     const handlePinMessage = useCallback(() => {
         if (!chat?._id || !chat?.conversation?._id) return;

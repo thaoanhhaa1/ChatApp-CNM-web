@@ -5,20 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MoreFillIcon, PinFilledIcon } from '~/assets';
 import { useLayout } from '~/context';
 import { setActive, togglePin } from '~/features/chats/chatsSlice';
+import { useBoolean } from '~/hooks';
 import conversationServices from '~/services/conversation.service';
-import {
-    classNames,
-    convertToAvatarUrlList,
-    getNameConversation,
-    getTimeChat,
-    getUnseenMessageNumber,
-    isPinConversation,
-} from '~/utils';
-import Avatar from '../avatar';
-import AvatarGroup from '../avatarGroup';
+import { classNames, getNameConversation, getTimeChat, getUnseenMessageNumber, isPinConversation } from '~/utils';
 import ChatItemMessage from '../chatItemMessage';
+import ConversationAvatar from '../conversationAvatar';
 import Popup from '../popup';
 import Typing from '../typing';
+import DeleteChatItem from './DeleteChatItem';
 
 const ChatItem = ({ chat, active }) => {
     const { t } = useTranslation();
@@ -26,16 +20,28 @@ const ChatItem = ({ chat, active }) => {
     const { user } = useSelector((state) => state.user);
     const { active: activeChat } = useSelector((state) => state.chats);
     const dispatch = useDispatch();
-    const receiver = useMemo(() => (chat.isGroup ? {} : chat.users.find((u) => u._id !== user._id)), [chat, user]);
     const isPin = isPinConversation(chat, user);
     const isTyping = chat.users.some((u) => u.typing);
     const conversationName = getNameConversation(chat, user._id);
-    const avatars = useMemo(() => convertToAvatarUrlList(chat.users), [chat.users]);
+    const {
+        value: showDeleteConversation,
+        setFalse: handleHideDeleteConversation,
+        setTrue: handleShowDeleteConversation,
+    } = useBoolean(false);
 
     const togglePinConversation = useCallback(() => {
         conversationServices.togglePinConversation(chat._id).then();
         dispatch(togglePin({ conversationId: chat._id, userId: user._id }));
     }, [chat._id, dispatch, user._id]);
+
+    const handleClickDeleteConversation = useCallback(
+        (e) => {
+            e.stopPropagation();
+
+            handleShowDeleteConversation();
+        },
+        [handleShowDeleteConversation],
+    );
 
     const more = useMemo(() => {
         const more = [
@@ -50,6 +56,7 @@ const ChatItem = ({ chat, active }) => {
             {
                 title: t('chats.more.delete-conversation'),
                 separate: true,
+                onClick: handleClickDeleteConversation,
             },
             {
                 title: t('chats.more.report'),
@@ -70,7 +77,7 @@ const ChatItem = ({ chat, active }) => {
             });
 
         return more;
-    }, [isPin, t, togglePinConversation]);
+    }, [handleClickDeleteConversation, isPin, t, togglePinConversation]);
 
     const message = chat.lastMessage;
 
@@ -87,7 +94,7 @@ const ChatItem = ({ chat, active }) => {
             )}
             onClick={handleClickChat}
         >
-            {chat.picture ? <Avatar status={receiver.status} src={chat.picture} /> : <AvatarGroup avatars={avatars} />}
+            <ConversationAvatar conversation={chat} />
             <div className="flex-1 flex flex-col gap-1">
                 <div className="mb-1 flex gap-1 items-center justify-between">
                     <h5 className="text-mm font-semibold line-clamp-1">{conversationName}</h5>
@@ -96,12 +103,9 @@ const ChatItem = ({ chat, active }) => {
                             {getTimeChat(message.updatedAt || new Date(message.timeSend))}
                         </span>
                     ) : null}
-                    <div className="group-hover/chat:block hidden">
+                    <div onClick={(e) => e.stopPropagation()} className="group-hover/chat:block hidden">
                         <Popup data={more}>
-                            <span
-                                onClick={(e) => e.stopPropagation()}
-                                className="hover:bg-black hover:bg-opacity-5 transition-colors duration-150 flex w-[18px] h-[18px] justify-center items-center rounded"
-                            >
+                            <span className="hover:bg-black hover:bg-opacity-5 transition-colors duration-150 flex w-[18px] h-[18px] justify-center items-center rounded">
                                 <MoreFillIcon className="w-[14px] h-[14px]" />
                             </span>
                         </Popup>
@@ -109,9 +113,9 @@ const ChatItem = ({ chat, active }) => {
                 </div>
                 <div className="flex gap-1 items-center justify-between">
                     {(isTyping && <Typing />) || <ChatItemMessage chat={chat} />}
-                    {chat.unseenMessages && chat._id !== activeChat?._id ? (
+                    {chat.unreadMessageCount && chat._id !== activeChat?._id ? (
                         <div className="ml-auto w-fit px-1.5 py-0.5 rounded-full text-[10px] font-semibold leading-[1.6] text-danger bg-danger bg-opacity-20">
-                            {getUnseenMessageNumber(chat.unseenMessages)}
+                            {getUnseenMessageNumber(chat.unreadMessageCount)}
                         </div>
                     ) : (
                         isPin && (
@@ -122,6 +126,11 @@ const ChatItem = ({ chat, active }) => {
                     )}
                 </div>
             </div>
+            <DeleteChatItem
+                conversationId={chat._id}
+                show={showDeleteConversation}
+                onClickOutside={handleHideDeleteConversation}
+            />
         </div>
     );
 };

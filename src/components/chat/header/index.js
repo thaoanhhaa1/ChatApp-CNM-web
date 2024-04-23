@@ -16,15 +16,14 @@ import {
     UserIcon,
     VideoLineIcon,
 } from '~/assets';
-import Avatar from '~/components/avatar';
-import AvatarGroup from '~/components/avatarGroup';
 import Call from '~/components/call';
+import ConversationAvatar from '~/components/conversationAvatar';
 import Input from '~/components/input';
 import Popup from '~/components/popup';
 import { screens } from '~/constants';
 import { useChat, useLayout } from '~/context';
 import { useBoolean } from '~/hooks';
-import { getNameConversation, getOtherUserInIndividual } from '~/utils';
+import { getNameConversation } from '~/utils';
 import Button from './Button';
 
 const tippyProps = {
@@ -48,11 +47,6 @@ const Header = () => {
     const { user } = useSelector((state) => state.user);
     const { width } = useWindowSize();
     const conversationName = getNameConversation(active, user._id);
-    const conversationAvatar = getOtherUserInIndividual(active?.users, user._id)?.avatar;
-    const receiver = useMemo(
-        () => (active.isGroup ? {} : active.users.find((u) => u._id !== user._id)),
-        [active, user],
-    );
     const more = useMemo(() => {
         const more = [];
 
@@ -79,7 +73,6 @@ const Header = () => {
             },
         ];
     }, [handleShowProfile, t, width]);
-    const avatars = useMemo(() => active.users.map((user) => user.avatar), [active.users]);
 
     return (
         <div className="flex items-center justify-between p-2 sm:p-3 md:p-4 dl:p-5 border-b border-separate dark:border-dark-separate">
@@ -90,15 +83,7 @@ const Header = () => {
                 >
                     <ChevronDownIcon className="w-4 h-4" />
                 </button>
-                {active.picture ? (
-                    <Avatar
-                        containerClassName="flex-shrink-0"
-                        src={active.isGroup ? active.picture : conversationAvatar}
-                        status={receiver.status}
-                    />
-                ) : (
-                    <AvatarGroup avatars={avatars} />
-                )}
+                <ConversationAvatar conversation={active} />
                 <Link to="/" className="text-base font-semibold line-clamp-1">
                     {conversationName}
                 </Link>
