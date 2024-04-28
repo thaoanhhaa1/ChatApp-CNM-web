@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -56,4 +57,4 @@ const ChatEmpty = () => {
 
 ChatEmpty.propTypes = {};
 
-export default ChatEmpty;
+export default memo(ChatEmpty);

@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Modal from '~/components/modal';
 import Switch from '~/components/switch';
-import { groupRole } from '~/constants';
+import { groupRole, messageNotificationType } from '~/constants';
 import { removeConversation } from '~/features/chats/chatsSlice';
 import { removeGroup } from '~/features/contactGroups/contactGroupsSlice';
 import groupServices from '~/services/group.service';
+import messageServices from '~/services/message.service';
 
 const LeaveGroup = ({ newOwnerId, show, onClickOutside }) => {
     const { t } = useTranslation();
@@ -24,17 +25,34 @@ const LeaveGroup = ({ newOwnerId, show, onClickOutside }) => {
 
         try {
             setLoading(true);
-            if (newOwnerId)
-                await groupServices.addRole({
-                    params: [active._id, newOwnerId],
-                    data: {
-                        role: groupRole.OWNER_ROLE,
-                    },
-                });
+            if (newOwnerId) {
+                const [, message] = await Promise.all([
+                    groupServices.addRole({
+                        params: [active._id, newOwnerId],
+                        data: {
+                            role: groupRole.OWNER_ROLE,
+                        },
+                    }),
+                    messageServices.addMessageNotification({
+                        conversationId: active._id,
+                        userIds: [newOwnerId],
+                        type: messageNotificationType.CHANGE_OWNER,
+                    }),
+                ]);
 
-            const res = await groupServices.leaveGroup({
-                params: [active._id, user._id],
-            });
+                console.log('🚀 ~ handleLeave ~ message:', message);
+            }
+
+            const [res, message] = await Promise.all([
+                groupServices.leaveGroup({
+                    params: [active._id, user._id],
+                }),
+                messageServices.addMessageNotification({
+                    conversationId: active._id,
+                    type: messageNotificationType.LEAVE_GROUP,
+                }),
+            ]);
+            console.log('🚀 ~ handleLeave ~ message:', message);
 
             socket.emit('addOrUpdateConversation', {
                 conversation: res.data,

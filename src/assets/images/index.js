@@ -21,6 +21,12 @@ const images = {
     mentionAll: require('./mention-all.png'),
     imageVerify: require('./image_vetify.png'),
     invitationEmpty: require('./addInvitationEmptyListImage.png'),
+    chatTipIconKey: require('./chat-tip-icon-key.png'),
+    chatTipIconKeyDel: require('./chat-tip-icon-key-del.png'),
+    chatPrimaryKey: require('./chat-primary-key.png'),
+    artBoard: require('./artboard.png'),
+    pinMessage: require('./ic_pin.png'),
+    unpinMessage: require('./ic_unpin.png'),
 };
 
 export default images;

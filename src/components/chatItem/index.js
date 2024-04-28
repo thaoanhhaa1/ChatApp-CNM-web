@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { MoreFillIcon, PinFilledIcon } from '~/assets';
+import { statusUser } from '~/constants';
 import { useLayout } from '~/context';
 import { setActive, togglePin } from '~/features/chats/chatsSlice';
 import { useBoolean } from '~/hooks';
@@ -14,20 +15,25 @@ import {
     getOtherUserInIndividual,
     getTimeChat,
     getUnseenMessageNumber,
+    isOnlineConversation,
     isPinConversation,
 } from '~/utils';
 import ChatItemMessage from '../chatItemMessage';
 import ConversationAvatar from '../conversationAvatar';
+import MessageNotification from '../messageNotification';
 import Popup from '../popup';
 import Typing from '../typing';
 import AddToGroups from './AddToGroups';
 import DeleteChatItem from './DeleteChatItem';
 
 const ChatItem = ({ chat, active }) => {
+    console.log('🚀 ~ ChatItem ~ chat:', chat);
     const { t } = useTranslation();
     const { setShowChat } = useLayout();
     const { user } = useSelector((state) => state.user);
     const { active: activeChat } = useSelector((state) => state.chats);
+    const { users } = useSelector((state) => state.onlineUsers);
+    console.log('🚀 ~ ChatItem ~ users:', users);
     const dispatch = useDispatch();
     const isPin = isPinConversation(chat, user);
     const isTyping = chat.users.some((u) => u.typing);
@@ -43,6 +49,11 @@ const ChatItem = ({ chat, active }) => {
         setTrue: handleShowAddToGroups,
     } = useBoolean(false);
     const otherUser = !chat.isGroup && getOtherUserInIndividual(chat.users, user._id);
+    const onlineStatus = useMemo(
+        () => isOnlineConversation({ users: chat.users, onlineUserIds: users }),
+        [chat.users, users],
+    );
+    const [notificationMessage, setNotificationMessage] = useState(null);
 
     const togglePinConversation = useCallback(async () => {
         const index = chat.pinBy.findIndex((item) => item === user._id);
@@ -113,6 +124,12 @@ const ChatItem = ({ chat, active }) => {
         dispatch(setActive(chat));
     };
 
+    useLayoutEffect(() => {
+        const element = document.getElementById(chat._id);
+
+        if (element) setNotificationMessage(element.innerText);
+    }, [chat._id]);
+
     return (
         <div
             className={classNames(
@@ -121,7 +138,7 @@ const ChatItem = ({ chat, active }) => {
             )}
             onClick={handleClickChat}
         >
-            <ConversationAvatar conversation={chat} />
+            <ConversationAvatar status={onlineStatus ? statusUser.ONLINE : statusUser.OFFLINE} conversation={chat} />
             <div className="flex-1 flex flex-col gap-1">
                 <div className="mb-1 flex gap-1 items-center justify-between">
                     <h5 className="text-mm font-semibold line-clamp-1">{conversationName}</h5>
@@ -139,7 +156,14 @@ const ChatItem = ({ chat, active }) => {
                     </div>
                 </div>
                 <div className="flex gap-1 items-center justify-between">
-                    {(isTyping && <Typing />) || <ChatItemMessage chat={chat} />}
+                    {(isTyping && <Typing />) || null}
+                    {!isTyping && notificationMessage ? (
+                        <p className="first-letter:uppercase text-sm text-secondary dark:text-dark-secondary">
+                            {notificationMessage}
+                        </p>
+                    ) : (
+                        <ChatItemMessage chat={chat} />
+                    )}
                     {chat.unreadMessageCount && chat._id !== activeChat?._id ? (
                         <div className="ml-auto w-fit px-1.5 py-0.5 rounded-full text-[10px] font-semibold leading-[1.6] text-danger bg-danger bg-opacity-20">
                             {getUnseenMessageNumber(chat.unreadMessageCount)}
@@ -159,8 +183,19 @@ const ChatItem = ({ chat, active }) => {
                 onClickOutside={handleHideDeleteConversation}
             />
             {otherUser && (
-                <AddToGroups userId={otherUser._id} show={showAddToGroups} onClickOutside={handleHideAddToGroups} />
+                <AddToGroups
+                    conversationId={chat._id}
+                    userId={otherUser._id}
+                    show={showAddToGroups}
+                    onClickOutside={handleHideAddToGroups}
+                />
             )}
+            {(chat.lastMessage.notification && (
+                <div id={chat._id} className="opacity-0 invisible select-none pointer-events-none hidden">
+                    <MessageNotification message={message} />
+                </div>
+            )) ||
+                null}
         </div>
     );
 };

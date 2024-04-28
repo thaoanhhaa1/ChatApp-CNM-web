@@ -10,6 +10,8 @@ const ChatMessage = ({ status = DeleteMessageStatus.NO_DELETE, large, messages, 
         if (message.type === 'text' || isReply) return;
     };
 
+    if (!messages.length) return null;
+
     return (
         <p
             className={classNames(

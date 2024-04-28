@@ -25,7 +25,12 @@ import {
     setNewReceived,
 } from '~/features/friend/friendSlice';
 import { addMessageSocket, updateDeletedMessage, updateReact } from '~/features/messages/messagesSlice';
-import { addOnlineUser, addOnlineUsers, removeOnlineUser } from '~/features/onlineUsers/onlineUsersSlice';
+import {
+    addOfflineRecent,
+    addOnlineUser,
+    addOnlineUsers,
+    removeOnlineUser,
+} from '~/features/onlineUsers/onlineUsersSlice';
 import { connect } from '~/features/socket/socketSlice';
 
 const messageSound = new Audio(sound);
@@ -35,6 +40,7 @@ const SocketListener = ({ children }) => {
     const { socket } = useSelector((state) => state.socket);
     const { user } = useSelector((state) => state.user);
     const { contact } = useSelector((state) => state.addContact);
+    const { offlineRecent } = useSelector((state) => state.onlineUsers);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -49,7 +55,10 @@ const SocketListener = ({ children }) => {
         socket.on('userOnline', (userId) => {
             console.log('🚀 ~ socket.on ~ userOnline ~ userId:', userId);
 
-            dispatch(addOnlineUser(userId));
+            const idTimeout = offlineRecent[userId];
+
+            if (idTimeout) clearTimeout(idTimeout);
+            else dispatch(addOnlineUser(userId));
         });
 
         // Nhận khi chính mình online
@@ -63,7 +72,8 @@ const SocketListener = ({ children }) => {
         socket.on('userOffline', (userId) => {
             console.log('🚀 ~ socket.on ~ userOffline ~ userId:', userId);
 
-            dispatch(removeOnlineUser(userId));
+            const idTimeout = setTimeout(() => dispatch(removeOnlineUser(userId)), [10000]);
+            dispatch(addOfflineRecent({ userId, idTimeout }));
         });
 
         socket.on('receivedMessage', (message) => {
@@ -219,7 +229,7 @@ const SocketListener = ({ children }) => {
                 dispatch(addOrUpdateChat(conversation));
             });
         });
-    }, [active?._id, contact, dispatch, socket, user?._id]);
+    }, [active?._id, contact, dispatch, offlineRecent, socket, user?._id]);
 
     return children;
 };

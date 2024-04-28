@@ -32,6 +32,7 @@ export { default as insertEmojiToChat } from './insertEmojiToChat';
 export { default as isCanRecall } from './isCanRecall';
 export { default as isContactInclude } from './isContactInclude';
 export { default as isImageFileByType } from './isImageFileByType';
+export { default as isOnlineConversation } from './isOnlineConversation';
 export { default as isPhotoFile } from './isPhotoFile';
 export { default as isPinConversation } from './isPinConversation';
 export { default as isShowTimeChatSeparate } from './isShowTimeChatSeparate';

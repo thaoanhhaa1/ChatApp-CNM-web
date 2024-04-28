@@ -15,6 +15,7 @@ export { default as statusUser } from './statusUser';
 export { default as sentMessageStatus } from './sentMessageStatus';
 export { default as DeleteMessageStatus } from './DeleteMessageStatus';
 export { default as FriendStatus } from './FriendStatus';
+export { default as messageNotificationType } from './messageNotificationType';
 export * as groupRole from './roleMemberInGroup';
 
 export const constants = {

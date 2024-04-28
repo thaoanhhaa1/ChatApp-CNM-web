@@ -32,9 +32,11 @@ const Body = () => {
 
     const handleScroll = async (e) => {
         const scrollTop = e.target.scrollTop;
-        if (scrollTop > 0 && scrollTop <= 200 && !loading && page < maxPage && active?._id) {
-            await dispatch(getMessages({ param: [active._id], query: { messageId: messages?.at(-1)?._id } })).unwrap();
-            ref.current.scrollY(205);
+        if (scrollTop !== 40 && scrollTop <= 200 && !loading && page < maxPage && active?._id) {
+            const data = await dispatch(
+                getMessages({ param: [active._id], query: { messageId: messages?.at(-1)?._id } }),
+            ).unwrap();
+            if (data?.length) ref.current.scrollY(205);
         }
     };
 
@@ -71,7 +73,7 @@ const Body = () => {
 
     useEffect(() => {
         ref.current.scrollBottom();
-    }, [messages, page]);
+    }, [messages.length]);
 
     useEffect(() => {
         const message = messages?.[0];

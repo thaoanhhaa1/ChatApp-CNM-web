@@ -4,9 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import Checkbox from '~/components/checkbox';
 import Modal from '~/components/modal';
+import { messageNotificationType } from '~/constants';
 import { addOrUpdateChat } from '~/features/chats/chatsSlice';
 import { addOrUpdateGroup } from '~/features/contactGroups/contactGroupsSlice';
 import groupServices from '~/services/group.service';
+import messageServices from '~/services/message.service';
 
 const RemoveMember = ({ userId, show, onClickOutside }) => {
     const { t } = useTranslation();
@@ -20,14 +22,22 @@ const RemoveMember = ({ userId, show, onClickOutside }) => {
         setLoading(true);
 
         try {
-            const res = await groupServices.removeUser({
-                params: [active._id, userId],
-                data: {
-                    params: {
-                        blockRejoin: checked,
+            const [res, message] = await Promise.all([
+                groupServices.removeUser({
+                    params: [active._id, userId],
+                    data: {
+                        params: {
+                            blockRejoin: checked,
+                        },
                     },
-                },
-            });
+                }),
+                messageServices.addMessageNotification({
+                    conversationId: active._id,
+                    userIds: [userId],
+                    type: messageNotificationType.REMOVE_USER,
+                }),
+            ]);
+            console.log('🚀 ~ handleRemoveMember ~ message:', message);
 
             socket.emit('addOrUpdateConversation', {
                 conversation: res.data,

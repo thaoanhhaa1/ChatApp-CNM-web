@@ -8,12 +8,14 @@ import Alert from '~/components/alert';
 import Button from '~/components/button';
 import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
-import { FriendStatus, personalInformation } from '~/constants';
+import { FriendStatus, messageNotificationType, personalInformation } from '~/constants';
 import { blockContact, setContact, unblockContact } from '~/features/addContact/addContactSlice';
 import { getConversation, setActive } from '~/features/chats/chatsSlice';
 import { acceptFriendReceived, rejectFriendSent } from '~/features/friend/friendSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
+import conversationServices from '~/services/conversation.service';
 import friendServices from '~/services/friend.service';
+import messageServices from '~/services/message.service';
 import { classNames, getChatIndividual, getDate } from '~/utils';
 import ProfileHeader from '../ProfileHeader';
 import AddFriend from '../addFriend';
@@ -87,7 +89,15 @@ const Profile = ({ onClose }) => {
         try {
             const friendResponse = friendReceived.find((item) => item.sender_id._id === contact._id);
             const sender_id = friendResponse.sender_id;
-            await friendServices.acceptFriend(sender_id._id);
+            const conversation = await conversationServices.openConversation(sender_id._id);
+            const [, message] = await Promise.all([
+                friendServices.acceptFriend(sender_id._id),
+                messageServices.addMessageNotification({
+                    type: messageNotificationType.ACCEPT_FRIEND,
+                    conversationId: conversation.data._id,
+                }),
+            ]);
+            console.log('🚀 ~ handleAcceptFriend ~ message:', message);
 
             socket.emit('acceptFriend', { _id: friendResponse._id, user, senderId: sender_id._id });
             dispatch(acceptFriendReceived({ _id: friendResponse._id, user: sender_id }));

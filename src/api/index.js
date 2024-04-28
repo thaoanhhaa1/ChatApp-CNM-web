@@ -32,6 +32,7 @@ const api = {
     unpinMessage: (messageId) => `/message/unpinMessage/${messageId}`,
     forward: () => `/message/forward`,
     react: () => `/message/react`,
+    addMessageNotification: () => `/message/notification`,
 
     // Friend
     getFriends: () => `/user/listFriend`,

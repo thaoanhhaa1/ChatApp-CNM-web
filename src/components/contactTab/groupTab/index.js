@@ -18,8 +18,11 @@ import CreateGroup from './createGroup';
 const Group = () => {
     const { t } = useTranslation();
     const { chats, loading, firstFetch } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
     const groups = useMemo(() => chats.filter((chat) => chat.isGroup), [chats]);
-    const [sort, setSort] = useState(sortGroup[0]);
+    console.log('🚀 ~ Group ~ groups:', groups);
+    const [sort, setSort] = useState(() => sortGroup[0]);
+    console.log('🚀 ~ Group ~ sort:', sort);
     const sorts = useMemo(
         () => sortGroup.map((sort) => ({ ...sort, title: t(sort.title), onClick: () => setSort(sort) })),
         [t],
@@ -27,12 +30,13 @@ const Group = () => {
     const sortedGroups = useMemo(() => {
         const newGroup = [...groups];
 
-        if (sort.id === RECENT_ACTIVITY) return newGroup.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        if (sort.id === RECENT_ACTIVITY) return newGroup;
 
         if (sort.id === GROUP_NAME) return newGroup.sort((a, b) => a.name.localeCompare(b.name));
 
-        return newGroup.filter((group) => group.admin);
-    }, [groups, sort.id]);
+        return newGroup.filter((group) => group.admin === user._id);
+    }, [groups, sort.id, user._id]);
+    console.log('🚀 ~ sortedGroups ~ sortedGroups:', sortedGroups);
     const { value: show, setFalse: handleHidden, setTrue: handleShow } = useBoolean(false);
     const dispatch = useDispatch();
 

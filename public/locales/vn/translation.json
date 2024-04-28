@@ -511,7 +511,10 @@
             "description-1": "Toàn bộ nội dung trò chuyện sẽ bị xóa vĩnh viễn.",
             "description-2": "Bạn có chắc chắn muốn xóa?",
             "no": "Không",
-            "delete": "Xoá"
+            "delete": "Xoá",
+            "pending": "Đang xoá...",
+            "success": "Xoá hội thoại thành công",
+            "error": "Xoá hội thoại không thành công"
         },
         "pinConversation": {
             "pending": "Đang ghim...",
@@ -522,6 +525,56 @@
             "pending": "Đang bỏ ghim...",
             "success": "Bỏ ghim thành công",
             "error": "Bỏ ghim không thành công"
+        }
+    },
+    "message-notification": {
+        "you": "bạn",
+        "and": "và",
+        "add-users": {
+            "was": "được",
+            "were": "được",
+            "title": "thêm vào nhóm"
+        },
+        "remove-user": {
+            "was": "được",
+            "title": "xoá khỏi nhóm"
+        },
+        "add-admin": "đã được bổ nhiệm thành phó nhóm",
+        "remove-admin": "không còn là phó nhóm",
+        "change-owner-group-1": "đã bổ nhiệm",
+        "change-owner-group-2": "làm trưởng nhóm mới",
+        "accept-friend": "đã trở thành bạn",
+        "invite-to-group": {
+            "invited": "đã thêm thành công",
+            "to-group": "vào nhóm",
+            "view-detail": "Xem chi tiết",
+            "model": {
+                "title": "Danh sách nhóm đã mời",
+                "invited-success": "Mời vào nhóm thành cồng",
+                "close": "Đóng"
+            }
+        },
+        "leave-group": "đã rời khỏi nhóm",
+        "pinned-message": "đã ghim tin nhắn",
+        "unpinned-message": "đã bỏ ghim tin nhắn",
+        "message": {
+            "pin": {
+                "text": "đã ghim tin nhắn",
+                "location": "đã ghim 1 tin nhắn",
+                "sticker": "đã ghim 1 sticker",
+                "image": "đã ghim 1 tin nhắn hình ảnh",
+                "file": "đã ghim 1 tin nhắn file",
+                "text-image": "đã ghim 1 tin nhắn hình ảnh"
+            },
+            "unpin": {
+                "text": "đã bỏ ghim tin nhắn",
+                "location": "đã bỏ ghim 1 tin nhắn",
+                "sticker": "đã bỏ ghim 1 sticker",
+                "image": "đã bỏ ghim 1 tin nhắn hình ảnh",
+                "file": "đã bỏ ghim 1 tin nhắn file",
+                "text-image": "đã bỏ ghim 1 tin nhắn hình ảnh"
+            },
+            "view": "Xem"
         }
     },
     "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"

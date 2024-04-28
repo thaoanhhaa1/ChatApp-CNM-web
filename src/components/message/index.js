@@ -23,7 +23,7 @@ import Popup from '~/components/popup';
 import ReplyMessage from '~/components/replyMessage';
 import StickerItem from '~/components/sticker/StickerItem';
 import Toast from '~/components/toast';
-import { DeleteMessageStatus, sentMessageStatus } from '~/constants';
+import { DeleteMessageStatus, messageNotificationType, sentMessageStatus } from '~/constants';
 import { MessageProvider } from '~/context';
 import { setReply } from '~/features/chat/chatSlice';
 import { addPinMessage, changeLastMessage, setMessages, updateMessage } from '~/features/chats/chatsSlice';
@@ -43,6 +43,7 @@ import {
     location,
 } from '~/utils';
 import officeCanView from '~/utils/officeCanView';
+import MessageNotification from '../messageNotification';
 import OfficeViewer from '../officeViewer';
 import Button from './Button';
 import MessageImage from './MessageImage';
@@ -156,13 +157,22 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
         );
     }, [chat, dispatch, t]);
 
-    const handlePinMessage = useCallback(() => {
+    const handlePinMessage = useCallback(async () => {
         if (!chat?._id || !chat?.conversation?._id) return;
 
-        messageServices.pinMessage(chat._id).then();
+        // TODO Toast promise
+        const [message] = await Promise.all([
+            messageServices.addMessageNotification({
+                type: messageNotificationType.PIN_MESSAGE,
+                conversationId: active._id,
+                messageId: chat._id,
+            }),
+            messageServices.pinMessage(chat._id),
+        ]);
+        console.log('🚀 ~ handlePinMessage ~ message:', message);
         dispatch(addPinMessage({ conversationId: chat.conversation._id, message: chat }));
         socket.emit('pinMessage', { message: chat, userId: user._id, users: active.users });
-    }, [active.users, chat, dispatch, socket, user._id]);
+    }, [active._id, active.users, chat, dispatch, socket, user._id]);
 
     const handleClickForward = useCallback(() => setShowForward(true), []);
     const handleCloseForward = useCallback(() => setShowForward(false), []);
@@ -234,10 +244,12 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
         console.log(mess);
 
         if (mess?.offsetTop) {
-            scrollY(0);
+            scrollY(40);
             setIsScrollToReply();
         }
     }, [isScrollToReply, messages, messagesLoading, scrollY]);
+
+    if (chat?.notification) return <MessageNotification message={chat} />;
 
     if (!chat.messages?.length && !firstFile && !chat?.location && !chat?.sticker) {
         console.log(chat);

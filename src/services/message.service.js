@@ -18,6 +18,7 @@ const messageServices = {
             conversationIds,
         }),
     react: ({ react, messageId }) => axiosClient.post(api.react(), { react, messageId }),
+    addMessageNotification: (data) => axiosClient.post(api.addMessageNotification(), data),
 };
 
 export default messageServices;

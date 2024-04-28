@@ -23,7 +23,7 @@ import Popup from '~/components/popup';
 import { screens } from '~/constants';
 import { useChat, useLayout } from '~/context';
 import { useBoolean } from '~/hooks';
-import { getNameConversation } from '~/utils';
+import { getNameConversation, isOnlineConversation } from '~/utils';
 import Button from './Button';
 
 const tippyProps = {
@@ -45,8 +45,13 @@ const Header = () => {
     const { handleShowProfile } = useChat();
     const { active } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
+    const { users } = useSelector((state) => state.onlineUsers);
     const { width } = useWindowSize();
     const conversationName = useMemo(() => getNameConversation(active, user._id), [active, user._id]);
+    const onlineStatus = useMemo(
+        () => isOnlineConversation({ users: active?.users, onlineUserIds: users }),
+        [active?.users, users],
+    );
     const more = useMemo(() => {
         const more = [];
 
@@ -87,7 +92,9 @@ const Header = () => {
                 <Link to="/" className="text-base font-semibold line-clamp-1">
                     {conversationName}
                 </Link>
-                <RecordCircleFillIcon className="flex-shrink-0 -ml-1 sm:-ml-2 w-2.5 h-2.5 text-success" />
+                {onlineStatus && (
+                    <RecordCircleFillIcon className="flex-shrink-0 -ml-1 sm:-ml-2 w-2.5 h-2.5 text-success" />
+                )}
             </div>
             <div className="flex gap-2">
                 <div>

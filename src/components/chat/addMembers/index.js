@@ -9,10 +9,12 @@ import ItemSkeleton from '~/components/forwardMessage/ItemSkeleton';
 import Input from '~/components/input';
 import Modal from '~/components/modal';
 import PhoneBookSkeleton from '~/components/phoneBook/PhoneBookSkeleton';
+import { messageNotificationType } from '~/constants';
 import { addOrUpdateChat } from '~/features/chats/chatsSlice';
 import { addOrUpdateGroup } from '~/features/contactGroups/contactGroupsSlice';
 import { getFriends } from '~/features/friend/friendSlice';
 import groupServices from '~/services/group.service';
+import messageServices from '~/services/message.service';
 import { convertContactsToPhoneBook, phoneBookFilter } from '~/utils';
 
 const AddMembers = ({ show, handleClickOutside }) => {
@@ -55,7 +57,14 @@ const AddMembers = ({ show, handleClickOutside }) => {
         try {
             const userIds = selectedContacts.map((item) => item._id);
 
-            const res = await groupServices.addUsers({ params: [active._id], data: { userIds } });
+            const [res] = await Promise.all([
+                groupServices.addUsers({ params: [active._id], data: { userIds } }),
+                messageServices.addMessageNotification({
+                    conversationId: active._id,
+                    userIds,
+                    type: messageNotificationType.ADD_USERS,
+                }),
+            ]);
 
             dispatch(addOrUpdateChat(res.data));
             dispatch(addOrUpdateGroup(res.data));

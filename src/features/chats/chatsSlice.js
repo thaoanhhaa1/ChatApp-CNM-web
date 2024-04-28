@@ -200,9 +200,16 @@ const chatsSlice = createSlice({
         addChat: (state, { payload }) => {
             console.log('🚀 ~ chats ~ addChat');
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
+            const chat = state.chats[index];
 
             if (index < 0) state.chats.unshift(payload);
-            else state.chats[index] = payload;
+            else
+                state.chats[index] = {
+                    ...payload,
+                    unreadMessageCount: chat.unreadMessageCount,
+                    lastMessage: chat.lastMessage,
+                    messages: chat.messages,
+                };
         },
         addChatAndActive: (state, { payload }) => {
             console.log('🚀 ~ chats ~ addChatAndActive');
@@ -271,7 +278,13 @@ const chatsSlice = createSlice({
                     messages: chat.messages,
                 };
 
-            if (state.active?._id === payload._id) state.active = payload;
+            if (state.active?._id === payload._id)
+                state.active = {
+                    ...payload,
+                    unreadMessageCount: chat.unreadMessageCount,
+                    lastMessage: chat.lastMessage,
+                    messages: chat.messages,
+                };
         },
         reset: (state) => ({ ...state, ...initialState }),
         addChats: (state, { payload }) => {

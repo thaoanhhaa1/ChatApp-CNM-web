@@ -103,9 +103,10 @@ const useSendMessage = () => {
     const handleSendTextMessage = useCallback(
         ({ text, conversationId, reply, messages }) => {
             const timeSend = Date.now();
-            dispatch(
-                sendMessage({ messages: messages || splitMessage(text), conversationId, reply: reply?._id, timeSend }),
-            )
+
+            const messagesFilter = (messages || splitMessage(text) || []).filter((message) => message.content.trim());
+
+            dispatch(sendMessage({ messages: messagesFilter, conversationId, reply: reply?._id, timeSend }))
                 .unwrap()
                 .then(showMessageToast)
                 .catch(showError);

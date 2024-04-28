@@ -4,9 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactShowMoreText from 'react-show-more-text';
 import { toast } from 'react-toastify';
+import { messageNotificationType } from '~/constants';
 import { acceptFriendReceived, rejectFriendReceived } from '~/features/friend/friendSlice';
 import { setToast } from '~/features/toastAll/toastAllSlice';
+import conversationServices from '~/services/conversation.service';
 import friendServices from '~/services/friend.service';
+import messageServices from '~/services/message.service';
 import { getDate } from '~/utils';
 import Avatar from '../avatar';
 import Button from '../button';
@@ -40,7 +43,15 @@ const ReceivedFriendRequest = ({ contact }) => {
         setAcceptLoading(true);
 
         try {
-            await friendServices.acceptFriend(sender._id);
+            const conversation = await conversationServices.openConversation(sender._id);
+            const [, message] = await Promise.all([
+                friendServices.acceptFriend(sender._id),
+                messageServices.addMessageNotification({
+                    type: messageNotificationType.ACCEPT_FRIEND,
+                    conversationId: conversation.data._id,
+                }),
+            ]);
+            console.log('🚀 ~ handleAcceptFriend ~ message:', message);
 
             socket.emit('acceptFriend', { _id: contact._id, user, senderId: sender._id });
             dispatch(acceptFriendReceived({ _id: contact._id, user: sender }));

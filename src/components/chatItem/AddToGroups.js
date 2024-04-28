@@ -3,13 +3,15 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { messageNotificationType } from '~/constants';
 import { addOrUpdateChat } from '~/features/chats/chatsSlice';
 import conversationServices from '~/services/conversation.service';
+import messageServices from '~/services/message.service';
 import { isUserInConversation } from '~/utils';
 import Modal from '../modal';
 import SelectedConversation from '../selectedConversation';
 
-const AddToGroups = ({ userId, show, onClickOutside }) => {
+const AddToGroups = ({ conversationId, userId, show, onClickOutside }) => {
     const { t } = useTranslation();
     const [selectedContacts, setSelectedContacts] = useState([]);
     const { chats } = useSelector((state) => state.chats);
@@ -27,7 +29,23 @@ const AddToGroups = ({ userId, show, onClickOutside }) => {
         try {
             const conversationIds = selectedContacts.map((i) => i._id);
 
-            const res = await conversationServices.addToGroups(conversationIds, userId);
+            const [res, ...messages] = await Promise.all([
+                conversationServices.addToGroups(conversationIds, userId),
+                ...selectedContacts.map((item) =>
+                    messageServices.addMessageNotification({
+                        conversationId: item._id,
+                        userIds: [userId],
+                        type: messageNotificationType.ADD_USERS,
+                    }),
+                ),
+                messageServices.addMessageNotification({
+                    conversationId,
+                    type: messageNotificationType.INVITE_TO_GROUP,
+                    conversations: conversationIds,
+                    userIds: [userId],
+                }),
+            ]);
+            console.log('🚀 ~ handleAdd ~ messages:', messages);
 
             const conversations = res.data;
 
@@ -72,6 +90,7 @@ const AddToGroups = ({ userId, show, onClickOutside }) => {
 };
 
 AddToGroups.propTypes = {
+    conversationId: PropTypes.string.isRequired,
     userId: PropTypes.string,
     show: PropTypes.bool,
     onClickOutside: PropTypes.func,

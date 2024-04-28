@@ -17,6 +17,7 @@ const LinkPreview = ({ url }) => {
                 return Promise.reject(response.status);
             })
             .then(setResponse)
+            .catch((error) => console.error('Error:', error))
             .finally(() => setLoading(false));
     }, [url]);
 

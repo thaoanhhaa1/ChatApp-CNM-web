@@ -1,15 +1,16 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { deleteChat } from '~/features/chats/chatsSlice';
+import { deleteChat, setActive } from '~/features/chats/chatsSlice';
 import conversationServices from '~/services/conversation.service';
 import Modal from '../modal';
 
 const DeleteChatItem = ({ conversationId, show, onClickOutside }) => {
     const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
+    const { active } = useSelector((state) => state.chats);
     const dispatch = useDispatch();
 
     const handleDeleteConversation = async (e) => {
@@ -17,14 +18,17 @@ const DeleteChatItem = ({ conversationId, show, onClickOutside }) => {
         setLoading(true);
 
         try {
-            await conversationServices.deleteConversation(conversationId);
+            await toast.promise(conversationServices.deleteConversation(conversationId), {
+                pending: t('conversation.delete.pending'),
+                success: t('conversation.delete.success'),
+                error: t('conversation.delete.error'),
+            });
 
             onClickOutside();
             dispatch(deleteChat(conversationId));
+            if (active?._id === conversationId) dispatch(setActive(null));
         } catch (error) {
             console.error(error);
-
-            toast.error(t('request-error'));
         } finally {
             setLoading(false);
         }

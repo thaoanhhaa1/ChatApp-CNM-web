@@ -513,7 +513,10 @@
             "description-1": "Whole conversation history will permanently delete.",
             "description-2": "Are you sure you want to delete?",
             "no": "No",
-            "delete": "Delete"
+            "delete": "Delete",
+            "pending": "Deleting...",
+            "success": "Deleted successfully",
+            "error": "Failed to delete"
         },
         "pinConversation": {
             "pending": "Pinning...",
@@ -524,6 +527,56 @@
             "pending": "Unpinning...",
             "success": "Unpinned successfully",
             "error": "Failed to unpin"
+        }
+    },
+    "message-notification": {
+        "you": "you",
+        "and": "and",
+        "add-users": {
+            "was": "was",
+            "were": "were",
+            "title": "added to the group by"
+        },
+        "remove-user": {
+            "was": "was",
+            "title": "removed from the group by"
+        },
+        "add-admin": "has become admin of this group",
+        "remove-admin": "is no longer an admin of this group",
+        "change-owner-group-1": "appointed",
+        "change-owner-group-2": "as new group owner",
+        "accept-friend": "are now friends",
+        "invite-to-group": {
+            "invited": "invited",
+            "to-group": "to group",
+            "view-detail": "View detail",
+            "model": {
+                "title": "Invited groups",
+                "invited-success": "Invited groups successfully",
+                "close": "Close"
+            }
+        },
+        "leave-group": "left the group",
+        "pinned-message": "pinned message",
+        "unpinned-message": "unpinned message",
+        "message": {
+            "pin": {
+                "text": "pinned message",
+                "location": "pinned a message",
+                "sticker": "pinned a sticker",
+                "image": "pinned a photo message",
+                "file": "pinned a file message",
+                "text-image": "pinned a photo message"
+            },
+            "unpin": {
+                "sticker": "unpinned a sticker",
+                "image": "unpinned a photo message",
+                "text": "unpinned message",
+                "location": "unpinned a message",
+                "file": "unpinned a file message",
+                "text-image": "unpinned a photo message"
+            },
+            "view": "View"
         }
     },
     "request-error": "Some errors occurred, please try again"

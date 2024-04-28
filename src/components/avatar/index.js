@@ -1,10 +1,14 @@
 import PropTypes from 'prop-types';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { statusUser } from '~/constants';
 import { classNames } from '~/utils';
 
 const Avatar = ({ size = '36px', src, alt = '', status = statusUser.OFFLINE, className, containerClassName }) => {
+    const [image, setImage] = useState(src);
+
+    const handleError = () => setImage(process.env.REACT_APP_FALLBACK_AVATAR);
+
     return (
         <div
             style={{
@@ -15,11 +19,17 @@ const Avatar = ({ size = '36px', src, alt = '', status = statusUser.OFFLINE, cla
         >
             <LazyLoadImage
                 className={classNames('w-full h-full object-cover rounded-full', className)}
-                src={src}
+                src={image}
                 alt={alt}
+                onError={handleError}
             />
             {status !== statusUser.OFFLINE && (
-                <div className="absolute right-0 bottom-0 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-[#262e35] bg-[#06d6a0]" />
+                <div
+                    className={classNames(
+                        'absolute right-0 bottom-0 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-[#262e35]',
+                        status === statusUser.ONLINE && 'bg-[#06d6a0]',
+                    )}
+                />
             )}
         </div>
     );

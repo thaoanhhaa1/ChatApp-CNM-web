@@ -1,26 +1,28 @@
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { statusUser } from '~/constants';
 import { getOtherUserInIndividual } from '~/utils';
 import getAvatarsGroup from '~/utils/getAvatarsGroup';
 import Avatar from '../avatar';
 import AvatarGroup from '../avatarGroup';
 
-const ConversationAvatar = ({ conversation, size }) => {
+const ConversationAvatar = ({ conversation, size, status = statusUser.OFFLINE }) => {
     const { user } = useSelector((state) => state.user);
 
     if (!conversation?._id) return null;
 
     if (conversation.isGroup) {
-        if (conversation.picture) return <Avatar src={conversation.picture} size={size} alt={conversation.name} />;
+        if (conversation.picture)
+            return <Avatar status={status} src={conversation.picture} size={size} alt={conversation.name} />;
 
         const avatars = getAvatarsGroup(conversation.users);
 
-        return <AvatarGroup avatars={avatars} size={size} />;
+        return <AvatarGroup status={status} avatars={avatars} size={size} />;
     }
 
     const otherUser = getOtherUserInIndividual(conversation.users, user._id);
 
-    return <Avatar src={otherUser.avatar} size={size} alt={otherUser.name} />;
+    return <Avatar status={status} src={otherUser.avatar} size={size} alt={otherUser.name} />;
 };
 
 ConversationAvatar.propTypes = {

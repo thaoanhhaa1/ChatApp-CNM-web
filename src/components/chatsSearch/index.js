@@ -23,16 +23,11 @@ const ChatsSearch = ({ searchValue }) => {
     const { user: me } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
-    const handleClickSearchUser = (user) => {
-        dispatch(addRecentSearch(user));
-
-        handleClickUser(user);
-    };
-
     const handleClickUser = async (user) => {
         const chat = chats.find((chat) => !chat.isGroup && chat.users.find((u) => u._id === user._id));
 
         console.log('handleClickUser:: ', chat);
+        dispatch(addRecentSearch(user));
 
         if (chat) {
             // conversation loaded
@@ -76,11 +71,7 @@ const ChatsSearch = ({ searchValue }) => {
                     <SearchItem title={t('chats-search.contacts')}>
                         {contacts.length ? (
                             contacts.map((user) => (
-                                <UserSearchResult
-                                    onClick={() => handleClickSearchUser(user)}
-                                    key={user._id}
-                                    user={user}
-                                />
+                                <UserSearchResult onClick={() => handleClickUser(user)} key={user._id} user={user} />
                             ))
                         ) : (
                             <SearchEmpty />
