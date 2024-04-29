@@ -6,11 +6,11 @@ import { getOtherUserInIndividual } from '~/utils';
 import Avatar from '../avatar';
 import UserTag from './UserTag';
 
-const AcceptFriendNotification = ({ sender }) => {
+const AcceptFriendNotification = ({ sender, conversation }) => {
     const { t } = useTranslation();
-    const { active } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
-    const otherUser = getOtherUserInIndividual(active.users, user._id);
+    const otherUser = getOtherUserInIndividual(conversation.users, user._id);
+
     const [myAvatar, otherAvatar] =
         sender._id === user._id ? [user.avatar, otherUser.avatar] : [otherUser.avatar, user.avatar];
 

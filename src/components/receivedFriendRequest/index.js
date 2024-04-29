@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReactShowMoreText from 'react-show-more-text';
 import { toast } from 'react-toastify';
 import { messageNotificationType } from '~/constants';
+import { addMessageHeadSocket } from '~/features/chats/chatsSlice';
 import { acceptFriendReceived, rejectFriendReceived } from '~/features/friend/friendSlice';
+import { addMessageSocket } from '~/features/messages/messagesSlice';
 import { setToast } from '~/features/toastAll/toastAllSlice';
 import conversationServices from '~/services/conversation.service';
 import friendServices from '~/services/friend.service';
@@ -54,6 +56,9 @@ const ReceivedFriendRequest = ({ contact }) => {
             console.log('🚀 ~ handleAcceptFriend ~ message:', message);
 
             socket.emit('acceptFriend', { _id: contact._id, user, senderId: sender._id });
+            socket.emit('sendMessage', message.data);
+            dispatch(addMessageSocket(message.data));
+            dispatch(addMessageHeadSocket(message.data));
             dispatch(acceptFriendReceived({ _id: contact._id, user: sender }));
             dispatch(setToast(t('friend.accept-friend')));
         } catch (error) {

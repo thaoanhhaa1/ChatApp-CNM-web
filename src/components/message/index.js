@@ -26,8 +26,19 @@ import Toast from '~/components/toast';
 import { DeleteMessageStatus, messageNotificationType, sentMessageStatus } from '~/constants';
 import { MessageProvider } from '~/context';
 import { setReply } from '~/features/chat/chatSlice';
-import { addPinMessage, changeLastMessage, setMessages, updateMessage } from '~/features/chats/chatsSlice';
-import { getReplyMessages, setOffsetTop, updateDeletedMessage } from '~/features/messages/messagesSlice';
+import {
+    addMessageHeadSocket,
+    addPinMessage,
+    changeLastMessage,
+    setMessages,
+    updateMessage,
+} from '~/features/chats/chatsSlice';
+import {
+    addMessageSocket,
+    getReplyMessages,
+    setOffsetTop,
+    updateDeletedMessage,
+} from '~/features/messages/messagesSlice';
 import { setLocationError } from '~/features/toastAll/toastAllSlice';
 import { useBoolean, useLoader, useToast } from '~/hooks';
 import messageServices from '~/services/message.service';
@@ -172,6 +183,9 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
         console.log('🚀 ~ handlePinMessage ~ message:', message);
         dispatch(addPinMessage({ conversationId: chat.conversation._id, message: chat }));
         socket.emit('pinMessage', { message: chat, userId: user._id, users: active.users });
+        socket.emit('sendMessage', message.data);
+        dispatch(addMessageSocket(message.data));
+        dispatch(addMessageHeadSocket(message.data));
     }, [active._id, active.users, chat, dispatch, socket, user._id]);
 
     const handleClickForward = useCallback(() => setShowForward(true), []);

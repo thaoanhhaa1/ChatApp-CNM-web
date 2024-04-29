@@ -1,11 +1,10 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { BlockIcon, PencilLineIcon } from '~/assets';
+import images from '~/assets/images';
 import Avatar from '~/components/avatar';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import Alias from './alias';
-
-const DEFAULT_BACKGROUND = 'https://cover-talk.zadn.vn/6/a/6/c/9/82037b27670895bf54b18e4937cb00cf.jpg';
 
 const ProfileHeader = () => {
     const { contact } = useSelector((state) => state.addContact);
@@ -17,7 +16,7 @@ const ProfileHeader = () => {
         <div>
             <LazyLoadImage
                 className="w-full aspect-[400/171] object-cover"
-                src={contact.background || DEFAULT_BACKGROUND}
+                src={contact.background || images.defaultBackground}
                 alt=""
             />
 

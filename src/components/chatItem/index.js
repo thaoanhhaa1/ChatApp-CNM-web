@@ -127,8 +127,12 @@ const ChatItem = ({ chat, active }) => {
     useLayoutEffect(() => {
         const element = document.getElementById(chat._id);
 
-        if (element) setNotificationMessage(element.innerText);
-    }, [chat._id]);
+        if (element) {
+            const text = element.innerText;
+
+            setNotificationMessage(text.charAt(0).toUpperCase() + text.slice(1));
+        } else setNotificationMessage(null);
+    }, [chat._id, chat.lastMessage]);
 
     return (
         <div
@@ -157,13 +161,14 @@ const ChatItem = ({ chat, active }) => {
                 </div>
                 <div className="flex gap-1 items-center justify-between">
                     {(isTyping && <Typing />) || null}
-                    {!isTyping && notificationMessage ? (
-                        <p className="first-letter:uppercase text-sm text-secondary dark:text-dark-secondary">
-                            {notificationMessage}
-                        </p>
-                    ) : (
-                        <ChatItemMessage chat={chat} />
-                    )}
+                    {!isTyping &&
+                        (notificationMessage ? (
+                            <p className="line-clamp-1 first-letter:uppercase text-sm text-secondary dark:text-dark-secondary">
+                                {notificationMessage}
+                            </p>
+                        ) : (
+                            <ChatItemMessage chat={chat} />
+                        ))}
                     {chat.unreadMessageCount && chat._id !== activeChat?._id ? (
                         <div className="ml-auto w-fit px-1.5 py-0.5 rounded-full text-[10px] font-semibold leading-[1.6] text-danger bg-danger bg-opacity-20">
                             {getUnseenMessageNumber(chat.unreadMessageCount)}

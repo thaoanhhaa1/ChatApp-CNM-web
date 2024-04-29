@@ -6,8 +6,9 @@ import { toast } from 'react-toastify';
 import Modal from '~/components/modal';
 import Switch from '~/components/switch';
 import { groupRole, messageNotificationType } from '~/constants';
-import { removeConversation } from '~/features/chats/chatsSlice';
+import { addMessageHeadSocket, removeConversation } from '~/features/chats/chatsSlice';
 import { removeGroup } from '~/features/contactGroups/contactGroupsSlice';
+import { addMessageSocket } from '~/features/messages/messagesSlice';
 import groupServices from '~/services/group.service';
 import messageServices from '~/services/message.service';
 
@@ -41,6 +42,9 @@ const LeaveGroup = ({ newOwnerId, show, onClickOutside }) => {
                 ]);
 
                 console.log('🚀 ~ handleLeave ~ message:', message);
+                socket.emit('sendMessage', message.data);
+                dispatch(addMessageSocket(message.data));
+                dispatch(addMessageHeadSocket(message.data));
             }
 
             const [res, message] = await Promise.all([
@@ -58,6 +62,9 @@ const LeaveGroup = ({ newOwnerId, show, onClickOutside }) => {
                 conversation: res.data,
                 userIds: res.data.users.map((user) => user._id),
             });
+            socket.emit('sendMessage', message.data);
+            dispatch(addMessageSocket(message.data));
+            dispatch(addMessageHeadSocket(message.data));
 
             dispatch(removeConversation(active._id));
             dispatch(removeGroup(active._id));

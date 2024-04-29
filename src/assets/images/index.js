@@ -27,6 +27,7 @@ const images = {
     artBoard: require('./artboard.png'),
     pinMessage: require('./ic_pin.png'),
     unpinMessage: require('./ic_unpin.png'),
+    defaultBackground: require('./default_background.jpg'),
 };
 
 export default images;

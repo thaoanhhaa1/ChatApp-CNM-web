@@ -6,8 +6,9 @@ import { toast } from 'react-toastify';
 import { MoreFillIcon } from '~/assets';
 import { groupRole, messageNotificationType, statusUser } from '~/constants';
 import { useChat } from '~/context';
-import { addOrUpdateChat } from '~/features/chats/chatsSlice';
+import { addMessageHeadSocket, addOrUpdateChat } from '~/features/chats/chatsSlice';
 import { addOrUpdateGroup } from '~/features/contactGroups/contactGroupsSlice';
+import { addMessageSocket } from '~/features/messages/messagesSlice';
 import { useBoolean } from '~/hooks';
 import groupServices from '~/services/group.service';
 import messageServices from '~/services/message.service';
@@ -39,8 +40,8 @@ const Member = ({ user }) => {
 
         return groupRole.MEMBER_ROLE;
     }, [active.admin, active.deputy, user._id]);
-    const [checked, setChecked] = useState(
-        () => role === groupRole.OWNER_ROLE && (active?.users || []).find((user) => user._id !== me._id)?._id,
+    const [checked, setChecked] = useState(() =>
+        role === groupRole.OWNER_ROLE ? (active?.users || []).find((user) => user._id !== me._id)?._id : '',
     );
 
     const handleClickLeave = useCallback(() => {
@@ -79,6 +80,9 @@ const Member = ({ user }) => {
             conversation: res.data,
             userIds: res.data.users.map((user) => user._id),
         });
+        socket.emit('sendMessage', message.data);
+        dispatch(addMessageSocket(message.data));
+        dispatch(addMessageHeadSocket(message.data));
         dispatch(addOrUpdateChat(res.data));
         dispatch(addOrUpdateGroup(res.data));
     }, [active?._id, dispatch, role, socket, t, user?._id]);
@@ -115,6 +119,9 @@ const Member = ({ user }) => {
             conversation: res.data,
             userIds: res.data.users.map((user) => user._id),
         });
+        socket.emit('sendMessage', message.data);
+        dispatch(addMessageSocket(message.data));
+        dispatch(addMessageHeadSocket(message.data));
 
         dispatch(addOrUpdateChat(res.data));
     }, [active._id, dispatch, socket, t, user._id]);

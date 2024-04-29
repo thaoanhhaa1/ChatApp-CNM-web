@@ -147,7 +147,6 @@ const chatsSlice = createSlice({
                 else chat.messages = [payload];
 
                 chat.lastMessage = payload;
-                // FIXME
                 chat.unreadMessageCount = chat.unreadMessageCount ? chat.unreadMessageCount + 1 : 1;
                 if (state.active?._id === conversationId) {
                     state.active.lastMessage = payload;
@@ -155,13 +154,13 @@ const chatsSlice = createSlice({
                     chat.unreadMessageCount = 0;
                 }
 
-                state.chats.splice(chatIndex, 1);
-
-                if (!chat.pinBy.includes(payload.myId)) {
+                if (chat.pinBy.includes(payload.myId)) state.chats.splice(chatIndex, 1, chat);
+                else {
+                    state.chats.splice(chatIndex, 1);
                     const index = state.chats.findIndex((item) => !item.pinBy.includes(payload.myId));
 
                     if (index >= 0) state.chats.splice(index, 0, chat);
-                    else state.chats.unshift(chat);
+                    else state.chats.push(chat);
                 }
             } else {
                 if (!state.messageIds.includes(payload._id)) {
@@ -183,17 +182,19 @@ const chatsSlice = createSlice({
                 else chat.messages = [payload];
 
                 chat.lastMessage = payload;
+                console.log('🚀 ~ payload:', payload);
                 if (state.active?._id === conversationId) {
                     state.active.lastMessage = payload;
                     state.active.messages = chat.messages;
                 }
 
-                state.chats.splice(chatIndex, 1);
-
-                if (!chat.pinBy.includes(payload.myId)) {
+                if (chat.pinBy.includes(payload.myId)) state.chats.splice(chatIndex, 1, chat);
+                else {
+                    state.chats.splice(chatIndex, 1);
                     const index = state.chats.findIndex((item) => !item.pinBy.includes(payload.myId));
 
                     if (index >= 0) state.chats.splice(index, 0, chat);
+                    else state.chats.unshift(chat);
                 }
             }
         },

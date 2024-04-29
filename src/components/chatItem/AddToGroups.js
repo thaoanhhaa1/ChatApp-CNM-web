@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { messageNotificationType } from '~/constants';
-import { addOrUpdateChat } from '~/features/chats/chatsSlice';
+import { addMessageHeadSocket, addOrUpdateChat } from '~/features/chats/chatsSlice';
+import { addMessageSocket } from '~/features/messages/messagesSlice';
 import conversationServices from '~/services/conversation.service';
 import messageServices from '~/services/message.service';
 import { isUserInConversation } from '~/utils';
@@ -54,6 +55,12 @@ const AddToGroups = ({ conversationId, userId, show, onClickOutside }) => {
 
                 socket.emit('addOrUpdateConversation', { conversation, userIds });
                 dispatch(addOrUpdateChat(conversation));
+            });
+
+            messages.forEach((message) => {
+                socket.emit('sendMessage', message.data);
+                dispatch(addMessageSocket(message.data));
+                dispatch(addMessageHeadSocket(message.data));
             });
             onClickOutside();
         } catch (error) {

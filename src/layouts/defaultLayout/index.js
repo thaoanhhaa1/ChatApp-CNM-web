@@ -12,6 +12,7 @@ import Toast from '~/components/toast';
 import config from '~/config';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
+import { getChats } from '~/features/chats/chatsSlice';
 import { getFriends } from '~/features/friend/friendSlice';
 import { setLocationError, setToast } from '~/features/toastAll/toastAllSlice';
 import { getUserInfo } from '~/features/user/userSlice';
@@ -83,10 +84,11 @@ const DefaultLayout = ({ children }) => {
         if (!user?._id || !socket) return;
 
         dispatch(getFriends()).unwrap().then().catch(console.error);
+        dispatch(getChats()).unwrap().then().catch(console.error);
     }, [dispatch, socket, user?._id]);
 
     useEffect(() => {
-        if (!user?._id || !friendList.length) return;
+        if (!user?._id || !Array.isArray(friendList) || !socket) return;
 
         socket.emit('online', { userId: user._id, friendIds: friendList.map((friend) => friend._id) });
     }, [friendList, socket, user?._id]);

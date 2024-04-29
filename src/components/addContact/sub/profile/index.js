@@ -10,8 +10,9 @@ import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { FriendStatus, messageNotificationType, personalInformation } from '~/constants';
 import { blockContact, setContact, unblockContact } from '~/features/addContact/addContactSlice';
-import { getConversation, setActive } from '~/features/chats/chatsSlice';
+import { addMessageHeadSocket, getConversation, setActive } from '~/features/chats/chatsSlice';
 import { acceptFriendReceived, rejectFriendSent } from '~/features/friend/friendSlice';
+import { addMessageSocket } from '~/features/messages/messagesSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import conversationServices from '~/services/conversation.service';
 import friendServices from '~/services/friend.service';
@@ -100,6 +101,9 @@ const Profile = ({ onClose }) => {
             console.log('🚀 ~ handleAcceptFriend ~ message:', message);
 
             socket.emit('acceptFriend', { _id: friendResponse._id, user, senderId: sender_id._id });
+            socket.emit('sendMessage', message.data);
+            dispatch(addMessageSocket(message.data));
+            dispatch(addMessageHeadSocket(message.data));
             dispatch(acceptFriendReceived({ _id: friendResponse._id, user: sender_id }));
             dispatch(setContact({ ...contact, status: FriendStatus.FRIEND }));
         } catch (error) {

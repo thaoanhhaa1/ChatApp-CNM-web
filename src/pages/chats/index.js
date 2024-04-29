@@ -2,7 +2,6 @@ import { useDebounce, useWindowSize } from '@uidotdev/usehooks';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SearchIcon } from '~/assets';
 import Button from '~/components/button';
@@ -16,7 +15,6 @@ import List from '~/components/list';
 import OnlineUser from '~/components/onlineUser';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { screens } from '~/constants';
-import { getChats } from '~/features/chats/chatsSlice';
 import { setMessages } from '~/features/messages/messagesSlice';
 import { searchUsers, setSearch } from '~/features/search/searchSlice';
 import { useBoolean } from '~/hooks';
@@ -30,7 +28,7 @@ const Chats = () => {
     const { t } = useTranslation();
     const { width, height } = useWindowSize();
     const { users: onlineUserIds } = useSelector((state) => state.onlineUsers);
-    const { chats, active, loading, firstFetch } = useSelector((state) => state.chats);
+    const { chats, active, loading } = useSelector((state) => state.chats);
     const { search } = useSelector((state) => state.search);
     const { friendList } = useSelector((state) => state.friend);
     const [searchValue, setSearchValue] = useState('');
@@ -69,19 +67,6 @@ const Chats = () => {
         dispatch(searchUsers(searchDebounce));
         dispatch(setSearch(searchDebounce));
     }, [dispatch, search, searchDebounce]);
-
-    useEffect(() => {
-        const fetchChats = async () => {
-            try {
-                await dispatch(getChats()).unwrap();
-            } catch (error) {
-                console.error(error);
-                toast.error(error.message);
-            }
-        };
-
-        firstFetch || fetchChats();
-    }, [dispatch, firstFetch]);
 
     useEffect(() => {
         dispatch(setMessages([]));

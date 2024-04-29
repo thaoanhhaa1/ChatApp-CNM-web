@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import { Fragment } from 'react';
+import Avatar from '../avatar';
 import UsersTag from './UsersTag';
 
-const CommonNotification = ({ img, data }) => {
+const CommonNotification = ({ img, data, isAvatar }) => {
     return (
         <>
-            {img && <img className="w-4 h-4" src={img} alt="" />}
+            {img && (isAvatar ? <Avatar size="24px" src={img} /> : <img className="w-4 h-4" src={img} alt="" />)}
             <span className="first-letter:uppercase">
                 {data.map((item, index) => (
                     <Fragment key={index}>

@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { PeopleAddIcon, SortArrowIcon } from '~/assets';
 import ContactGroupItem from '~/components/contactGroupItem';
 import ContactGroupItemSkeleton from '~/components/contactGroupItem/ContactGroupItemSkeleton';
@@ -8,7 +8,6 @@ import List from '~/components/list';
 import Popup from '~/components/popup';
 import { sortGroup } from '~/constants';
 import { GROUP_NAME, RECENT_ACTIVITY } from '~/constants/sortGroup';
-import { getChats } from '~/features/chats/chatsSlice';
 import { useBoolean } from '~/hooks';
 import Button from '../Button';
 import Seperate from '../Seperate';
@@ -17,7 +16,7 @@ import CreateGroup from './createGroup';
 
 const Group = () => {
     const { t } = useTranslation();
-    const { chats, loading, firstFetch } = useSelector((state) => state.chats);
+    const { chats, loading } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const groups = useMemo(() => chats.filter((chat) => chat.isGroup), [chats]);
     console.log('🚀 ~ Group ~ groups:', groups);
@@ -38,11 +37,6 @@ const Group = () => {
     }, [groups, sort.id, user._id]);
     console.log('🚀 ~ sortedGroups ~ sortedGroups:', sortedGroups);
     const { value: show, setFalse: handleHidden, setTrue: handleShow } = useBoolean(false);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        firstFetch || dispatch(getChats());
-    }, [dispatch, firstFetch]);
 
     return (
         <Wrapper>

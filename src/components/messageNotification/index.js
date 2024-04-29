@@ -11,13 +11,14 @@ import TogglePinMessageNotification from './TogglePinMessageNotification';
 import Wrapper from './Wrapper';
 
 const MessageNotification = ({ message }) => {
+    console.log('🚀 ~ MessageNotification ~ message:', message);
     const { t } = useTranslation();
     const notification = message?.notification;
 
     if (!notification) return null;
 
     if (notification.type === messageNotificationType.ACCEPT_FRIEND)
-        return <AcceptFriendNotification sender={message.sender} />;
+        return <AcceptFriendNotification conversation={message.conversation} sender={message.sender} />;
 
     if (notification.type === messageNotificationType.INVITE_TO_GROUP)
         return (
@@ -50,6 +51,7 @@ const MessageNotification = ({ message }) => {
             )}
             {notification.type === messageNotificationType.LEAVE_GROUP && (
                 <CommonNotification
+                    isAvatar
                     img={message.sender.avatar}
                     data={[[message.sender], t('message-notification.leave-group')]}
                 />

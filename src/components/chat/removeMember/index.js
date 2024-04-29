@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Checkbox from '~/components/checkbox';
 import Modal from '~/components/modal';
 import { messageNotificationType } from '~/constants';
-import { addOrUpdateChat } from '~/features/chats/chatsSlice';
+import { addMessageHeadSocket, addOrUpdateChat } from '~/features/chats/chatsSlice';
 import { addOrUpdateGroup } from '~/features/contactGroups/contactGroupsSlice';
+import { addMessageSocket } from '~/features/messages/messagesSlice';
 import groupServices from '~/services/group.service';
 import messageServices from '~/services/message.service';
 
@@ -44,6 +45,9 @@ const RemoveMember = ({ userId, show, onClickOutside }) => {
                 userIds: res.data.users.map((user) => user._id),
             });
             socket.emit('removeUserFromConversation', { conversationId: active._id, userId });
+            socket.emit('sendMessage', message.data);
+            dispatch(addMessageSocket(message.data));
+            dispatch(addMessageHeadSocket(message.data));
 
             dispatch(addOrUpdateChat(res.data));
             dispatch(addOrUpdateGroup(res.data));

@@ -10,9 +10,10 @@ import Input from '~/components/input';
 import Modal from '~/components/modal';
 import PhoneBookSkeleton from '~/components/phoneBook/PhoneBookSkeleton';
 import { messageNotificationType } from '~/constants';
-import { addOrUpdateChat } from '~/features/chats/chatsSlice';
+import { addMessageHeadSocket, addOrUpdateChat } from '~/features/chats/chatsSlice';
 import { addOrUpdateGroup } from '~/features/contactGroups/contactGroupsSlice';
 import { getFriends } from '~/features/friend/friendSlice';
+import { addMessageSocket } from '~/features/messages/messagesSlice';
 import groupServices from '~/services/group.service';
 import messageServices from '~/services/message.service';
 import { convertContactsToPhoneBook, phoneBookFilter } from '~/utils';
@@ -57,7 +58,7 @@ const AddMembers = ({ show, handleClickOutside }) => {
         try {
             const userIds = selectedContacts.map((item) => item._id);
 
-            const [res] = await Promise.all([
+            const [res, message] = await Promise.all([
                 groupServices.addUsers({ params: [active._id], data: { userIds } }),
                 messageServices.addMessageNotification({
                     conversationId: active._id,
@@ -72,6 +73,9 @@ const AddMembers = ({ show, handleClickOutside }) => {
                 conversation: res.data,
                 userIds: res.data.users.map((item) => item._id),
             });
+            socket.emit('sendMessage', message.data);
+            dispatch(addMessageSocket(message.data));
+            dispatch(addMessageHeadSocket(message.data));
             handleClickOutside();
         } catch (error) {
             console.error(error);

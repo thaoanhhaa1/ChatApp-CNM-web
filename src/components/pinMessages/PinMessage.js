@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChatTextLineIcon, ChevronDownIcon, FileTextFillIcon, LocationIcon, MoreFillIcon } from '~/assets';
 import { messageNotificationType } from '~/constants';
-import { removePinMessage } from '~/features/chats/chatsSlice';
+import { addMessageHeadSocket, removePinMessage } from '~/features/chats/chatsSlice';
+import { addMessageSocket } from '~/features/messages/messagesSlice';
 import messageServices from '~/services/message.service';
 import { classNames, isImageFileByType } from '~/utils';
 import ChatMessage from '../chatMessage';
@@ -48,6 +49,9 @@ const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }
         console.log('🚀 ~ handleUnpin ~ messageRes:', messageRes);
         dispatch(removePinMessage({ conversationId: active._id, message: message }));
         socket.emit('unpinMessage', { message, userId: user._id, users: active.users });
+        socket.emit('sendMessage', messageRes.data);
+        dispatch(addMessageSocket(messageRes.data));
+        dispatch(addMessageHeadSocket(messageRes.data));
     };
 
     const more = [
