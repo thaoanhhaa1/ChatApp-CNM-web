@@ -20,6 +20,7 @@ const attachedFilesSlice = createSlice({
     reducers: {
         addAttachedFile: (state, { payload }) => {
             const { conversationId, file } = payload;
+            console.log('🚀 ~ file:', file);
 
             if (!state[conversationId]) state[conversationId] = [];
 

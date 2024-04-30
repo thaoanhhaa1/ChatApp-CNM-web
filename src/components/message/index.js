@@ -25,6 +25,7 @@ import StickerItem from '~/components/sticker/StickerItem';
 import Toast from '~/components/toast';
 import { DeleteMessageStatus, messageNotificationType, sentMessageStatus } from '~/constants';
 import { MessageProvider } from '~/context';
+import { removeAttachedFile } from '~/features/attachedFiles/attachedFilesSlice';
 import { setReply } from '~/features/chat/chatSlice';
 import { addPinMessage, changeLastMessage, setMessages, updateMessage } from '~/features/chats/chatsSlice';
 import { getReplyMessages, setOffsetTop, updateDeletedMessage } from '~/features/messages/messagesSlice';
@@ -126,6 +127,9 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
                         message: { ...chat, deleted: DeleteMessageStatus.RECALL },
                     }),
                 );
+
+            const files = chat.files || [];
+            files.forEach((file) => dispatch(removeAttachedFile({ conversationId: chat.conversation._id, file })));
             socket.emit('recallMessage', { ...chat, conversation: active });
         } else setToastRecall(true);
     }, [active, chat, dispatch, setToastRecall, socket]);
@@ -139,6 +143,9 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
             error: t('chat.delete-for-me-error'),
         });
 
+        const files = chat.files || [];
+
+        files.forEach((file) => dispatch(removeAttachedFile({ conversationId: chat.conversation._id, file })));
         dispatch(updateDeletedMessage({ _id: chat._id, deleted: DeleteMessageStatus.DELETE_FOR_ME }));
         dispatch(
             updateMessage({

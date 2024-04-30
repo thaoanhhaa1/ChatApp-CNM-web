@@ -580,5 +580,13 @@
             "view": "View"
         }
     },
+    "mutual-group": {
+        "title": "Mutual group",
+        "all-group": "All groups",
+        "my-group": "My group",
+        "remove-from-group": "Remove from group",
+        "choose-multi-group": "Choose multi group",
+        "add-to-group": "Add to group"
+    },
     "request-error": "Some errors occurred, please try again"
 }

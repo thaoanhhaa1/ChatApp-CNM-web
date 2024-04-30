@@ -138,7 +138,14 @@ const Chat = () => {
 
             const files = lastMessage.files || [];
 
-            files.forEach((file) => dispatch(addAttachedFile(file)));
+            files.forEach((file) =>
+                dispatch(
+                    addAttachedFile({
+                        conversationId: lastMessage.conversation?._id || lastMessage?.conversationId,
+                        file,
+                    }),
+                ),
+            );
         }
     }, [dispatch, messages, socket]);
 

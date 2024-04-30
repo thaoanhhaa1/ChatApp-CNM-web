@@ -578,5 +578,13 @@
             "view": "Xem"
         }
     },
+    "mutual-group": {
+        "title": "Nhóm chung",
+        "all-group": "Tất cả",
+        "my-group": "Nhóm của tôi",
+        "remove-from-group": "Xoá khỏi nhóm",
+        "choose-multi-group": "Chọn nhiều nhóm",
+        "add-to-group": "Thêm vào nhóm"
+    },
     "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"
 }

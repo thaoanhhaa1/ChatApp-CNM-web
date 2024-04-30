@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import sound from '~/assets/sounds/message-sound.mp3';
 import { DeleteMessageStatus, FriendStatus } from '~/constants';
 import { setContact } from '~/features/addContact/addContactSlice';
-import { addAttachedFile } from '~/features/attachedFiles/attachedFilesSlice';
+import { addAttachedFile, removeAttachedFile } from '~/features/attachedFiles/attachedFilesSlice';
 import {
     addChat,
     addMessageHead,
@@ -89,7 +89,14 @@ const SocketListener = ({ children }) => {
 
             const files = message.files || [];
             console.log('🚀 ~ socket.on ~ files:', files);
-            files.forEach((file) => dispatch(addAttachedFile(file)));
+            files.forEach((file) =>
+                dispatch(
+                    addAttachedFile({
+                        conversationId: message.conversation?._id || message?.conversationId,
+                        file,
+                    }),
+                ),
+            );
 
             if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));
 
@@ -136,6 +143,9 @@ const SocketListener = ({ children }) => {
                     message: { ...message, deleted: DeleteMessageStatus.RECALL },
                 }),
             );
+
+            const files = message.files || [];
+            files.forEach((file) => dispatch(removeAttachedFile({ conversationId: message.conversation._id, file })));
         });
 
         socket.on('pinMessage', ({ message }) => {
