@@ -192,6 +192,7 @@ const chatsSlice = createSlice({
                 else {
                     state.chats.splice(chatIndex, 1);
                     const index = state.chats.findIndex((item) => !item.pinBy.includes(payload.myId));
+                    console.log('🚀 ~ index:', index);
 
                     if (index >= 0) state.chats.splice(index, 0, chat);
                     else state.chats.unshift(chat);

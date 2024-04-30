@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { messageNotificationType } from '~/constants';
-import { addMessageHeadSocket, addOrUpdateChat } from '~/features/chats/chatsSlice';
-import { addMessageSocket } from '~/features/messages/messagesSlice';
+import { addOrUpdateChat } from '~/features/chats/chatsSlice';
+import { useSendMessage } from '~/hooks';
 import conversationServices from '~/services/conversation.service';
 import messageServices from '~/services/message.service';
 import { isUserInConversation } from '~/utils';
@@ -23,6 +23,7 @@ const AddToGroups = ({ conversationId, userId, show, onClickOutside }) => {
     const [loading, setLoading] = useState(false);
     const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
+    const { handleSendNotificationMessage } = useSendMessage();
 
     const handleAdd = async () => {
         setLoading(true);
@@ -57,11 +58,7 @@ const AddToGroups = ({ conversationId, userId, show, onClickOutside }) => {
                 dispatch(addOrUpdateChat(conversation));
             });
 
-            messages.forEach((message) => {
-                socket.emit('sendMessage', message.data);
-                dispatch(addMessageSocket(message.data));
-                dispatch(addMessageHeadSocket(message.data));
-            });
+            messages.forEach(handleSendNotificationMessage);
             onClickOutside();
         } catch (error) {
             toast.error(t('request-error'));

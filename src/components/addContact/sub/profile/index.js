@@ -10,10 +10,10 @@ import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { FriendStatus, messageNotificationType, personalInformation } from '~/constants';
 import { blockContact, setContact, unblockContact } from '~/features/addContact/addContactSlice';
-import { addMessageHeadSocket, getConversation, setActive } from '~/features/chats/chatsSlice';
+import { getConversation, setActive } from '~/features/chats/chatsSlice';
 import { acceptFriendReceived, rejectFriendSent } from '~/features/friend/friendSlice';
-import { addMessageSocket } from '~/features/messages/messagesSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
+import { useSendMessage } from '~/hooks';
 import conversationServices from '~/services/conversation.service';
 import friendServices from '~/services/friend.service';
 import messageServices from '~/services/message.service';
@@ -36,6 +36,7 @@ const Profile = ({ onClose }) => {
     const information = useMemo(() => personalInformation[contact?.blocked ? 'block' : 'noBlock'], [contact?.blocked]);
     const [chatLoading, setChatLoading] = useState(false);
     const [otherLoading, setOtherLoading] = useState(false);
+    const { handleSendNotificationMessage } = useSendMessage();
 
     // TODO
     // const handleShareContact = () => {
@@ -91,19 +92,16 @@ const Profile = ({ onClose }) => {
             const friendResponse = friendReceived.find((item) => item.sender_id._id === contact._id);
             const sender_id = friendResponse.sender_id;
             const conversation = await conversationServices.openConversation(sender_id._id);
-            const [, message] = await Promise.all([
+            const [, messageRes] = await Promise.all([
                 friendServices.acceptFriend(sender_id._id),
                 messageServices.addMessageNotification({
                     type: messageNotificationType.ACCEPT_FRIEND,
                     conversationId: conversation.data._id,
                 }),
             ]);
-            console.log('🚀 ~ handleAcceptFriend ~ message:', message);
 
             socket.emit('acceptFriend', { _id: friendResponse._id, user, senderId: sender_id._id });
-            socket.emit('sendMessage', message.data);
-            dispatch(addMessageSocket(message.data));
-            dispatch(addMessageHeadSocket(message.data));
+            handleSendNotificationMessage(messageRes);
             dispatch(acceptFriendReceived({ _id: friendResponse._id, user: sender_id }));
             dispatch(setContact({ ...contact, status: FriendStatus.FRIEND }));
         } catch (error) {

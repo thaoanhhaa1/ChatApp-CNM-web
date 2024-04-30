@@ -6,10 +6,9 @@ import { toast } from 'react-toastify';
 import { MoreFillIcon } from '~/assets';
 import { groupRole, messageNotificationType, statusUser } from '~/constants';
 import { useChat } from '~/context';
-import { addMessageHeadSocket, addOrUpdateChat } from '~/features/chats/chatsSlice';
+import { addOrUpdateChat } from '~/features/chats/chatsSlice';
 import { addOrUpdateGroup } from '~/features/contactGroups/contactGroupsSlice';
-import { addMessageSocket } from '~/features/messages/messagesSlice';
-import { useBoolean } from '~/hooks';
+import { useBoolean, useSendMessage } from '~/hooks';
 import groupServices from '~/services/group.service';
 import messageServices from '~/services/message.service';
 import Avatar from '../avatar';
@@ -26,6 +25,7 @@ const Member = ({ user }) => {
     const { socket } = useSelector((state) => state.socket);
     const { users } = useSelector((state) => state.onlineUsers);
     const dispatch = useDispatch();
+    const { handleSendNotificationMessage } = useSendMessage();
     const { value: showRemoveUser, setTrue: handleShowRemoveUser, setFalse: handleHideRemoveUser } = useBoolean(false);
     const { value: showLeave, setTrue: handleShowLeave, setFalse: handleHideLeave } = useBoolean(false);
     const {
@@ -80,12 +80,10 @@ const Member = ({ user }) => {
             conversation: res.data,
             userIds: res.data.users.map((user) => user._id),
         });
-        socket.emit('sendMessage', message.data);
-        dispatch(addMessageSocket(message.data));
-        dispatch(addMessageHeadSocket(message.data));
+        handleSendNotificationMessage(message);
         dispatch(addOrUpdateChat(res.data));
         dispatch(addOrUpdateGroup(res.data));
-    }, [active?._id, dispatch, role, socket, t, user?._id]);
+    }, [active?._id, dispatch, handleSendNotificationMessage, role, socket, t, user?._id]);
 
     const handleContinueChangeOwnerRole = useCallback(() => {
         handleHideChangeOwner();
@@ -119,12 +117,10 @@ const Member = ({ user }) => {
             conversation: res.data,
             userIds: res.data.users.map((user) => user._id),
         });
-        socket.emit('sendMessage', message.data);
-        dispatch(addMessageSocket(message.data));
-        dispatch(addMessageHeadSocket(message.data));
 
+        handleSendNotificationMessage(message);
         dispatch(addOrUpdateChat(res.data));
-    }, [active._id, dispatch, socket, t, user._id]);
+    }, [active._id, dispatch, handleSendNotificationMessage, socket, t, user._id]);
 
     const more = useMemo(() => {
         if (!me?._id || !user?._id) return [];

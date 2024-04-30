@@ -6,9 +6,9 @@ import { toast } from 'react-toastify';
 import Modal from '~/components/modal';
 import Switch from '~/components/switch';
 import { groupRole, messageNotificationType } from '~/constants';
-import { addMessageHeadSocket, removeConversation } from '~/features/chats/chatsSlice';
+import { removeConversation } from '~/features/chats/chatsSlice';
 import { removeGroup } from '~/features/contactGroups/contactGroupsSlice';
-import { addMessageSocket } from '~/features/messages/messagesSlice';
+import { useSendMessage } from '~/hooks';
 import groupServices from '~/services/group.service';
 import messageServices from '~/services/message.service';
 
@@ -20,6 +20,7 @@ const LeaveGroup = ({ newOwnerId, show, onClickOutside }) => {
     const [leaveInSilence, setLeaveInSilence] = useState(false);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
+    const { handleSendNotificationMessage } = useSendMessage();
 
     const handleLeave = useCallback(async () => {
         if (!active?._id || !user?._id) return;
@@ -41,10 +42,7 @@ const LeaveGroup = ({ newOwnerId, show, onClickOutside }) => {
                     }),
                 ]);
 
-                console.log('🚀 ~ handleLeave ~ message:', message);
-                socket.emit('sendMessage', message.data);
-                dispatch(addMessageSocket(message.data));
-                dispatch(addMessageHeadSocket(message.data));
+                handleSendNotificationMessage(message);
             }
 
             const [res, message] = await Promise.all([
@@ -62,9 +60,7 @@ const LeaveGroup = ({ newOwnerId, show, onClickOutside }) => {
                 conversation: res.data,
                 userIds: res.data.users.map((user) => user._id),
             });
-            socket.emit('sendMessage', message.data);
-            dispatch(addMessageSocket(message.data));
-            dispatch(addMessageHeadSocket(message.data));
+            handleSendNotificationMessage(message);
 
             dispatch(removeConversation(active._id));
             dispatch(removeGroup(active._id));
@@ -77,7 +73,7 @@ const LeaveGroup = ({ newOwnerId, show, onClickOutside }) => {
             setLoading(false);
             onClickOutside();
         }
-    }, [active._id, user._id, newOwnerId, socket, dispatch, t, onClickOutside]);
+    }, [active._id, user._id, newOwnerId, socket, dispatch, t, handleSendNotificationMessage, onClickOutside]);
 
     return (
         <Modal show={show} onClickOutside={onClickOutside}>

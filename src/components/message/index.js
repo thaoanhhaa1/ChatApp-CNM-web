@@ -26,21 +26,10 @@ import Toast from '~/components/toast';
 import { DeleteMessageStatus, messageNotificationType, sentMessageStatus } from '~/constants';
 import { MessageProvider } from '~/context';
 import { setReply } from '~/features/chat/chatSlice';
-import {
-    addMessageHeadSocket,
-    addPinMessage,
-    changeLastMessage,
-    setMessages,
-    updateMessage,
-} from '~/features/chats/chatsSlice';
-import {
-    addMessageSocket,
-    getReplyMessages,
-    setOffsetTop,
-    updateDeletedMessage,
-} from '~/features/messages/messagesSlice';
+import { addPinMessage, changeLastMessage, setMessages, updateMessage } from '~/features/chats/chatsSlice';
+import { getReplyMessages, setOffsetTop, updateDeletedMessage } from '~/features/messages/messagesSlice';
 import { setLocationError } from '~/features/toastAll/toastAllSlice';
-import { useBoolean, useLoader, useToast } from '~/hooks';
+import { useBoolean, useLoader, useSendMessage, useToast } from '~/hooks';
 import messageServices from '~/services/message.service';
 import {
     classNames,
@@ -100,6 +89,7 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
     const fileCanView = useMemo(() => firstFile && officeCanView(firstFile), [firstFile]);
     const { value: viewFile, setTrue: setShowViewFile, setFalse: setHideViewFile } = useBoolean(false);
     const [isScrollToReply, setIsScrollToReply] = useState();
+    const { handleSendNotificationMessage } = useSendMessage();
 
     const handleClickReply = (message) => {
         if (!message._id) return;
@@ -183,10 +173,8 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
         console.log('🚀 ~ handlePinMessage ~ message:', message);
         dispatch(addPinMessage({ conversationId: chat.conversation._id, message: chat }));
         socket.emit('pinMessage', { message: chat, userId: user._id, users: active.users });
-        socket.emit('sendMessage', message.data);
-        dispatch(addMessageSocket(message.data));
-        dispatch(addMessageHeadSocket(message.data));
-    }, [active._id, active.users, chat, dispatch, socket, user._id]);
+        handleSendNotificationMessage(message);
+    }, [active._id, active.users, chat, dispatch, handleSendNotificationMessage, socket, user._id]);
 
     const handleClickForward = useCallback(() => setShowForward(true), []);
     const handleCloseForward = useCallback(() => setShowForward(false), []);

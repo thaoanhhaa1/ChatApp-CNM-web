@@ -2,13 +2,15 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
+import { addMessageHeadSocket } from '~/features/chats/chatsSlice';
+import { addMessage, addMessageSocket, sendMessage } from '~/features/messages/messagesSlice';
 import { isImageFileByType, splitMessage } from '~/utils';
 import validFileSize from '~/utils/validFileSize';
 
 const useSendMessage = () => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);
+    const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
 
     const getFilesByType = useCallback(
@@ -150,12 +152,29 @@ const useSendMessage = () => {
         [dispatch, showError, showMessageToast, user],
     );
 
+    const handleSendNotificationMessage = useCallback(
+        (messageRes) => {
+            if (!socket) return;
+
+            const message = {
+                ...messageRes.data,
+                myId: user._id,
+            };
+
+            socket.emit('sendMessage', message);
+            dispatch(addMessageSocket(message));
+            dispatch(addMessageHeadSocket(message));
+        },
+        [dispatch, socket, user._id],
+    );
+
     return {
         getFilesByType,
         handleSendImages,
         handleSendOtherFiles,
         handleSendTextMessage,
         handleSendTextImageMessage,
+        handleSendNotificationMessage,
     };
 };
 
