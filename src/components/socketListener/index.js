@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import sound from '~/assets/sounds/message-sound.mp3';
 import { DeleteMessageStatus, FriendStatus } from '~/constants';
 import { setContact } from '~/features/addContact/addContactSlice';
+import { addAttachedFile } from '~/features/attachedFiles/attachedFilesSlice';
 import {
     addChat,
     addMessageHead,
@@ -85,6 +86,10 @@ const SocketListener = ({ children }) => {
                     ...message,
                 }),
             );
+
+            const files = message.files || [];
+            console.log('🚀 ~ socket.on ~ files:', files);
+            files.forEach((file) => dispatch(addAttachedFile(file)));
 
             if (active?._id === message.conversation._id) dispatch(addMessageSocket(message));
 

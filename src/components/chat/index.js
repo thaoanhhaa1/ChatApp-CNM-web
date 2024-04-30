@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { v4 } from 'uuid';
 import { groupRole, sentMessageStatus } from '~/constants';
 import { ChatProvider } from '~/context';
+import { addAttachedFile } from '~/features/attachedFiles/attachedFilesSlice';
 import { addFiles } from '~/features/chat/chatSlice';
 import { updateMessage } from '~/features/chats/chatsSlice';
 import { updateState } from '~/features/messages/messagesSlice';
@@ -134,6 +135,10 @@ const Chat = () => {
                 }),
             );
             dispatch(updateState({ _id: lastMessage._id }));
+
+            const files = lastMessage.files || [];
+
+            files.forEach((file) => dispatch(addAttachedFile(file)));
         }
     }, [dispatch, messages, socket]);
 

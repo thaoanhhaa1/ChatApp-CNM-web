@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { statusUser } from '~/constants';
 import { classNames } from '~/utils';
@@ -8,6 +8,10 @@ const Avatar = ({ size = '36px', src, alt = '', status = statusUser.OFFLINE, cla
     const [image, setImage] = useState(src);
 
     const handleError = () => setImage(process.env.REACT_APP_FALLBACK_AVATAR);
+
+    useEffect(() => {
+        setImage(src);
+    }, [src]);
 
     return (
         <div

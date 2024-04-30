@@ -14,6 +14,7 @@ import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
 import { getChats } from '~/features/chats/chatsSlice';
 import { getFriends } from '~/features/friend/friendSlice';
+import { updateRecentSearch } from '~/features/localSetting/localSettingSlice';
 import { setLocationError, setToast } from '~/features/toastAll/toastAllSlice';
 import { getUserInfo } from '~/features/user/userSlice';
 import { useToast } from '~/hooks';
@@ -37,6 +38,8 @@ const DefaultLayout = ({ children }) => {
     const { user, loading } = useSelector((state) => state.user);
     const { locationError, toast } = useSelector((state) => state.toastAll);
     const { friendList } = useSelector((state) => state.friend);
+    const { chats } = useSelector((state) => state.chats);
+    const { contacts } = useSelector((state) => state.search);
     const { socket } = useSelector((state) => state.socket);
     const navigation = useNavigate();
     const dispatch = useDispatch();
@@ -92,6 +95,26 @@ const DefaultLayout = ({ children }) => {
 
         socket.emit('online', { userId: user._id, friendIds: friendList.map((friend) => friend._id) });
     }, [friendList, socket, user?._id]);
+
+    useEffect(() => {
+        chats.forEach((chat) => {
+            chat.users.forEach((user) => {
+                dispatch(updateRecentSearch(user));
+            });
+        });
+    }, [chats, dispatch]);
+
+    useEffect(() => {
+        contacts.forEach((contact) => {
+            dispatch(updateRecentSearch(contact));
+        });
+    }, [contacts, dispatch]);
+
+    useEffect(() => {
+        friendList.forEach((friend) => {
+            dispatch(updateRecentSearch(friend));
+        });
+    }, [dispatch, friendList]);
 
     if (loading || !user?._id) return <Loading />;
 

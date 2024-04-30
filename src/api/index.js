@@ -33,6 +33,7 @@ const api = {
     forward: () => `/message/forward`,
     react: () => `/message/react`,
     addMessageNotification: () => `/message/notification`,
+    getAttachedFiles: (params) => `/message/${params[0]}/attached-files`,
 
     // Friend
     getFriends: () => `/user/listFriend`,

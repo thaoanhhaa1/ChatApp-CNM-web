@@ -7,8 +7,6 @@ import Button from './Button';
 const getIcon = (fileName) => {
     if (isPhotoFile(fileName)) return ImageFillIcon;
 
-    // Regex video: /\.(mp4|mkv|avi|mov|wmv|flv)$/i
-
     return FileTextFillIcon;
 };
 
@@ -29,11 +27,11 @@ const AttachedFile = ({ file, canView, onClick = () => {} }) => {
                 canView && 'cursor-pointer',
             )}
         >
-            <div className="text-primary-color bg-[#e3e1fc] dark:bg-[rgba(114,105,239,.15)] w-12 h-12 rounded flex justify-center items-center">
+            <div className="flex-shrink-0 text-primary-color bg-[#e3e1fc] dark:bg-[rgba(114,105,239,.15)] w-12 h-12 rounded flex justify-center items-center">
                 <Icon className="w-5 h-5" />
             </div>
             <div className="flex-1">
-                <h5 className="text-sm font-semibold mb-1 line-clamp-1">{file.name}</h5>
+                <h5 className="text-sm font-semibold mb-1 line-clamp-1 break-all">{file.name}</h5>
                 {file.size && (
                     <p className="text-ss text-secondary dark:text-dark-secondary">{convertFileSize(file.size)}</p>
                 )}

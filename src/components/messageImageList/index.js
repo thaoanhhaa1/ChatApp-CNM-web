@@ -15,9 +15,13 @@ const MessageImageList = ({ files, loading }) => {
     const columnCount = data.length >= 12 ? 4 : data.length >= 6 ? 3 : data.length >= 4 ? 2 : 1;
 
     return (
-        <ImageList masonry style={{ columnCount }} className="grid gap-0.5 rounded-md overflow-hidden">
+        <ImageList
+            masonry
+            style={{ columnCount, columnGap: '2px' }}
+            className="rounded-md overflow-hidden max-w-[370px]"
+        >
             {data.map((item) => (
-                <ImageListItem key={item.url}>
+                <ImageListItem className="mb-0.5" key={item.url}>
                     <ImageListImageAspectContainer>
                         <MessageImage loading={loading} imageInList src={item.url} name={item.name} />
                     </ImageListImageAspectContainer>

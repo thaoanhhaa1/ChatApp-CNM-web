@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { AttachmentLineIcon, CloseLineIcon, GroupIcon, RecordCircleFillIcon, UserIcon } from '~/assets';
 import Accordion from '~/components/accordion';
-import AttachedFile from '~/components/attachedFile';
 import Avatar from '~/components/avatar';
 import AvatarGroup from '~/components/avatarGroup';
 import Member from '~/components/member';
@@ -11,6 +10,7 @@ import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { useChat } from '~/context';
 import { addRoleToUser, convertToAvatarUrlList, getNameConversation, sortMemberByRole } from '~/utils';
 import About from './About';
+import AttachedFiles from './AttachedFiles';
 import HeaderActions from './HeaderActions';
 
 const Profile = () => {
@@ -32,28 +32,13 @@ const Profile = () => {
     );
 
     const accordions = useMemo(() => {
-        if (!activeChat?.isGroup) return [];
+        if (!activeChat) return [];
 
         const data = [
             {
                 icon: AttachmentLineIcon,
                 title: 'chat.attached-files',
-                children: (
-                    <div className="flex flex-col gap-2">
-                        <AttachedFile
-                            file={{
-                                name: 'Admin-A.zip',
-                                size: 2777,
-                            }}
-                        />
-                        <AttachedFile
-                            file={{
-                                name: 'Admin-A.png',
-                                size: 95,
-                            }}
-                        />
-                    </div>
-                ),
+                children: <AttachedFiles />,
             },
         ];
 
@@ -77,7 +62,7 @@ const Profile = () => {
             });
 
         return data;
-    }, [activeChat?.isGroup, sortedMember]);
+    }, [activeChat, sortedMember]);
 
     if (!activeChat?._id) return null;
 

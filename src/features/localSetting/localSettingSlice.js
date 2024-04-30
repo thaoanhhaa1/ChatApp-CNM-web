@@ -37,9 +37,21 @@ const localSettingSlice = createSlice({
         addIgnoreSuggestFriends: (state, { payload }) => {
             state.settings.ignoreSuggestFriends.push(payload);
         },
+        updateRecentSearch: (state, { payload }) => {
+            const recentSearch = state.settings.recentSearch;
+
+            const index = recentSearch.findIndex((user) => user._id === payload._id);
+            const user = recentSearch[index];
+
+            if (index !== -1)
+                recentSearch[index] = {
+                    ...user,
+                    ...payload,
+                };
+        },
     },
 });
 
-export const { setSetting, reset, addRecentSearch, removeRecentSearch, addIgnoreSuggestFriends } =
+export const { setSetting, reset, addRecentSearch, removeRecentSearch, addIgnoreSuggestFriends, updateRecentSearch } =
     localSettingSlice.actions;
 export default localSettingSlice.reducer;

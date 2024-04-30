@@ -19,6 +19,7 @@ const messageServices = {
         }),
     react: ({ react, messageId }) => axiosClient.post(api.react(), { react, messageId }),
     addMessageNotification: (data) => axiosClient.post(api.addMessageNotification(), data),
+    getAttachedFiles: ({ params }) => axiosClient.get(api.getAttachedFiles(params)),
 };
 
 export default messageServices;

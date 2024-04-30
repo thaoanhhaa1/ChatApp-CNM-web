@@ -95,7 +95,8 @@
         "error-file-size": "Maximum allowed size for uploaded files is 10MB",
         "delete-for-me-pending": "Deleting...",
         "delete-for-me-success": "Deleted successfully",
-        "delete-for-me-error": "Failed to delete"
+        "delete-for-me-error": "Failed to delete",
+        "attached-file-empty": "No Files is shared in this conversation"
     },
     "contacts": {
         "title": "Contacts",

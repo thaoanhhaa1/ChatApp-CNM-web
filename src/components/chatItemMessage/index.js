@@ -55,7 +55,7 @@ const ChatItemMessage = ({ chat }) => {
                 <ChatMessage
                     status={message?.deleted}
                     isMe
-                    className="line-clamp-1"
+                    className="line-clamp-1 break-all"
                     isReply
                     messages={message?.messages || []}
                 />

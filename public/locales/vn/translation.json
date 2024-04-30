@@ -93,7 +93,8 @@
         "error-file-size": "Zalo hỗ trợ gửi file tối đa 10MB",
         "delete-for-me-pending": "Đang xoá...",
         "delete-for-me-success": "Xoá tin nhắn thành công",
-        "delete-for-me-error": "Xoá tin nhắn không thành công"
+        "delete-for-me-error": "Xoá tin nhắn không thành công",
+        "attached-file-empty": "Chưa có file được chia sẻ trong hội thoại này"
     },
     "contacts": {
         "title": "Danh bạ",

@@ -116,7 +116,7 @@ const AddContact = ({ show, onClickOutside }) => {
                     <ScrollbarCustomize>
                         {settings?.recentSearch?.length ? (
                             <ContactList title={t('contacts.modal.recentSearches')}>
-                                {settings.recentSearch.map((contact) => (
+                                {settings.recentSearch.slice(0, 2).map((contact) => (
                                     <Contact
                                         key={contact._id}
                                         onClick={(e) => handleClickContact(contact, e)}
@@ -137,43 +137,44 @@ const AddContact = ({ show, onClickOutside }) => {
                                 />
                                 <List length={3} control={ContactSkeleton} />
                             </>
-                        )) || (
-                            <>
-                                <ContactList Icon={UserCircleBrokenIcon} title={t('contacts.modal.youMayKnow')}>
-                                    {suggestShow.map((contact) => (
-                                        <Contact
-                                            key={contact._id}
-                                            onClick={(e) => handleClickContact(contact, e)}
-                                            avatar={contact.avatar}
-                                            name={contact.name}
-                                            description={contact._id}
-                                            onClose={(e) => handleClickClose(contact, e)}
-                                            right={
-                                                <Button
-                                                    onClick={(e) => handleClickAddFriend(contact, e)}
-                                                    outline
-                                                    primary
-                                                    small
+                        )) ||
+                            (suggestShow.length > 0 && (
+                                <>
+                                    <ContactList Icon={UserCircleBrokenIcon} title={t('contacts.modal.youMayKnow')}>
+                                        {suggestShow.map((contact) => (
+                                            <Contact
+                                                key={contact._id}
+                                                onClick={(e) => handleClickContact(contact, e)}
+                                                avatar={contact.avatar}
+                                                name={contact.name}
+                                                description={contact._id}
+                                                onClose={(e) => handleClickClose(contact, e)}
+                                                right={
+                                                    <Button
+                                                        onClick={(e) => handleClickAddFriend(contact, e)}
+                                                        outline
+                                                        primary
+                                                        small
+                                                    >
+                                                        {t('contacts.modal.addFriend')}
+                                                    </Button>
+                                                }
+                                            />
+                                        ))}
+                                    </ContactList>
+                                    {showMore ||
+                                        (suggestFriends.length > 3 && (
+                                            <div className="h-[30px] flex items-center">
+                                                <div
+                                                    onClick={handleClickViewMore}
+                                                    className="cursor-pointer pl-2 ex:pl-3 sm:pl-4 text-ss leading-normal text-primary-color"
                                                 >
-                                                    {t('contacts.modal.addFriend')}
-                                                </Button>
-                                            }
-                                        />
-                                    ))}
-                                </ContactList>
-                                {showMore ||
-                                    (suggestFriends.length > 3 && (
-                                        <div className="h-[30px] flex items-center">
-                                            <div
-                                                onClick={handleClickViewMore}
-                                                className="cursor-pointer pl-2 ex:pl-3 sm:pl-4 text-ss leading-normal text-primary-color"
-                                            >
-                                                View more
+                                                    View more
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
-                            </>
-                        )}
+                                        ))}
+                                </>
+                            ))}
                     </ScrollbarCustomize>
                 </div>
 

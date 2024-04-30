@@ -30,12 +30,16 @@ const MessageImage = ({ imageInList = false, src, name, className }) => {
             onClick={handleClickImage}
             className={classNames(
                 'relative cursor-pointer',
-                imageInList || 'w-[150px] aspect-[3/2] border border-separate dark:border-dark-separate rounded',
+                imageInList || 'w-[370px] aspect-[3/2] border border-separate dark:border-dark-separate rounded',
                 className,
             )}
         >
-            <div className="relative flex justify-center items-center h-full">
-                <LazyLoadImage className={classNames('w-full h-full object-cover rounded')} src={src} alt={name} />
+            <div className={classNames('flex justify-center items-center h-full', imageInList ? 'min-h-[50px]' : '')}>
+                <LazyLoadImage
+                    className={classNames('w-full h-full object-cover rounded min-h-[50px]')}
+                    src={src}
+                    alt={name}
+                />
             </div>
             <div className="absolute bottom-0 ex:bottom-1 right-0 ex:right-1 flex gap-1 xs:gap-2">
                 <button onClick={handleDownload} className="text-white p-1 xs:p-1.5">
