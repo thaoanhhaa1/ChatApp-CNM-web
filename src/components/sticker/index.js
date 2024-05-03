@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { LeftIcon, RightIcon, SearchIcon } from '~/assets';
@@ -83,4 +84,9 @@ const Sticker = () => {
 
 Sticker.propTypes = {};
 
-export default Sticker;
+export default withErrorBoundary(Sticker, {
+    FallbackComponent: null,
+    onReset: () => {
+        // reset the state of your app so the error doesn't happen again
+    },
+});

@@ -17,6 +17,7 @@ export { default as DeleteMessageStatus } from './DeleteMessageStatus';
 export { default as FriendStatus } from './FriendStatus';
 export { default as messageNotificationType } from './messageNotificationType';
 export * as groupRole from './roleMemberInGroup';
+export { default as callType } from './callType';
 
 export const constants = {
     MAX_LENGTH_OF_GREETING_MESSAGE: 150,

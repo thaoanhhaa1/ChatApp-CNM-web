@@ -5,6 +5,7 @@ import sound from '~/assets/sounds/message-sound.mp3';
 import { DeleteMessageStatus, FriendStatus } from '~/constants';
 import { setContact } from '~/features/addContact/addContactSlice';
 import { addAttachedFile, removeAttachedFile } from '~/features/attachedFiles/attachedFilesSlice';
+import { acceptCall, cancelCall, setCalling } from '~/features/calling/callingSlice';
 import {
     addChat,
     addMessageHead,
@@ -244,6 +245,31 @@ const SocketListener = ({ children }) => {
                 dispatch(addOrUpdateChat(conversation));
             });
         });
+
+        socket.on('call', ({ type, sender, users, _id }) => {
+            console.log('🚀 ~ socket.on ~ call ~ users', users);
+
+            console.log('🚀 ~ socket.on ~ call ~ type', type);
+            console.log('🚀 ~ socket.on ~ call ~ sender', sender);
+            console.log('🚀 ~ socket.on ~ call ~ _id', _id);
+
+            dispatch(setCalling({ _id, users, type, sender }));
+        });
+
+        socket.on('cancelCall', ({ _id }) => {
+            console.log('🚀 ~ socket.on ~ cancelCall ~ _id:', _id);
+
+            dispatch(cancelCall(_id));
+        });
+
+        socket.on('acceptCall', ({ _id, receiver }) => {
+            console.log('🚀 ~ socket.on ~ acceptCall ~ _id:', _id);
+            console.log('🚀 ~ socket.on ~ acceptCall ~ receiver:', receiver);
+
+            dispatch(acceptCall({ _id, receiver }));
+        });
+
+        socket.on('rejectCall', ({ receiver, _id }) => {});
     }, [active?._id, contact, dispatch, offlineRecent, socket, user?._id]);
 
     return children;

@@ -19,15 +19,15 @@ const useLoader = () => {
     const [marker, setMarker] = useState(null);
 
     useEffect(() => {
-        // (async () => {
-        //     // FIXME: This is a workaround for the issue of the library not being loaded
-        //     const google = await loader.load();
-        //     const places = await google.maps.importLibrary('places');
-        //     const marker = await google.maps.importLibrary('marker');
-        //     setGoogle(google);
-        //     setPlaces(places);
-        //     setMarker(marker);
-        // })();
+        (async () => {
+            // FIXME: This is a workaround for the issue of the library not being loaded
+            // const google = await loader.load();
+            // const places = await google.maps.importLibrary('places');
+            // const marker = await google.maps.importLibrary('marker');
+            // setGoogle(google);
+            // setPlaces(places);
+            // setMarker(marker);
+        })();
     }, [loader]);
 
     return { google, places, marker };
