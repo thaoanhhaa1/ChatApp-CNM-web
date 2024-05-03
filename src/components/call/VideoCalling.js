@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import NewWindow from 'react-new-window';
 import { useSelector } from 'react-redux';
-import { v4 } from 'uuid';
 import { useCalling } from '~/hooks';
 import VideoStream from '../videoStream';
 import CallingEmpty from './CallingEmpty';
@@ -15,22 +14,36 @@ const VideoCalling = ({ onClickOutside }) => {
     const { handleClickOutside } = useCalling();
     const [stream, setStream] = useState(null);
     const [streams, setStreams] = useState({});
-    const acceptUsers = useMemo(
-        () => [...users.filter((u) => acceptUserIds.includes(u._id), sender)],
-        [acceptUserIds, sender, users],
-    );
+    const acceptUsers = useMemo(() => {
+        const usersWithoutMe = [];
+
+        users.forEach((u) => {
+            if (acceptUserIds.includes(u._id) && u._id !== user._id) {
+                usersWithoutMe.push(u);
+            }
+        });
+
+        if (sender._id !== user._id) usersWithoutMe.push(sender);
+
+        return usersWithoutMe;
+    }, [acceptUserIds, sender, user._id, users]);
     const userVideo = useRef();
-    const containerRef = useRef();
+    const peersRef = useRef({});
+    const [video, setVideo] = useState(true);
+    const [audio, setAudio] = useState(true);
+
+    const toggleVideo = () => setVideo((prev) => !prev);
+    const toggleAudio = () => setAudio((prev) => !prev);
 
     useEffect(() => {
         navigator.mediaDevices
-            .getUserMedia({ video: true, audio: true })
+            .getUserMedia({ video, audio })
             .then((stream) => {
                 setStream(stream);
                 if (userVideo.current) userVideo.current.srcObject = stream;
             })
             .catch((error) => console.error(error));
-    }, []);
+    }, [audio, video]);
 
     useEffect(() => {
         const userIds = [sender._id, ...acceptUserIds];
@@ -52,6 +65,7 @@ const VideoCalling = ({ onClickOutside }) => {
                 // path: '/peerjs',
                 // key: 'peerjs',
             });
+            peersRef.current[userId] = peer;
 
             peer.on('open', (id) => {
                 socket.emit('peerId', { peerId: id, fromUserId: user._id, toUserId: userId });
@@ -63,56 +77,48 @@ const VideoCalling = ({ onClickOutside }) => {
             });
 
             if (myPosition > index) {
-                // Answerer
-                console.log('🚀 ~ VideoCalling ~ Answerer:', userId);
                 peer.on('call', (call) => {
-                    call.answer(stream); // Answer the call with an A/V stream.
-                    call.on('stream', (remoteStream) => {
-                        // Show stream in some <video> element.
-                        console.group('Answerer...');
-                        console.log('🚀 ~ VideoCalling ~ from userId:', userId);
-                        console.log('🚀 ~ VideoCalling ~ to userId:', user._id);
-                        console.log('🚀 ~ VideoCalling ~ remoteStream:', remoteStream);
-                        console.groupEnd();
-                        setStreams((prevStreams) => ({ ...prevStreams, [userId]: remoteStream }));
-                    });
+                    call.answer(stream);
+                    call.on('stream', (remoteStream) => setStreams((prev) => ({ ...prev, [userId]: remoteStream })));
                 });
             } else {
-                // Caller
-                socket.on('peerId', ({ peerId, fromUserId }) => {
-                    console.log('🚀 ~ VideoCalling ~ Caller:', fromUserId);
+                socket.on('peerId', ({ peerId, fromUserId: userId }) => {
                     const call = peer.call(peerId, stream);
-                    call.on('stream', (remoteStream) => {
-                        // Show stream in some <video> element.
-                        console.group('Caller...');
-                        console.log('🚀 ~ VideoCalling ~ from userId:', user._id);
-                        console.log('🚀 ~ VideoCalling ~ to userId:', userId);
-                        console.log('🚀 ~ VideoCalling ~ remoteStream:', remoteStream);
-                        console.groupEnd();
-                        setStreams((prevStreams) => ({ ...prevStreams, [fromUserId]: remoteStream }));
-                    });
+                    call?.on('stream', (remoteStream) => setStreams((prev) => ({ ...prev, [userId]: remoteStream })));
                 });
             }
         });
+
+        return () => {
+            Object.keys(peersRef.current).forEach((userId) => {
+                if (peersRef.current[userId]) {
+                    peersRef.current[userId].destroy();
+                    delete peersRef.current[userId];
+                }
+            });
+        };
     }, [_id, acceptUserIds, sender._id, socket, stream, user._id]);
 
     return (
         <NewWindow onUnload={handleClickOutside(onClickOutside, stream)}>
-            <div className="w-full h-full relative" ref={containerRef}>
-                {acceptUserIds.length ? (
-                    <div className="flex">
-                        {acceptUsers.map((user) => (
-                            <VideoStream stream={streams[user._id]} user={user} key={v4()} />
-                        ))}
-                    </div>
-                ) : (
-                    <CallingEmpty />
-                )}
-                <div className="absolute right-10 bottom-10">
-                    <video className="w-[300px] h-[300px]" playsInline muted ref={userVideo} autoPlay />
-                    {stream ? null : (
-                        <img className="absolute inset-0 w-[300px] h-[300px]" alt={user.name} src={user.avatar} />
+            <div className="h-screen w-screen flex flex-col">
+                <div className="relative flex-1">
+                    {acceptUserIds.length ? (
+                        <div className="flex">
+                            <VideoStream stream={stream} user={user} />
+                            {acceptUsers.map((user) => (
+                                <VideoStream stream={streams[user._id]} user={user} key={user._id} />
+                            ))}
+                        </div>
+                    ) : (
+                        <CallingEmpty />
                     )}
+                </div>
+
+                <div className="flex">
+                    <button onClick={toggleVideo}>{video ? 'Turn off video' : 'Turn on video'}</button>
+                    <button onClick={toggleAudio}>{audio ? 'Turn off audio' : 'Turn on audio'}</button>
+                    <button>End call</button>
                 </div>
             </div>
         </NewWindow>
