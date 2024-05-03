@@ -13,13 +13,13 @@ const useCalling = () => {
             onClickOutside();
 
             if ((user._id === sender?._id && !acceptUserIds.length) || users?.length === 2) {
-                dispatch(cancelCall(_id));
                 socket.emit('cancelCall', {
                     users,
                     sender,
                     _id,
                 });
             }
+            dispatch(resetCalling());
 
             if (stream) {
                 stream.getTracks().forEach((track) => track.stop());

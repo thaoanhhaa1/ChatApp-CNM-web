@@ -20,15 +20,20 @@ const VideoStream = ({ stream, user = {} }) => {
 
     return (
         <div className="relative">
-            <video
-                className="w-[300px] h-[300px]"
-                playsInline
-                // muted={!audio || user._id === me._id}
-                muted
-                ref={localVideo}
-                autoPlay
-            />
-            {video ? null : <img className="absolute inset-0 w-[300px] h-[300px]" alt={user.name} src={user.avatar} />}
+            <div className="relative">
+                <video
+                    className="w-[300px] h-[300px]"
+                    playsInline
+                    // muted={!audio || user._id === me._id}
+                    muted
+                    ref={localVideo}
+                    autoPlay
+                />
+                {video ? null : (
+                    <img className="absolute inset-0 w-[300px] h-[300px]" alt={user.name} src={user.avatar} />
+                )}
+            </div>
+            <h4>{user._id}</h4>
         </div>
     );
 };

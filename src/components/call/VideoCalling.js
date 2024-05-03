@@ -1,9 +1,9 @@
-import { Peer } from 'peerjs';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import NewWindow from 'react-new-window';
 import { useSelector } from 'react-redux';
 import { useCalling } from '~/hooks';
+import { createPeer, getMediaStream } from '~/utils';
 import VideoStream from '../videoStream';
 import CallingEmpty from './CallingEmpty';
 
@@ -12,8 +12,11 @@ const VideoCalling = ({ onClickOutside }) => {
     const { socket } = useSelector((state) => state.socket);
     const { user } = useSelector((state) => state.user);
     const { handleClickOutside } = useCalling();
-    const [stream, setStream] = useState(null);
+    const [stream, setStream] = useState();
+    console.error('🚀 ~ VideoCalling ~ stream:', stream);
     const [streams, setStreams] = useState({});
+    console.error('🚀 ~ VideoCalling ~ streams:', streams);
+    const joinedUserIds = useMemo(() => [sender._id, ...acceptUserIds], [acceptUserIds, sender._id]);
     const acceptUsers = useMemo(() => {
         const usersWithoutMe = [];
 
@@ -27,84 +30,111 @@ const VideoCalling = ({ onClickOutside }) => {
 
         return usersWithoutMe;
     }, [acceptUserIds, sender, user._id, users]);
-    const userVideo = useRef();
-    const peersRef = useRef({});
     const [video, setVideo] = useState(true);
     const [audio, setAudio] = useState(true);
+    const [myPeer, setMyPeer] = useState(null);
+    const [peerIds, setPeerIds] = useState({});
+    console.error('🚀 ~ VideoCalling ~ peerIds:', peerIds);
 
     const toggleVideo = () => setVideo((prev) => !prev);
     const toggleAudio = () => setAudio((prev) => !prev);
 
+    // Stream
     useEffect(() => {
-        navigator.mediaDevices
-            .getUserMedia({ video, audio })
-            .then((stream) => {
-                setStream(stream);
-                if (userVideo.current) userVideo.current.srcObject = stream;
-            })
-            .catch((error) => console.error(error));
+        async function getStream() {
+            const stream = await getMediaStream({ video, audio });
+            console.error('🚀 ~ getStream ~ stream:', stream);
+
+            setStream(stream);
+        }
+
+        getStream();
     }, [audio, video]);
 
+    // Create peer
     useEffect(() => {
-        const userIds = [sender._id, ...acceptUserIds];
+        if (typeof stream === 'undefined') return;
 
-        const myPosition = userIds.indexOf(user._id);
+        const peer = createPeer();
+        console.error('🚀 ~ useEffect ~ peer:', peer);
 
-        userIds.forEach((userId, index) => {
-            if (myPosition === index) return;
+        setMyPeer(peer);
+    }, [stream]);
 
-            const peer = new Peer({
-                // DEV
-                host: 'localhost',
-                port: '4000',
-                path: '/peerjs',
-                key: 'peerjs',
+    // Handle open event
+    useEffect(() => {
+        if (!myPeer) return;
 
-                // PROD
-                // host: 'homeless-eadith-vunguyendev.koyeb.app',
-                // path: '/peerjs',
-                // key: 'peerjs',
-            });
-            peersRef.current[userId] = peer;
-
-            peer.on('open', (id) => {
-                socket.emit('peerId', { peerId: id, fromUserId: user._id, toUserId: userId });
-                console.log('🚀 ~ VideoCalling ~ id:', id);
-            });
-
-            peer.on('error', (error) => {
-                console.error('🚀 ~ VideoCalling ~ error:', error);
-            });
-
-            if (myPosition > index) {
-                peer.on('call', (call) => {
-                    call.answer(stream);
-                    call.on('stream', (remoteStream) => setStreams((prev) => ({ ...prev, [userId]: remoteStream })));
-                });
-            } else {
-                socket.on('peerId', ({ peerId, fromUserId: userId }) => {
-                    const call = peer.call(peerId, stream);
-                    call?.on('stream', (remoteStream) => setStreams((prev) => ({ ...prev, [userId]: remoteStream })));
-                });
-            }
+        myPeer.on('open', (id) => {
+            socket.emit('peerId', { peerId: id, fromUserId: user._id, toUserIds: joinedUserIds });
+            console.error('🚀 ~ VideoCalling ~ id:', id);
         });
 
-        return () => {
-            Object.keys(peersRef.current).forEach((userId) => {
-                if (peersRef.current[userId]) {
-                    peersRef.current[userId].destroy();
-                    delete peersRef.current[userId];
-                }
+        return () => myPeer.off('open');
+    }, [joinedUserIds, myPeer, socket, user._id]);
+
+    // Handle call event
+    useEffect(() => {
+        if (!myPeer) return;
+
+        myPeer.on('call', (call) => {
+            console.error('🚀 ~ myPeer.on ~ call:', call);
+            console.error('🚀 ~ myPeer.on ~ stream:', stream);
+            console.error('🚀 ~ myPeer.on ~ peerIds:', peerIds);
+
+            const userId = call.metadata;
+            const peerId = call.peer;
+
+            if (peerIds[userId] === peerId) return;
+
+            setPeerIds((prev) => ({ ...prev, [userId]: peerId }));
+            call.answer(stream);
+            call.on('stream', (remoteStream) => setStreams((prev) => ({ ...prev, [userId]: remoteStream })));
+        });
+
+        return () => myPeer.off('call');
+    }, [myPeer, peerIds, stream]);
+
+    // Handle error event
+    useEffect(() => {
+        if (!myPeer) return;
+
+        myPeer.on('error', (error) => console.error(error));
+    }, [myPeer]);
+
+    useEffect(() => {
+        console.error('🚀 ~ VideoCalling ~ peerIds:', peerIds);
+        console.error('🚀 ~ VideoCalling ~ stream:', stream);
+
+        Object.keys(peerIds).forEach((userId) => {
+            const call = myPeer.call(peerIds[userId], stream, { metadata: user._id });
+            call?.on('stream', (remoteStream) => setStreams((prev) => ({ ...prev, [userId]: remoteStream })));
+        });
+    }, [myPeer, peerIds, stream, user._id]);
+
+    useEffect(() => {
+        if (!myPeer) return;
+
+        socket.on('peerId', ({ peerId, fromUserId: userId }) => {
+            console.error('🚀 ~ socket.on ~ userId:', userId);
+            setPeerIds((prev) => ({ ...prev, [userId]: peerId }));
+
+            const call = myPeer.call(peerId, stream, { metadata: user._id });
+            call?.on('stream', (remoteStream) => {
+                console.error('🚀 ~ call?.on ~ userId:', userId);
+                console.error('🚀 ~ call?.on ~ remoteStream:', remoteStream);
+
+                setStreams((prev) => ({ ...prev, [userId]: remoteStream }));
             });
-        };
-    }, [_id, acceptUserIds, sender._id, socket, stream, user._id]);
+        });
+    }, [myPeer, socket, stream, user._id]);
 
     return (
         <NewWindow onUnload={handleClickOutside(onClickOutside, stream)}>
             <div className="h-screen w-screen flex flex-col">
                 <div className="relative flex-1">
                     {acceptUserIds.length ? (
-                        <div className="flex">
+                        <div className="flex flex-wrap">
                             <VideoStream stream={stream} user={user} />
                             {acceptUsers.map((user) => (
                                 <VideoStream stream={streams[user._id]} user={user} key={user._id} />
