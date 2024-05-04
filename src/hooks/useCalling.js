@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { acceptCall, cancelCall, resetCalling } from '~/features/calling/callingSlice';
+import { acceptCall, resetCalling } from '~/features/calling/callingSlice';
 
 const useCalling = () => {
-    const { sender, _id, acceptUserIds, users } = useSelector((state) => state.calling);
+    const { _id, users } = useSelector((state) => state.calling);
     const { user } = useSelector((state) => state.user);
     const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
@@ -12,44 +12,28 @@ const useCalling = () => {
         (onClickOutside, stream) => () => {
             onClickOutside();
 
-            if ((user._id === sender?._id && !acceptUserIds.length) || users?.length === 2) {
-                socket.emit('cancelCall', {
-                    users,
-                    sender,
-                    _id,
-                });
-            }
+            socket.emit('endCall', {
+                users,
+                sender: user,
+                _id,
+            });
             dispatch(resetCalling());
 
             if (stream) {
                 stream.getTracks().forEach((track) => track.stop());
             }
         },
-        [acceptUserIds.length, _id, dispatch, sender, socket, user._id, users],
+        [_id, dispatch, socket, user, users],
     );
 
-    const handleReject = useCallback(
-        (onClickOutside) => () => {
-            if (users?.length === 2) {
-                dispatch(cancelCall(_id));
-                socket.emit('cancelCall', {
-                    users,
-                    sender,
-                    _id,
-                });
-            } else {
-                socket.emit('rejectCall', {
-                    receiver: user,
-                    sender,
-                    _id,
-                });
-                dispatch(resetCalling());
-            }
-
-            onClickOutside();
-        },
-        [_id, dispatch, sender, socket, user, users],
-    );
+    const handleReject = useCallback(() => {
+        socket.emit('rejectCall', {
+            users,
+            sender: user,
+            _id,
+        });
+        dispatch(resetCalling());
+    }, [_id, dispatch, socket, user, users]);
 
     const handleAccept = useCallback(
         (onClose) => () => {

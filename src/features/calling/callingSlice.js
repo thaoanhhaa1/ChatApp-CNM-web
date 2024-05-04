@@ -6,6 +6,10 @@ const initialState = {
     type: '',
     sender: '',
     acceptUserIds: [],
+    rejectUserIds: [],
+    notifiedUserIds: [],
+    endedUserIds: [],
+    roles: {},
     showAudioCalling: false,
     showVideoCalling: false,
 };
@@ -37,6 +41,10 @@ const callingSlice = createSlice({
 
             if (_id === state._id && !state.acceptUserIds.includes(receiver._id)) {
                 state.acceptUserIds.push(receiver._id);
+                state.roles[receiver._id] = {
+                    video: true,
+                    audio: true,
+                };
             }
         },
         setShowAudioCalling: (state) => {
@@ -51,6 +59,43 @@ const callingSlice = createSlice({
         setHideVideoCalling: (state) => {
             state.showVideoCalling = false;
         },
+        addRejectUserIds: (state, { payload }) => {
+            if (!state._id) return state;
+
+            const { _id, senderId } = payload;
+
+            if (_id === state._id && !state.rejectUserIds.includes(senderId)) {
+                state.rejectUserIds.push(senderId);
+            }
+        },
+        addNotifiedUserIds: (state, { payload }) => {
+            if (!state._id) return state;
+
+            const { senderId } = payload;
+
+            if (!state.notifiedUserIds.includes(senderId)) {
+                state.notifiedUserIds.push(senderId);
+            }
+        },
+        addEndedUserIds: (state, { payload }) => {
+            if (!state._id) return state;
+
+            const { senderId } = payload;
+
+            if (!state.endedUserIds.includes(senderId)) {
+                state.endedUserIds.push(senderId);
+            }
+        },
+        updateRoles: (state, { payload }) => {
+            console.log('🚀 ~ payload:', payload);
+            const { userId, video, audio } = payload;
+
+            if (state?.roles)
+                state.roles[userId] = {
+                    video,
+                    audio,
+                };
+        },
     },
 });
 
@@ -63,5 +108,9 @@ export const {
     setHideAudioCalling,
     setShowVideoCalling,
     setHideVideoCalling,
+    addRejectUserIds,
+    addNotifiedUserIds,
+    addEndedUserIds,
+    updateRoles,
 } = callingSlice.actions;
 export default callingSlice.reducer;

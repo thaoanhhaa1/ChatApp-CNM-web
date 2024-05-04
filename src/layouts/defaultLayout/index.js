@@ -177,10 +177,7 @@ const DefaultLayout = ({ children }) => {
                         </div>
                     </section>
 
-                    {showCallWaiting && (
-                        <CallWaiting show={showCallWaiting} onClose={() => setShowCallWaiting(false)} />
-                    )}
-
+                    {showCallWaiting && <CallWaiting onClose={() => setShowCallWaiting(false)} />}
                     {calling.showAudioCalling && <AudioCalling onClickOutside={handleClickOutsideCall} />}
                     {calling.showVideoCalling && <VideoCalling onClickOutside={handleClickOutsideCall} />}
                 </main>

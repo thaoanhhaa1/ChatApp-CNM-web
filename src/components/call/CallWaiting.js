@@ -8,7 +8,7 @@ import ConversationAvatar from '../conversationAvatar';
 import Modal from '../modal';
 import Button from './Button';
 
-const CallWaiting = ({ show, onClose = () => {} }) => {
+const CallWaiting = ({ onClose = () => {} }) => {
     const { t } = useTranslation();
     const { _id, sender, users, type } = useSelector((state) => state.calling);
     const { handleReject, handleAccept } = useCalling();
@@ -17,7 +17,7 @@ const CallWaiting = ({ show, onClose = () => {} }) => {
     if (!_id) return null;
 
     return (
-        <Modal show={show} onClickOutside={handleReject(onClose)}>
+        <Modal show onClickOutside={handleReject}>
             <div className="p-10 flex flex-col items-center gap-6">
                 <ConversationAvatar
                     conversation={{
@@ -36,7 +36,7 @@ const CallWaiting = ({ show, onClose = () => {} }) => {
                 </div>
                 <div />
                 <div className="flex gap-6">
-                    <Button onClick={handleReject(onClose)} className="bg-danger">
+                    <Button onClick={handleReject} className="bg-danger">
                         <CloseLineIcon />
                     </Button>
                     <Button onClick={handleAccept(onClose)} className="bg-success">
@@ -49,10 +49,7 @@ const CallWaiting = ({ show, onClose = () => {} }) => {
 };
 
 CallWaiting.propTypes = {
-    isVideoCall: PropTypes.bool,
-    show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    onAccept: PropTypes.func.isRequired,
 };
 
 export default CallWaiting;
