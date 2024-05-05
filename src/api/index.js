@@ -55,6 +55,9 @@ const api = {
     leaveGroup: (params) => `/conversation/group/${params[0]}/users/leave`,
     addRole: (params) => `/conversation/group/${params[0]}/users/${params[1]}/role`,
     removeRole: (params) => `/conversation/group/${params[0]}/users/${params[1]}/role`,
+
+    // Phonebook
+    getPhonebook: () => `/phonebook`,
 };
 
 export default api;

@@ -198,7 +198,16 @@
             "not-friends": "Not friends",
             "notAllowViewFeed": "Block this person to view my timeline",
             "greetingMessage1": "Hi, I'm",
-            "greetingMessage2": "I've got your phone number"
+            "greetingMessage2": "I've got your phone number",
+            "recall-loading": "Loading...",
+            "recall-success": "Recall successfully",
+            "recall-error": "Recall error",
+            "accept-loading": "Accepting...",
+            "accept-success": "Accept successfully",
+            "accept-error": "Accept error",
+            "addFriend-loading": "Adding...",
+            "addFriend-success": "Add friend successfully",
+            "addFriend-error": "Add friend error"
         },
         "recent-activity": "Recent activity",
         "group-name": "Group name",

@@ -11,6 +11,7 @@ const messageNotificationType = {
     LEAVE_GROUP: 'LEAVE_GROUP',
     PIN_MESSAGE: 'PIN_MESSAGE',
     UNPIN_MESSAGE: 'UNPIN_MESSAGE',
+    CREATE_GROUP: 'CREATE_GROUP',
 };
 
 export default messageNotificationType;

@@ -16,9 +16,7 @@ const initialState = {
 };
 
 const getFriends = createAsyncThunk('getFriends', async () => {
-    console.log('🚀 ~ getFriends ~ getFriends', Date.now());
     const response = await friendServices.getFriends();
-    console.log('🚀 ~ getFriends ~ getFriends', Date.now());
     return response.data;
 });
 

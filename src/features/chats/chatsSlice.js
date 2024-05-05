@@ -215,10 +215,14 @@ const chatsSlice = createSlice({
         },
         addChatAndActive: (state, { payload }) => {
             console.log('🚀 ~ chats ~ addChatAndActive');
-            const index = state.chats.findIndex((chat) => chat._id === payload._id);
+            const chatIndex = state.chats.findIndex((chat) => chat._id === payload._id);
 
-            if (index < 0) state.chats.unshift(payload);
-            else state.chats[index] = payload;
+            if (chatIndex < 0) {
+                const index = state.chats.findIndex((item) => !item.pinBy.includes(payload.myId));
+
+                if (index >= 0) state.chats.splice(index, 0, payload);
+                else state.chats.unshift(payload);
+            } else state.chats[chatIndex] = payload;
 
             state.active = payload;
         },

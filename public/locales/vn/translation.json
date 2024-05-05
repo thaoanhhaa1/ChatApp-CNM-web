@@ -197,7 +197,16 @@
             "not-friends": "Chưa là bạn",
             "notAllowViewFeed": "Chặn xem nhật ký của tôi",
             "greetingMessage1": "Xin chào, mình là",
-            "greetingMessage2": "Mình có số điện thoại của bạn"
+            "greetingMessage2": "Mình có số điện thoại của bạn",
+            "recall-loading": "Đang thu hồi...",
+            "recall-success": "Thu hồi lời mời kết bạn thành công",
+            "recall-error": "Thu hồi lời mời kết bạn không thành công",
+            "accept-loading": "Đang chấp nhận...",
+            "accept-success": "Chấp nhận lời mời kết bạn thành công",
+            "accept-error": "Chấp nhận lời mời kết bạn không thành công",
+            "addFriend-loading": "Đang kết bạn...",
+            "addFriend-success": "Kết bạn thành công",
+            "addFriend-error": "Kết bạn không thành công"
         },
         "recent-activity": "Hoạt động cuối",
         "group-name": "Tên nhóm",
