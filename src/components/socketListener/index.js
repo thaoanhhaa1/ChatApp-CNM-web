@@ -106,7 +106,12 @@ const SocketListener = ({ children }) => {
         socket.on('openConversation', (data) => {
             console.log('🚀 ~ socket.on ~ openConversation ~ data:', data);
 
-            dispatch(addChat(data));
+            dispatch(
+                addChat({
+                    ...data,
+                    myId: user._id,
+                }),
+            );
 
             if (data?.isGroup) dispatch(addGroup(data));
         });
@@ -226,7 +231,12 @@ const SocketListener = ({ children }) => {
         socket.on('addOrUpdateConversation', ({ conversation }) => {
             console.log('🚀 ~ socket.on ~ addOrUpdateConversation ~ conversation:', conversation);
 
-            dispatch(addOrUpdateChat(conversation));
+            dispatch(
+                addOrUpdateChat({
+                    ...conversation,
+                    myId: user._id,
+                }),
+            );
             dispatch(addOrUpdateGroup(conversation));
         });
 
@@ -241,7 +251,12 @@ const SocketListener = ({ children }) => {
             console.log('🚀 ~ socket.on ~ addToGroups ~ conversations:', conversations);
 
             conversations.forEach((conversation) => {
-                dispatch(addOrUpdateChat(conversation));
+                dispatch(
+                    addOrUpdateChat({
+                        ...conversation,
+                        myId: user._id,
+                    }),
+                );
             });
         });
     }, [active?._id, contact, dispatch, offlineRecent, socket, user?._id]);

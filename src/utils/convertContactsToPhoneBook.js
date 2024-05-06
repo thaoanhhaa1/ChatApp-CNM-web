@@ -8,7 +8,7 @@ const convertContactsToPhoneBook = (contacts) => {
     const phoneBook = {};
 
     contactsSort.forEach((contact) => {
-        const firstCharOfName = (contact.alias || contact.name)[0];
+        const firstCharOfName = (contact.alias || contact.name)[0].toUpperCase();
 
         if (phoneBook[firstCharOfName]) phoneBook[firstCharOfName].push(contact);
         else phoneBook[firstCharOfName] = [contact];

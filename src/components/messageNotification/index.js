@@ -11,7 +11,6 @@ import TogglePinMessageNotification from './TogglePinMessageNotification';
 import Wrapper from './Wrapper';
 
 const MessageNotification = ({ message }) => {
-    console.log('🚀 ~ MessageNotification ~ message:', message);
     const { t } = useTranslation();
     const notification = message?.notification;
 
@@ -31,7 +30,7 @@ const MessageNotification = ({ message }) => {
 
     return (
         <Wrapper>
-            {notification.type === messageNotificationType.ADD_USERS && (
+            {[messageNotificationType.ADD_USERS, messageNotificationType.CREATE_GROUP].includes(notification.type) && (
                 <AddUsersNotification users={notification.users} sender={message.sender} />
             )}
             {notification.type === messageNotificationType.REMOVE_USER && (

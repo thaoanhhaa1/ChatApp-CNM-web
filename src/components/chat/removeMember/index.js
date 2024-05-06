@@ -16,6 +16,7 @@ const RemoveMember = ({ userId, show, onClickOutside }) => {
     const [loading, setLoading] = useState(false);
     const [checked, setChecked] = useState(false);
     const { active } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
     const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
     const { handleSendNotificationMessage } = useSendMessage();
@@ -48,7 +49,12 @@ const RemoveMember = ({ userId, show, onClickOutside }) => {
             socket.emit('removeUserFromConversation', { conversationId: active._id, userId });
             handleSendNotificationMessage(message);
 
-            dispatch(addOrUpdateChat(res.data));
+            dispatch(
+                addOrUpdateChat({
+                    ...res.data,
+                    myId: user._id,
+                }),
+            );
             dispatch(addOrUpdateGroup(res.data));
             onClickOutside();
         } catch (error) {

@@ -45,7 +45,12 @@ const AddFriend = ({ onClose }) => {
                 conversation: conversation.data,
                 user,
             });
-            dispatch(addChat(conversation.data));
+            dispatch(
+                addChat({
+                    ...conversation.data,
+                    myId: user._id,
+                }),
+            );
             dispatch(addRequestFriend(res.data));
             dispatch(setToast(t('contacts.modal.addFriendSuccess')));
         } catch (error) {

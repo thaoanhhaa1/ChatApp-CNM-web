@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useBoolean, useOnClickOutside } from '~/hooks';
 import Header from './Header';
 import PinMessage from './PinMessage';
@@ -9,6 +9,10 @@ const PinMessages = ({ messages }) => {
     const ref = useRef(null);
 
     useOnClickOutside(ref, setFalse);
+
+    useEffect(() => {
+        messages?.length || setFalse();
+    }, [messages?.length, setFalse]);
 
     if (!messages?.length) return null;
 

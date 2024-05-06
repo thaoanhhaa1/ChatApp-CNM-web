@@ -16,6 +16,7 @@ const AddToGroups = ({ conversationId, userId, show, onClickOutside }) => {
     const { t } = useTranslation();
     const [selectedContacts, setSelectedContacts] = useState([]);
     const { chats } = useSelector((state) => state.chats);
+    const { user } = useSelector((state) => state.user);
     const groups = useMemo(
         () => chats.filter((chat) => chat.isGroup && !isUserInConversation(chat, userId)),
         [chats, userId],
@@ -55,7 +56,12 @@ const AddToGroups = ({ conversationId, userId, show, onClickOutside }) => {
                 const userIds = conversation.users.map((i) => i._id);
 
                 socket.emit('addOrUpdateConversation', { conversation, userIds });
-                dispatch(addOrUpdateChat(conversation));
+                dispatch(
+                    addOrUpdateChat({
+                        ...conversation,
+                        myId: user._id,
+                    }),
+                );
             });
 
             messages.forEach(handleSendNotificationMessage);

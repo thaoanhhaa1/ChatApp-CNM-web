@@ -24,6 +24,7 @@ const AddMembers = ({ show, handleClickOutside }) => {
     const [selectedContacts, setSelectedContacts] = useState([]);
     const [loading, setLoading] = useState(false);
     const { active } = useSelector((state) => state.chats);
+    const { user: me } = useSelector((state) => state.user);
     const { friendList, friendListLoading, friendListFirstFetch } = useSelector((state) => state.friend);
     const { socket } = useSelector((state) => state.socket);
     const phoneBook = useMemo(
@@ -68,7 +69,12 @@ const AddMembers = ({ show, handleClickOutside }) => {
                 }),
             ]);
 
-            dispatch(addOrUpdateChat(res.data));
+            dispatch(
+                addOrUpdateChat({
+                    ...res.data,
+                    myId: me._id,
+                }),
+            );
             dispatch(addOrUpdateGroup(res.data));
             socket.emit('addOrUpdateConversation', {
                 conversation: res.data,

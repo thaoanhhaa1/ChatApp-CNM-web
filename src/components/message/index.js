@@ -276,7 +276,10 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
                     )}
                 >
                     <Avatar
-                        containerClassName={classNames('self-end', !showSeparate && isYourPrev && 'opacity-0')}
+                        containerClassName={classNames(
+                            'self-end',
+                            !showSeparate && isYourPrev && !prevChat.notification && 'opacity-0',
+                        )}
                         src={chat.sender.avatar}
                     />
                     <div
@@ -398,7 +401,7 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
 
 Message.propTypes = {
     chat: PropTypes.object.isRequired,
-    nextChat: PropTypes.object,
+    prevChat: PropTypes.object,
     scrollY: PropTypes.func,
 };
 
