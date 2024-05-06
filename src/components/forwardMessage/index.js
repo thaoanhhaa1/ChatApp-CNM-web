@@ -78,7 +78,12 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
 
                 conversations.forEach((conversation) => {
                     conversationIndividualIds.push(conversation._id);
-                    dispatch(addChat(conversation));
+                    dispatch(
+                        addChat({
+                            ...conversation,
+                            myId: user._id,
+                        }),
+                    );
                     socket.emit('openConversation', {
                         conversation,
                         user,

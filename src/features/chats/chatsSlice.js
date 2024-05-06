@@ -23,12 +23,55 @@ const getConversation = createAsyncThunk('getConversation', async (receiverId) =
     return response.data;
 });
 
+const insertChat = ({ chats, chat, userId }) => {
+    const chatIndex = chats.findIndex((item) => item._id === chat._id);
+
+    chats.splice(chatIndex, 1);
+    const index = chats.findIndex((item) => !item.pinBy.includes(userId));
+
+    if (index >= 0) chats.splice(index, 0, chat);
+    else chats.push(chat);
+};
+
+const insertMessage = ({ payload, state, isMe }) => {
+    console.log('🚀 ~ chats ~ addMessageHead');
+    console.log('🚀 ~ payload:', payload);
+    const conversationId = payload.conversationId || payload.conversation._id;
+
+    const chatIndex = state.chats.findIndex((chat) => chat._id === conversationId);
+    const chat = state.chats[chatIndex];
+
+    if (chat && chat?.messages?.[0]?._id !== payload._id) {
+        if (chat.messages?.length) chat.messages = [payload, ...chat.messages];
+        else chat.messages = [payload];
+
+        chat.lastMessage = payload;
+        if (!isMe) chat.unreadMessageCount = chat.unreadMessageCount ? chat.unreadMessageCount + 1 : 1;
+        if (state.active?._id === conversationId) {
+            state.active.lastMessage = payload;
+            state.active.messages = chat.messages;
+            if (!isMe) chat.unreadMessageCount = 0;
+        }
+
+        if (chat.pinBy.includes(payload.myId)) state.chats.splice(chatIndex, 1, chat);
+        else {
+            insertChat({
+                chats: state.chats,
+                chat,
+                userId: payload.myId,
+            });
+        }
+    } else if (!state.messageIds.includes(payload._id) && !isMe) {
+        state.messageIds.push(payload._id);
+        state.unreadMessageCount += 1;
+    }
+};
+
 const chatsSlice = createSlice({
     name: 'chats',
     initialState,
     reducers: {
         setTyping: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ setTyping');
             const { conversationId, userId, typing } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
@@ -41,7 +84,6 @@ const chatsSlice = createSlice({
             if (state.active?._id === conversationId) state.active.users = chat.users;
         },
         setActive: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ setActive');
             if (state.active?._id !== payload?._id) state.active = payload;
 
             const chat = state.chats.find((chat) => chat._id === payload?._id);
@@ -77,8 +119,14 @@ const chatsSlice = createSlice({
                 const chat = state.chats[chatIndex];
                 const index = chat.pinBy.findIndex((item) => item === userId);
 
-                if (index >= 0) chat.pinBy.splice(index, 1);
-                else {
+                if (index >= 0) {
+                    chat.pinBy.splice(index, 1);
+                    insertChat({
+                        chats: state.chats,
+                        chat,
+                        userId,
+                    });
+                } else {
                     chat.pinBy.push(userId);
                     state.chats.splice(chatIndex, 1);
                     state.chats.unshift(chat);
@@ -122,89 +170,34 @@ const chatsSlice = createSlice({
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
 
-            if (chat) {
-                if (chat.messages?.length) {
-                } else chat.messages = payload;
+            if (!chat) return;
 
-                chat.firstFetchMessages = true;
+            if (!chat.messages?.length) chat.messages = payload;
 
-                if (state.active?._id === conversationId) {
-                    state.active.messages = chat.messages;
-                    state.active.firstFetchMessages = true;
-                }
+            chat.firstFetchMessages = true;
+
+            if (state.active?._id === conversationId) {
+                state.active.messages = chat.messages;
+                state.active.firstFetchMessages = true;
             }
         },
         addMessageHead: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ addMessageHead');
-            console.log('🚀 ~ payload:', payload);
-            const conversationId = payload.conversationId || payload.conversation._id;
-
-            const chatIndex = state.chats.findIndex((chat) => chat._id === conversationId);
-            const chat = state.chats[chatIndex];
-
-            if (chat && chat?.messages?.[0]?._id !== payload._id) {
-                if (chat.messages?.length) chat.messages = [payload, ...chat.messages];
-                else chat.messages = [payload];
-
-                chat.lastMessage = payload;
-                chat.unreadMessageCount = chat.unreadMessageCount ? chat.unreadMessageCount + 1 : 1;
-                if (state.active?._id === conversationId) {
-                    state.active.lastMessage = payload;
-                    state.active.messages = chat.messages;
-                    chat.unreadMessageCount = 0;
-                }
-
-                if (chat.pinBy.includes(payload.myId)) state.chats.splice(chatIndex, 1, chat);
-                else {
-                    state.chats.splice(chatIndex, 1);
-                    const index = state.chats.findIndex((item) => !item.pinBy.includes(payload.myId));
-
-                    if (index >= 0) state.chats.splice(index, 0, chat);
-                    else state.chats.push(chat);
-                }
-            } else {
-                if (!state.messageIds.includes(payload._id)) {
-                    state.messageIds.push(payload._id);
-                    state.unreadMessageCount += 1;
-                }
-            }
+            insertMessage({ payload, state, isMe: false });
         },
         addMessageHeadSocket: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ addMessageHeadSocket');
-            console.log('🚀 ~ payload:', payload);
-            const conversationId = payload.conversationId || payload.conversation._id;
-
-            const chatIndex = state.chats.findIndex((chat) => chat._id === conversationId);
-            const chat = state.chats[chatIndex];
-
-            if (chat && chat?.messages?.[0]._id !== payload._id) {
-                if (chat.messages?.length) chat.messages = [payload, ...chat.messages];
-                else chat.messages = [payload];
-
-                chat.lastMessage = payload;
-                console.log('🚀 ~ payload:', payload);
-                if (state.active?._id === conversationId) {
-                    state.active.lastMessage = payload;
-                    state.active.messages = chat.messages;
-                }
-
-                if (chat.pinBy.includes(payload.myId)) state.chats.splice(chatIndex, 1, chat);
-                else {
-                    state.chats.splice(chatIndex, 1);
-                    const index = state.chats.findIndex((item) => !item.pinBy.includes(payload.myId));
-                    console.log('🚀 ~ index:', index);
-
-                    if (index >= 0) state.chats.splice(index, 0, chat);
-                    else state.chats.unshift(chat);
-                }
-            }
+            insertMessage({ payload, state, isMe: true });
         },
         addChat: (state, { payload }) => {
             console.log('🚀 ~ chats ~ addChat');
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
             const chat = state.chats[index];
 
-            if (index < 0) state.chats.unshift(payload);
+            if (index < 0)
+                insertChat({
+                    chats: state.chats,
+                    chat: payload,
+                    userId: payload.myId,
+                });
             else
                 state.chats[index] = {
                     ...payload,
@@ -218,10 +211,11 @@ const chatsSlice = createSlice({
             const chatIndex = state.chats.findIndex((chat) => chat._id === payload._id);
 
             if (chatIndex < 0) {
-                const index = state.chats.findIndex((item) => !item.pinBy.includes(payload.myId));
-
-                if (index >= 0) state.chats.splice(index, 0, payload);
-                else state.chats.unshift(payload);
+                insertChat({
+                    chats: state.chats,
+                    chat: payload,
+                    userId: payload.myId,
+                });
             } else state.chats[chatIndex] = payload;
 
             state.active = payload;
@@ -275,7 +269,12 @@ const chatsSlice = createSlice({
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
             const chat = state.chats[index];
 
-            if (index < 0) state.chats.unshift(payload);
+            if (index < 0)
+                insertChat({
+                    chats: state.chats,
+                    chat: payload,
+                    userId: payload.myId,
+                });
             else
                 state.chats[index] = {
                     ...payload,

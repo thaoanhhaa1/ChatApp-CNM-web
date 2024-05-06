@@ -81,9 +81,14 @@ const Member = ({ user }) => {
             userIds: res.data.users.map((user) => user._id),
         });
         handleSendNotificationMessage(message);
-        dispatch(addOrUpdateChat(res.data));
+        dispatch(
+            addOrUpdateChat({
+                ...res.data,
+                myId: me._id,
+            }),
+        );
         dispatch(addOrUpdateGroup(res.data));
-    }, [active?._id, dispatch, handleSendNotificationMessage, role, socket, t, user?._id]);
+    }, [active?._id, dispatch, handleSendNotificationMessage, me?._id, role, socket, t, user?._id]);
 
     const handleContinueChangeOwnerRole = useCallback(() => {
         handleHideChangeOwner();
@@ -119,8 +124,13 @@ const Member = ({ user }) => {
         });
 
         handleSendNotificationMessage(message);
-        dispatch(addOrUpdateChat(res.data));
-    }, [active._id, dispatch, handleSendNotificationMessage, socket, t, user._id]);
+        dispatch(
+            addOrUpdateChat({
+                ...res.data,
+                myId: me._id,
+            }),
+        );
+    }, [active._id, dispatch, handleSendNotificationMessage, me._id, socket, t, user._id]);
 
     const more = useMemo(() => {
         if (!me?._id || !user?._id) return [];

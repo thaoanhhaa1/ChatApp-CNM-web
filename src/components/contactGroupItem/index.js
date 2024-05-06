@@ -16,7 +16,12 @@ const ContactGroupItem = ({ group }) => {
     const [notificationMessage, setNotificationMessage] = useState(null);
 
     const handleClickGroup = () => {
-        dispatch(addChatAndActive(group));
+        dispatch(
+            addChatAndActive({
+                ...group,
+                myId: user._id,
+            }),
+        );
 
         socket.emit('openConversation', {
             conversation: group,
