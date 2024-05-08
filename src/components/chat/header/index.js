@@ -141,7 +141,8 @@ const Header = () => {
                         <Call
                             users={active?.users}
                             onAccept={() => handleAcceptCall(callType.AUDIO)}
-                            onCancel={setHideCall}
+                            onClose={setHideCall}
+                            // onCancel={setHideCall}
                             show={showCall}
                         />
                     </div>
@@ -151,9 +152,11 @@ const Header = () => {
                         <Call
                             users={active?.users}
                             onAccept={() => handleAcceptCall(callType.VIDEO)}
-                            onCancel={setHideVideo}
+                            // onCancel={setHideVideo}
                             show={showVideo}
-                            isVideoCall
+                            // isVideoCall
+                            onClose={setHideVideo}
+
                         />
                     </div>
 
