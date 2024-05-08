@@ -71,6 +71,7 @@ module.exports = {
             },
             width: {
                 sidebar: '380px',
+                unset: 'unset',
             },
             borderRadius: {
                 0.75: '0.1875rem',

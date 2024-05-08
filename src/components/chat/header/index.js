@@ -23,13 +23,7 @@ import Input from '~/components/input';
 import Popup from '~/components/popup';
 import { callType, screens } from '~/constants';
 import { useChat, useLayout } from '~/context';
-import {
-    setCalling,
-    setHideAudioCalling,
-    setHideVideoCalling,
-    setShowAudioCalling,
-    setShowVideoCalling,
-} from '~/features/calling/callingSlice';
+import { setCalling, setHideCalling, setShowCalling } from '~/features/calling/callingSlice';
 import { useBoolean } from '~/hooks';
 import { getNameConversation, isOnlineConversation } from '~/utils';
 import Button from './Button';
@@ -94,8 +88,7 @@ const Header = () => {
         console.log('🚀 ~ handleAcceptCall ~ type:', type);
         const _id = v4();
         socket.emit('call', { type, users: active.users, sender: user, _id });
-        if (type === callType.AUDIO) dispatch(setShowAudioCalling());
-        else dispatch(setShowVideoCalling());
+        dispatch(setShowCalling());
         setHideCall();
         setHideVideo();
         dispatch(setCalling({ _id, users: active.users, type, sender: user }));
@@ -103,8 +96,7 @@ const Header = () => {
 
     useEffect(() => {
         if (!calling._id) {
-            dispatch(setHideAudioCalling());
-            dispatch(setHideVideoCalling());
+            dispatch(setHideCalling());
         }
     }, [calling, calling._id, dispatch]);
 

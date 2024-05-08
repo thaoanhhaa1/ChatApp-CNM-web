@@ -1,16 +1,11 @@
 import Peer from 'peerjs';
 
 const peerOptions = {
-    // DEV
-    host: 'localhost',
-    port: '4000',
-    path: '/peerjs',
-    key: 'peerjs',
-
-    // PROD
-    // host: 'homeless-eadith-vunguyendev.koyeb.app',
-    // path: '/peerjs',
-    // key: 'peerjs',
+    host: process.env.REACT_APP_PEER_HOST,
+    port: process.env.REACT_APP_PEER_PORT,
+    path: process.env.REACT_APP_PEER_PATH,
+    key: process.env.REACT_APP_PEER_KEY,
+    secure: process.env.REACT_APP_PEER_SECURE,
 };
 
 const createPeer = () => {

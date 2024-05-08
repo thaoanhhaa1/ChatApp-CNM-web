@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import AudioCalling from '~/components/call/AudioCalling';
 import CallWaiting from '~/components/call/CallWaiting';
 import VideoCalling from '~/components/call/VideoCalling';
 import Chat from '~/components/chat';
@@ -13,14 +12,9 @@ import Navbar from '~/components/navbar';
 import SocketListener from '~/components/socketListener';
 import Toast from '~/components/toast';
 import config from '~/config';
-import { callType, screens } from '~/constants';
+import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
-import {
-    setHideAudioCalling,
-    setHideVideoCalling,
-    setShowAudioCalling,
-    setShowVideoCalling,
-} from '~/features/calling/callingSlice';
+import { setHideCalling, setShowCalling } from '~/features/calling/callingSlice';
 import { getChats } from '~/features/chats/chatsSlice';
 
 import { getFriends } from '~/features/friend/friendSlice';
@@ -57,10 +51,7 @@ const DefaultLayout = ({ children }) => {
     const refSection = useRef(null);
     const [showCallWaiting, setShowCallWaiting] = useState(false);
 
-    const handleClickOutsideCall = () => {
-        dispatch(setHideAudioCalling());
-        dispatch(setHideVideoCalling());
-    };
+    const handleClickOutsideCall = () => dispatch(setHideCalling());
 
     useEffect(() => {
         width > screens.DL && setShowChat(false);
@@ -142,10 +133,7 @@ const DefaultLayout = ({ children }) => {
     useEffect(() => {
         if (!user._id) return;
 
-        if (calling.acceptUserIds.includes(user._id)) {
-            if (calling.type === callType.AUDIO) dispatch(setShowAudioCalling());
-            else dispatch(setShowVideoCalling());
-        }
+        if (calling.acceptUserIds.includes(user._id)) dispatch(setShowCalling());
     }, [calling, calling.acceptUserIds, calling.type, dispatch, user._id]);
 
     if (loading || !user?._id) return <Loading />;
@@ -178,8 +166,7 @@ const DefaultLayout = ({ children }) => {
                     </section>
 
                     {showCallWaiting && <CallWaiting onClose={() => setShowCallWaiting(false)} />}
-                    {calling.showAudioCalling && <AudioCalling onClickOutside={handleClickOutsideCall} />}
-                    {calling.showVideoCalling && <VideoCalling onClickOutside={handleClickOutsideCall} />}
+                    {calling.showCalling && <VideoCalling onClickOutside={handleClickOutsideCall} />}
                 </main>
             </LayoutProvider>
         </SocketListener>

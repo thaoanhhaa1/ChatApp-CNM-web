@@ -3,16 +3,17 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import NewWindow from 'react-new-window';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { addNotifiedUserIds, updateRoles } from '~/features/calling/callingSlice';
+import { MicFillIcon, MicStopIcon, PhoneFillIcon, VideoFillIcon, VideoStopIcon } from '~/assets';
+import { callType } from '~/constants';
+import { addEndedUserIds, addNotifiedUserIds, updateRoles } from '~/features/calling/callingSlice';
 import { useCalling } from '~/hooks';
 import { createPeer, getMediaStream } from '~/utils';
 import VideoStream from '../videoStream';
-import CallingEmpty from './CallingEmpty';
+import Button from './Button';
 
 const VideoCalling = ({ onClickOutside }) => {
-    const { acceptUserIds, users, sender, rejectUserIds, notifiedUserIds, endedUserIds, _id, roles } = useSelector(
-        (state) => state.calling,
-    );
+    const { acceptUserIds, users, sender, rejectUserIds, notifiedUserIds, endedUserIds, _id, roles, type } =
+        useSelector((state) => state.calling);
     const { socket } = useSelector((state) => state.socket);
     const { user } = useSelector((state) => state.user);
     const { handleClickOutside } = useCalling();
@@ -21,41 +22,43 @@ const VideoCalling = ({ onClickOutside }) => {
     const [streams, setStreams] = useState({});
     console.error('🚀 ~ VideoCalling ~ streams:', streams);
     const joinedUserIds = useMemo(() => [sender._id, ...acceptUserIds], [acceptUserIds, sender._id]);
-    const acceptUsers = useMemo(() => {
-        const usersWithoutMe = [];
+    // const acceptUsers = useMemo(() => {
+    //     const usersWithoutMe = [];
 
-        users.forEach((u) => {
-            if (acceptUserIds.includes(u._id) && u._id !== user._id) {
-                usersWithoutMe.push(u);
-            }
-        });
+    //     users.forEach((u) => {
+    //         if (acceptUserIds.includes(u._id) && u._id !== user._id) {
+    //             usersWithoutMe.push(u);
+    //         }
+    //     });
 
-        if (sender._id !== user._id) usersWithoutMe.push(sender);
+    //     if (sender._id !== user._id) usersWithoutMe.push(sender);
 
-        return usersWithoutMe;
-    }, [acceptUserIds, sender, user._id, users]);
-    const [video, setVideo] = useState(true);
-    const [audio, setAudio] = useState(true);
+    //     return usersWithoutMe;
+    // }, [acceptUserIds, sender, user._id, users]);
+    const [role, setRole] = useState({
+        video: type === callType.VIDEO,
+        audio: true,
+    });
     const [myPeer, setMyPeer] = useState(null);
     const [peerIds, setPeerIds] = useState({});
     const timeoutIdRef = useRef();
     const dispatch = useDispatch();
     console.error('🚀 ~ VideoCalling ~ peerIds:', peerIds);
 
-    const toggleVideo = () => setVideo((prev) => !prev);
-    const toggleAudio = () => setAudio((prev) => !prev);
+    const toggleVideo = () => setRole((prev) => ({ ...prev, video: !prev.video }));
+    const toggleAudio = () => setRole((prev) => ({ ...prev, audio: !prev.audio }));
 
     // Stream
     useEffect(() => {
         async function getStream() {
-            const stream = await getMediaStream({});
+            const stream = await getMediaStream({ video: type === callType.VIDEO });
             console.error('🚀 ~ getStream ~ stream:', stream);
 
             setStream(stream);
         }
 
         getStream();
-    }, []);
+    }, [type]);
 
     // Create peer
     useEffect(() => {
@@ -99,6 +102,9 @@ const VideoCalling = ({ onClickOutside }) => {
                 dispatch(updateRoles({ userId, video: true, audio: true }));
                 setStreams((prev) => ({ ...prev, [userId]: remoteStream }));
             });
+            call.on('close', () => {
+                dispatch(addEndedUserIds({ senderId: userId }));
+            });
         });
 
         return () => myPeer.off('call');
@@ -109,6 +115,8 @@ const VideoCalling = ({ onClickOutside }) => {
         if (!myPeer) return;
 
         myPeer.on('error', (error) => console.error(error));
+
+        return () => myPeer.off('error');
     }, [myPeer]);
 
     useEffect(() => {
@@ -120,25 +128,25 @@ const VideoCalling = ({ onClickOutside }) => {
             call?.on('stream', (remoteStream) => {
                 setStreams((prev) => ({ ...prev, [userId]: remoteStream }));
             });
+            call.on('close', () => {
+                dispatch(addEndedUserIds({ senderId: userId }));
+            });
         });
-    }, [myPeer, peerIds, stream, user._id]);
+    }, [dispatch, myPeer, peerIds, stream, user._id]);
 
     useEffect(() => {
         if (!myPeer) return;
 
         socket.on('peerId', ({ peerId, fromUserId: userId }) => {
-            console.error('🚀 ~ socket.on ~ userId:', userId);
             setPeerIds((prev) => ({ ...prev, [userId]: peerId }));
 
             const call = myPeer.call(peerId, stream, { metadata: user._id });
-            call?.on('stream', (remoteStream) => {
-                console.error('🚀 ~ call?.on ~ userId:', userId);
-                console.error('🚀 ~ call?.on ~ remoteStream:', remoteStream);
 
-                setStreams((prev) => ({ ...prev, [userId]: remoteStream }));
-            });
+            if (!call) return;
+            call.on('stream', (remoteStream) => setStreams((prev) => ({ ...prev, [userId]: remoteStream })));
+            call.on('close', () => dispatch(addEndedUserIds({ senderId: userId })));
         });
-    }, [myPeer, socket, stream, user._id]);
+    }, [dispatch, myPeer, socket, stream, user._id]);
 
     useEffect(() => {
         const newUserReject = rejectUserIds.at(-1);
@@ -179,8 +187,8 @@ const VideoCalling = ({ onClickOutside }) => {
     }, []);
 
     useEffect(() => {
-        socket.emit('toggleMediaStreamConstraints', { users, sender: user, video, audio, _id });
-    }, [_id, audio, socket, user, users, video]);
+        socket.emit('toggleMediaStreamConstraints', { users, sender: user, _id, ...role });
+    }, [_id, role, socket, user, users]);
 
     useEffect(() => {
         socket.on('toggleMediaStreamConstraints', ({ sender, video, audio }) => {
@@ -193,35 +201,27 @@ const VideoCalling = ({ onClickOutside }) => {
     return (
         <NewWindow onUnload={handleClickOutside(onClickOutside, stream)}>
             <div className="h-screen w-screen flex flex-col">
-                <div className="relative flex-1">
-                    {acceptUserIds.length ? (
-                        <div className="flex flex-wrap">
-                            <VideoStream
-                                stream={stream}
-                                roles={{
-                                    video,
-                                    audio,
-                                }}
-                                user={user}
-                            />
-                            {acceptUsers.map((user) => (
-                                <VideoStream
-                                    stream={streams[user._id]}
-                                    roles={roles[user._id]}
-                                    user={user}
-                                    key={user._id}
-                                />
-                            ))}
+                <div className="flex-1 relative bg-[#1a1a1a]">
+                    <div className="absolute inset-0 flex justify-center items-center">
+                        <div className=" grid grid-cols-2 gap-1 justify-center max-w-[calc(min(100vw,(100vh_-_50px)*_16_/_9))]">
+                            <VideoStream stream={stream} roles={role} user={user} />
+                            {users.map((u) =>
+                                [user._id, ...rejectUserIds, ...endedUserIds].includes(u._id) ? null : (
+                                    <VideoStream stream={streams[u._id]} roles={roles[u._id]} user={u} key={u._id} />
+                                ),
+                            )}
                         </div>
-                    ) : (
-                        <CallingEmpty />
-                    )}
+                    </div>
                 </div>
 
-                <div className="flex">
-                    <button onClick={toggleVideo}>{video ? 'Turn off video' : 'Turn on video'}</button>
-                    <button onClick={toggleAudio}>{audio ? 'Turn off audio' : 'Turn on audio'}</button>
-                    <button onClick={handleClickOutside(onClickOutside, stream)}>End call</button>
+                <div className="h-[50px] bg-[#0a0a0a] flex justify-center items-center">
+                    <Button onClick={toggleVideo}>{role.video ? <VideoFillIcon /> : <VideoStopIcon />}</Button>
+                    <Button onClick={handleClickOutside(onClickOutside, stream)}>
+                        <span className="bg-red-500 text-white rounded-full h-8 w-8 flex justify-center items-center">
+                            <PhoneFillIcon />
+                        </span>
+                    </Button>
+                    <Button onClick={toggleAudio}>{role.audio ? <MicFillIcon /> : <MicStopIcon />}</Button>
                 </div>
             </div>
         </NewWindow>

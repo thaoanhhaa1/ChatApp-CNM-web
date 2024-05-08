@@ -1,7 +1,7 @@
 const getMediaStream = ({ video = true, audio = true }) =>
     new Promise((resolve) => {
         navigator.mediaDevices
-            .getUserMedia({ video, audio })
+            .getUserMedia({ video, audio, aspectRatio: 16 / 9 })
             .then(resolve)
             .catch((error) => {
                 console.error(error);

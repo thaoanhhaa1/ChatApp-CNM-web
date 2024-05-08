@@ -10,8 +10,7 @@ const initialState = {
     notifiedUserIds: [],
     endedUserIds: [],
     roles: {},
-    showAudioCalling: false,
-    showVideoCalling: false,
+    showCalling: false,
 };
 
 const callingSlice = createSlice({
@@ -47,17 +46,11 @@ const callingSlice = createSlice({
                 };
             }
         },
-        setShowAudioCalling: (state) => {
-            state.showAudioCalling = true;
+        setShowCalling: (state) => {
+            state.showCalling = true;
         },
-        setHideAudioCalling: (state) => {
-            state.showAudioCalling = false;
-        },
-        setShowVideoCalling: (state) => {
-            state.showVideoCalling = true;
-        },
-        setHideVideoCalling: (state) => {
-            state.showVideoCalling = false;
+        setHideCalling: (state) => {
+            state.showCalling = false;
         },
         addRejectUserIds: (state, { payload }) => {
             if (!state._id) return state;
@@ -104,10 +97,8 @@ export const {
     resetCalling,
     cancelCall,
     acceptCall,
-    setShowAudioCalling,
-    setHideAudioCalling,
-    setShowVideoCalling,
-    setHideVideoCalling,
+    setShowCalling,
+    setHideCalling,
     addRejectUserIds,
     addNotifiedUserIds,
     addEndedUserIds,
