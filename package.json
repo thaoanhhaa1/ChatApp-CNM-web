@@ -17,6 +17,8 @@
         "@testing-library/user-event": "^13.5.0",
         "@tippyjs/react": "^4.2.6",
         "@uidotdev/usehooks": "^2.4.1",
+        "agora-rtc-react": "^2.1.0",
+        "agora-rtc-sdk-ng": "^4.20.2",
         "axios": "^1.6.5",
         "customize-cra": "^1.0.0",
         "emoji-picker-react": "^4.7.10",

@@ -6,12 +6,12 @@ import Avatar from '../avatar';
 import { classNames } from '~/utils';
 
 const VideoStream = ({ stream, user = {}, roles = {} }) => {
-    const { type, endedUserIds } = useSelector((state) => state.calling);
+    const { type, endedUserIds, rejectUserIds, acceptUserIds } = useSelector((state) => state.calling);
     const localVideo = useRef();
     const [muted, setMuted] = useState(true);
     const showImage = useMemo(
-        () => !roles.video || type !== callType.VIDEO || endedUserIds.includes(user._id),
-        [endedUserIds, roles.video, type, user._id],
+        () => !roles.video || type !== callType.VIDEO || [...endedUserIds, ...rejectUserIds].includes(user._id),
+        [endedUserIds, rejectUserIds, roles.video, type, user._id],
     );
 
     useEffect(() => {
@@ -38,7 +38,9 @@ const VideoStream = ({ stream, user = {}, roles = {} }) => {
                                 className="border-[5px] border-gray-500 border-opacity-20"
                                 containerClassName="!w-unset aspect-square"
                             />
-                            <span className="text-white">Đang đổ chuông...</span>
+                            {acceptUserIds.includes(user._id) || <span className="text-white">Đang đổ chuông...</span>}
+                            {rejectUserIds.includes(user._id) && <span className="text-danger">Đã từ chối</span>}
+                            {endedUserIds.includes(user._id) && <span className="text-danger">Rời cuộc gọi</span>}
                         </div>
                     </div>
                 </div>
