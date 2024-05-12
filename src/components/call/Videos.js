@@ -7,7 +7,7 @@ import {
     usePublish,
     useRemoteUsers,
 } from 'agora-rtc-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MicFillIcon, MicStopIcon, PhoneFillIcon, VideoFillIcon, VideoStopIcon } from '~/assets';
 import Button from './Button';
@@ -33,6 +33,21 @@ const Videos = () => {
     const toggleVideo = () => setCamera((prev) => !prev);
     const toggleAudio = () => setMic((prev) => !prev);
 
+    const [time, setTime] = useState(1);
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTime((prevTime) => prevTime + 1);
+        }, 1000);
+        return () => clearInterval(timer);
+    }, []);
+    const formatTime = (seconds) => {
+        const hh = Math.floor(seconds / 3600).toString().padStart(2, '0');
+        const mm = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+        const ss = (seconds % 60).toString().padStart(2, '0');
+        return `${hh}:${mm}:${ss}`;
+    };
+
+
     return (
         <div className="flex flex-col h-screen">
             <div className="flex-1 relative bg-[#1a1a1a]">
@@ -57,9 +72,13 @@ const Videos = () => {
                             </div>
                         ))}
                     </div>
-                </div>
-            </div>
 
+                </div>
+
+            </div>
+            <div className='bg-[#1a1a1a] flex justify-center items-center'>
+                <p className='text-success mb-2'>{formatTime(time)}</p>
+            </div>
             <div className="h-[50px] bg-[#0a0a0a] flex justify-center items-center">
                 <Button onClick={toggleVideo}>{cameraOn ? <VideoFillIcon /> : <VideoStopIcon />}</Button>
                 <Button className="bg-red-500">
