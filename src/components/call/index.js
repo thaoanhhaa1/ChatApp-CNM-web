@@ -1,25 +1,29 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { useSelector } from 'react-redux';
 import { CloseLineIcon, PhoneFillIcon, VideoFillIcon } from '~/assets';
+import ConversationAvatar from '../conversationAvatar';
 import Modal from '../modal';
 import Button from './Button';
 
-const Call = ({ isVideoCall, show, onCancel = () => {}, onAccept = () => {} }) => {
+const Call = ({ users, isVideoCall, show, onCancel = () => {}, onAccept = () => {} }) => {
     const { t } = useTranslation();
+    const { user } = useSelector((state) => state.user);
+    const usersWithoutMe = users.filter((u) => u._id !== user._id);
 
     return (
         <Modal show={show} onClickOutside={onCancel}>
             <div className="p-10 flex flex-col items-center gap-6">
-                <div className="w-[96px] h-[96px] p-1 border border-[#f0eff5] dark:border-dark-separate rounded-full">
-                    <LazyLoadImage
-                        className="w-full h-full rounded-full object-cover"
-                        src="https://images.pexels.com/photos/4164418/pexels-photo-4164418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                        alt=""
-                    />
-                </div>
+                <ConversationAvatar
+                    conversation={{
+                        _id: 'call',
+                        isGroup: usersWithoutMe.length > 1,
+                        users: usersWithoutMe,
+                    }}
+                    size="96px"
+                />
                 <div className="text-center">
-                    <h5 className="mb-2 text-lg font-semibold">Doris Brown</h5>
+                    <h5 className="mb-2 text-lg font-semibold">{usersWithoutMe.map((u) => u.name).join(', ')}</h5>
                     <p className="text-secondary text-mm">{t(`chat.${isVideoCall ? 'video' : 'audio'}-call`)}</p>
                 </div>
                 <div />

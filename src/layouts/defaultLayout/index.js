@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import CallWaiting from '~/components/call/CallWaiting';
+import VideoCalling from '~/components/call/VideoCalling';
 import Chat from '~/components/chat';
 import Loading from '~/components/loading';
 import Navbar from '~/components/navbar';
@@ -13,6 +15,7 @@ import config from '~/config';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
 import { getChats } from '~/features/chats/chatsSlice';
+
 import { getFriends } from '~/features/friend/friendSlice';
 import { updateRecentSearch } from '~/features/localSetting/localSettingSlice';
 import { setLocationError, setToast } from '~/features/toastAll/toastAllSlice';
@@ -41,9 +44,11 @@ const DefaultLayout = ({ children }) => {
     const { chats } = useSelector((state) => state.chats);
     const { contacts } = useSelector((state) => state.search);
     const { socket } = useSelector((state) => state.socket);
+    const calling = useSelector((state) => state.calling);
     const navigation = useNavigate();
     const dispatch = useDispatch();
     const refSection = useRef(null);
+    const [showCallWaiting, setShowCallWaiting] = useState(false);
 
     useEffect(() => {
         width > screens.DL && setShowChat(false);
@@ -116,6 +121,12 @@ const DefaultLayout = ({ children }) => {
         });
     }, [dispatch, friendList]);
 
+    useEffect(() => {
+        if (!user._id) return;
+
+        calling._id && user._id !== calling.sender?._id && setShowCallWaiting(true);
+    }, [calling._id, calling.sender?._id, user._id]);
+
     if (loading || !user?._id) return <Loading />;
 
     return (
@@ -144,6 +155,9 @@ const DefaultLayout = ({ children }) => {
                             <Chat />
                         </div>
                     </section>
+
+                    {showCallWaiting && <CallWaiting onClose={() => setShowCallWaiting(false)} />}
+                    {calling.showCalling && <VideoCalling />}
                 </main>
             </LayoutProvider>
         </SocketListener>

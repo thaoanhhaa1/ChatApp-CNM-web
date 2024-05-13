@@ -1,8 +1,8 @@
 import Tippy from '@tippyjs/react';
 import { useWindowSize } from '@uidotdev/usehooks';
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
     ArchiveIcon,
@@ -20,8 +20,9 @@ import Call from '~/components/call';
 import ConversationAvatar from '~/components/conversationAvatar';
 import Input from '~/components/input';
 import Popup from '~/components/popup';
-import { screens } from '~/constants';
+import { callType, screens } from '~/constants';
 import { useChat, useLayout } from '~/context';
+import { setCalling, setHideCalling, setShowCalling } from '~/features/calling/callingSlice';
 import { useBoolean } from '~/hooks';
 import { getNameConversation, isOnlineConversation } from '~/utils';
 import Button from './Button';
@@ -46,6 +47,9 @@ const Header = () => {
     const { active } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const { users } = useSelector((state) => state.onlineUsers);
+    const { socket } = useSelector((state) => state.socket);
+    const calling = useSelector((state) => state.calling);
+    const dispatch = useDispatch();
     const { width } = useWindowSize();
     const conversationName = useMemo(() => getNameConversation(active, user._id), [active, user._id]);
     const onlineStatus = useMemo(
@@ -79,6 +83,20 @@ const Header = () => {
         ];
     }, [handleShowProfile, t, width]);
 
+    const handleAcceptCall = (type) => {
+        console.log('🚀 ~ handleAcceptCall ~ type:', type);
+        const _id = active._id + user._id;
+        socket.emit('call', { type, users: active.users, sender: user, _id });
+        dispatch(setShowCalling());
+        setHideCall();
+        setHideVideo();
+        dispatch(setCalling({ _id, users: active.users, type, sender: user }));
+    };
+
+    useEffect(() => {
+        if (!calling._id) dispatch(setHideCalling());
+    }, [calling, calling._id, dispatch]);
+
     return (
         <div className="flex items-center justify-between p-2 sm:p-3 md:p-4 dl:p-5 border-b border-separate dark:border-dark-separate">
             <div className="flex gap-2 sm:gap-4 items-center">
@@ -106,18 +124,29 @@ const Header = () => {
                     </Tippy>
                 </div>
 
-                <div className="dl:flex gap-2 hidden">
+                <div className="flex gap-2">
                     <div>
                         <Button icon={PhoneLineIcon} onClick={setShowCall} />
-                        <Call onAccept={() => {}} onCancel={setHideCall} show={showCall} />
+                        <Call
+                            users={active?.users}
+                            onAccept={() => handleAcceptCall(callType.AUDIO)}
+                            onCancel={setHideCall}
+                            show={showCall}
+                        />
                     </div>
 
                     <div>
                         <Button icon={VideoLineIcon} onClick={setShowVideo} />
-                        <Call onAccept={() => {}} onCancel={setHideVideo} show={showVideo} isVideoCall />
+                        <Call
+                            users={active?.users}
+                            onAccept={() => handleAcceptCall(callType.VIDEO)}
+                            onCancel={setHideVideo}
+                            show={showVideo}
+                            isVideoCall
+                        />
                     </div>
 
-                    <Button onClick={handleShowProfile} icon={UserIcon} />
+                    <Button className="dl:flex hidden" onClick={handleShowProfile} icon={UserIcon} />
                 </div>
 
                 <Popup data={more} animation="shift-toward" placement="bottom-end">

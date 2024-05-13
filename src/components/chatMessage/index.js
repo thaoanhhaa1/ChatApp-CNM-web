@@ -10,8 +10,6 @@ const ChatMessage = ({ status = DeleteMessageStatus.NO_DELETE, large, messages, 
         if (message.type === 'text' || isReply) return;
     };
 
-    if (!messages.length) return null;
-
     return (
         <p
             className={classNames(
@@ -27,7 +25,7 @@ const ChatMessage = ({ status = DeleteMessageStatus.NO_DELETE, large, messages, 
         >
             {status === DeleteMessageStatus.RECALL && <span>{t('chat.message-recalled')}</span>}
             {status !== DeleteMessageStatus.RECALL
-                ? messages.map((message, index) => (
+                ? (messages || []).map((message, index) => (
                       <span
                           key={index}
                           onClick={() => handleClickMessage(message)}

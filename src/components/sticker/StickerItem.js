@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useImageSize } from 'react-image-size';
 import { useBoolean } from '~/hooks';
 import { classNames, loadImage } from '~/utils';
@@ -19,7 +20,9 @@ const StickerItem = ({ count = 0, className, url, onClick = () => {} }) => {
     };
 
     useEffect(() => {
-        loadImage(url).then(() => setLoadedImage(true));
+        loadImage(url)
+            .then(() => setLoadedImage(true))
+            .catch((error) => console.error(error));
     }, [url]);
 
     useEffect(() => {
@@ -86,4 +89,7 @@ StickerItem.propTypes = {
     onClick: PropTypes.func,
 };
 
-export default StickerItem;
+export default withErrorBoundary(StickerItem, {
+    fallback: null,
+    onError: (error, componentStack) => console.error(error, componentStack),
+});

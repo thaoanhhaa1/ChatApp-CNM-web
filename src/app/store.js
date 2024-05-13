@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import addContactReducer from '~/features/addContact/addContactSlice';
 import attachedFilesReducer from '~/features/attachedFiles/attachedFilesSlice';
+import callingReducer from '~/features/calling/callingSlice';
 import chatReducer from '~/features/chat/chatSlice';
 import chatsReducer from '~/features/chats/chatsSlice';
 import contactGroupsReducer from '~/features/contactGroups/contactGroupsSlice';
@@ -36,6 +37,7 @@ export const store = configureStore({
         toastAll: toastAllReducer,
         friend: friendReducer,
         attachedFiles: attachedFilesReducer,
+        calling: callingReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

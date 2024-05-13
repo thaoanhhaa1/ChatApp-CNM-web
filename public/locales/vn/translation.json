@@ -595,5 +595,22 @@
         "choose-multi-group": "Chọn nhiều nhóm",
         "add-to-group": "Thêm vào nhóm"
     },
+    "calling": {
+        "video": {
+            "group-waiting": "đã mời bạn tham gia nhóm chat video",
+            "individual-waiting": "đang gọi cho bạn"
+        },
+        "audio": {
+            "group-waiting": "đã mời bạn tham gia cuộc gọi nhóm",
+            "individual-waiting": "đang gọi cho bạn"
+        }
+    },
+    "call": {
+        "connecting": "Đang kết nối...",
+        "left": "Rời cuộc gọi",
+        "rejected": "Đã từ chối",
+        "busy": "Máy bận",
+        "missed": "Không bắt máy"
+    },
     "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"
 }
