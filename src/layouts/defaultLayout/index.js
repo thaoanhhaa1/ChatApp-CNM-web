@@ -14,7 +14,6 @@ import Toast from '~/components/toast';
 import config from '~/config';
 import { screens } from '~/constants';
 import { LayoutProvider } from '~/context';
-import { setHideCalling, setShowCalling } from '~/features/calling/callingSlice';
 import { getChats } from '~/features/chats/chatsSlice';
 
 import { getFriends } from '~/features/friend/friendSlice';
@@ -50,8 +49,6 @@ const DefaultLayout = ({ children }) => {
     const dispatch = useDispatch();
     const refSection = useRef(null);
     const [showCallWaiting, setShowCallWaiting] = useState(false);
-
-    const handleClickOutsideCall = () => dispatch(setHideCalling());
 
     useEffect(() => {
         width > screens.DL && setShowChat(false);
@@ -130,12 +127,6 @@ const DefaultLayout = ({ children }) => {
         calling._id && user._id !== calling.sender?._id && setShowCallWaiting(true);
     }, [calling._id, calling.sender?._id, user._id]);
 
-    useEffect(() => {
-        if (!user._id) return;
-
-        if (calling.acceptUserIds.includes(user._id)) dispatch(setShowCalling());
-    }, [calling, calling.acceptUserIds, calling.type, dispatch, user._id]);
-
     if (loading || !user?._id) return <Loading />;
 
     return (
@@ -166,7 +157,7 @@ const DefaultLayout = ({ children }) => {
                     </section>
 
                     {showCallWaiting && <CallWaiting onClose={() => setShowCallWaiting(false)} />}
-                    {calling.showCalling && <VideoCalling onClickOutside={handleClickOutsideCall} />}
+                    {calling.showCalling && <VideoCalling />}
                 </main>
             </LayoutProvider>
         </SocketListener>

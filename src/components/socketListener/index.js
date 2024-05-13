@@ -5,7 +5,14 @@ import sound from '~/assets/sounds/message-sound.mp3';
 import { DeleteMessageStatus, FriendStatus } from '~/constants';
 import { setContact } from '~/features/addContact/addContactSlice';
 import { addAttachedFile, removeAttachedFile } from '~/features/attachedFiles/attachedFilesSlice';
-import { acceptCall, addEndedUserIds, addRejectUserIds, setCalling } from '~/features/calling/callingSlice';
+import {
+    acceptCall,
+    addBusyUserId,
+    addEndedUserIds,
+    addMissedUserIds,
+    addRejectUserIds,
+    setCalling,
+} from '~/features/calling/callingSlice';
 import {
     addChat,
     addMessageHead,
@@ -43,6 +50,7 @@ const SocketListener = ({ children }) => {
     const { user } = useSelector((state) => state.user);
     const { contact } = useSelector((state) => state.addContact);
     const { offlineRecent } = useSelector((state) => state.onlineUsers);
+    const { acceptUserIds, rejectUserIds, endedUserIds, _id: prevId } = useSelector((state) => state.calling);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -253,28 +261,83 @@ const SocketListener = ({ children }) => {
             console.log('🚀 ~ socket.on ~ call ~ sender', sender);
             console.log('🚀 ~ socket.on ~ call ~ _id', _id);
 
-            dispatch(setCalling({ _id, users, type, sender }));
+            if (prevId) socket.emit('busyCall', { _id, sender: user });
+            else dispatch(setCalling({ _id, users, type, sender }));
         });
 
         socket.on('rejectCall', ({ _id, sender }) => {
-            console.log('🚀 ~ socket.on ~ cancelCall ~ _id:', _id);
-
             dispatch(addRejectUserIds({ _id, senderId: sender._id }));
         });
 
         socket.on('acceptCall', ({ _id, receiver }) => {
             console.log('🚀 ~ socket.on ~ acceptCall ~ _id:', _id);
             console.log('🚀 ~ socket.on ~ acceptCall ~ receiver:', receiver);
-
             dispatch(acceptCall({ _id, receiver }));
         });
 
-        socket.on('endCall', ({ sender }) => {
-            console.log('🚀 ~ socket.on ~ endCall ~ sender:', sender);
-
-            dispatch(addEndedUserIds({ senderId: sender._id }));
+        socket.on('endCall', ({ sender, _id }) => {
+            dispatch(addEndedUserIds({ _id, senderId: sender._id }));
         });
-    }, [active?._id, contact, dispatch, offlineRecent, socket, user?._id]);
+
+        socket.on('busyCall', ({ _id, sender }) => {
+            console.log('🚀 ~ socket.on ~ busyCall ~ _id:', _id);
+            console.log('🚀 ~ socket.on ~ busyCall ~ sender:', sender);
+
+            dispatch(addBusyUserId({ _id, senderId: sender._id }));
+        });
+
+        socket.on('missedCall', ({ _id, missedUserIds }) => {
+            console.log('🚀 ~ socket.on ~ missedCall ~ _id:', _id);
+            console.log('🚀 ~ socket.on ~ missedCall ~ missedUserIds:', missedUserIds);
+
+            dispatch(addMissedUserIds({ _id, missedUserIds }));
+        });
+
+        return () => {
+            if (!socket) return;
+
+            socket.off('busyCall');
+            socket.off('missedCall');
+            socket.off('endCall');
+            socket.off('acceptCall');
+            socket.off('rejectCall');
+            socket.off('call');
+            socket.off('addToGroups');
+            socket.off('removeUserFromConversation');
+            socket.off('addOrUpdateConversation');
+            socket.off('deleteConversation');
+            socket.off('deleteFriend');
+            socket.off('revocationRequestFriend');
+            socket.off('rejectFriend');
+            socket.off('acceptFriend');
+            socket.off('sendFriendRequest');
+            socket.off('reactForMessage');
+            socket.off('unpinMessage');
+            socket.off('pinMessage');
+            socket.off('recallMessage');
+            socket.off('stopTyping');
+            socket.off('typing');
+            socket.off('openConversation');
+            socket.off('receivedMessage');
+            socket.off('userOffline');
+            socket.off('usersOnline');
+            socket.off('userOnline');
+        };
+    }, [
+        acceptUserIds,
+        active?._id,
+        contact,
+        dispatch,
+        endedUserIds,
+        endedUserIds.length,
+        offlineRecent,
+        prevId,
+        rejectUserIds,
+        rejectUserIds.length,
+        socket,
+        user,
+        user._id,
+    ]);
 
     return children;
 };

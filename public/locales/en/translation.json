@@ -598,5 +598,12 @@
             "individual-waiting": "is calling you"
         }
     },
+    "call": {
+        "connecting": "Connecting...",
+        "left": "Left",
+        "rejected": "Rejected",
+        "busy": "Didn't pick up",
+        "missed": "Didn't pick up"
+    },
     "request-error": "Some errors occurred, please try again"
 }

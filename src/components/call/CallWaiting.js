@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { CloseLineIcon, PhoneFillIcon, VideoFillIcon } from '~/assets';
@@ -10,9 +11,13 @@ import Button from './Button';
 
 const CallWaiting = ({ onClose = () => {} }) => {
     const { t } = useTranslation();
-    const { _id, sender, users, type } = useSelector((state) => state.calling);
-    const { handleReject, handleAccept } = useCalling();
+    const { _id, sender, users, type, acceptUserIds } = useSelector((state) => state.calling);
+    const { handleReject, handleAccept, handleClickOutside } = useCalling();
     const conversationType = users.length > 2 ? 'group' : 'individual';
+
+    useEffect(() => {
+        if (acceptUserIds.length === 0) handleClickOutside();
+    }, [acceptUserIds.length, handleClickOutside]);
 
     if (!_id) return null;
 
@@ -36,7 +41,7 @@ const CallWaiting = ({ onClose = () => {} }) => {
                 </div>
                 <div />
                 <div className="flex gap-6">
-                    <Button onClick={handleReject} className="bg-danger">
+                    <Button onClick={handleReject(onClose)} className="bg-danger">
                         <CloseLineIcon />
                     </Button>
                     <Button onClick={handleAccept(onClose)} className="bg-success">

@@ -1,15 +1,20 @@
 import {
     LocalUser,
     RemoteUser,
+    useClientEvent,
     useJoin,
     useLocalCameraTrack,
     useLocalMicrophoneTrack,
     usePublish,
+    useRTCClient,
     useRemoteUsers,
 } from 'agora-rtc-react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MicFillIcon, MicStopIcon, PhoneFillIcon, VideoFillIcon, VideoStopIcon } from '~/assets';
+import { callType } from '~/constants';
+import { useCalling } from '~/hooks';
+import { findUserById } from '~/utils';
 import Button from './Button';
 import CallCover from './CallCover';
 
@@ -17,21 +22,39 @@ const APP_ID = process.env.REACT_APP_AGORA_APP_ID;
 // console.log('🚀 ~ APP_ID:', APP_ID);
 
 const Videos = () => {
-    const [channel] = useState('test');
     const { user } = useSelector((state) => state.user);
+    const { _id, type, users, notifiedUserIds } = useSelector((state) => state.calling);
+    const { handleClickOutside } = useCalling();
 
-    useJoin({ appid: APP_ID, channel: channel, token: null });
+    useJoin({ appid: APP_ID, channel: _id, token: null, uid: user._id });
     //local user
     const [micOn, setMic] = useState(true);
-    const [cameraOn, setCamera] = useState(true);
+    const [cameraOn, setCamera] = useState(type === callType.VIDEO);
     const { localMicrophoneTrack } = useLocalMicrophoneTrack(micOn);
     const { localCameraTrack } = useLocalCameraTrack(cameraOn);
     usePublish([localMicrophoneTrack, localCameraTrack]);
     //remote users
     const remoteUsers = useRemoteUsers();
+    const acceptUserIds = useMemo(() => remoteUsers.map((user) => user.uid), [remoteUsers]);
+    const client = useRTCClient();
 
     const toggleVideo = () => setCamera((prev) => !prev);
     const toggleAudio = () => setMic((prev) => !prev);
+
+    useEffect(() => {
+        return () => {
+            localCameraTrack?.close();
+            localMicrophoneTrack?.close();
+        };
+    }, [localCameraTrack, localMicrophoneTrack]);
+
+    useClientEvent(client, 'user-left', (user) => {
+        console.log('The user', user.uid, ' has left the channel');
+    });
+
+    useEffect(() => {
+        if (notifiedUserIds.length === users.length - 1) handleClickOutside();
+    }, [handleClickOutside, notifiedUserIds.length, users.length]);
 
     return (
         <div className="flex flex-col h-screen">
@@ -51,18 +74,30 @@ const Videos = () => {
                         </div>
                         {remoteUsers.map((remoteUser) => (
                             <div className="user aspect-video" key={remoteUser.uid}>
-                                <RemoteUser cover={() => <CallCover user={user} />} user={remoteUser}>
+                                <RemoteUser
+                                    cover={() => <CallCover user={findUserById(users, remoteUser.uid)} />}
+                                    user={remoteUser}
+                                >
                                     <samp className="user-name">{remoteUser.uid}</samp>
                                 </RemoteUser>
                             </div>
                         ))}
+                        {users.map((u) =>
+                            [...acceptUserIds, ...notifiedUserIds, user._id].includes(u._id) ? null : (
+                                <div className="user aspect-video relative" key={u._id}>
+                                    <CallCover user={u} />
+                                </div>
+                            ),
+                        )}
                     </div>
                 </div>
             </div>
 
             <div className="h-[50px] bg-[#0a0a0a] flex justify-center items-center">
-                <Button onClick={toggleVideo}>{cameraOn ? <VideoFillIcon /> : <VideoStopIcon />}</Button>
-                <Button className="bg-red-500">
+                <Button disabled={type !== callType.VIDEO} onClick={toggleVideo}>
+                    {cameraOn ? <VideoFillIcon /> : <VideoStopIcon />}
+                </Button>
+                <Button className="bg-red-500" onClick={handleClickOutside}>
                     <PhoneFillIcon />
                 </Button>
                 <Button onClick={toggleAudio}>{micOn ? <MicFillIcon /> : <MicStopIcon />}</Button>

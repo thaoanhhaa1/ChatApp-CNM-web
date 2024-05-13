@@ -4,7 +4,6 @@ import { memo, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { v4 } from 'uuid';
 import {
     ArchiveIcon,
     ChevronDownIcon,
@@ -86,7 +85,7 @@ const Header = () => {
 
     const handleAcceptCall = (type) => {
         console.log('🚀 ~ handleAcceptCall ~ type:', type);
-        const _id = v4();
+        const _id = active._id + user._id;
         socket.emit('call', { type, users: active.users, sender: user, _id });
         dispatch(setShowCalling());
         setHideCall();
@@ -95,9 +94,7 @@ const Header = () => {
     };
 
     useEffect(() => {
-        if (!calling._id) {
-            dispatch(setHideCalling());
-        }
+        if (!calling._id) dispatch(setHideCalling());
     }, [calling, calling._id, dispatch]);
 
     return (
@@ -127,7 +124,7 @@ const Header = () => {
                     </Tippy>
                 </div>
 
-                <div className="dl:flex gap-2 hidden">
+                <div className="flex gap-2">
                     <div>
                         <Button icon={PhoneLineIcon} onClick={setShowCall} />
                         <Call
@@ -149,7 +146,7 @@ const Header = () => {
                         />
                     </div>
 
-                    <Button onClick={handleShowProfile} icon={UserIcon} />
+                    <Button className="dl:flex hidden" onClick={handleShowProfile} icon={UserIcon} />
                 </div>
 
                 <Popup data={more} animation="shift-toward" placement="bottom-end">

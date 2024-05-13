@@ -596,5 +596,12 @@
             "individual-waiting": "đang gọi cho bạn"
         }
     },
+    "call": {
+        "connecting": "Đang kết nối...",
+        "left": "Rời cuộc gọi",
+        "rejected": "Đã từ chối",
+        "busy": "Máy bận",
+        "missed": "Không bắt máy"
+    },
     "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"
 }

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { acceptCall, resetCalling } from '~/features/calling/callingSlice';
+import { acceptCall, resetCalling, setShowCalling } from '~/features/calling/callingSlice';
 
 const useCalling = () => {
     const { _id, users } = useSelector((state) => state.calling);
@@ -8,32 +8,22 @@ const useCalling = () => {
     const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
 
-    const handleClickOutside = useCallback(
-        (onClickOutside, stream) => () => {
-            onClickOutside();
+    const handleClickOutside = useCallback(() => {
+        dispatch(resetCalling());
+        socket.emit('endCall', { sender: user, _id });
+    }, [_id, dispatch, socket, user]);
 
-            socket.emit('endCall', {
-                users,
+    const handleReject = useCallback(
+        (onClose) => () => {
+            socket.emit('rejectCall', {
                 sender: user,
                 _id,
             });
             dispatch(resetCalling());
-
-            if (stream) {
-                stream.getTracks().forEach((track) => track.stop());
-            }
+            onClose();
         },
-        [_id, dispatch, socket, user, users],
+        [_id, dispatch, socket, user],
     );
-
-    const handleReject = useCallback(() => {
-        socket.emit('rejectCall', {
-            users,
-            sender: user,
-            _id,
-        });
-        dispatch(resetCalling());
-    }, [_id, dispatch, socket, user, users]);
 
     const handleAccept = useCallback(
         (onClose) => () => {
@@ -43,6 +33,7 @@ const useCalling = () => {
                 _id,
             });
             dispatch(acceptCall({ receiver: user, _id }));
+            dispatch(setShowCalling());
             onClose();
         },
         [_id, dispatch, socket, user, users],
