@@ -45,8 +45,8 @@ const AttachedFiles = () => {
             ) : null}
             {!loading && attachedFiles?.length ? (
                 <div className="flex flex-col gap-2">
-                    {attachedFiles.map((file) => (
-                        <AttachedFile key={file.link} file={file} />
+                    {attachedFiles.map((file, index) => (
+                        <AttachedFile key={index} file={file} />
                     ))}
                 </div>
             ) : null}

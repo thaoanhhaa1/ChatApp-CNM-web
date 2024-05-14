@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { v4 } from 'uuid';
 import { classNames } from '~/utils';
 
 const List = ({ length = 1, control, direction = 'column' }) => {
@@ -7,8 +6,8 @@ const List = ({ length = 1, control, direction = 'column' }) => {
 
     return (
         <div className={classNames('flex', direction === 'column' && 'flex-col')}>
-            {new Array(length).fill(null).map(() => (
-                <Control key={v4()} />
+            {new Array(length).fill(null).map((_item, index) => (
+                <Control key={index} />
             ))}
         </div>
     );

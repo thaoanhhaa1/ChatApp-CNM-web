@@ -2,7 +2,6 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { v4 } from 'uuid';
 import { NextIcon, PrevIcon } from '~/assets';
 import { slider } from '~/constants';
 import SliderItem from './SliderItem';
@@ -38,7 +37,7 @@ const ChatEmpty = () => {
                         loop
                     >
                         {slider.map((item) => (
-                            <SwiperSlide key={v4()} className="!w-full">
+                            <SwiperSlide key={item.title} className="!w-full">
                                 <SliderItem slide={item} />
                             </SwiperSlide>
                         ))}
