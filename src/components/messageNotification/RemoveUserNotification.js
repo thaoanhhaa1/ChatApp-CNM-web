@@ -5,6 +5,7 @@ import UserTag from './UserTag';
 
 const RemoveUserNotification = ({ user, sender }) => {
     const { t, i18n } = useTranslation();
+    const isVietnamese = i18n.language === 'vn';
 
     return (
         <>
@@ -13,7 +14,7 @@ const RemoveUserNotification = ({ user, sender }) => {
                 <UserTag user={user} />
                 &nbsp;
                 {t('message-notification.remove-user.was')}
-                {i18n.language === 'vn' && (
+                {isVietnamese && (
                     <>
                         &nbsp;
                         <UserTag user={sender} />
@@ -21,7 +22,7 @@ const RemoveUserNotification = ({ user, sender }) => {
                 )}
                 &nbsp;
                 {t('message-notification.remove-user.title')}
-                {i18n.language === 'en' && (
+                {!isVietnamese && (
                     <>
                         &nbsp;
                         <UserTag user={sender} />

@@ -42,11 +42,19 @@ const Videos = () => {
             localCameraTrack?.close();
             localMicrophoneTrack?.close();
         };
-    }, [localCameraTrack, localMicrophoneTrack]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (notifiedUserIds.length === users.length - 1) handleClickOutside();
     }, [handleClickOutside, notifiedUserIds.length, users.length]);
+
+    useEffect(() => {
+        if (time === 0 && acceptUserIds.length === 0) return;
+
+        const timer = setInterval(() => setTime((prevTime) => prevTime + 1), 1000);
+        return () => clearInterval(timer);
+    }, [acceptUserIds.length, time]);
 
     const renderRemoteUser = useCallback(
         (remoteUser) => {
@@ -66,13 +74,6 @@ const Videos = () => {
         [users],
     );
 
-    useEffect(() => {
-        if (time === 0 && acceptUserIds.length === 0) return;
-
-        const timer = setInterval(() => setTime((prevTime) => prevTime + 1), 1000);
-        return () => clearInterval(timer);
-    }, [acceptUserIds.length, time]);
-
     const renderOtherUser = useCallback(
         (u) =>
             [...acceptUserIds, ...notifiedUserIds, user._id].includes(u._id) ? null : (
@@ -91,10 +92,11 @@ const Videos = () => {
                     <div className=" grid grid-cols-2 gap-1 justify-center w-full max-w-[calc(min(100vw,(100vh_-_50px)*_16_/_9))]">
                         <div className="user aspect-video">
                             <LocalUser
-                                audioTrack={localMicrophoneTrack}
                                 cameraOn={cameraOn}
                                 micOn={micOn}
                                 videoTrack={localCameraTrack}
+                                audioTrack={localMicrophoneTrack}
+                                playAudio={false}
                                 cover={() => <CallCover user={user} />}
                             >
                                 <CallName name="You" />

@@ -9,6 +9,7 @@ import UsersTag from './UsersTag';
 const AddUsersNotification = ({ users, sender }) => {
     const { t, i18n } = useTranslation();
     const avatars = getAvatarsGroup(users);
+    const isVietnamese = i18n.language === 'vn';
     const isPlural = users.length > 1;
 
     return (
@@ -18,7 +19,7 @@ const AddUsersNotification = ({ users, sender }) => {
                 <UsersTag users={users} />
                 &nbsp;
                 {t(`message-notification.add-users.${isPlural ? 'were' : 'was'}`)}
-                {i18n.language === 'vn' && (
+                {isVietnamese && (
                     <>
                         &nbsp;
                         <UserTag user={sender} />
@@ -26,7 +27,7 @@ const AddUsersNotification = ({ users, sender }) => {
                 )}
                 &nbsp;
                 {t(`message-notification.add-users.title`)}
-                {i18n.language === 'en' && (
+                {!isVietnamese && (
                     <>
                         &nbsp;
                         <UserTag user={sender} />

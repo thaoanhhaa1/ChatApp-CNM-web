@@ -63,6 +63,10 @@ const SocketListener = ({ children }) => {
 
         // Nhận khi user khác online
         socket.on('userOnline', (userId) => {
+            console.group('🚀 ~ socket.on ~ userOnline');
+            console.log('userId', userId);
+            console.groupEnd();
+
             const idTimeout = offlineRecent[userId];
 
             if (idTimeout) clearTimeout(idTimeout);
@@ -71,6 +75,10 @@ const SocketListener = ({ children }) => {
 
         // Nhận khi chính mình online
         socket.on('usersOnline', (userIds) => {
+            console.group('🚀 ~ socket.on ~ usersOnline');
+            console.log('userIds', userIds);
+            console.groupEnd();
+
             dispatch(addOnlineUsers(userIds));
         });
 
@@ -227,30 +235,43 @@ const SocketListener = ({ children }) => {
         });
 
         socket.on('call', ({ type, sender, users, _id }) => {
+            console.group('🚀 ~ socket.on ~ call');
+            console.log('type', type);
+            console.log('sender', sender);
+            console.log('users', users);
+            console.log('_id', _id);
+            console.groupEnd();
+
             if (prevId.length && prevId !== _id) {
                 console.group('🚀 ~ socket.on ~ call');
+                console.log('prevId', prevId);
                 console.groupEnd();
                 socket.emit('busyCall', { _id, sender: user });
             } else if (!prevId) dispatch(setCalling({ _id, users, type, sender }));
         });
 
         socket.on('rejectCall', ({ _id, sender }) => {
+            console.log('🚀 ~ socket.on ~ sender:', sender);
             dispatch(addRejectUserIds({ _id, senderId: sender._id }));
         });
 
         socket.on('acceptCall', ({ _id, receiver }) => {
+            console.log('🚀 ~ socket.on ~ receiver:', receiver);
             dispatch(acceptCall({ _id, receiver }));
         });
 
         socket.on('endCall', ({ sender, _id }) => {
+            console.log('🚀 ~ socket.on ~ sender:', sender);
             dispatch(addEndedUserIds({ _id, senderId: sender._id }));
         });
 
         socket.on('busyCall', ({ _id, sender }) => {
+            console.log('🚀 ~ socket.on ~ sender:', sender);
             dispatch(addBusyUserId({ _id, senderId: sender._id }));
         });
 
         socket.on('missedCall', ({ _id, missedUserIds }) => {
+            console.log('🚀 ~ socket.on ~ missedUserIds:', missedUserIds);
             dispatch(addMissedUserIds({ _id, missedUserIds }));
         });
 
