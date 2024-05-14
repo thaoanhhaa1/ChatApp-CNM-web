@@ -123,7 +123,6 @@ const Chat = () => {
         if (!lastMessage) return;
 
         if (lastMessage.state === sentMessageStatus.SENT) {
-            console.log(`lastMessage`, lastMessage);
             socket.emit('sendMessage', lastMessage);
             dispatch(
                 updateMessage({

@@ -74,7 +74,6 @@ const Member = ({ user }) => {
                 error: t('group.user-more.toggle-role-reject'),
             },
         );
-        console.log('🚀 ~ handleToggleRole ~ message:', message);
 
         socket.emit('addOrUpdateConversation', {
             conversation: res.data,
@@ -116,7 +115,6 @@ const Member = ({ user }) => {
                 error: t('group.user-more.toggle-role-reject'),
             },
         );
-        console.log('🚀 ~ handleChangeOwner ~ message:', message);
 
         socket.emit('addOrUpdateConversation', {
             conversation: res.data,

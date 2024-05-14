@@ -57,6 +57,7 @@ const ContactItem = ({ contact }) => {
         },
     ];
 
+    // TODO
     const handleCallAudio = (e) => {
         e.stopPropagation();
         console.log('handleCallAudio');
@@ -67,14 +68,10 @@ const ContactItem = ({ contact }) => {
     };
 
     const handleClickItem = () => {
-        console.log('handleClickItem');
         const chat = getChatIndividual(chats, contact._id);
 
-        if (chat) {
-            dispatch(setActive(chat));
-        } else {
-            dispatch(getConversation(contact._id));
-        }
+        if (chat) dispatch(setActive(chat));
+        else dispatch(getConversation(contact._id));
     };
 
     return (

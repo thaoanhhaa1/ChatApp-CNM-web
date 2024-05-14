@@ -11,6 +11,7 @@ import Button from './Button';
 
 const CallWaiting = ({ onClose = () => {} }) => {
     const { t } = useTranslation();
+    const { user } = useSelector((state) => state.user);
     const { _id, sender, users, type, acceptUserIds } = useSelector((state) => state.calling);
     const { handleReject, handleAccept, handleClickOutside } = useCalling();
     const conversationType = users.length > 2 ? 'group' : 'individual';
@@ -19,7 +20,7 @@ const CallWaiting = ({ onClose = () => {} }) => {
         if (acceptUserIds.length === 0) handleClickOutside();
     }, [acceptUserIds.length, handleClickOutside]);
 
-    if (!_id) return null;
+    if (!_id || user._id === sender._id) return null;
 
     return (
         <Modal show onClickOutside={handleReject}>

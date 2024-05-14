@@ -39,14 +39,10 @@ const Profile = ({ onClose }) => {
     const { handleSendNotificationMessage } = useSendMessage();
 
     // TODO
-    // const handleShareContact = () => {
-    //     console.log('🚀 ~ handleShareContact ~ handleShareContact');
-    // };
+    // const handleShareContact = () => {};
 
     // TODO
-    const handleShowGroupMutual = () => {
-        console.log('🚀 ~ handleShowGroupMutual ~ handleShowGroupMutual');
-    };
+    const handleShowGroupMutual = () => {};
 
     // TODO
     const handleBlock = () => {

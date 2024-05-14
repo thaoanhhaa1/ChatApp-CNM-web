@@ -45,8 +45,6 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
         setLoading(true);
 
         try {
-            console.log('🚀 ~ handleForward ~ selectedContacts:', selectedContacts);
-
             const selectedUserIds = [];
             const selectedGroupIds = [];
 
@@ -54,7 +52,6 @@ const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
                 if (selected.isGroup) selectedGroupIds.push(selected._id);
                 else selectedUserIds.push(selected._id);
             });
-            console.log('🚀 ~ handleForward ~ selectedUserIds:', selectedUserIds);
 
             const conversationIndividualIds = [];
 

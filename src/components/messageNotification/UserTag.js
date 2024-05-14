@@ -8,6 +8,7 @@ const UserTag = ({ user }) => {
 
     if (currentUser._id === user._id) return t('message-notification.you');
 
+    // TODO
     const handleClick = () => console.log('UserTag clicked');
 
     return (

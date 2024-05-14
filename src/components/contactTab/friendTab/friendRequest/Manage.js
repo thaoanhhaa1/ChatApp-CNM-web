@@ -16,6 +16,7 @@ const Manage = ({ onClose }) => {
     const [commonGroup, setCommonGroup] = useState(true);
     const [suggest, setSuggest] = useState(true);
 
+    // TODO
     useEffect(() => {
         console.group('Update setting...');
         console.log('🚀 ~ Manage ~ allowAddByPhone:', allowAddByPhone);

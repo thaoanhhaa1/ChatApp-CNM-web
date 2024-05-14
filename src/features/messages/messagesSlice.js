@@ -45,7 +45,6 @@ const messagesSlice = createSlice({
             state.maxPage = 1;
         },
         addMessage: (state, { payload }) => {
-            console.log('🚀 ~ messages ~ addMessage');
             const message = { ...payload, _id: v4() };
 
             message.state = sentMessageStatus.SENDING;
@@ -67,7 +66,6 @@ const messagesSlice = createSlice({
             });
         },
         addMessageSocket: (state, { payload }) => {
-            console.log('🚀 ~ messages ~ addMessageSocket');
             if (
                 payload &&
                 payload._id !== state.messages?.[0]?._id &&

@@ -23,6 +23,7 @@ const ContactItem = ({ contact }) => {
         },
     ];
 
+    // TODO
     const handleCallAudio = () => console.log('handleCallAudio');
     const handleCallVideo = () => console.log('handleCallVideo');
 

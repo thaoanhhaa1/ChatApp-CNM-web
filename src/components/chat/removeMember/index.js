@@ -40,7 +40,6 @@ const RemoveMember = ({ userId, show, onClickOutside }) => {
                     type: messageNotificationType.REMOVE_USER,
                 }),
             ]);
-            console.log('🚀 ~ handleRemoveMember ~ message:', message);
 
             socket.emit('addOrUpdateConversation', {
                 conversation: res.data,

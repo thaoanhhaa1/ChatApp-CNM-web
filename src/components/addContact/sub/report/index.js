@@ -42,6 +42,8 @@ const Report = ({ onClose }) => {
     const dispatch = useDispatch();
 
     const handleClickCancel = () => dispatch(popSub());
+
+    // TODO
     const handleReport = () => {
         console.group('Report');
         console.log('From: ', user);

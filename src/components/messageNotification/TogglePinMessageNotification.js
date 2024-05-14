@@ -11,7 +11,6 @@ const TogglePinMessageNotification = ({ message, type }) => {
     const { t } = useTranslation();
     const joinedMessage = useMemo(() => {
         const { files, location, messages, sticker } = message.notification.message;
-        console.log('🚀 ~ joinedMessage ~ messages:', messages);
 
         const joinedMessage = (messages || [])
             .map((item) => {

@@ -48,7 +48,6 @@ const AddToGroups = ({ conversationId, userId, show, onClickOutside }) => {
                     userIds: [userId],
                 }),
             ]);
-            console.log('🚀 ~ handleAdd ~ messages:', messages);
 
             const conversations = res.data;
 

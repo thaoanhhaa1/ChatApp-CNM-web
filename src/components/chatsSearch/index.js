@@ -26,7 +26,6 @@ const ChatsSearch = ({ searchValue }) => {
     const handleClickUser = async (user) => {
         const chat = chats.find((chat) => !chat.isGroup && chat.users.find((u) => u._id === user._id));
 
-        console.log('handleClickUser:: ', chat);
         dispatch(addRecentSearch(user));
 
         if (chat) {
@@ -40,8 +39,6 @@ const ChatsSearch = ({ searchValue }) => {
             // conversation not load
             try {
                 const data = await dispatch(getConversation(user._id)).unwrap();
-
-                console.log(data);
 
                 socket.emit('openConversation', {
                     conversation: data,

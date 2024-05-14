@@ -18,7 +18,6 @@ import CallCover from './CallCover';
 import CallName from './CallName';
 
 const APP_ID = process.env.REACT_APP_AGORA_APP_ID;
-// console.log('🚀 ~ APP_ID:', APP_ID);
 
 const Videos = () => {
     const { user } = useSelector((state) => state.user);
@@ -26,13 +25,11 @@ const Videos = () => {
     const { handleClickOutside } = useCalling();
 
     useJoin({ appid: APP_ID, channel: _id, token: null, uid: user._id });
-    //local user
     const [micOn, setMic] = useState(true);
     const [cameraOn, setCamera] = useState(type === callType.VIDEO);
     const { localMicrophoneTrack } = useLocalMicrophoneTrack(micOn);
     const { localCameraTrack } = useLocalCameraTrack(cameraOn);
     usePublish([localMicrophoneTrack, localCameraTrack]);
-    //remote users
     const remoteUsers = useRemoteUsers();
     const acceptUserIds = useMemo(() => remoteUsers.map((user) => user.uid), [remoteUsers]);
     const [time, setTime] = useState(0);

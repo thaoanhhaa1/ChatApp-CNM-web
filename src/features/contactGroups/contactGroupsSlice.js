@@ -8,9 +8,7 @@ const initialState = {
 };
 
 const getGroups = createAsyncThunk('getGroups', async () => {
-    console.log('🚀 ~ getGroups ~ getGroups', Date.now());
     const response = await groupServices.getGroups();
-    console.log('🚀 ~ getGroups ~ getGroups', Date.now());
     return response.data;
 });
 
@@ -22,7 +20,6 @@ const contactGroupsSlice = createSlice({
             state.groups = payload;
         },
         addGroup: (state, { payload }) => {
-            console.log('🚀 ~ contactGroups ~ addGroup');
             const index = state.groups.findIndex((group) => group._id === payload._id);
 
             if (index !== -1) state.groups[index] = payload;

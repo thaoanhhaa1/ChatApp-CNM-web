@@ -55,8 +55,6 @@ const Body = () => {
 
                 dispatch(addMessages(messages));
             } catch (error) {
-                console.log(error);
-
                 if (error?.code === 'ERR_CANCELED') dispatch(setLoading(true));
             }
         };

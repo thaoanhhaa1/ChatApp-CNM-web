@@ -10,18 +10,11 @@ import { useBoolean } from '~/hooks';
 const MobileLoginForm = ({ sdt, onBack = () => {} }) => {
     const { t } = useTranslation();
     const [phone, setPhone] = useState(sdt);
-    // const [country, setCountry] = useState();
     const { value, setFalse, setTrue } = useBoolean();
 
     const handleSubmit = () => {
         setFalse();
-        // if (!validator.isMobilePhone(phone, 'vi-VN')) setTrue();
         if (!validator.isEmail(phone)) setTrue();
-
-        console.group('MobileLoginForm');
-        console.log(`phone`, phone);
-        // console.log(`country`, country);
-        console.groupEnd('MobileLoginForm');
     };
 
     return (

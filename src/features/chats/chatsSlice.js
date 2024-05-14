@@ -34,8 +34,6 @@ const insertChat = ({ chats, chat, userId }) => {
 };
 
 const insertMessage = ({ payload, state, isMe }) => {
-    console.log('🚀 ~ chats ~ addMessageHead');
-    console.log('🚀 ~ payload:', payload);
     const conversationId = payload.conversationId || payload.conversation._id;
 
     const chatIndex = state.chats.findIndex((chat) => chat._id === conversationId);
@@ -90,7 +88,6 @@ const chatsSlice = createSlice({
             if (chat) chat.unreadMessageCount = 0;
         },
         updateMessage: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ updateMessage');
             const { conversationId, message } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
@@ -110,7 +107,6 @@ const chatsSlice = createSlice({
             }
         },
         togglePin: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ togglePin');
             const { conversationId, userId } = payload;
 
             const chatIndex = state.chats.findIndex((chat) => chat._id === conversationId);
@@ -136,7 +132,6 @@ const chatsSlice = createSlice({
             }
         },
         addPinMessage: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ addPinMessage');
             const { conversationId, message } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
@@ -149,7 +144,6 @@ const chatsSlice = createSlice({
             if (state.active?._id === conversationId) state.active.pinnedMessages = chat.pinnedMessages;
         },
         removePinMessage: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ removePinMessage');
             const { conversationId, message } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
@@ -162,8 +156,6 @@ const chatsSlice = createSlice({
             }
         },
         addMessages: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ addMessages');
-
             if (!payload?.length) return state;
 
             const conversationId = payload[0].conversationId || payload[0].conversation._id;
@@ -188,7 +180,6 @@ const chatsSlice = createSlice({
             insertMessage({ payload, state, isMe: true });
         },
         addChat: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ addChat');
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
             const chat = state.chats[index];
 
@@ -207,7 +198,6 @@ const chatsSlice = createSlice({
                 };
         },
         addChatAndActive: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ addChatAndActive');
             const chatIndex = state.chats.findIndex((chat) => chat._id === payload._id);
 
             if (chatIndex < 0) {
@@ -221,7 +211,6 @@ const chatsSlice = createSlice({
             state.active = payload;
         },
         setMessages: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ setMessages');
             if (!payload?.length) return state;
 
             const conversationId = payload[0].conversationId || payload[0].conversation._id;
@@ -232,10 +221,7 @@ const chatsSlice = createSlice({
             if (state.active?._id === conversationId) state.active.messages = chat.messages;
         },
         updateMessageReact: (state, { payload }) => {
-            console.log('🚀 ~ updateMessageReact');
             const { conversationId, messageId, userId, react } = payload;
-            console.log('🚀 ~ messageId:', messageId);
-            console.log('🚀 ~ conversationId:', conversationId);
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
 
@@ -243,7 +229,6 @@ const chatsSlice = createSlice({
                 const message = (chat?.messages || []).find((message) => {
                     return message._id === messageId;
                 });
-                console.log('🚀 ~ message:', message);
                 if (message) {
                     const status = message.statuses.find((item) => item.user === userId);
 
@@ -255,15 +240,12 @@ const chatsSlice = createSlice({
             }
         },
         removeConversation: (state, { payload }) => {
-            console.log('removeConversation', payload);
             const index = state.chats.findIndex((chat) => chat._id === payload);
 
             if (index >= 0) state.chats.splice(index, 1);
             if (state.active?._id === payload) state.active = null;
         },
         addOrUpdateChat: (state, { payload }) => {
-            console.log('addOrUpdateChat', payload);
-
             if (!payload?._id) return state;
 
             const index = state.chats.findIndex((chat) => chat._id === payload._id);
@@ -293,7 +275,6 @@ const chatsSlice = createSlice({
         },
         reset: (state) => ({ ...state, ...initialState }),
         addChats: (state, { payload }) => {
-            console.log('🚀 ~ chats ~ addChats');
             if (!payload?.length) return state;
 
             payload.forEach((chat) => {
@@ -304,7 +285,6 @@ const chatsSlice = createSlice({
             });
         },
         changeLastMessage: (state, { payload }) => {
-            console.log('Change last message', payload);
             const { conversationId, message, prevMessage } = payload;
 
             const chat = state.chats.find((chat) => chat._id === conversationId);
@@ -315,7 +295,6 @@ const chatsSlice = createSlice({
             if (state.active?._id === conversationId) state.active.lastMessage = message;
         },
         deleteChat: (state, { payload }) => {
-            console.log('Delete chat', payload);
             const chat = state.chats.find((chat) => chat._id === payload);
 
             if (chat) {
@@ -344,7 +323,6 @@ const chatsSlice = createSlice({
                 state.activeLoading = true;
             })
             .addCase(getConversation.fulfilled, (state, { payload }) => {
-                console.log('🚀 ~ .addCase ~ payload:', payload);
                 state.active = payload;
                 state.activeLoading = false;
 

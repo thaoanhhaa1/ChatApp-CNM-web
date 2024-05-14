@@ -124,8 +124,9 @@ const DefaultLayout = ({ children }) => {
     useEffect(() => {
         if (!user._id) return;
 
-        calling._id && user._id !== calling.sender?._id && setShowCallWaiting(true);
-    }, [calling._id, calling.sender?._id, user._id]);
+        if (calling._id && calling.sender && user._id !== calling.sender?._id) setShowCallWaiting(true);
+        else setShowCallWaiting(false);
+    }, [calling._id, calling.sender, calling.sender?._id, user._id]);
 
     if (loading || !user?._id) return <Loading />;
 

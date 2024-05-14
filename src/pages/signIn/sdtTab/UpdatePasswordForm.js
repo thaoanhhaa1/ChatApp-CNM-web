@@ -61,7 +61,6 @@ const UpdatePasswordForm = ({ sdt, onBack }) => {
                 try {
                     setLoading(true);
                     setErrors('');
-                    console.log(sdt, otpCode, password);
                     await authServices.verifyOTPForgotPassword({ contact: sdt, otp: otpCode, password: password });
 
                     const res = await authServices.login({ contact: sdt, password });

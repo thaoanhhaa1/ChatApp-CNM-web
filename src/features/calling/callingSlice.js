@@ -39,8 +39,6 @@ const callingSlice = createSlice({
             if (!state._id) return state;
 
             const { _id, receiver } = payload;
-            console.log('🚀 ~ _id:', _id);
-            console.log('🚀 ~ receiver:', receiver);
 
             if (_id === state._id && !state.acceptUserIds.includes(receiver._id)) {
                 state.acceptUserIds.push(receiver._id);

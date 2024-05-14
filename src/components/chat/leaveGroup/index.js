@@ -54,7 +54,6 @@ const LeaveGroup = ({ newOwnerId, show, onClickOutside }) => {
                     type: messageNotificationType.LEAVE_GROUP,
                 }),
             ]);
-            console.log('🚀 ~ handleLeave ~ message:', message);
 
             socket.emit('addOrUpdateConversation', {
                 conversation: res.data,

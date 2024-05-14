@@ -84,7 +84,6 @@ const Header = () => {
     }, [handleShowProfile, t, width]);
 
     const handleAcceptCall = (type) => {
-        console.log('🚀 ~ handleAcceptCall ~ type:', type);
         const _id = active._id + user._id;
         socket.emit('call', { type, users: active.users, sender: user, _id });
         dispatch(setShowCalling());

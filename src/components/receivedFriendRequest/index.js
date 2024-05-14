@@ -41,7 +41,6 @@ const ReceivedFriendRequest = ({ contact }) => {
         }
     };
     const handleAccept = async () => {
-        console.log('handleAccept');
         setAcceptLoading(true);
 
         try {
@@ -53,7 +52,6 @@ const ReceivedFriendRequest = ({ contact }) => {
                     conversationId: conversation.data._id,
                 }),
             ]);
-            console.log('🚀 ~ handleAcceptFriend ~ message:', message);
 
             socket.emit('acceptFriend', { _id: contact._id, user, senderId: sender._id });
             handleSendNotificationMessage(message);

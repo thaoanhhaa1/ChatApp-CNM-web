@@ -47,7 +47,6 @@ const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }
             }),
             messageServices.unpinMessage(message._id),
         ]);
-        console.log('🚀 ~ handleUnpin ~ messageRes:', messageRes);
         dispatch(removePinMessage({ conversationId: active._id, message: message }));
         socket.emit('unpinMessage', { message, userId: user._id, users: active.users });
         handleSendNotificationMessage(messageRes);

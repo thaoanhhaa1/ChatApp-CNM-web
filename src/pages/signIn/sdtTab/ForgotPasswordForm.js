@@ -24,8 +24,7 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
         if (!validator.isEmail(phone)) return setTrue();
 
         try {
-            const response = await authServices.sendOTPForgotPassword(phone);
-            console.log(response.data);
+            await authServices.sendOTPForgotPassword(phone);
             setShowUpdatePass(true);
         } catch (error) {
             console.error('Lỗi khi tạo mã OTP:', error);

@@ -16,7 +16,6 @@ import SelectedContacts from './SelectedContacts';
 const ContactList = ({ chat, selectedContacts, handleClickContact, handleRemoveContact }) => {
     const { t } = useTranslation();
     const { friendList, friendListLoading, friendListFirstFetch } = useSelector((state) => state.friend);
-    console.log('🚀 ~ ContactList ~ friendList:', friendList);
     const { chats } = useSelector((state) => state.chats);
     const groups = useMemo(() => chats.filter((chat) => chat.isGroup), [chats]);
     const contacts = convertContactsToPhoneBook(friendList);

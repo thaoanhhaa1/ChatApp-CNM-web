@@ -177,7 +177,6 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
             }),
             messageServices.pinMessage(chat._id),
         ]);
-        console.log('🚀 ~ handlePinMessage ~ message:', message);
         dispatch(addPinMessage({ conversationId: chat.conversation._id, message: chat }));
         socket.emit('pinMessage', { message: chat, userId: user._id, users: active.users });
         handleSendNotificationMessage(message);
@@ -250,7 +249,6 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
         if (!isScrollToReply || messagesLoading) return;
 
         const mess = messages.find((mess) => mess._id === isScrollToReply);
-        console.log(mess);
 
         if (mess?.offsetTop) {
             scrollY(40);
@@ -261,8 +259,6 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
     if (chat?.notification) return <MessageNotification message={chat} />;
 
     if (!chat.messages?.length && !firstFile && !chat?.location && !chat?.sticker) {
-        console.log(chat);
-
         return null;
     }
     return (

@@ -19,9 +19,7 @@ const Group = () => {
     const { chats, loading } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
     const groups = useMemo(() => chats.filter((chat) => chat.isGroup), [chats]);
-    console.log('🚀 ~ Group ~ groups:', groups);
     const [sort, setSort] = useState(() => sortGroup[0]);
-    console.log('🚀 ~ Group ~ sort:', sort);
     const sorts = useMemo(
         () => sortGroup.map((sort) => ({ ...sort, title: t(sort.title), onClick: () => setSort(sort) })),
         [t],
@@ -35,7 +33,6 @@ const Group = () => {
 
         return newGroup.filter((group) => group.admin === user._id);
     }, [groups, sort.id, user._id]);
-    console.log('🚀 ~ sortedGroups ~ sortedGroups:', sortedGroups);
     const { value: show, setFalse: handleHidden, setTrue: handleShow } = useBoolean(false);
 
     return (

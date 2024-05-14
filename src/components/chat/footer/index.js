@@ -102,7 +102,6 @@ const Footer = () => {
     };
 
     const handleFocus = () => {
-        console.log(`Typing: `, Date.now());
         socket.emit('typing', { conversation: active, userId: user._id });
     };
 

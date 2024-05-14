@@ -1,4 +1,9 @@
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+
 const useDownloadFile = (src, name) => {
+    const { t } = useTranslation();
+
     const handleDownload = () => {
         fetch(src)
             .then((response) => response.arrayBuffer())
@@ -10,7 +15,7 @@ const useDownloadFile = (src, name) => {
                 document.body.appendChild(link);
                 link.click();
             })
-            .catch((err) => console.log(err));
+            .catch(() => toast.error(t('request-error')));
     };
 
     return handleDownload;

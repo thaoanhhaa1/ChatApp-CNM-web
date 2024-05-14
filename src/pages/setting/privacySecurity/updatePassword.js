@@ -46,9 +46,7 @@ const UpdatePassword = ({ onClose }) => {
 
         if (!Object.keys(errors).length) {
             try {
-                console.log(confirmPassword, newPassword, oldPassword);
-                const res = await authServices.changePassword({ oldPassword: oldPassword, newPassword: newPassword });
-                console.log(res.data);
+                await authServices.changePassword({ oldPassword: oldPassword, newPassword: newPassword });
                 toast.success(t('profile.updateSuccess'));
                 dispatch(resetSubs());
             } catch (error) {

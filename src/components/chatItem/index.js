@@ -27,13 +27,11 @@ import AddToGroups from './AddToGroups';
 import DeleteChatItem from './DeleteChatItem';
 
 const ChatItem = ({ chat, active }) => {
-    console.log('🚀 ~ ChatItem ~ chat:', chat);
     const { t } = useTranslation();
     const { setShowChat } = useLayout();
     const { user } = useSelector((state) => state.user);
     const { active: activeChat } = useSelector((state) => state.chats);
     const { users } = useSelector((state) => state.onlineUsers);
-    console.log('🚀 ~ ChatItem ~ users:', users);
     const dispatch = useDispatch();
     const isPin = isPinConversation(chat, user);
     const isTyping = chat.users.some((u) => u.typing);
