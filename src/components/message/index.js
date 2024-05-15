@@ -284,7 +284,7 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
                             isMe ? 'ml-1 mr-2 sm:mr-4 flex flex-col items-end' : 'ml-2 sm:ml-4 mr-1',
                         )}
                     >
-                        <div className={classNames('flex gap-1', isMe ? 'flex-row-reverse' : '')}>
+                        <div className={classNames('flex gap-1 group/message', isMe ? 'flex-row-reverse' : '')}>
                             <div
                                 className={classNames(
                                     'relative w-fit flex flex-col gap-1 px-2 dl:px-5 py-1 dl:py-3 rounded-t-lg',
@@ -341,7 +341,12 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
                                 <MessageLoading loading={loading} />
                             </div>
                             {recalled || loading ? null : (
-                                <div className={classNames('flex', isMe && 'flex-row-reverse')}>
+                                <div
+                                    className={classNames(
+                                        'flex opacity-0 group-hover/message:opacity-100 transition-all',
+                                        isMe && 'flex-row-reverse',
+                                    )}
+                                >
                                     <Button onClick={handleReply}>
                                         <QuoteRightIcon className="w-[14px] h-[14px]" />
                                     </Button>

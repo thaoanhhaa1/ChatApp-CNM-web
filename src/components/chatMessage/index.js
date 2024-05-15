@@ -13,7 +13,7 @@ const ChatMessage = ({ status = DeleteMessageStatus.NO_DELETE, large, messages, 
     return (
         <p
             className={classNames(
-                'flex gap-1',
+                'flex gap-1 break-all',
                 isMe
                     ? isReply || status === DeleteMessageStatus.RECALL
                         ? 'text-secondary dark:text-dark-secondary'
@@ -29,7 +29,10 @@ const ChatMessage = ({ status = DeleteMessageStatus.NO_DELETE, large, messages, 
                       <span
                           key={index}
                           onClick={() => handleClickMessage(message)}
-                          className={classNames(message.type === 'tag' && !isReply && 'text-[#0068ff] cursor-pointer')}
+                          className={classNames(
+                              message.type === 'tag' && !isReply && 'text-[#0068ff] cursor-pointer',
+                              className,
+                          )}
                       >
                           {message.type === 'tag' && '@'}
                           {message.content}

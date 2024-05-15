@@ -211,13 +211,13 @@ const Register = () => {
     };
 
     useEffect(() => {
+        let interval;
         if (showModal) {
-            const interval = setInterval(() => {
+            interval = setInterval(() => {
                 setCountdown((prev) => Math.max(0, prev - 1));
             }, 1000);
-
-            return () => clearInterval(interval);
         }
+        return () => clearInterval(interval);
     }, [showModal]);
 
     return (
