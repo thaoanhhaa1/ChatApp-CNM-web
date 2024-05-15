@@ -5,6 +5,8 @@ const initialState = {
     users: [],
     type: '',
     sender: '',
+    conversationName: '',
+    isGroup: false,
     acceptUserIds: [],
     rejectUserIds: [],
     notifiedUserIds: [],
@@ -21,13 +23,15 @@ const callingSlice = createSlice({
         setCalling: (state, { payload }) => {
             if (state._id) return state;
 
-            const { _id, users, type, sender } = payload;
+            const { _id, users, type, sender, conversationName, isGroup } = payload;
 
             state._id = _id;
             state.users = users;
             state.type = type;
             state.sender = sender;
             state.acceptUserIds = [sender._id];
+            state.conversationName = conversationName;
+            state.isGroup = isGroup;
         },
         resetCalling: () => initialState,
         cancelCall: (state, { payload }) => {

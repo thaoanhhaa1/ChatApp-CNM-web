@@ -85,7 +85,14 @@ const Header = () => {
 
     const handleAcceptCall = (type) => {
         const _id = active._id + user._id;
-        socket.emit('call', { type, users: active.users, sender: user, _id });
+        socket.emit('call', {
+            type,
+            users: active.users,
+            sender: user,
+            _id,
+            conversationName,
+            isGroup: active.isGroup,
+        });
         dispatch(setShowCalling());
         setHideCall();
         setHideVideo();

@@ -12,9 +12,9 @@ import Button from './Button';
 const CallWaiting = ({ onClose = () => {} }) => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);
-    const { _id, sender, users, type, acceptUserIds } = useSelector((state) => state.calling);
+    const { _id, sender, type, acceptUserIds, conversationName, isGroup } = useSelector((state) => state.calling);
     const { handleReject, handleAccept, handleClickOutside } = useCalling();
-    const conversationType = users.length > 2 ? 'group' : 'individual';
+    const conversationType = isGroup ? 'group' : 'individual';
 
     useEffect(() => {
         if (acceptUserIds.length === 0) handleClickOutside();
@@ -34,7 +34,7 @@ const CallWaiting = ({ onClose = () => {} }) => {
                 />
                 <div className="text-center">
                     <h5 className="mb-2 text-lg font-semibold">
-                        {sender.name}
+                        {conversationName}
                         &nbsp;
                         {t(`calling.${type}.${conversationType}-waiting`)}
                     </h5>
