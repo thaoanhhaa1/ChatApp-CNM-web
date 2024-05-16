@@ -612,7 +612,8 @@
         "left": "Left",
         "rejected": "Rejected",
         "busy": "Didn't pick up",
-        "missed": "Didn't pick up"
+        "missed": "Didn't pick up",
+        "missed-notify": "Got a missed call from"
     },
     "request-error": "Some errors occurred, please try again"
 }

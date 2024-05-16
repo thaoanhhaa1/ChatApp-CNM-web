@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import sound from '~/assets/sounds/message-sound.mp3';
 import { DeleteMessageStatus, FriendStatus } from '~/constants';
 import { setContact } from '~/features/addContact/addContactSlice';
@@ -11,6 +13,7 @@ import {
     addEndedUserIds,
     addMissedUserIds,
     addRejectUserIds,
+    resetCalling,
     setCalling,
 } from '~/features/calling/callingSlice';
 import {
@@ -45,6 +48,7 @@ import { connect } from '~/features/socket/socketSlice';
 const messageSound = new Audio(sound);
 
 const SocketListener = ({ children }) => {
+    const { t } = useTranslation();
     const { active } = useSelector((state) => state.chats);
     const { socket } = useSelector((state) => state.socket);
     const { user } = useSelector((state) => state.user);
@@ -245,8 +249,13 @@ const SocketListener = ({ children }) => {
             dispatch(addBusyUserId({ _id, senderId: sender._id }));
         });
 
-        socket.on('missedCall', ({ _id, missedUserIds }) => {
+        socket.on('missedCallToAccepter', ({ _id, missedUserIds }) => {
             dispatch(addMissedUserIds({ _id, missedUserIds }));
+        });
+
+        socket.on('missedCall', ({ _id, conversationName }) => {
+            dispatch(resetCalling());
+            toast.info(`${t('call.missed-notify')} ${conversationName}`);
         });
 
         return () => {
@@ -254,6 +263,7 @@ const SocketListener = ({ children }) => {
 
             socket.off('busyCall');
             socket.off('missedCall');
+            socket.off('missedCallToAccepter');
             socket.off('endCall');
             socket.off('acceptCall');
             socket.off('rejectCall');
@@ -291,6 +301,7 @@ const SocketListener = ({ children }) => {
         rejectUserIds,
         rejectUserIds.length,
         socket,
+        t,
         user,
         user._id,
     ]);

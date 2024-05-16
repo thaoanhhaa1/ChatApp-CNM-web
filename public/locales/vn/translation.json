@@ -610,7 +610,8 @@
         "left": "Rời cuộc gọi",
         "rejected": "Đã từ chối",
         "busy": "Máy bận",
-        "missed": "Không bắt máy"
+        "missed": "Không bắt máy",
+        "missed-notify": "Có cuộc gọi nhỡ từ"
     },
     "request-error": "Có vài lỗi xảy ra, xin vui lòng thử lại"
 }
