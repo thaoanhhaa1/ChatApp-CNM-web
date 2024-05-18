@@ -11,6 +11,8 @@ const AcceptFriendNotification = ({ sender, conversation }) => {
     const { user } = useSelector((state) => state.user);
     const otherUser = getOtherUserInIndividual(conversation.users, user._id);
 
+    if (!conversation.users) return null;
+
     const [myAvatar, otherAvatar] =
         sender._id === user._id ? [user.avatar, otherUser.avatar] : [otherUser.avatar, user.avatar];
 
