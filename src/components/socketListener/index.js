@@ -87,8 +87,8 @@ const SocketListener = ({ children }) => {
         socket.on('receivedMessage', (message) => {
             dispatch(
                 addMessageHead({
-                    myId: user._id,
                     ...message,
+                    myId: user._id,
                 }),
             );
 

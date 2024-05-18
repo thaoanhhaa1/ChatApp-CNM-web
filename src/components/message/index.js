@@ -276,7 +276,7 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
                             'self-end',
                             !showSeparate && isYourPrev && !prevChat.notification && 'opacity-0',
                         )}
-                        src={chat.sender.avatar}
+                        src={isMe ? user.avatar : chat.sender.avatar}
                     />
                     <div
                         className={classNames(
@@ -378,7 +378,7 @@ const Message = ({ chat, prevChat, scrollY = () => {} }) => {
                                     isMe && 'text-right',
                                 )}
                             >
-                                {chat.sender.name}
+                                {isMe ? user.name : chat.sender.name}
                             </div>
                         )}
                     </div>

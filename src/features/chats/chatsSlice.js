@@ -280,7 +280,12 @@ const chatsSlice = createSlice({
             payload.forEach((chat) => {
                 const index = state.chats.findIndex((item) => item._id === chat._id);
 
-                if (index < 0) state.chats.unshift(chat);
+                if (index < 0)
+                    insertChat({
+                        chats: state.chats,
+                        chat,
+                        userId: chat.myId,
+                    });
                 else state.chats[index] = chat;
             });
         },

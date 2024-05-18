@@ -27,6 +27,8 @@ const About = () => {
                 title: 'profile.date-of-birth',
                 value: getDate(otherUser.dateOfBirth),
             });
+
+        return data;
     }, [otherUser._id, otherUser.dateOfBirth, otherUser.name]);
 
     return (
