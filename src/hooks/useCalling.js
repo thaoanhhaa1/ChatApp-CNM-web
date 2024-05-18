@@ -8,10 +8,14 @@ const useCalling = () => {
     const { socket } = useSelector((state) => state.socket);
     const dispatch = useDispatch();
 
-    const handleClickOutside = useCallback(() => {
-        dispatch(resetCalling());
-        socket.emit('endCall', { sender: user, _id });
-    }, [_id, dispatch, socket, user]);
+    const handleClickOutside = useCallback(
+        (handleCloseTrack) => () => {
+            dispatch(resetCalling());
+            socket.emit('endCall', { sender: user, _id });
+            handleCloseTrack?.();
+        },
+        [_id, dispatch, socket, user],
+    );
 
     const handleReject = useCallback(
         (onClose) => () => {

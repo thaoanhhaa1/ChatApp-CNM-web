@@ -37,17 +37,14 @@ const Videos = () => {
     const toggleVideo = () => setCamera((prev) => !prev);
     const toggleAudio = () => setMic((prev) => !prev);
 
-    useEffect(() => {
-        return () => {
-            localCameraTrack?.close();
-            localMicrophoneTrack?.close();
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const handleCloseTrack = useCallback(() => {
+        localCameraTrack?.close();
+        localMicrophoneTrack?.close();
+    }, [localCameraTrack, localMicrophoneTrack]);
 
     useEffect(() => {
-        if (notifiedUserIds.length === users.length - 1) handleClickOutside();
-    }, [handleClickOutside, notifiedUserIds.length, users.length]);
+        if (notifiedUserIds.length === users.length - 1) handleClickOutside(handleCloseTrack)();
+    }, [handleClickOutside, handleCloseTrack, notifiedUserIds.length, users.length]);
 
     useEffect(() => {
         if (time === 0 && acceptUserIds.length === 0) return;
@@ -118,7 +115,7 @@ const Videos = () => {
                 <Button disabled={type !== callType.VIDEO} onClick={toggleVideo}>
                     {cameraOn ? <VideoFillIcon /> : <VideoStopIcon />}
                 </Button>
-                <Button className="bg-red-500" onClick={handleClickOutside}>
+                <Button className="bg-red-500" onClick={handleClickOutside(handleCloseTrack)}>
                     <PhoneFillIcon />
                 </Button>
                 <Button onClick={toggleAudio}>{micOn ? <MicFillIcon /> : <MicStopIcon />}</Button>

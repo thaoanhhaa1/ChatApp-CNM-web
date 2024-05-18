@@ -16,7 +16,7 @@ const CallWaiting = ({ onClose = () => {} }) => {
     const conversationType = isGroup ? 'group' : 'individual';
 
     useEffect(() => {
-        if (acceptUserIds.length === 0) handleClickOutside();
+        if (acceptUserIds.length === 0) handleClickOutside()();
     }, [acceptUserIds.length, handleClickOutside]);
 
     return (

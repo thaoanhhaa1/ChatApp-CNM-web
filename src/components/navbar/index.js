@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-    ClockIcon,
     ContactIcon,
     GlobalIcon,
     LogOutIcon,
@@ -93,35 +92,28 @@ const Navbar = ({ className }) => {
         dispatch(disconnect());
     }, [dispatch]);
 
-    const navBars = [
-        {
-            title: 'navbar.profile',
-            icon: UserIcon,
-            onClick: () => setOpenProfileModal(true),
-        },
-        {
-            title: 'navbar.chats',
-            icon: MessageIcon,
-            to: routes.chats,
-            badge: countMessagesUnseen,
-        },
-        {
-            title: 'navbar.groups',
-            icon: ClockIcon,
-            to: routes.feed,
-        },
-        {
-            title: 'navbar.contacts',
-            icon: ContactIcon,
-            to: routes.contacts,
-            badge: hasNewReceived ? 'N' : '',
-        },
-        {
-            title: 'navbar.settings',
-            icon: SettingIcon,
-            onClick: () => setOpenSettingModal(true),
-        },
-    ];
+    const navBars = useMemo(
+        () => [
+            {
+                title: 'navbar.profile',
+                icon: UserIcon,
+                onClick: () => setOpenProfileModal(true),
+            },
+            {
+                title: 'navbar.chats',
+                icon: MessageIcon,
+                to: routes.chats,
+                badge: countMessagesUnseen,
+            },
+            {
+                title: 'navbar.contacts',
+                icon: ContactIcon,
+                to: routes.contacts,
+                badge: hasNewReceived ? 'N' : '',
+            },
+        ],
+        [countMessagesUnseen, hasNewReceived],
+    );
 
     const actions = useMemo(
         () => [

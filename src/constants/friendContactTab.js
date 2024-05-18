@@ -1,4 +1,4 @@
-import { Cake2LineIcon, ContactBook3LineIcon, GroupIcon } from '~/assets';
+import { ContactBook3LineIcon, GroupIcon } from '~/assets';
 
 const FRIEND_REQUEST = 1;
 const PHONE_BOOK = 2;
@@ -16,12 +16,13 @@ const actions = [
         title: 'contacts.directory',
         description: 'contacts.user-may-use',
     },
-    {
-        id: BIRTHDAY_CALENDAR,
-        Icon: Cake2LineIcon,
-        title: 'contacts.birthday-calender',
-        description: 'contacts.follow-friend-birthday',
-    },
+    // TODO
+    // {
+    //     id: BIRTHDAY_CALENDAR,
+    //     Icon: Cake2LineIcon,
+    //     title: 'contacts.birthday-calender',
+    //     description: 'contacts.follow-friend-birthday',
+    // },
 ];
 
 export default actions;
