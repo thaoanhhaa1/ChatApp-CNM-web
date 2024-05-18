@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { token } from '~/utils';
+import api from '.';
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 
@@ -15,8 +16,8 @@ function destroyToken() {
 
 function refresh() {
     return new Promise((resolve, reject) => {
-        axios
-            .post(`${baseURL}/auth/refreshToken`)
+        axiosClient
+            .post(api.refreshToken())
             .then((response) => {
                 saveToken(response.data.accessToken);
                 return resolve(response.data.accessToken);
@@ -38,7 +39,7 @@ axiosClient.interceptors.response.use(
 
             try {
                 const newAccessToken = await refresh();
-                prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                prevRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                 token.set(newAccessToken);
                 return axiosClient(prevRequest);
             } catch (error) {

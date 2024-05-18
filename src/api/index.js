@@ -8,6 +8,7 @@ const api = {
     sendOTPForgotPassword: () => `/auth/forgotpassword`,
     verifyOTPForgotPassword: () => `/auth/forgot-password`,
     changePassword: () => `/auth/changePassword/`,
+    refreshToken: () => `/auth/refreshToken`,
 
     // User
     userInfo: () => `/user/info`,
