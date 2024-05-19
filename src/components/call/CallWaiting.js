@@ -31,7 +31,7 @@ const CallWaiting = ({ onClose = () => {} }) => {
                 />
                 <div className="text-center">
                     <h5 className="mb-2 text-lg font-semibold">
-                        {conversationName}
+                        {isGroup ? conversationName : sender.name}
                         &nbsp;
                         {t(`calling.${type}.${conversationType}-waiting`)}
                     </h5>

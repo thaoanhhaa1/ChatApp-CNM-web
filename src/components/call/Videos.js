@@ -31,6 +31,7 @@ const Videos = () => {
     const { localCameraTrack } = useLocalCameraTrack(cameraOn);
     usePublish([localMicrophoneTrack, localCameraTrack]);
     const remoteUsers = useRemoteUsers();
+
     const acceptUserIds = useMemo(() => remoteUsers.map((user) => user.uid), [remoteUsers]);
     const [time, setTime] = useState(0);
 
@@ -43,7 +44,7 @@ const Videos = () => {
     }, [localCameraTrack, localMicrophoneTrack]);
 
     useEffect(() => {
-        if (notifiedUserIds.length === users.length - 1) handleClickOutside(handleCloseTrack)();
+        if (notifiedUserIds.length >= users.length - 1) handleClickOutside(handleCloseTrack)();
     }, [handleClickOutside, handleCloseTrack, notifiedUserIds.length, users.length]);
 
     useEffect(() => {

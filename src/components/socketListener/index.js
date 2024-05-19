@@ -55,6 +55,7 @@ const SocketListener = ({ children }) => {
     const { contact } = useSelector((state) => state.addContact);
     const { offlineRecent } = useSelector((state) => state.onlineUsers);
     const { acceptUserIds, rejectUserIds, endedUserIds, _id: prevId } = useSelector((state) => state.calling);
+    console.log('🚀 ~ SocketListener ~ prevId:', prevId);
     const dispatch = useDispatch();
 
     useEffect(() => {

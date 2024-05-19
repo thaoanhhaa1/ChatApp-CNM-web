@@ -16,7 +16,7 @@ function destroyToken() {
 
 function refresh() {
     return new Promise((resolve, reject) => {
-        axiosClient
+        axios
             .post(api.refreshToken())
             .then((response) => {
                 saveToken(response.data.accessToken);
