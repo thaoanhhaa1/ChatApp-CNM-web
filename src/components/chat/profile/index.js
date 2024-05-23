@@ -20,13 +20,21 @@ const Profile = () => {
     const { user } = useSelector((state) => state.user);
     const { active: activeChat } = useSelector((state) => state.chats);
     const conversationName = getNameConversation(activeChat, user._id);
-    const avatars = useMemo(() => convertToAvatarUrlList(activeChat?.users), [activeChat?.users]);
+
+    const avatars = useMemo(() => {
+        if (activeChat?.isGroup) {
+            return convertToAvatarUrlList(activeChat?.users);
+        }
+        const otherUser = activeChat?.users.find(u => u._id !== user._id);
+        return otherUser ? [otherUser.avatar] : [];
+    }, [activeChat?.users, activeChat?.isGroup, user._id]);
+
     const sortedMember = useMemo(
         () =>
             activeChat?.users
                 ? sortMemberByRole(activeChat.users, activeChat.admin, activeChat.deputy).map((user) =>
-                      addRoleToUser(user, activeChat.admin, activeChat.deputy),
-                  )
+                    addRoleToUser(user, activeChat.admin, activeChat.deputy),
+                )
                 : [],
         [activeChat?.users, activeChat?.admin, activeChat?.deputy],
     );
@@ -77,10 +85,10 @@ const Profile = () => {
                 </button>
 
                 <div className="flex flex-col items-center mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6">
-                    {activeChat.picture ? (
-                        <Avatar size="96px" src={activeChat.picture} />
-                    ) : (
+                    {activeChat.isGroup ? (
                         <AvatarGroup avatars={avatars} size="96px" />
+                    ) : (
+                        <Avatar size="96px" src={avatars[0]} />
                     )}
                     <h5 className="mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6 mb-1 font-semibold">{conversationName}</h5>
                     <div className="flex items-center gap-1">
@@ -93,10 +101,10 @@ const Profile = () => {
             </div>
             <ScrollbarCustomize>
                 <div className="p-2 ex:p-3 sm:p-4 md:p-5 dl:p-6 pb-0">
-                    <p className="text-mm text-secondary dark:text-dark-secondary mb-2 ex:mb-3 sm:mb-4 md:mb-5 dl:mb-6 leading-normal">
+                    {/* <p className="text-mm text-secondary dark:text-dark-secondary mb-2 ex:mb-3 sm:mb-4 md:mb-5 dl:mb-6 leading-normal">
                         "If several languages coalesce, the grammar of the resulting language is more simple and regular
                         than that of the individual."
-                    </p>
+                    </p> */}
                     <div className="flex flex-col gap-2">
                         {accordions.map((accordion, index) => (
                             <Accordion
