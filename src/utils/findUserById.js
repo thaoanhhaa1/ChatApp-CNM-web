@@ -1,3 +1,5 @@
-const findUserById = (users, _id) => users.find((user) => user._id === _id);
+import getAgoraUid from './getAgoraUid';
+
+const findUserById = (users, _id) => users.find((user) => getAgoraUid(user._id) === _id);
 
 export default findUserById;

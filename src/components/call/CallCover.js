@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useMemo } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotifiedUserIds } from '~/features/calling/callingSlice';
@@ -84,4 +85,10 @@ CallCover.propTypes = {
     user: PropTypes.object.isRequired,
 };
 
-export default CallCover;
+export default withErrorBoundary(CallCover, {
+    fallback: null,
+    onError: (error, info) => {
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -36,7 +36,9 @@ const friendSlice = createSlice({
             state.friendSent = requestFriends;
         },
         addRequestFriend: (state, { payload }) => {
-            state.friendSent.unshift(payload);
+            const index = state.friendSent.findIndex((item) => item._id === payload._id);
+
+            if (index === -1) state.friendSent.unshift(payload);
         },
         addResponseFriend: (state, { payload }) => {
             const index = state.friendReceived.findIndex((item) => item._id === payload._id);

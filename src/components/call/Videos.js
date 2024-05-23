@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { MicFillIcon, MicStopIcon, PhoneFillIcon, VideoFillIcon, VideoStopIcon } from '~/assets';
 import { callType } from '~/constants';
 import { useCalling } from '~/hooks';
-import { findUserById, formatTime } from '~/utils';
+import { findUserById, formatTime, getAgoraUid } from '~/utils';
 import Button from './Button';
 import CallCover from './CallCover';
 import CallName from './CallName';
@@ -21,16 +21,18 @@ const APP_ID = process.env.REACT_APP_AGORA_APP_ID;
 
 const Videos = () => {
     const { user } = useSelector((state) => state.user);
+    const uid = useMemo(() => getAgoraUid(user._id), [user._id]);
     const { _id, type, users, notifiedUserIds } = useSelector((state) => state.calling);
     const { handleClickOutside } = useCalling();
 
-    useJoin({ appid: APP_ID, channel: _id, token: null, uid: user._id });
+    useJoin({ appid: APP_ID, channel: _id, token: null, uid });
     const [micOn, setMic] = useState(true);
     const [cameraOn, setCamera] = useState(type === callType.VIDEO);
     const { localMicrophoneTrack } = useLocalMicrophoneTrack(micOn);
     const { localCameraTrack } = useLocalCameraTrack(cameraOn);
     usePublish([localMicrophoneTrack, localCameraTrack]);
     const remoteUsers = useRemoteUsers();
+    console.log('🚀 ~ Videos ~ remoteUsers:', remoteUsers);
 
     const acceptUserIds = useMemo(() => remoteUsers.map((user) => user.uid), [remoteUsers]);
     const [time, setTime] = useState(0);
@@ -61,26 +63,27 @@ const Videos = () => {
             return (
                 <div className="user aspect-video" key={remoteUser.uid}>
                     <RemoteUser
-                        cover={() => <CallCover user={findUserById(users, remoteUser.uid)} />}
+                        playVideo={type === callType.VIDEO}
+                        cover={() => <CallCover user={user} />}
                         user={remoteUser}
                     >
-                        <CallName name={user.name} />
+                        <CallName name={user?.name} />
                     </RemoteUser>
                 </div>
             );
         },
-        [users],
+        [type, users],
     );
 
     const renderOtherUser = useCallback(
         (u) =>
-            [...acceptUserIds, ...notifiedUserIds, user._id].includes(u._id) ? null : (
+            [...acceptUserIds, ...notifiedUserIds.map(getAgoraUid), uid].includes(getAgoraUid(u._id)) ? null : (
                 <div className="user aspect-video relative" key={u._id}>
                     <CallCover user={u} />
-                    <CallName name={u.name} />
+                    <CallName name={u?.name} />
                 </div>
             ),
-        [acceptUserIds, notifiedUserIds, user._id],
+        [acceptUserIds, notifiedUserIds, uid],
     );
 
     return (

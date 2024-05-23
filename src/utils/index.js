@@ -12,6 +12,7 @@ export { default as countContactsInPhoneBook } from './countContactsInPhoneBook'
 export { default as findUserById } from './findUserById';
 export { default as formatDate } from './formatDate';
 export { default as formatTime } from './formatTime';
+export { default as getAgoraUid } from './getAgoraUid';
 export { default as getBgByTypeFile } from './getBgByTypeFile';
 export { default as getChatIndividual } from './getChatIndividual';
 export { default as getDate } from './getDate';

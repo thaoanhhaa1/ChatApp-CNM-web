@@ -398,6 +398,9 @@
         "enter-confirm": "Enter OTP code",
         "not-receive": "Didn't receive the verification OTP?"
     },
+    "forgot-password": {
+        "contact-not-use": "This email address or phone number is not registered."
+    },
     "chats-search": {
         "search-recent": "Recent search",
         "no-recent-search": "No recent searches",

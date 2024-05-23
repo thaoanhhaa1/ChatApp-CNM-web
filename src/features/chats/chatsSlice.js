@@ -117,10 +117,14 @@ const chatsSlice = createSlice({
 
                 if (index >= 0) {
                     chat.pinBy.splice(index, 1);
-                    insertChat({
-                        chats: state.chats,
-                        chat,
-                        userId,
+                    state.chats.splice(chatIndex, 1);
+
+                    state.chats.find((item, index) => {
+                        if (item.pinBy.includes(userId)) return false;
+                        if (new Date(item.lastMessage?.updatedAt) > new Date(chat.lastMessage?.updatedAt)) return false;
+
+                        state.chats.splice(index, 0, chat);
+                        return true;
                     });
                 } else {
                     chat.pinBy.push(userId);

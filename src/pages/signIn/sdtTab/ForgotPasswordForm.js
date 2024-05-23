@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import validator from 'validator';
 import { EmailIcon } from '~/assets';
 import Button from '~/components/button';
 import UnderlineInput from '~/components/underlineInput';
-import { useBoolean } from '~/hooks';
 import authServices from '~/services/auth.service';
 import UpdatePasswordForm from './UpdatePasswordForm';
 
@@ -14,22 +12,22 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
     const { t } = useTranslation();
     const [showUpdatePass, setShowUpdatePass] = useState(false);
     const [phone, setPhone] = useState(sdt);
-    const { value, setFalse, setTrue } = useBoolean();
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleContinue = async () => {
-        setFalse();
-        setLoading(true);
+        setError();
 
-        if (!validator.isEmail(phone)) return setTrue();
+        if (!validator.isEmail(phone)) return setError(t('login.error-forget-password'));
+        setLoading(true);
 
         try {
             await authServices.sendOTPForgotPassword(phone);
             setShowUpdatePass(true);
         } catch (error) {
             console.error('Lỗi khi tạo mã OTP:', error);
-
-            toast.error(t('request-error'));
+            if (error.response?.status === 409) setError(t('forgot-password.contact-not-use'));
+            else setError(t('request-error'));
         }
 
         setLoading(false);
@@ -51,17 +49,16 @@ const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
                         containerClassName="mb-[18px]"
                         value={phone}
                         onChangeText={setPhone}
-                        // more={<PhoneSelect onChange={setCountry} />}
                         type="email"
                         Icon={EmailIcon}
                         placeholder={t('login.phone-number')}
                     />
 
-                    {value && (
+                    {error ? (
                         <div className="rounded-sm text-xs font-medium text-[#b64848] bg-[#ffe7e7] p-[15px] mb-6">
-                            {t('login.error-forget-password')}
+                            {error}
                         </div>
-                    )}
+                    ) : null}
 
                     <Button
                         loading={loading}

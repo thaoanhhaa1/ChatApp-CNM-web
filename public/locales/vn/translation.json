@@ -394,7 +394,10 @@
         "countdown": "Mã xác thực sẽ hêt hạn trong",
         "second": "giây",
         "enter-confirm": "Nhập mã xác thực",
-        "not-receive": "Didn't receive the verification OTP?"
+        "not-receive": "Không nhận được OTP xác minh?"
+    },
+    "forgot-password": {
+        "contact-not-use": "Địa chỉ email hoặc sô điện thoại này chưa được đăng ký."
     },
     "chats-search": {
         "search-recent": "Tìm gần đây",
@@ -469,8 +472,8 @@
             "change-role-successfully": "Chuyển quyền trưởng nhóm thành công"
         },
         "manage": {
-            "title": "Manage group",
-            "delete": "Delete group",
+            "title": "Quản lý nhóm",
+            "delete": "Giải tán nhóm",
             "delete-description": "Mời tất cả mọi người rời nhóm và xóa tin nhắn? Nhóm đã giải tán sẽ KHÔNG THỂ khôi phục.",
             "no": "Không",
             "warning": "Tính năng chỉ dành cho quản trị viên"
