@@ -84,7 +84,7 @@ const Header = () => {
     }, [handleShowProfile, t, width]);
 
     const handleAcceptCall = (type) => {
-        const _id = active._id + user._id;
+        const _id = active._id;
         socket.emit('call', {
             type,
             users: active.users,

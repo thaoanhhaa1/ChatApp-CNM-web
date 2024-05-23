@@ -96,6 +96,11 @@ const messagesSlice = createSlice({
 
             if (message) message.state = null;
         },
+        removeSendingMessage: (state, { payload }) => {
+            const index = state.messages.findIndex((message) => message.timeSend === payload);
+
+            if (index >= 0) state.messages.splice(index, 1);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -161,5 +166,6 @@ export const {
     addMessageSocket,
     updateReact,
     updateState,
+    removeSendingMessage,
 } = messagesSlice.actions;
 export { getMessages, getReplyMessages, sendMessage };

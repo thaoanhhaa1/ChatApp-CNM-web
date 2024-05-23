@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { addMessageHeadSocket } from '~/features/chats/chatsSlice';
-import { addMessage, addMessageSocket, sendMessage } from '~/features/messages/messagesSlice';
+import { addMessage, addMessageSocket, removeSendingMessage, sendMessage } from '~/features/messages/messagesSlice';
 import { isImageFileByType, splitMessage } from '~/utils';
 import validFileSize from '~/utils/validFileSize';
 
@@ -111,7 +111,10 @@ const useSendMessage = () => {
             dispatch(sendMessage({ messages: messagesFilter, conversationId, reply: reply?._id, timeSend }))
                 .unwrap()
                 .then(showMessageToast)
-                .catch(showError);
+                .catch((error) => {
+                    showError(error);
+                    dispatch(removeSendingMessage(timeSend));
+                });
             dispatch(
                 addMessage({
                     messages,
