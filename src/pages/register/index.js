@@ -208,7 +208,7 @@ const Register = () => {
 
     return (
         <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden px-2">
-            <h1 className="text-4xl text-primary-color font-bold mb-10">Zalo</h1>
+            <h1 className="text-4xl text-primary-color font-bold mb-10">Lola</h1>
             <div className="max-w-[400px] w-full bg-white shadow-md rounded px-8 pt-6 pb-8">
                 <div className="flex justify-center items-center mb-4">
                     {new Array(NUMBER_OF_STEP).fill(null).map((_, i) => (

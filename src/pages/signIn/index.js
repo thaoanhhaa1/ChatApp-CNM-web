@@ -16,7 +16,7 @@ const SignIn = () => {
 
     return (
         <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden px-2">
-            <h1 className="text-4xl text-primary-color font-bold mb-10">Zalo</h1>
+            <h1 className="text-4xl text-primary-color font-bold mb-10">Lola</h1>
             <div className="max-w-[400px] w-full bg-white shadow-md rounded flex flex-col items-center justify-center">
                 <ul className="flex flex-wrap justify-between -mb-px w-full border-b-2 border-gray-150">
                     <Tab active={activeTab === QR_TAB} onClick={() => switchTab(QR_TAB)}>
