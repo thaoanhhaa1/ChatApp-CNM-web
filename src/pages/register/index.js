@@ -34,7 +34,6 @@ const Register = () => {
         password: '',
         gender: 'male',
         dateOfBirth: '',
-        // country: {},
     });
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
@@ -58,19 +57,8 @@ const Register = () => {
     const [errors, setErrors] = useState({});
     const [otpCode, setOtpCode] = useState('');
     const [countdown, setCountdown] = useState(TIME_OTP);
-
-    // const nextStep = () => {
-    //     const validationErrors = validateFormFields(currentStep);
-    //     if (Object.keys(validationErrors).length === 0) {
-    //         setCurrentStep(currentStep + 1);
-    //     } else {
-    //         setErrors(validationErrors);
-    //     }
-    // };
     const [showModal, setShowModal] = useState(false);
-    const handleClose = () => {
-        setShowModal(false); // Đảo ngược trạng thái hiển thị của modal
-    };
+    const handleClose = () => setShowModal(false); // Đảo ngược trạng thái hiển thị của modal
 
     const handleSendOTP = async () => {
         try {
@@ -160,8 +148,6 @@ const Register = () => {
 
     const prevStep = () => currentStep > 1 && setCurrentStep(currentStep - 1);
 
-    // const handleChangeCountry = useCallback((country) => setFormData((prev) => ({ ...prev, country })), []);
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -181,7 +167,7 @@ const Register = () => {
         if (loading) return;
 
         setLoading(true);
-        const validationErrors = validateFormFields(currentStep);
+        const validationErrors = await validateFormFields(currentStep);
 
         if (Object.keys(validationErrors).length) {
             setErrors(validationErrors);
