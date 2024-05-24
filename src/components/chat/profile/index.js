@@ -3,12 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { AttachmentLineIcon, CloseLineIcon, GroupIcon, RecordCircleFillIcon, UserIcon } from '~/assets';
 import Accordion from '~/components/accordion';
-import Avatar from '~/components/avatar';
-import AvatarGroup from '~/components/avatarGroup';
+import ConversationAvatar from '~/components/conversationAvatar';
 import Member from '~/components/member';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { useChat } from '~/context';
-import { addRoleToUser, convertToAvatarUrlList, getNameConversation, sortMemberByRole } from '~/utils';
+import { addRoleToUser, getNameConversation, sortMemberByRole } from '~/utils';
 import About from './About';
 import AttachedFiles from './AttachedFiles';
 import HeaderActions from './HeaderActions';
@@ -21,20 +20,12 @@ const Profile = () => {
     const { active: activeChat } = useSelector((state) => state.chats);
     const conversationName = getNameConversation(activeChat, user._id);
 
-    const avatars = useMemo(() => {
-        if (activeChat?.isGroup) {
-            return convertToAvatarUrlList(activeChat?.users);
-        }
-        const otherUser = activeChat?.users.find(u => u._id !== user._id);
-        return otherUser ? [otherUser.avatar] : [];
-    }, [activeChat?.users, activeChat?.isGroup, user._id]);
-
     const sortedMember = useMemo(
         () =>
             activeChat?.users
                 ? sortMemberByRole(activeChat.users, activeChat.admin, activeChat.deputy).map((user) =>
-                    addRoleToUser(user, activeChat.admin, activeChat.deputy),
-                )
+                      addRoleToUser(user, activeChat.admin, activeChat.deputy),
+                  )
                 : [],
         [activeChat?.users, activeChat?.admin, activeChat?.deputy],
     );
@@ -85,11 +76,7 @@ const Profile = () => {
                 </button>
 
                 <div className="flex flex-col items-center mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6">
-                    {activeChat.isGroup ? (
-                        <AvatarGroup avatars={avatars} size="96px" />
-                    ) : (
-                        <Avatar size="96px" src={avatars[0]} />
-                    )}
+                    <ConversationAvatar conversation={activeChat} size="96px" />
                     <h5 className="mt-2 ex:mt-3 sm:mt-4 md:mt-5 dl:mt-6 mb-1 font-semibold">{conversationName}</h5>
                     <div className="flex items-center gap-1">
                         <RecordCircleFillIcon className="flex-shrink-0 w-2.5 h-2.5 text-success" />

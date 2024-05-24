@@ -22,7 +22,14 @@ const ConversationAvatar = ({ conversation, size, status = statusUser.OFFLINE })
 
     const otherUser = getOtherUserInIndividual(conversation.users, user._id);
 
-    return <Avatar status={status} src={otherUser.avatar} size={size} alt={otherUser.name} />;
+    return (
+        <Avatar
+            status={status}
+            src={otherUser?.avatar || process.env.REACT_APP_FALLBACK_AVATAR}
+            size={size}
+            alt={otherUser.name}
+        />
+    );
 };
 
 ConversationAvatar.propTypes = {

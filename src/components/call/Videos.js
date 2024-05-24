@@ -32,7 +32,6 @@ const Videos = () => {
     const { localCameraTrack } = useLocalCameraTrack(cameraOn);
     usePublish([localMicrophoneTrack, localCameraTrack]);
     const remoteUsers = useRemoteUsers();
-    console.log('🚀 ~ Videos ~ remoteUsers:', remoteUsers);
 
     const acceptUserIds = useMemo(() => remoteUsers.map((user) => user.uid), [remoteUsers]);
     const [time, setTime] = useState(0);

@@ -7,7 +7,7 @@ import ConversationAvatar from '../conversationAvatar';
 import Modal from '../modal';
 import Button from './Button';
 
-const Call = ({ users, isVideoCall, show, onCancel = () => {}, onAccept = () => {} }) => {
+const Call = ({ isVideoCall, show, onCancel = () => {}, onAccept = () => {} }) => {
     const { t } = useTranslation();
     const { user } = useSelector((state) => state.user);
     const { active } = useSelector((state) => state.chats);
