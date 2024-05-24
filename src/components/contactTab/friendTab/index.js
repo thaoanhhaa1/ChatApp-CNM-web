@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,10 +16,18 @@ import Wrapper from '../Wrapper';
 import FriendRequest from './friendRequest';
 import PhoneBookSub from './phoneBook';
 
-const Friend = () => {
+const Friend = ({ search = '' }) => {
     const { t } = useTranslation();
     const { friendList, friendListLoading, friendListFirstFetch } = useSelector((state) => state.friend);
-    const phoneBook = useMemo(() => convertContactsToPhoneBook(friendList), [friendList]);
+    const phoneBook = useMemo(() => {
+        const searchLower = search.toLowerCase();
+
+        return convertContactsToPhoneBook(
+            friendList.filter(
+                (friend) => friend.name.toLowerCase().includes(searchLower) || friend._id.toLowerCase() === searchLower,
+            ),
+        );
+    }, [friendList, search]);
     const [modalActive, setModalActive] = useState();
     const dispatch = useDispatch();
 
@@ -63,6 +72,8 @@ const Friend = () => {
     );
 };
 
-Friend.propTypes = {};
+Friend.propTypes = {
+    search: PropTypes.string,
+};
 
 export default Friend;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -14,11 +15,14 @@ import Seperate from '../Seperate';
 import Wrapper from '../Wrapper';
 import CreateGroup from './createGroup';
 
-const Group = () => {
+const Group = ({ search = '' }) => {
     const { t } = useTranslation();
     const { chats, loading } = useSelector((state) => state.chats);
     const { user } = useSelector((state) => state.user);
-    const groups = useMemo(() => chats.filter((chat) => chat.isGroup), [chats]);
+    const groups = useMemo(
+        () => chats.filter((chat) => chat.isGroup && chat.name.toLowerCase().includes(search.toLowerCase())),
+        [chats, search],
+    );
     const [sort, setSort] = useState(() => sortGroup[0]);
     const sorts = useMemo(
         () => sortGroup.map((sort) => ({ ...sort, title: t(sort.title), onClick: () => setSort(sort) })),
@@ -65,6 +69,8 @@ const Group = () => {
     );
 };
 
-Group.propTypes = {};
+Group.propTypes = {
+    search: PropTypes.string,
+};
 
 export default Group;

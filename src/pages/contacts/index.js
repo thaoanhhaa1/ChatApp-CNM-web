@@ -3,6 +3,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
+import { useDebounce } from '@uidotdev/usehooks';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +22,8 @@ const Contacts = () => {
     const [tab, setTab] = useState('1');
     const { value, setTrue, setFalse } = useBoolean(false);
     const { active } = useSelector((state) => state.chats);
+    const [search, setSearch] = useState('');
+    const searchDebounce = useDebounce(search, 500);
     const dispatch = useDispatch();
 
     const handleChange = (_, a) => setTab(a);
@@ -41,7 +44,7 @@ const Contacts = () => {
                 rightIcon={UserAddLineIcon}
                 rightClick={setTrue}
             >
-                <Input placeholder={t('contacts.search')} Icon={SearchIcon} />
+                <Input value={search} onChangeText={setSearch} placeholder={t('contacts.search')} Icon={SearchIcon} />
             </HeaderPage>
 
             <TabContext value={tab}>
@@ -53,10 +56,10 @@ const Contacts = () => {
                 </Box>
                 <ScrollbarCustomize>
                     <TabPanel value="1">
-                        <ContactTab.Friend />
+                        <ContactTab.Friend search={searchDebounce} />
                     </TabPanel>
                     <TabPanel value="2">
-                        <ContactTab.Group />
+                        <ContactTab.Group search={searchDebounce} />
                     </TabPanel>
                 </ScrollbarCustomize>
             </TabContext>
