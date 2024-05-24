@@ -65,8 +65,6 @@ const LeaveGroup = ({ newOwnerId, show, onClickOutside }) => {
             dispatch(removeGroup(active._id));
             toast.success(t('group.leave.notification-successfully'));
         } catch (error) {
-            console.error(error);
-
             toast.error(t('request-error'));
         } finally {
             setLoading(false);

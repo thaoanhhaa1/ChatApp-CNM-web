@@ -481,7 +481,8 @@
         "add-members": {
             "title": "Thêm thành viên",
             "cancel": "Huỷ",
-            "confirm": "Xác nhận"
+            "confirm": "Xác nhận",
+            "error": "Có lỗi xảy ra trong quá trình thêm thành viên"
         },
         "remove-member": {
             "title": "Xác nhận",

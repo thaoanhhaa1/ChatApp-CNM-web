@@ -33,7 +33,6 @@ const DeleteGroup = ({ show, onClickOutside }) => {
             });
             onClickOutside();
         } catch (error) {
-            console.error(error);
             toast.error(t('request-error'));
         } finally {
             setLoading(false);

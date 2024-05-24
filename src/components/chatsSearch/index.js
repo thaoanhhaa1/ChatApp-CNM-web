@@ -45,8 +45,6 @@ const ChatsSearch = ({ searchValue }) => {
                     user: me,
                 });
             } catch (error) {
-                console.error(error);
-
                 toast.error(t('request-error'));
             }
         }

@@ -101,7 +101,6 @@ const Profile = ({ onClose }) => {
             dispatch(acceptFriendReceived({ _id: friendResponse._id, user: sender_id }));
             dispatch(setContact({ ...contact, status: FriendStatus.FRIEND }));
         } catch (error) {
-            console.error(error);
             toast.error(t('request-error'));
         } finally {
             setOtherLoading(false);
@@ -118,7 +117,6 @@ const Profile = ({ onClose }) => {
             else await dispatch(getConversation(contact._id)).unwrap();
             onClose();
         } catch (error) {
-            console.error(error);
             toast.error(t('request-error'));
         } finally {
             setChatLoading(false);

@@ -28,7 +28,6 @@ const DeleteChatItem = ({ conversationId, show, onClickOutside }) => {
             dispatch(deleteChat(conversationId));
             if (active?._id === conversationId) dispatch(setActive(null));
         } catch (error) {
-            console.error(error);
         } finally {
             setLoading(false);
         }

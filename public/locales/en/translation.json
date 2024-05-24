@@ -483,7 +483,8 @@
         "add-members": {
             "title": "Add members",
             "cancel": "Cancel",
-            "confirm": "Confirm"
+            "confirm": "Confirm",
+            "error": "Failed to add members"
         },
         "remove-member": {
             "title": "Confirm",

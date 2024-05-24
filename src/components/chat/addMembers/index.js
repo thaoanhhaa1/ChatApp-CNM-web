@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { SearchIcon } from '~/assets';
 import ContactList from '~/components/contactTab/groupTab/createGroup/ContactList';
 import ItemSkeleton from '~/components/forwardMessage/ItemSkeleton';
@@ -84,7 +85,7 @@ const AddMembers = ({ show, handleClickOutside }) => {
             handleSendNotificationMessage(messageRes);
             handleClickOutside();
         } catch (error) {
-            console.error(error);
+            toast.error(t('group.add-members.error'));
         } finally {
             setLoading(false);
         }

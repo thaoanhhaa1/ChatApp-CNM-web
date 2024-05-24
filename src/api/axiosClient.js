@@ -42,9 +42,7 @@ axiosClient.interceptors.response.use(
                 prevRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                 token.set(newAccessToken);
                 return axiosClient(prevRequest);
-            } catch (error) {
-                console.error(error);
-            }
+            } catch (error) {}
         }
         return Promise.reject(error);
     },

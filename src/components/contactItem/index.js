@@ -32,9 +32,7 @@ const ContactItem = ({ contact }) => {
                 receiverId: contact._id,
             });
             dispatch(removeFriend({ _id: contact._id }));
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) {}
     };
 
     const more = [

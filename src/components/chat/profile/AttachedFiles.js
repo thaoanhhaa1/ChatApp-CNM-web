@@ -20,7 +20,6 @@ const AttachedFiles = () => {
                 setLoading(true);
                 await dispatch(getAttachedFiles({ conversationId: active._id })).unwrap();
             } catch (error) {
-                console.error(error);
             } finally {
                 setLoading(false);
             }
