@@ -125,6 +125,7 @@ const Profile = ({ onClose }) => {
 
     const getPersonalInformation = (key) => {
         if (['createdAt', 'dateOfBirth'].includes(key)) return getDate(new Date(contact[key]));
+        if (key === 'gender') return user.gender === 'male' ? t('profile.male') : t('profile.female');
 
         return contact[key] || '';
     };

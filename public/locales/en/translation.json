@@ -155,7 +155,7 @@
             "unblockTitle": "Unblock to send message and call to this person.",
             "blockWarning": "Be careful when adding strangers",
             "zaloName": "Zalo name",
-            "phoneNumber": "Phone number",
+            "phoneNumber": "Email",
             "joinedZalo": "Joined Zalo",
             "undoRequest": "Undo request",
             "addFriendSuccess": "Friend request sent",
@@ -386,7 +386,7 @@
         "password-validate-max-length": "Password not exceed 30 characters",
         "dob-validate": "You must be at least 14 years old to use app",
         "dob-validate1": "Please enter your date of birth",
-        "error-password-01": "Passwords do not match",
+        "error-password-01": "Password does not match new password",
         "modal-text-1": "You will receive an encrypted OTP from Zalo.",
         "modal-text-2": "Enter activation code",
         "authentication": "Authentication",
@@ -396,7 +396,8 @@
         "countdown": "The OTP will be expired in",
         "second": "seconds",
         "enter-confirm": "Enter OTP code",
-        "not-receive": "Didn't receive the verification OTP?"
+        "not-receive": "Didn't receive the verification OTP?",
+        "update-password-max-length": "Password not exceed 30 characters."
     },
     "forgot-password": {
         "contact-not-use": "This email address or phone number is not registered."

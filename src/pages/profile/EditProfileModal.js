@@ -9,6 +9,7 @@ import Modal from '~/components/modal';
 import RadioGroup from '~/components/radioGroup';
 import UnderlineInput from '~/components/underlineInput';
 import { genders } from '~/constants';
+import { popSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { setUser } from '~/features/user/userSlice';
 import userServices from '~/services/user.service';
 
@@ -21,6 +22,7 @@ const EditProfileModal = ({ onClose = () => {} }) => {
     const [dateOfBirth, setDateOfBirth] = useState(user.dateOfBirth);
     const gendersTranslation = useMemo(() => genders.map((gender) => ({ ...gender, label: t(gender.label) })), [t]);
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -54,15 +56,19 @@ const EditProfileModal = ({ onClose = () => {} }) => {
 
     const handleUpdateProfile = async () => {
         if (!errors.name && !errors.dateOfBirth) {
+            setLoading(true);
             try {
                 const updatedInfo = { name, gender, dateOfBirth };
                 const response = await userServices.updateUser(updatedInfo);
 
                 dispatch(setUser(response.data));
+                dispatch(popSub());
                 toast.success(t('profile.updateSuccess'));
             } catch (error) {
                 console.error('Đã xảy ra lỗi khi cập nhật thông tin người dùng:', error);
                 toast.error(t('profile.updateError'));
+            } finally {
+                setLoading(false);
             }
         }
     };
@@ -113,10 +119,12 @@ const EditProfileModal = ({ onClose = () => {} }) => {
             </div>
 
             <Modal.Footer className="flex justify-end items-center gap-2">
-                <Modal.Button type="text-secondary" onClick={onClose}>
+                <Modal.Button disabled={loading} type="text-secondary" onClick={onClose}>
                     {t('profile.cancel')}
                 </Modal.Button>
-                <Modal.Button onClick={handleUpdateProfile}>{t('profile.update')}</Modal.Button>
+                <Modal.Button disabled={loading} loading={loading} onClick={handleUpdateProfile}>
+                    {t('profile.update')}
+                </Modal.Button>
             </Modal.Footer>
         </>
     );

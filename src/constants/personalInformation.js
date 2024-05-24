@@ -15,6 +15,10 @@ export const block = [
 
 export const noBlock = [
     {
+        label: 'phoneNumber',
+        key: '_id',
+    },
+    {
         label: 'gender',
         key: 'gender',
     },

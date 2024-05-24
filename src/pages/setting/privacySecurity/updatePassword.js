@@ -17,6 +17,7 @@ const UpdatePassword = ({ onClose }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const { updateHeightPopup } = useSelector((state) => state.popupMultiLevel);
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
 
     const handleChange = (event) => {
@@ -30,10 +31,12 @@ const UpdatePassword = ({ onClose }) => {
     const validate = () => {
         const newErrors = { ...errors };
 
-        if (!validator.matches(oldPassword, /^(?=.*\d)(?=.*[a-zA-Z]).{6,32}$/))
+        if (oldPassword.length > 32) newErrors.oldPassword = t('register.update-password-max-length');
+        else if (!validator.matches(oldPassword, /^(?=.*\d)(?=.*[a-zA-Z]).{6,32}$/))
             newErrors.oldPassword = t('register.error-password');
 
-        if (!validator.matches(newPassword, /^(?=.*\d)(?=.*[a-zA-Z]).{6,32}$/))
+        if (newPassword.length > 32) newErrors.newPassword = t('register.update-password-max-length');
+        else if (!validator.matches(newPassword, /^(?=.*\d)(?=.*[a-zA-Z]).{6,32}$/))
             newErrors.newPassword = t('register.error-password');
         else if (newPassword !== confirmPassword) newErrors.confirmPassword = t('register.error-password-01');
 
@@ -45,6 +48,7 @@ const UpdatePassword = ({ onClose }) => {
         const errors = validate();
 
         if (!Object.keys(errors).length) {
+            setLoading(true);
             try {
                 await authServices.changePassword({ oldPassword: oldPassword, newPassword: newPassword });
                 toast.success(t('profile.updateSuccess'));
@@ -54,6 +58,8 @@ const UpdatePassword = ({ onClose }) => {
                 if (error.response.status === 400) {
                     setErrors({ ...errors, oldPassword: t('profile.error-incorrect-old-password') });
                 } else setErrors({ ...errors, oldPassword: t('request-error') });
+            } finally {
+                setLoading(false);
             }
         }
     };
@@ -117,11 +123,12 @@ const UpdatePassword = ({ onClose }) => {
                 </div>
             </div>
             <Modal.Footer className="flex justify-end items-center gap-2">
-                <Modal.Button type="text-secondary" onClick={onClose}>
+                <Modal.Button disabled={loading} type="text-secondary" onClick={onClose}>
                     {t('profile.cancel')}
                 </Modal.Button>
                 <Modal.Button
-                    disabled={oldPassword.length < 6 || newPassword.length < 6 || confirmPassword.length < 6}
+                    loading={loading}
+                    disabled={oldPassword.length < 6 || newPassword.length < 6 || confirmPassword.length < 6 || loading}
                     onClick={handleConfirm}
                 >
                     {t('profile.update')}
