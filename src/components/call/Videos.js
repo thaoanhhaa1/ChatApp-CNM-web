@@ -5,6 +5,7 @@ import {
     useLocalCameraTrack,
     useLocalMicrophoneTrack,
     usePublish,
+    useRTCClient,
     useRemoteUsers,
 } from 'agora-rtc-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -32,8 +33,10 @@ const Videos = () => {
     const { localCameraTrack } = useLocalCameraTrack(cameraOn);
     usePublish([localMicrophoneTrack, localCameraTrack]);
     const remoteUsers = useRemoteUsers();
+    const client = useRTCClient();
 
     const acceptUserIds = useMemo(() => remoteUsers.map((user) => user.uid), [remoteUsers]);
+    const [audioRemotes, setAudioRemotes] = useState({});
     const [time, setTime] = useState(0);
 
     const toggleVideo = () => setCamera((prev) => !prev);
@@ -55,6 +58,22 @@ const Videos = () => {
         return () => clearInterval(timer);
     }, [acceptUserIds.length, time]);
 
+    useEffect(() => {
+        client.on('user-published', async (user, mediaType) => {
+            if (mediaType === 'audio') {
+                await client.subscribe(user, 'audio');
+                setAudioRemotes((prev) => ({ ...prev, [user.uid]: true }));
+            }
+        });
+
+        client.on('user-unpublished', (user) => setAudioRemotes((prev) => ({ ...prev, [user.uid]: false })));
+
+        return () => {
+            client.off('user-published');
+            client.off('user-unpublished');
+        };
+    }, [client]);
+
     const renderRemoteUser = useCallback(
         (remoteUser) => {
             const user = findUserById(users, remoteUser.uid);
@@ -66,12 +85,12 @@ const Videos = () => {
                         cover={() => <CallCover user={user} />}
                         user={remoteUser}
                     >
-                        <CallName name={user?.name} />
+                        <CallName name={user?.name} audio={audioRemotes[remoteUser.uid]} />
                     </RemoteUser>
                 </div>
             );
         },
-        [type, users],
+        [audioRemotes, type, users],
     );
 
     const renderOtherUser = useCallback(
@@ -99,7 +118,7 @@ const Videos = () => {
                                 playAudio={false}
                                 cover={() => <CallCover user={user} />}
                             >
-                                <CallName name="You" />
+                                <CallName audio name="You" />
                             </LocalUser>
                         </div>
                         {remoteUsers.map(renderRemoteUser)}

@@ -328,7 +328,7 @@
         "login-with-password": "Đăng nhập với mật khẩu",
         "sign-in-with-mobile": "Đăng nhập bằng thiết bị di động",
         "forgot-password": "Quên mật khẩu?",
-        "error": "Số điện thoại hoặc mật khẩu không khớp, vui lòng nhập lại",
+        "error": "Địa chỉ email hoặc mật khẩu không khớp, vui lòng nhập lại",
         "enter-phone-number": "Nhập địa chỉ email của bạn",
         "error-forget-password": "Vui lòng nhập email hợp lệ",
         "continue": "Tiếp tục",

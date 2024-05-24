@@ -330,7 +330,7 @@
         "login-with-password": "Login with password",
         "sign-in-with-mobile": "Sign in with mobile device",
         "forgot-password": "Forgot password?",
-        "error": "Phone number or password does not match, please re-enter",
+        "error": "Email or password does not match, please re-enter",
         "enter-phone-number": "Enter the your email address",
         "error-forget-password": "Please enter a valid email",
         "continue": "Continue",
