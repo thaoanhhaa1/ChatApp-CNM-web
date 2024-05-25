@@ -1,13 +1,16 @@
 import PropTypes from 'prop-types';
 import { withErrorBoundary } from 'react-error-boundary';
 import { toast } from 'react-toastify';
-import { convertToDMS } from '~/utils';
+import { useMessage } from '~/context';
+import { classNames, convertToDMS } from '~/utils';
 
 const MessageLocation = ({ location }) => {
+    const { isMe } = useMessage();
+
     if (!location) return null;
 
     return (
-        <div className="relative w-fit flex flex-col">
+        <div className={classNames('relative w-fit flex flex-col', isMe ? '' : 'text-white')}>
             <h5 className="text-sm font-medium line-clamp-1 mb-1">{location.name}</h5>
             <p className="text-sm line-clamp-1 mb-2.5">{location.vicinity}</p>
             <a
