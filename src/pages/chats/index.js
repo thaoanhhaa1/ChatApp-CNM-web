@@ -1,7 +1,9 @@
 import { useDebounce, useWindowSize } from '@uidotdev/usehooks';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SearchIcon } from '~/assets';
 import Button from '~/components/button';
@@ -139,4 +141,11 @@ const Chats = () => {
 
 Chats.propTypes = {};
 
-export default Chats;
+export default withErrorBoundary(Chats, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Chats::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

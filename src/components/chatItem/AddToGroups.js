@@ -11,6 +11,7 @@ import messageServices from '~/services/message.service';
 import { isUserInConversation } from '~/utils';
 import Modal from '../modal';
 import SelectedConversation from '../selectedConversation';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const AddToGroups = ({ conversationId, userId, show, onClickOutside }) => {
     const { t } = useTranslation();
@@ -105,4 +106,11 @@ AddToGroups.propTypes = {
     onClickOutside: PropTypes.func,
 };
 
-export default AddToGroups;
+export default withErrorBoundary(AddToGroups, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('AddToGroups::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -9,6 +9,8 @@ import InviteToGroupNotification from './InviteToGroupNotification';
 import RemoveUserNotification from './RemoveUserNotification';
 import TogglePinMessageNotification from './TogglePinMessageNotification';
 import Wrapper from './Wrapper';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const MessageNotification = ({ message }) => {
     const { t } = useTranslation();
@@ -77,4 +79,11 @@ MessageNotification.propTypes = {
     message: PropTypes.object,
 };
 
-export default MessageNotification;
+export default withErrorBoundary(MessageNotification, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('MessageNotification::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 import Avatar from '~/components/avatar';
 import Radio from '~/components/radioGroup/Radio';
 
@@ -18,4 +20,11 @@ UserItem.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
 
-export default UserItem;
+export default withErrorBoundary(UserItem, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('UserItem::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

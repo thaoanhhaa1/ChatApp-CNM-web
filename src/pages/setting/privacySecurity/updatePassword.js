@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useLayoutEffect, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -141,4 +142,11 @@ UpdatePassword.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default UpdatePassword;
+export default withErrorBoundary(UpdatePassword, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('UpdatePassword::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

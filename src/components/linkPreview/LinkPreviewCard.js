@@ -1,11 +1,14 @@
 import { CardMedia } from '@mui/material';
+import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
-const LinkPreviewCard = (props) => (
+const LinkPreviewCard = ({ response }) => (
     <div className="w-[300px] rounded mt-[14px]">
-        <a href={props.response.url || '#'} target="_blank" rel="noreferrer">
+        <a href={response.url || '#'} target="_blank" rel="noreferrer">
             <CardMedia
                 component="img"
-                image={props.response.image || ''}
+                image={response.image || ''}
                 alt="No Image Found"
                 sx={{
                     objectFit: 'contain',
@@ -14,16 +17,31 @@ const LinkPreviewCard = (props) => (
             />
 
             <div className="mt-3">
-                <h5 className="text-sm mb-1 line-clamp-1">{props.response.title}</h5>
+                <h5 className="text-sm mb-1 line-clamp-1">{response.title}</h5>
                 <p className="text-sm mb-1 line-clamp-2 text-secondary dark:text-dark-secondary">
-                    {props.response.description}
+                    {response.description}
                 </p>
             </div>
-            {props.response.publisher ? (
-                <span className="text-ss text-primary-color">{props.response.publisher}</span>
-            ) : null}
+            {response.publisher ? <span className="text-ss text-primary-color">{response.publisher}</span> : null}
         </a>
     </div>
 );
 
-export default LinkPreviewCard;
+LinkPreviewCard.propTypes = {
+    response: PropTypes.shape({
+        url: PropTypes.string,
+        image: PropTypes.string,
+        title: PropTypes.string,
+        description: PropTypes.string,
+        publisher: PropTypes.string,
+    }).isRequired,
+};
+
+export default withErrorBoundary(LinkPreviewCard, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('LinkPreviewCard::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

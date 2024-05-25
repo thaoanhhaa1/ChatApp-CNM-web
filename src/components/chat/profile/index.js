@@ -11,6 +11,8 @@ import { addRoleToUser, getNameConversation, sortMemberByRole } from '~/utils';
 import About from './About';
 import AttachedFiles from './AttachedFiles';
 import HeaderActions from './HeaderActions';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Profile = () => {
     const [active, setActive] = useState(-1);
@@ -112,4 +114,11 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default withErrorBoundary(Profile, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Profile::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

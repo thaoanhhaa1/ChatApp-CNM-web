@@ -7,6 +7,8 @@ import PhoneBook from '../phoneBook';
 import ContactItem from './ContactItem';
 import GroupItem from './GroupItem';
 import SelectedContacts from './SelectedContacts';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ContactList = ({ contacts, groups, selectedContacts, handleClickContact, handleRemoveContact }) => {
     const { t } = useTranslation();
@@ -75,4 +77,11 @@ ContactList.propTypes = {
     handleRemoveContact: PropTypes.func.isRequired,
 };
 
-export default ContactList;
+export default withErrorBoundary(ContactList, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ContactList::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import AboutItem from '~/components/aboutItem';
 import { getDate } from '~/utils';
 
@@ -44,4 +46,11 @@ const About = () => {
 
 About.propTypes = {};
 
-export default About;
+export default withErrorBoundary(About, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('About::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

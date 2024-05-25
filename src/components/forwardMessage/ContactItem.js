@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 import Avatar from '~/components/avatar';
 import Checkbox from '~/components/checkbox';
 
@@ -26,4 +28,11 @@ ContactItem.propTypes = {
     checked: PropTypes.bool,
 };
 
-export default ContactItem;
+export default withErrorBoundary(ContactItem, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ContactItem::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

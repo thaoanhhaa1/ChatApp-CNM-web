@@ -14,6 +14,8 @@ import authServices from '~/services/auth.service';
 import { token } from '~/utils';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import MobileLoginForm from './MobileLoginForm';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const SdtTab = () => {
     const { t } = useTranslation();
@@ -133,4 +135,11 @@ const SdtTab = () => {
 
 SdtTab.propTypes = {};
 
-export default SdtTab;
+export default withErrorBoundary(SdtTab, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('SdtTab::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

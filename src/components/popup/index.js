@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { classNames } from '~/utils';
 import Item from './Item';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Popup = ({ data, children, ...props }) => {
     const tipRef = useRef();
@@ -70,4 +72,11 @@ Popup.propTypes = {
 
 Popup.Item = Item;
 
-export default Popup;
+export default withErrorBoundary(Popup, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Popup::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

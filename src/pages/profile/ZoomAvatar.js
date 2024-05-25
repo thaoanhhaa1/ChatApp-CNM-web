@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -74,4 +75,11 @@ ZoomAvatar.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default ZoomAvatar;
+export default withErrorBoundary(ZoomAvatar, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ZoomAvatar::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

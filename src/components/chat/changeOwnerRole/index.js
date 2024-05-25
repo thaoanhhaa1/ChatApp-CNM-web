@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import Modal from '~/components/modal';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import UserItem from './UserItem';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ChangeOwnerRole = ({ checked, show, onClickOutside, onContinue, setChecked }) => {
     const { t } = useTranslation();
@@ -49,4 +51,11 @@ ChangeOwnerRole.propTypes = {
     setChecked: PropTypes.func,
 };
 
-export default ChangeOwnerRole;
+export default withErrorBoundary(ChangeOwnerRole, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ChangeOwnerRole::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

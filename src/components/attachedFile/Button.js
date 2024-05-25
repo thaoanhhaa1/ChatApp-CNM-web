@@ -8,7 +8,7 @@ const Button = ({ icon, onClick = () => {} }) => {
             onClick={onClick}
             className="flex justify-center items-center w-[26px] h-[26px] text-secondary dark:text-dark-secondary"
         >
-            <Icon className="w-[18px] h-[18px]" />
+            {Icon ? <Icon className="w-[18px] h-[18px]" /> : null}
         </button>
     );
 };

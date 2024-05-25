@@ -6,9 +6,10 @@ import SentFriendRequest from '~/components/sentFriendRequest';
 import SentFriendRequestSkeleton from '~/components/sentFriendRequest/SentFriendRequestSkeleton';
 import { classNames } from '~/utils';
 import RequestEmpty from './RequestEmpty';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const SentTab = ({ className }) => {
-    // const { sentFriendRequests } = useSelector((state) => state.sentFriendRequests);
     const { t } = useTranslation();
     const { friendRequestLoading, friendSent } = useSelector((state) => state.friend);
 
@@ -29,4 +30,11 @@ SentTab.propTypes = {
     className: PropTypes.string,
 };
 
-export default SentTab;
+export default withErrorBoundary(SentTab, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('SentTab::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

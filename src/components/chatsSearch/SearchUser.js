@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { useLayout } from '~/context';
 import { classNames, isUserInConversation } from '~/utils';
 import Avatar from '../avatar';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const SearchUser = ({ user, control, onClick = () => {} }) => {
     const { active } = useSelector((state) => state.chats);
@@ -35,4 +37,11 @@ SearchUser.propTypes = {
     onClick: PropTypes.func,
 };
 
-export default SearchUser;
+export default withErrorBoundary(SearchUser, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('SearchUser::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

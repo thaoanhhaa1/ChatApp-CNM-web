@@ -5,6 +5,8 @@ import { DownloadLineIcon } from '~/assets';
 import { useBoolean, useDownloadFile } from '~/hooks';
 import { classNames } from '~/utils';
 import ViewMediaFile from '../viewMediaFile';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const MessageImage = ({ imageInList = false, src, name, className }) => {
     const download = useDownloadFile(src, name);
@@ -59,4 +61,11 @@ MessageImage.propTypes = {
     className: PropTypes.string,
 };
 
-export default MessageImage;
+export default withErrorBoundary(MessageImage, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('MessageImage::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

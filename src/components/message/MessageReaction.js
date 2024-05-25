@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { memo, useMemo } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { toast } from 'react-toastify';
 import images from '~/assets/images';
 import { useMessage } from '~/context';
 import { classNames } from '~/utils';
@@ -52,4 +54,11 @@ MessageReaction.propTypes = {
     className: PropTypes.string,
 };
 
-export default memo(MessageReaction);
+export default withErrorBoundary(memo(MessageReaction), {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('MessageReaction::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

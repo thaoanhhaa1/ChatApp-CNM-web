@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import images from '~/assets/images';
 import Button from '~/components/button';
 import { classNames, getDate, getTime } from '~/utils';
@@ -39,4 +41,11 @@ ChatEmpty.propTypes = {
     className: PropTypes.string,
 };
 
-export default ChatEmpty;
+export default withErrorBoundary(ChatEmpty, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ChatEmpty::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

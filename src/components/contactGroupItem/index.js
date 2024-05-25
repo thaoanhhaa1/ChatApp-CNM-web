@@ -7,6 +7,8 @@ import Avatar from '../avatar';
 import AvatarGroup from '../avatarGroup';
 import ChatItemMessage from '../chatItemMessage';
 import MessageNotification from '../messageNotification';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ContactGroupItem = ({ group }) => {
     const avatars = useMemo(() => group.users.map((user) => user.avatar), [group.users]);
@@ -84,4 +86,11 @@ ContactGroupItem.propTypes = {
     }).isRequired,
 };
 
-export default ContactGroupItem;
+export default withErrorBoundary(ContactGroupItem, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ContactGroupItem::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

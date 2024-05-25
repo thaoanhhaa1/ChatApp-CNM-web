@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { FriendStatus } from '~/constants';
 import Avatar from '../avatar';
 import Button from '../button';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const PhoneBookItem = ({ contact, onAdd = () => {}, onRecall = () => {}, onAccept = () => {} }) => {
     const { t } = useTranslation();
@@ -57,4 +59,11 @@ PhoneBookItem.propTypes = {
     onAccept: PropTypes.func,
 };
 
-export default PhoneBookItem;
+export default withErrorBoundary(PhoneBookItem, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('PhoneBookItem::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -7,6 +7,8 @@ import { DeleteMessageStatus } from '~/constants';
 import { classNames, isImageFileByType } from '~/utils';
 import ChatMessage from '../chatMessage';
 import StickerItem from '../sticker/StickerItem';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ReplyMessage = ({ className, message, isMe, showClose, onClose = () => {}, onClick = () => {} }) => {
     const { t } = useTranslation();
@@ -92,4 +94,11 @@ ReplyMessage.propTypes = {
     onClick: PropTypes.func,
 };
 
-export default ReplyMessage;
+export default withErrorBoundary(ReplyMessage, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ReplyMessage::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

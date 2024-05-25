@@ -12,6 +12,8 @@ import { getOtherUserInIndividual } from '~/utils';
 import Input from '../input';
 import Modal from '../modal';
 import ContactList from './ContactList';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ForwardMessage = ({ messageId, show, handleClickOutside }) => {
     const { t } = useTranslation();
@@ -186,4 +188,11 @@ ForwardMessage.propTypes = {
     messageId: PropTypes.string.isRequired,
 };
 
-export default ForwardMessage;
+export default withErrorBoundary(ForwardMessage, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ForwardMessage::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

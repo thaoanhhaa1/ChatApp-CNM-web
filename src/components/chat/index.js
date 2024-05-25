@@ -20,6 +20,8 @@ import Footer from './footer';
 import Header from './header';
 import HeaderSkeleton from './header/HeaderSkeleton';
 import Profile from './profile';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Chat = () => {
     const { t } = useTranslation();
@@ -197,4 +199,11 @@ const Chat = () => {
 
 Chat.propTypes = {};
 
-export default Chat;
+export default withErrorBoundary(Chat, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Chat::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -6,6 +6,8 @@ import { setFiles } from '~/features/chat/chatSlice';
 import { reorder } from '~/utils';
 import AttachFile from './AttachFile';
 import Header from './Header';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const AttachFiles = () => {
     const { files } = useSelector((state) => state.chat);
@@ -65,4 +67,11 @@ const AttachFiles = () => {
 
 AttachFiles.propTypes = {};
 
-export default AttachFiles;
+export default withErrorBoundary(AttachFiles, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('AttachFiles::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

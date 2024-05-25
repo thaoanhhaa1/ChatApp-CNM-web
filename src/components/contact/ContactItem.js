@@ -4,6 +4,8 @@ import { BlockLineIcon, DeleteBinLineIcon, More2FillIcon, PhoneLineIcon, ShareLi
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ContactItem = ({ contact }) => {
     const { t } = useTranslation();
@@ -46,4 +48,11 @@ ContactItem.propTypes = {
     contact: PropTypes.object.isRequired,
 };
 
-export default ContactItem;
+export default withErrorBoundary(ContactItem, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ContactItem::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

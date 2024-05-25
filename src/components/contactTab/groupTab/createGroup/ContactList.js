@@ -6,6 +6,8 @@ import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import { classNames, countContactsInPhoneBook, isContactInclude } from '~/utils';
 import ContactItem from './ContactItem';
 import SelectedContacts from './SelectedContacts';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ContactList = ({ phoneBook, selectedContacts, addedMembers = [], handleClickContact, handleRemoveContact }) => {
     const countContacts = useMemo(() => countContactsInPhoneBook(phoneBook), [phoneBook]);
@@ -63,4 +65,11 @@ ContactList.propTypes = {
     handleRemoveContact: PropTypes.func.isRequired,
 };
 
-export default ContactList;
+export default withErrorBoundary(ContactList, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ContactList::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

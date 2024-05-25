@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import validator from 'validator';
 import { LockIcon } from '~/assets';
 import Button from '~/components/button';
@@ -161,4 +163,12 @@ UpdatePasswordForm.propTypes = {
     sdt: PropTypes.string.isRequired,
     onBack: PropTypes.func.isRequired,
 };
-export default UpdatePasswordForm;
+
+export default withErrorBoundary(UpdatePasswordForm, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('UpdatePasswordForm::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

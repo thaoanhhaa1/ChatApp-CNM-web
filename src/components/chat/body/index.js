@@ -9,6 +9,8 @@ import { addMessageHead, addMessages } from '~/features/chats/chatsSlice';
 import { getMessages, setLoading, setMessages } from '~/features/messages/messagesSlice';
 import { getTimeChatSeparate } from '~/utils';
 import ChatEmpty from './ChatEmpty';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Body = () => {
     const ref = useRef();
@@ -125,4 +127,12 @@ const Body = () => {
 
 Body.propTypes = {};
 
-export default memo(Body);
+// export default memo(Body);
+export default withErrorBoundary(memo(Body), {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Body::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -15,6 +15,8 @@ import { addSub, resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSli
 import { formatDate } from '~/utils';
 import EditProfileModal from './EditProfileModal';
 import ZoomAvatar from './ZoomAvatar';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Profile = ({ show, onClose }) => {
     const { user } = useSelector((state) => state.user);
@@ -116,4 +118,11 @@ Profile.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default Profile;
+export default withErrorBoundary(Profile, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Profile::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

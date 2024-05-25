@@ -14,6 +14,8 @@ import friendServices from '~/services/friend.service';
 import Manage from './Manage';
 import ReceivedTab from './ReceivedTab';
 import SentTab from './SentTab';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const RECEIVED_TAB = '1';
 const SENT_TAB = '2';
@@ -99,4 +101,11 @@ FriendRequest.propTypes = {
     onClickOutside: PropTypes.func.isRequired,
 };
 
-export default FriendRequest;
+export default withErrorBoundary(FriendRequest, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('FriendRequest::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

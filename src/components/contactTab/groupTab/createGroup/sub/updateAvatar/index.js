@@ -10,6 +10,8 @@ import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import EditAvatar from '../editAvatar';
 import ZoomAvatar from '../zoomAvatar';
 import UpdateAvatarItem from './UpdateAvatarItem';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const UpdateAvatar = ({ onClose }) => {
     const { t } = useTranslation();
@@ -62,4 +64,11 @@ UpdateAvatar.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default UpdateAvatar;
+export default withErrorBoundary(UpdateAvatar, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('UpdateAvatar::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -5,6 +5,8 @@ import { SearchIcon } from '~/assets';
 import { classNames } from '~/utils';
 import Input from '../input';
 import ContactList from './ContactList';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const SelectedConversation = ({
     contacts = [],
@@ -93,4 +95,11 @@ SelectedConversation.propTypes = {
     setSelectedContacts: PropTypes.func.isRequired,
 };
 
-export default SelectedConversation;
+export default withErrorBoundary(SelectedConversation, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('SelectedConversation::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

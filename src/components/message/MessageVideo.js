@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { useEffect, useMemo } from 'react';
 import { useBoolean } from '~/hooks';
 import ViewMediaFile from '../viewMediaFile';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const MessageVideo = ({ file }) => {
     const src = useMemo(() => file.link || URL.createObjectURL(file), [file]);
@@ -31,4 +33,11 @@ MessageVideo.propTypes = {
     file: PropTypes.object.isRequired,
 };
 
-export default MessageVideo;
+export default withErrorBoundary(MessageVideo, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('MessageVideo::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

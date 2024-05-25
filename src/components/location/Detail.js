@@ -8,6 +8,8 @@ import { useLoader } from '~/hooks';
 import { googleMaps } from '~/utils';
 import Avatar from '../avatar';
 import Modal from '../modal';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Detail = ({ onClose = () => {} }) => {
     const { t } = useTranslation();
@@ -77,4 +79,11 @@ Detail.propTypes = {
     onClose: PropTypes.func,
 };
 
-export default Detail;
+export default withErrorBoundary(Detail, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Detail::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

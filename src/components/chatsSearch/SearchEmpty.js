@@ -1,5 +1,7 @@
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import images from '~/assets/images';
 import { getDate } from '~/utils';
 
@@ -23,4 +25,11 @@ const SearchEmpty = () => {
 
 SearchEmpty.propTypes = {};
 
-export default SearchEmpty;
+export default withErrorBoundary(SearchEmpty, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('SearchEmpty::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

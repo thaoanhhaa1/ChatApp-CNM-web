@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import validator from 'validator';
 import { UserCircleBrokenIcon } from '~/assets';
 import { reset, searchUser, setContact, setEmail } from '~/features/addContact/addContactSlice';
@@ -26,7 +28,6 @@ import ContactSkeleton from './ContactSkeleton';
 import { Profile } from './sub';
 import AddFriend from './sub/addFriend';
 
-// TODO Can you know
 const AddContact = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
     const { email, searchLoading } = useSelector((state) => state.addContact);
@@ -200,4 +201,11 @@ AddContact.propTypes = {
     onClickOutside: PropTypes.func.isRequired,
 };
 
-export default AddContact;
+export default withErrorBoundary(AddContact, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('AddContact::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

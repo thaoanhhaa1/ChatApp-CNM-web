@@ -4,10 +4,12 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { statusUser } from '~/constants';
 import { classNames } from '~/utils';
 
+const FALLBACK_AVATAR = process.env.REACT_APP_FALLBACK_AVATAR;
+
 const Avatar = ({ size = '36px', src, alt = '', status = statusUser.OFFLINE, className, containerClassName }) => {
     const [image, setImage] = useState(src);
 
-    const handleError = () => setImage(process.env.REACT_APP_FALLBACK_AVATAR);
+    const handleError = () => setImage(FALLBACK_AVATAR);
 
     useEffect(() => {
         setImage(src);

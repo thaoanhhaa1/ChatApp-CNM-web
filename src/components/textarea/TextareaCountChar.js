@@ -2,7 +2,14 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { classNames } from '~/utils';
 
-const TextareaCountChar = ({ maxLength, value, className, onChangeText = () => {}, onChange = () => {}, ...props }) => {
+const TextareaCountChar = ({
+    maxLength,
+    value = '',
+    className,
+    onChangeText = () => {},
+    onChange = () => {},
+    ...props
+}) => {
     const { t } = useTranslation();
 
     const handleChange = (e) => {

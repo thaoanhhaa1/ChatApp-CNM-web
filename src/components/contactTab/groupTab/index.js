@@ -14,6 +14,8 @@ import Button from '../Button';
 import Seperate from '../Seperate';
 import Wrapper from '../Wrapper';
 import CreateGroup from './createGroup';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Group = ({ search = '' }) => {
     const { t } = useTranslation();
@@ -73,4 +75,11 @@ Group.propTypes = {
     search: PropTypes.string,
 };
 
-export default Group;
+export default withErrorBoundary(Group, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Group::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

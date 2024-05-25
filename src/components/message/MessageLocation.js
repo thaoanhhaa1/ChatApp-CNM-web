@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 import { convertToDMS } from '~/utils';
 
 const MessageLocation = ({ location }) => {
@@ -25,4 +27,11 @@ MessageLocation.propTypes = {
     location: PropTypes.object,
 };
 
-export default MessageLocation;
+export default withErrorBoundary(MessageLocation, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('MessageLocation::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

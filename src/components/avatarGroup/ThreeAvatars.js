@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import Avatar from './Avatar';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ThreeAvatars = ({ avatars, size }) => {
     return (
@@ -16,4 +18,11 @@ ThreeAvatars.propTypes = {
     avatars: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default ThreeAvatars;
+export default withErrorBoundary(ThreeAvatars, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ThreeAvatars::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

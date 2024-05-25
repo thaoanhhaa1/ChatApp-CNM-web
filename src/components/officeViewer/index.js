@@ -6,6 +6,8 @@ import { useBoolean, useDownloadFile } from '~/hooks';
 import { getDate, getTime } from '~/utils';
 import Avatar from '../avatar';
 import Portal from '../portal';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const OfficeViewer = ({ file, user, date, viewer, onClose = () => {} }) => {
     const { t } = useTranslation();
@@ -64,4 +66,11 @@ OfficeViewer.propTypes = {
     onClose: PropTypes.func,
 };
 
-export default OfficeViewer;
+export default withErrorBoundary(OfficeViewer, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('OfficeViewer::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

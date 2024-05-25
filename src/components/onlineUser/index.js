@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { statusUser } from '~/constants';
 import { setActive } from '~/features/chats/chatsSlice';
 import Avatar from '../avatar';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const OnlineUser = ({ data }) => {
     const { chats } = useSelector((state) => state.chats);
@@ -35,4 +37,11 @@ OnlineUser.propTypes = {
     data: PropTypes.object.isRequired,
 };
 
-export default OnlineUser;
+export default withErrorBoundary(OnlineUser, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('OnlineUser::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

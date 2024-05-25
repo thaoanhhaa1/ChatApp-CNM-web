@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { DeleteMessageStatus } from '~/constants';
 import { classNames } from '~/utils';
 
@@ -58,4 +60,11 @@ ChatMessage.propTypes = {
     status: PropTypes.string,
 };
 
-export default ChatMessage;
+export default withErrorBoundary(ChatMessage, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ChatMessage::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

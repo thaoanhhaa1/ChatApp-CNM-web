@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import ScrollbarCustomize from '~/components/scrollbarCustomize';
 import SelectedContact from './SelectedContact';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const SelectedContacts = ({ selectedContacts, handleRemoveContact = () => {} }) => {
     const { t } = useTranslation();
@@ -35,4 +37,11 @@ SelectedContacts.propTypes = {
     selectedContacts: PropTypes.array.isRequired,
 };
 
-export default SelectedContacts;
+export default withErrorBoundary(SelectedContacts, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('SelectedContacts::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

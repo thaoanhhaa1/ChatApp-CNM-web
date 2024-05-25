@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { isPhotoFile } from '~/utils';
 import HeaderLabel from './HeaderLabel';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Header = () => {
     const { t, i18n } = useTranslation();
@@ -44,4 +46,11 @@ const Header = () => {
 
 Header.propTypes = {};
 
-export default Header;
+export default withErrorBoundary(Header, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Header::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

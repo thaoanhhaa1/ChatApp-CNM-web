@@ -26,6 +26,8 @@ import { setCalling, setHideCalling, setShowCalling } from '~/features/calling/c
 import { useBoolean } from '~/hooks';
 import { getNameConversation, isOnlineConversation } from '~/utils';
 import Button from './Button';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const tippyProps = {
     role: 'popup',
@@ -163,4 +165,11 @@ const Header = () => {
     );
 };
 
-export default memo(Header);
+export default withErrorBoundary(memo(Header), {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Header::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

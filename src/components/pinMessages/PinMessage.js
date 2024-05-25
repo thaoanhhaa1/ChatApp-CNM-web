@@ -10,6 +10,8 @@ import messageServices from '~/services/message.service';
 import { classNames, isImageFileByType } from '~/utils';
 import ChatMessage from '../chatMessage';
 import Popup from '../popup';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const PinMessage = ({ pinCount, message, onMore = () => {}, onClick = () => {} }) => {
     const { t } = useTranslation();
@@ -132,4 +134,11 @@ PinMessage.propTypes = {
     onClick: PropTypes.func,
 };
 
-export default PinMessage;
+export default withErrorBoundary(PinMessage, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('PinMessage::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

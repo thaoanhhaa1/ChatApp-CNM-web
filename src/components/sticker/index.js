@@ -9,6 +9,7 @@ import ScrollbarCustomize from '../scrollbarCustomize';
 import Button from './Button';
 import StickerFooterItem from './StickerFooterItem';
 import StickerList from './StickerList';
+import { toast } from 'react-toastify';
 
 const Sticker = () => {
     const ref = useRef();
@@ -85,8 +86,10 @@ const Sticker = () => {
 Sticker.propTypes = {};
 
 export default withErrorBoundary(Sticker, {
-    FallbackComponent: null,
-    onReset: () => {
-        // reset the state of your app so the error doesn't happen again
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Sticker::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
     },
 });

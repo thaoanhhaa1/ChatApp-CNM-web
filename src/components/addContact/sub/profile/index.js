@@ -23,6 +23,7 @@ import AddFriend from '../addFriend';
 import Report from '../report';
 import Action from './Action';
 import PersonalInformation from './PersonalInformation';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const Profile = ({ onClose }) => {
     const { t } = useTranslation();
@@ -270,4 +271,11 @@ Profile.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default Profile;
+export default withErrorBoundary(Profile, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Profile::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

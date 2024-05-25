@@ -23,6 +23,7 @@ import messageServices from '~/services/message.service';
 import { getDate, getTime } from '~/utils';
 import Seperate from '../../Seperate';
 import AddFriend from './AddFriend';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const PhoneBookSub = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
@@ -162,4 +163,11 @@ PhoneBookSub.propTypes = {
     onClickOutside: PropTypes.func.isRequired,
 };
 
-export default PhoneBookSub;
+export default withErrorBoundary(PhoneBookSub, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('PhoneBookSub::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

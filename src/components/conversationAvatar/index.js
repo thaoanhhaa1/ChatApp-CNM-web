@@ -5,6 +5,8 @@ import { getOtherUserInIndividual } from '~/utils';
 import getAvatarsGroup from '~/utils/getAvatarsGroup';
 import Avatar from '../avatar';
 import AvatarGroup from '../avatarGroup';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ConversationAvatar = ({ conversation, size, status = statusUser.OFFLINE }) => {
     const { user } = useSelector((state) => state.user);
@@ -41,4 +43,11 @@ ConversationAvatar.propTypes = {
     size: PropTypes.string,
 };
 
-export default ConversationAvatar;
+export default withErrorBoundary(ConversationAvatar, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ConversationAvatar::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

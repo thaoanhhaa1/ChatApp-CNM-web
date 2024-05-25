@@ -16,6 +16,7 @@ import ChangeOwnerRole from '../chat/changeOwnerRole';
 import LeaveGroup from '../chat/leaveGroup';
 import RemoveMember from '../chat/removeMember';
 import Popup from '../popup';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const Member = ({ user }) => {
     const { t } = useTranslation();
@@ -208,4 +209,11 @@ Member.propTypes = {
     user: PropTypes.object.isRequired,
 };
 
-export default Member;
+export default withErrorBoundary(Member, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Member::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

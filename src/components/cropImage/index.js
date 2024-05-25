@@ -4,6 +4,8 @@ import ReactCrop from 'react-image-crop';
 import { constants } from '~/constants';
 import { useCropImage } from '~/hooks';
 import ControlScale from './ControlScale';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const CropImage = forwardRef(({ imageUrl }, forwardRef) => {
     const {
@@ -111,4 +113,11 @@ CropImage.propTypes = {
     imageUrl: PropTypes.string.isRequired,
 };
 
-export default CropImage;
+export default withErrorBoundary(CropImage, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('CropImage::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

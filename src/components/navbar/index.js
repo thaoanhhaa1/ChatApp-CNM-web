@@ -37,6 +37,8 @@ import { classNames, token } from '~/utils';
 import Avatar from '../avatar';
 import Popup from '../popup';
 import Button from './Button';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const languages = [
     {
@@ -205,4 +207,11 @@ Navbar.propTypes = {
     className: PropTypes.string,
 };
 
-export default Navbar;
+export default withErrorBoundary(Navbar, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Navbar::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

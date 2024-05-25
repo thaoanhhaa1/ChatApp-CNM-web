@@ -3,6 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { setNotifiedUserIds } from '~/features/calling/callingSlice';
 import Avatar from '../avatar';
 
@@ -88,6 +89,7 @@ CallCover.propTypes = {
 export default withErrorBoundary(CallCover, {
     fallback: null,
     onError: (error, info) => {
+        toast.error('CallCover::Some errors occurred, please try again');
         console.error('🚀 ~ error:', error);
         console.error('🚀 ~ info:', info);
     },

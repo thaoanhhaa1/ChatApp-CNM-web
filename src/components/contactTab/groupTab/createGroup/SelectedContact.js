@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 import { CloseFillIcon } from '~/assets';
 import Avatar from '~/components/avatar';
 
@@ -23,4 +25,11 @@ SelectedContact.propTypes = {
     onClose: PropTypes.func,
 };
 
-export default SelectedContact;
+export default withErrorBoundary(SelectedContact, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('SelectedContact::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

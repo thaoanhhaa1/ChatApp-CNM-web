@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import Avatar from '~/components/avatar';
 import Input from '~/components/input';
 import Modal from '~/components/modal';
@@ -63,4 +65,11 @@ Alias.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default Alias;
+export default withErrorBoundary(Alias, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Alias::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

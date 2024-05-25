@@ -6,6 +6,8 @@ import ReceivedFriendRequest from '~/components/receivedFriendRequest';
 import ReceivedFriendRequestSkeleton from '~/components/receivedFriendRequest/ReceivedFriendRequestSkeleton';
 import { classNames } from '~/utils';
 import RequestEmpty from './RequestEmpty';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ReceivedTab = ({ className }) => {
     const { t } = useTranslation();
@@ -28,4 +30,11 @@ ReceivedTab.propTypes = {
     className: PropTypes.string,
 };
 
-export default ReceivedTab;
+export default withErrorBoundary(ReceivedTab, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ReceivedTab::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

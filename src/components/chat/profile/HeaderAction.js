@@ -1,5 +1,7 @@
 import Tippy from '@tippyjs/react';
 import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 import { classNames } from '~/utils';
 
 const HeaderAction = ({ action, active }) => {
@@ -36,4 +38,11 @@ HeaderAction.propTypes = {
     active: PropTypes.bool,
 };
 
-export default HeaderAction;
+export default withErrorBoundary(HeaderAction, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('HeaderAction::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

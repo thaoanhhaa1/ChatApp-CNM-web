@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 import Avatar from '~/components/avatar';
 import Typing from '~/components/typing';
 
@@ -23,4 +25,11 @@ MessageTyping.propTypes = {
     chat: PropTypes.object.isRequired,
 };
 
-export default MessageTyping;
+export default withErrorBoundary(MessageTyping, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('MessageTyping::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

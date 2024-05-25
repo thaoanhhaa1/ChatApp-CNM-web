@@ -3,6 +3,8 @@ import { DownloadLineIcon, FileTextFillIcon, ImageFillIcon } from '~/assets';
 import { useDownloadFile } from '~/hooks';
 import { classNames, convertFileSize, isPhotoFile } from '~/utils';
 import Button from './Button';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const getIcon = (fileName) => {
     if (isPhotoFile(fileName)) return ImageFillIcon;
@@ -48,4 +50,11 @@ AttachedFile.propTypes = {
     onClick: PropTypes.func,
 };
 
-export default AttachedFile;
+export default withErrorBoundary(AttachedFile, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('AttachedFile::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

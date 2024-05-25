@@ -24,6 +24,8 @@ import { setSearch } from '~/features/search/searchSlice';
 import { convertContactsToPhoneBook, phoneBookFilter } from '~/utils';
 import ContactList from './ContactList';
 import UpdateAvatar from './sub/updateAvatar';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const CreateGroup = ({ show, onClickOutside }) => {
     const { t } = useTranslation();
@@ -183,4 +185,11 @@ CreateGroup.propTypes = {
     onClickOutside: PropTypes.func.isRequired,
 };
 
-export default CreateGroup;
+export default withErrorBoundary(CreateGroup, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('CreateGroup::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

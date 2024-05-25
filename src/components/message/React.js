@@ -10,6 +10,8 @@ import { updateReact } from '~/features/messages/messagesSlice';
 import messageServices from '~/services/message.service';
 import { retryPromise } from '~/utils';
 import Button from './Button';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const React = () => {
     const [instance, setInstance] = useState();
@@ -78,4 +80,11 @@ const React = () => {
 
 React.propTypes = {};
 
-export default React;
+export default withErrorBoundary(React, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('React::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

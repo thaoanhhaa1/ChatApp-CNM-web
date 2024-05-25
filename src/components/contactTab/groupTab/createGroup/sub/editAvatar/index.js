@@ -12,6 +12,8 @@ import { setUrlAvatar } from '~/features/createGroup/createGroupSlice';
 import { resetSubs } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { classNames } from '~/utils';
 import ArrowButton from './ArrowButton';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const IMAGE_SIZE = 48;
 
@@ -149,4 +151,11 @@ EditAvatar.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default EditAvatar;
+export default withErrorBoundary(EditAvatar, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('EditAvatar::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -134,4 +135,11 @@ EditProfileModal.propTypes = {
     onClose: PropTypes.func,
 };
 
-export default EditProfileModal;
+export default withErrorBoundary(EditProfileModal, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('EditProfileModal::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

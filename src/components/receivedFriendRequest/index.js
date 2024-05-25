@@ -14,6 +14,7 @@ import messageServices from '~/services/message.service';
 import { getDate } from '~/utils';
 import Avatar from '../avatar';
 import Button from '../button';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const ReceivedFriendRequest = ({ contact }) => {
     const { t } = useTranslation();
@@ -124,4 +125,11 @@ ReceivedFriendRequest.propTypes = {
     }),
 };
 
-export default ReceivedFriendRequest;
+export default withErrorBoundary(ReceivedFriendRequest, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ReceivedFriendRequest::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

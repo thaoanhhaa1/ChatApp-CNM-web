@@ -13,6 +13,7 @@ import SearchItem from './SearchItem';
 import SearchItemSkeleton from './SearchItemSkeleton';
 import SearchUserSkeleton from './SearchUserSkeleton';
 import UserSearchResult from './UserSearchResult';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const ChatsSearch = ({ searchValue }) => {
     const { t } = useTranslation();
@@ -101,4 +102,11 @@ ChatsSearch.propTypes = {
     searchValue: PropTypes.string.isRequired,
 };
 
-export default ChatsSearch;
+export default withErrorBoundary(ChatsSearch, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ChatsSearch::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

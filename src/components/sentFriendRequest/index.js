@@ -9,6 +9,8 @@ import friendServices from '~/services/friend.service';
 import { getDate } from '~/utils';
 import Avatar from '../avatar';
 import Button from '../button';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const SentFriendRequest = ({ contact }) => {
     const { t } = useTranslation();
@@ -96,4 +98,11 @@ SentFriendRequest.propTypes = {
     }).isRequired,
 };
 
-export default SentFriendRequest;
+export default withErrorBoundary(SentFriendRequest, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('SentFriendRequest::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

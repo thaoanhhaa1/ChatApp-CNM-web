@@ -20,6 +20,8 @@ import Button from './Button';
 import Emoticon from './Emoticon';
 import MentionItem from './Mention';
 import SendFiles from './SendFiles';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Footer = () => {
     const { t } = useTranslation();
@@ -210,4 +212,11 @@ const Footer = () => {
 
 Footer.propTypes = {};
 
-export default memo(Footer);
+export default withErrorBoundary(memo(Footer), {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Footer::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

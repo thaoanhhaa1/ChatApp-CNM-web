@@ -5,6 +5,8 @@ import { FileTextFillIcon, ImageFillIcon, LocationIcon, StickerSmileIcon } from 
 import { DeleteMessageStatus } from '~/constants';
 import { getLastMessageNoDeleted, isImageFileByType } from '~/utils';
 import ChatMessage from '../chatMessage';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ChatItemMessage = ({ chat }) => {
     const { t } = useTranslation();
@@ -68,4 +70,11 @@ ChatItemMessage.propTypes = {
     chat: PropTypes.object.isRequired,
 };
 
-export default ChatItemMessage;
+export default withErrorBoundary(ChatItemMessage, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ChatItemMessage::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

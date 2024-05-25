@@ -10,6 +10,7 @@ import { removeFriend } from '~/features/friend/friendSlice';
 import friendServices from '~/services/friend.service';
 import { getChatIndividual } from '~/utils';
 import Button from './Button';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const ContactItem = ({ contact }) => {
     const { t } = useTranslation();
@@ -94,4 +95,11 @@ ContactItem.propTypes = {
     contact: PropTypes.object.isRequired,
 };
 
-export default ContactItem;
+export default withErrorBoundary(ContactItem, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ContactItem::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -7,6 +7,8 @@ import FormControlLabel from '~/components/formControlLabel';
 import Modal from '~/components/modal';
 import Switch from '~/components/switch';
 import Seperate from '../../Seperate';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Manage = ({ onClose }) => {
     const { t } = useTranslation();
@@ -76,4 +78,11 @@ Manage.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default Manage;
+export default withErrorBoundary(Manage, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Manage::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

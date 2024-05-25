@@ -4,6 +4,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addMessage, sendMessage } from '~/features/messages/messagesSlice';
 import StickerItem from './StickerItem';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const StickerList = ({ sticker, setOffsetTop }) => {
     const stickerRef = useRef();
@@ -59,4 +61,11 @@ StickerList.propTypes = {
     setOffsetTop: PropTypes.func.isRequired,
 };
 
-export default StickerList;
+export default withErrorBoundary(StickerList, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('StickerList::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { deleteChat, setActive } from '~/features/chats/chatsSlice';
 import conversationServices from '~/services/conversation.service';
 import Modal from '../modal';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const DeleteChatItem = ({ conversationId, show, onClickOutside }) => {
     const { t } = useTranslation();
@@ -61,4 +62,11 @@ DeleteChatItem.propTypes = {
     onClickOutside: PropTypes.func.isRequired,
 };
 
-export default DeleteChatItem;
+export default withErrorBoundary(DeleteChatItem, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('DeleteChatItem::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

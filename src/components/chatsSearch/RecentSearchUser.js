@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import { CloseLineIcon } from '~/assets';
 import { removeRecentSearch } from '~/features/localSetting/localSettingSlice';
 import SearchUser from './SearchUser';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const RecentSearchUser = ({ user, onClick = () => {} }) => {
     const dispatch = useDispatch();
@@ -30,4 +32,11 @@ RecentSearchUser.propTypes = {
     onClick: PropTypes.func,
 };
 
-export default RecentSearchUser;
+export default withErrorBoundary(RecentSearchUser, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('RecentSearchUser::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

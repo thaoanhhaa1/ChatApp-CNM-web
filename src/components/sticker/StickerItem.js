@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useImageSize } from 'react-image-size';
+import { toast } from 'react-toastify';
 import { useBoolean } from '~/hooks';
 import { classNames, loadImage } from '~/utils';
 
@@ -91,5 +92,9 @@ StickerItem.propTypes = {
 
 export default withErrorBoundary(StickerItem, {
     fallback: null,
-    onError: (error, componentStack) => console.error(error, componentStack),
+    onError: (error, info) => {
+        toast.error('StickerItem::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
 });

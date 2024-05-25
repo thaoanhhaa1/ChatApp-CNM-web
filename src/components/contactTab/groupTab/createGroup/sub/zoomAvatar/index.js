@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { useMemo, useRef } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import CropImage from '~/components/cropImage';
 import Modal from '~/components/modal';
 import { setFileAvatar } from '~/features/createGroup/createGroupSlice';
@@ -49,4 +51,11 @@ ZoomAvatar.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default ZoomAvatar;
+export default withErrorBoundary(ZoomAvatar, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ZoomAvatar::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

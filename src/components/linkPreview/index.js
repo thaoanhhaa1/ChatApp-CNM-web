@@ -32,11 +32,12 @@ const LinkPreview = ({ url }) => {
             {loading ? (
                 <LinkPreviewSkeleton />
             ) : (
-                response && (
+                (response && (
                     <div ref={linkPreviewRef}>
                         <LinkPreviewCard response={response} />
                     </div>
-                )
+                )) ||
+                null
             )}
         </div>
     );

@@ -17,6 +17,8 @@ import { findUserById, formatTime, getAgoraUid } from '~/utils';
 import Button from './Button';
 import CallCover from './CallCover';
 import CallName from './CallName';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const APP_ID = process.env.REACT_APP_AGORA_APP_ID;
 
@@ -148,4 +150,11 @@ const Videos = () => {
 
 Videos.propTypes = {};
 
-export default Videos;
+export default withErrorBoundary(Videos, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Videos::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

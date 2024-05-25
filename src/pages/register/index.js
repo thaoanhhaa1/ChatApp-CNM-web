@@ -1,7 +1,9 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import validator from 'validator';
 import { saveToken } from '~/api/axiosClient';
 import images from '~/assets/images';
@@ -440,4 +442,11 @@ const Register = () => {
 
 Register.propTypes = {};
 
-export default Register;
+export default withErrorBoundary(Register, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Register::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

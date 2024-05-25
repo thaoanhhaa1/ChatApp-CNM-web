@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -55,7 +56,6 @@ const SocketListener = ({ children }) => {
     const { contact } = useSelector((state) => state.addContact);
     const { offlineRecent } = useSelector((state) => state.onlineUsers);
     const { acceptUserIds, rejectUserIds, endedUserIds, _id: prevId } = useSelector((state) => state.calling);
-    console.log('🚀 ~ SocketListener ~ prevId:', prevId);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -314,4 +314,11 @@ SocketListener.propTypes = {
     children: PropTypes.node,
 };
 
-export default SocketListener;
+export default withErrorBoundary(SocketListener, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('SocketListener::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

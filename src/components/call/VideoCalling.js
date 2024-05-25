@@ -4,6 +4,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import NewWindow from 'react-new-window';
 import { useCalling } from '~/hooks';
 import Videos from './Videos';
+import { toast } from 'react-toastify';
 
 const client = AgoraRTC.createClient({ codec: 'vp8', mode: 'rtc' });
 
@@ -24,8 +25,9 @@ VideoCalling.propTypes = {
 };
 
 export default withErrorBoundary(VideoCalling, {
-    fallback: <div>Something went wrong</div>,
+    fallback: null,
     onError: (error, info) => {
+        toast.error('VideoCalling::Some errors occurred, please try again');
         console.error('🚀 ~ error:', error);
         console.error('🚀 ~ info:', info);
     },

@@ -7,7 +7,7 @@ const Contact = ({ title, contactList }) => {
             <h6 className="px-2 sm:px-4 text-mm text-primary-color font-bold leading-normal">{title}</h6>
             <div>
                 {contactList.map((contact) => (
-                    <ContactItem contact={contact} key={contact.id} />
+                    <ContactItem contact={contact} key={contact._id} />
                 ))}
             </div>
         </div>

@@ -7,6 +7,8 @@ import Button from '~/components/button';
 import UnderlineInput from '~/components/underlineInput';
 import authServices from '~/services/auth.service';
 import UpdatePasswordForm from './UpdatePasswordForm';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const ForgotPasswordForm = ({ sdt, onBack = () => {} }) => {
     const { t } = useTranslation();
@@ -93,4 +95,11 @@ ForgotPasswordForm.propTypes = {
     onBack: PropTypes.func.isRequired,
 };
 
-export default ForgotPasswordForm;
+export default withErrorBoundary(ForgotPasswordForm, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ForgotPasswordForm::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

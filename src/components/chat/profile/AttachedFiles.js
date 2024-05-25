@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import AttachedFile from '~/components/attachedFile';
 import { getAttachedFiles } from '~/features/attachedFiles/attachedFilesSlice';
 
@@ -55,4 +57,11 @@ const AttachedFiles = () => {
 
 AttachedFiles.propTypes = {};
 
-export default AttachedFiles;
+export default withErrorBoundary(AttachedFiles, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('AttachedFiles::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

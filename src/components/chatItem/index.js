@@ -25,6 +25,7 @@ import Popup from '../popup';
 import Typing from '../typing';
 import AddToGroups from './AddToGroups';
 import DeleteChatItem from './DeleteChatItem';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const ChatItem = ({ chat, active }) => {
     const { t } = useTranslation();
@@ -208,4 +209,11 @@ ChatItem.propTypes = {
     chat: PropTypes.object.isRequired,
 };
 
-export default ChatItem;
+export default withErrorBoundary(ChatItem, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('ChatItem::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

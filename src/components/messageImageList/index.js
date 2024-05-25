@@ -1,6 +1,8 @@
 import { ImageList, ImageListImageAspectContainer, ImageListItem } from '@rmwc/image-list';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 import MessageImage from '~/components/message/MessageImage';
 
 const MessageImageList = ({ files, loading }) => {
@@ -36,4 +38,11 @@ MessageImageList.propTypes = {
     loading: PropTypes.bool,
 };
 
-export default MessageImageList;
+export default withErrorBoundary(MessageImageList, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('MessageImageList::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

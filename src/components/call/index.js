@@ -6,6 +6,8 @@ import { getNameConversation } from '~/utils';
 import ConversationAvatar from '../conversationAvatar';
 import Modal from '../modal';
 import Button from './Button';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Call = ({ isVideoCall, show, onCancel = () => {}, onAccept = () => {} }) => {
     const { t } = useTranslation();
@@ -42,4 +44,11 @@ Call.propTypes = {
     onAccept: PropTypes.func.isRequired,
 };
 
-export default Call;
+export default withErrorBoundary(Call, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Call::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

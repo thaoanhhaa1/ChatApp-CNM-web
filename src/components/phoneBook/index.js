@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 import Item from './Item';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const PhoneBook = ({ phoneBook, render }) => {
     const labels = useMemo(() => Object.keys(phoneBook), [phoneBook]);
@@ -19,4 +21,11 @@ PhoneBook.propTypes = {
     render: PropTypes.func.isRequired,
 };
 
-export default PhoneBook;
+export default withErrorBoundary(PhoneBook, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('PhoneBook::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

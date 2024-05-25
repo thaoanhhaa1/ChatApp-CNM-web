@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -90,4 +91,11 @@ AddFriend.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default AddFriend;
+export default withErrorBoundary(AddFriend, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('AddFriend::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

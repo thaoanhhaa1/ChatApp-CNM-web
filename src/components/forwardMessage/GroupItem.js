@@ -10,7 +10,7 @@ const GroupItem = ({ checked, group, onClick = () => {} }) => {
         >
             <Checkbox rounded checked={checked} />
             <ConversationAvatar conversation={group} />
-            <div className="flex-1 text-sm line-clamp-1">{group.name}</div>
+            <div className="flex-1 text-sm line-clamp-1">{group?.name}</div>
         </div>
     );
 };

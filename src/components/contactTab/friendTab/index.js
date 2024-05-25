@@ -15,6 +15,8 @@ import Seperate from '../Seperate';
 import Wrapper from '../Wrapper';
 import FriendRequest from './friendRequest';
 import PhoneBookSub from './phoneBook';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Friend = ({ search = '' }) => {
     const { t } = useTranslation();
@@ -76,4 +78,11 @@ Friend.propTypes = {
     search: PropTypes.string,
 };
 
-export default Friend;
+export default withErrorBoundary(Friend, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Friend::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

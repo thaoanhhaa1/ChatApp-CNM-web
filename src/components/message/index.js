@@ -55,6 +55,7 @@ import MessageSeparate from './MessageSeparate';
 import MessageTime from './MessageTime';
 import MessageVideo from './MessageVideo';
 import React from './React';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const Message = ({ chat, prevChat, scrollY = () => {} }) => {
     const [, startTransition] = useTransition();
@@ -406,4 +407,11 @@ Message.propTypes = {
     scrollY: PropTypes.func,
 };
 
-export default memo(Message);
+export default withErrorBoundary(memo(Message), {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Message::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

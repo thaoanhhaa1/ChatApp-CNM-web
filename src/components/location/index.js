@@ -11,6 +11,8 @@ import ScrollbarCustomize from '../scrollbarCustomize';
 import Skeleton from '../skeleton';
 import Item from './Item';
 import ItemSkeleton from './ItemSkeleton';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Location = ({ showLocation, onClose = () => {} }) => {
     const { t } = useTranslation();
@@ -82,4 +84,11 @@ Location.propTypes = {
     showLocation: PropTypes.bool,
 };
 
-export default Location;
+export default withErrorBoundary(Location, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Location::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

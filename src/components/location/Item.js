@@ -4,6 +4,8 @@ import { setLocation } from '~/features/location/locationSlice';
 import { addSub } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import Avatar from '../avatar';
 import Detail from './Detail';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const Item = ({ location, onClick = () => {} }) => {
     const dispatch = useDispatch();
@@ -41,4 +43,11 @@ Item.propTypes = {
     onClick: PropTypes.func,
 };
 
-export default Item;
+export default withErrorBoundary(Item, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Item::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 import Avatar from '~/components/avatar';
 
 const Mention = ({ mention }) => {
@@ -20,4 +22,11 @@ Mention.propTypes = {
     mention: PropTypes.object.isRequired,
 };
 
-export default Mention;
+export default withErrorBoundary(Mention, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('Mention::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import ProfileHeader from '../addContact/sub/ProfileHeader';
 import Switch from '../switch';
 import { TextareaCountChar } from '../textarea';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const AddFriend = ({ maxLength, blockViewTitle = '', data, setData }) => {
     const handleChangeMessage = (message) =>
@@ -45,4 +47,11 @@ AddFriend.propTypes = {
     blockViewTitle: PropTypes.string.isRequired,
 };
 
-export default AddFriend;
+export default withErrorBoundary(AddFriend, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('AddFriend::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

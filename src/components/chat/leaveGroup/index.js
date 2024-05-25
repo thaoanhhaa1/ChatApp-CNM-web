@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useCallback, useState } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -108,4 +109,11 @@ LeaveGroup.propTypes = {
     onClickOutside: PropTypes.func,
 };
 
-export default LeaveGroup;
+export default withErrorBoundary(LeaveGroup, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('LeaveGroup::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

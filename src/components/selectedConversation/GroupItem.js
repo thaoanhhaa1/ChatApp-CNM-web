@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import Checkbox from '~/components/checkbox';
 import ConversationAvatar from '../conversationAvatar';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const GroupItem = ({ checked, group, onClick = () => {} }) => {
     return (
@@ -21,4 +23,11 @@ GroupItem.propTypes = {
     checked: PropTypes.bool,
 };
 
-export default GroupItem;
+export default withErrorBoundary(GroupItem, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('GroupItem::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

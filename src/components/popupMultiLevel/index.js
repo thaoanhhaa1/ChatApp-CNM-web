@@ -4,6 +4,8 @@ import AnimateHeight from 'react-animate-height';
 import { useDispatch, useSelector } from 'react-redux';
 import { setHeight, setUpdateHeightPopup } from '~/features/popupMultiLevel/popupMultiLevelSlice';
 import { classNames } from '../../utils';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const PopupMultiLevel = ({ children, onClose = () => {} }) => {
     const { subs, height } = useSelector((state) => state.popupMultiLevel);
@@ -63,4 +65,11 @@ PopupMultiLevel.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default PopupMultiLevel;
+export default withErrorBoundary(PopupMultiLevel, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('PopupMultiLevel::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

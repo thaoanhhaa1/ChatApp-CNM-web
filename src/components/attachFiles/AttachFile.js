@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { CloseFilledIcon } from '~/assets';
 import { removeFile } from '~/features/chat/chatSlice';
 import { classNames, getBgByTypeFile, isImageFileByType } from '~/utils';
@@ -52,4 +54,11 @@ AttachFile.propTypes = {
     file: PropTypes.object.isRequired,
 };
 
-export default AttachFile;
+export default withErrorBoundary(AttachFile, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('AttachFile::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { classNames } from '~/utils';
 import RadioLabel from './RadioLabel';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const RadioLabelList = ({ name, list, className, onChange }) => {
     return (
@@ -19,4 +21,11 @@ RadioLabelList.propTypes = {
     className: PropTypes.string,
 };
 
-export default RadioLabelList;
+export default withErrorBoundary(RadioLabelList, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('RadioLabelList::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});

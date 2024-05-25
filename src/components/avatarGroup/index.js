@@ -6,6 +6,8 @@ import MoreThreeAvatars from './MoreThreeAvatars';
 import OneAvatar from './OneAvatar';
 import ThreeAvatars from './ThreeAvatars';
 import TwoAvatars from './TwoAvatars';
+import { withErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 const AvatarGroup = ({ avatars, size = '36px', status = statusUser.OFFLINE }) => {
     const children = useMemo(() => {
@@ -42,4 +44,11 @@ AvatarGroup.propTypes = {
     size: PropTypes.string,
 };
 
-export default AvatarGroup;
+export default withErrorBoundary(AvatarGroup, {
+    fallback: null,
+    onError: (error, info) => {
+        toast.error('AvatarGroup::Some errors occurred, please try again');
+        console.error('🚀 ~ error:', error);
+        console.error('🚀 ~ info:', info);
+    },
+});
