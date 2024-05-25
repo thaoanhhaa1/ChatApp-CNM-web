@@ -175,7 +175,9 @@ const Member = ({ user }) => {
         <div className="group/member p-2 flex gap-2 items-center hover:bg-black hover:bg-opacity-5 dark:hover:bg-white dark:hover:bg-opacity-5 transition-colors cursor-pointer rounded-md">
             <Avatar status={status} src={user.avatar} containerClassName="flex-shrink-0" />
             <div className="flex-1 flex-shrink-0 flex items-center gap-2">
-                <h5 className="text-sm font-semibold line-clamp-1">{user.name}</h5>
+                <h5 className="text-sm font-semibold line-clamp-1">
+                    {user._id === me._id ? t('chat.you') : user.name}
+                </h5>
                 {user.role && (
                     <span className="capitalize block px-1.5 py-[2px] rounded text-ex text-[#ef476f] bg-[rgba(239,71,111,.18)]">
                         {user.role}

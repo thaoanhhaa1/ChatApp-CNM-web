@@ -96,7 +96,8 @@
         "delete-for-me-pending": "Deleting...",
         "delete-for-me-success": "Deleted successfully",
         "delete-for-me-error": "Failed to delete",
-        "attached-file-empty": "No Files is shared in this conversation"
+        "attached-file-empty": "No Files is shared in this conversation",
+        "you": "You"
     },
     "contacts": {
         "title": "Contacts",

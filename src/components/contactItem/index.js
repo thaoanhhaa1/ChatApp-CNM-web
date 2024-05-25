@@ -1,16 +1,19 @@
 import PropTypes from 'prop-types';
+import { useCallback } from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { BlockLineIcon, DeleteBinLineIcon, More2FillIcon, PhoneLineIcon, ShareLineIcon, VideoLineIcon } from '~/assets';
 import Avatar from '~/components/avatar';
 import Popup from '~/components/popup';
+import { callType } from '~/constants';
+import { setCalling, setShowCalling } from '~/features/calling/callingSlice';
 import { getConversation, setActive } from '~/features/chats/chatsSlice';
 import { removeFriend } from '~/features/friend/friendSlice';
 import friendServices from '~/services/friend.service';
 import { getChatIndividual } from '~/utils';
 import Button from './Button';
-import { withErrorBoundary } from 'react-error-boundary';
 
 const ContactItem = ({ contact }) => {
     const { t } = useTranslation();
@@ -55,15 +58,34 @@ const ContactItem = ({ contact }) => {
             onClick: handleRemoveFriend,
         },
     ];
+    const handleAcceptCall = useCallback(
+        (type) => {
+            if (!socket) return;
 
-    // TODO
+            const users = [contact, user];
+
+            const _id = contact._id;
+            socket.emit('call', {
+                type,
+                users,
+                sender: user,
+                _id,
+                conversationName: contact.name,
+                isGroup: false,
+            });
+            dispatch(setShowCalling());
+            dispatch(setCalling({ _id, users, type, sender: user }));
+        },
+        [contact, dispatch, socket, user],
+    );
+
     const handleCallAudio = (e) => {
         e.stopPropagation();
-        console.log('handleCallAudio');
+        handleAcceptCall(callType.AUDIO);
     };
     const handleCallVideo = (e) => {
         e.stopPropagation();
-        console.log('handleCallVideo');
+        handleAcceptCall(callType.VIDEO);
     };
 
     const handleClickItem = () => {

@@ -94,7 +94,8 @@
         "delete-for-me-pending": "Đang xoá...",
         "delete-for-me-success": "Xoá tin nhắn thành công",
         "delete-for-me-error": "Xoá tin nhắn không thành công",
-        "attached-file-empty": "Chưa có file được chia sẻ trong hội thoại này"
+        "attached-file-empty": "Chưa có file được chia sẻ trong hội thoại này",
+        "you": "Bạn"
     },
     "contacts": {
         "title": "Danh bạ",
